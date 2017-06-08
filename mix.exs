@@ -40,8 +40,7 @@ defmodule Core.Mixfile do
      {:cowboy, "~> 1.0"},
      {:quantum, ">= 1.9.1"},
      {:timex, "~> 3.0"},
-     {:httpotion, "~> 3.0.2"},
-     {:poison, ">= 1.0.0"}]
+     {:httpotion, "~> 3.0.2"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
