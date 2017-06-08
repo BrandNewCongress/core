@@ -17,6 +17,7 @@ defmodule Core.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    get "/platform", PageController, :platform
   end
 
   # Other scopes may use custom stacks.
