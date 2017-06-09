@@ -1,25 +1,28 @@
 defmodule Core.PageController do
   use Core.Web, :controller
 
-  def index(conn, _params) do
-    render conn, "index.html"
+  defp get_brand(conn, params) do
+    cond do
+      params["brand"] == "jd" -> "jd"
+      true -> "bnc"
+    end
   end
 
-  defp get_platform() do
+  defp get_platform(brand) do
     %{body: {:ok, %{"object" => %{
       "content" => html
-    }}}} = Cosmic.get "platform"
+    }}}} = Cosmic.get "#{brand}-platform"
 
     html
   end
 
-  def platform(conn, %{"brand" => "jd"}) do
-    html = get_platform()
-    render conn, "platform.jd.html", [html: html]
+  def index(conn, params) do
+    render conn, "index.html", [brand: get_brand(conn, params)]
   end
 
-  def platform(conn, _params) do
-    html = get_platform()
-    render conn, "platform.bnc.html", [html: html]
+  def platform(conn, params) do
+    brand = get_brand(conn, params)
+    html = get_platform(brand)
+    render conn, "platform.html", [html: html, brand: brand]
   end
 end

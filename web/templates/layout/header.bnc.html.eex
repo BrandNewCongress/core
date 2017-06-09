@@ -1,0 +1,8 @@
+<header class="header">
+  <nav role="navigation">
+    <ul class="nav nav-pills pull-right">
+      <li><a href="http://www.phoenixframework.org/docs">BNC Header</a></li>
+    </ul>
+  </nav>
+  <span class="logo"></span>
+</header>

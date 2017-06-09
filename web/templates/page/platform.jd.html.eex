@@ -1,4 +1,0 @@
-<div> Welcome to JD's platform! </div>
-<div id="platform">
-  <%= raw(@html) %>
-</div>

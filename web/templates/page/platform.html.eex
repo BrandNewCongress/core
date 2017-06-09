@@ -1,0 +1,4 @@
+<div> Welcome to <%= @brand %> platform! </div>
+<div id="platform">
+  <%= raw(@html) %>
+</div>
