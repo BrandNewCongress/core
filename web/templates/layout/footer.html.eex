@@ -1,5 +1,5 @@
 <footer class="footer">
   <nav role="navigation">
-    <a href="http://www.phoenixframework.org/docs">JD Footer</a>
+    <%= raw(get_footer_links(@brand)) %>
   </nav>
 </footer>
