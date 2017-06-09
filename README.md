@@ -8,10 +8,11 @@ First, install Elixir – for Macs:
 brew install elixir
 ```
 
-should work. For anything else, check it: https://elixir-lang.org/install.html.
+should work. For anything else besides Macs, check: https://elixir-lang.org/install.html.
 
 To start the app locally:
   * Install dependencies with `mix deps.get` (equivalent of npm install)
+  * Run `npm install` to install Javascript + build dependencies
   * Start Phoenix endpoint with `mix phoenix.server`
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
