@@ -78,4 +78,7 @@ In the routing layer, `/web/router.ex`, a variable is passed to all views called
 `brand`. Variables can be accessed inside a template prefaced with `@`, so you see
 referenced to `@brand`. To set the brand (controlling whether the page is viewed
 from brandnewcongress.org or justicedemocrats.com), append `?brand=jd` to the URL
-for JD or anything else / nothing for BNC. 
+for JD or anything else / nothing for BNC.
+
+Right now, I'm setting the brand as a class name on the body, so that can be used
+to conditionally apply styles.
