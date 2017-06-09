@@ -29,7 +29,9 @@ defmodule NB do
     |> Keyword.update(:query, @default_params, &(Map.merge(@default_params, &1)))
   end
 
-  defp process_response_body(raw), do: Poison.decode(raw)
+  defp process_response_body(raw) do
+    Poison.decode(raw)
+  end
 
   # -----------------------------------
   # ---------- STREAM HELPERS ---------

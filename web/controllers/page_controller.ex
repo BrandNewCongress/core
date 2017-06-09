@@ -5,11 +5,21 @@ defmodule Core.PageController do
     render conn, "index.html"
   end
 
+  defp get_platform() do
+    %{body: {:ok, %{"object" => %{
+      "content" => html
+    }}}} = Cosmic.get "platform"
+
+    html
+  end
+
   def platform(conn, %{"brand" => "jd"}) do
-    render conn, "platform.jd.html"
+    html = get_platform()
+    render conn, "platform.jd.html", [html: html]
   end
 
   def platform(conn, _params) do
-    render conn, "platform.bnc.html"
+    html = get_platform()
+    render conn, "platform.bnc.html", [html: html]
   end
 end

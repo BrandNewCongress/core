@@ -1,1 +1,4 @@
 <div> Welcome to BNC's platform! </div>
+<div id="platform">
+  <%= raw(@html) %>
+</div>

@@ -5,5 +5,7 @@ defmodule Cosmic do
     "https://api.cosmicjs.com/v1/brand-new-congress/object/#{url}"
   end
 
-  defp process_response_body(raw), do: Poison.decode(raw)
+  defp process_response_body(raw) do
+    Poison.decode(raw)
+  end
 end
