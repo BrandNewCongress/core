@@ -1,4 +1,4 @@
-defmodule Cosmic do
+defmodule Cosmic.Api do
   use HTTPotion.Base
 
   defp process_url(url) do

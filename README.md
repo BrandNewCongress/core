@@ -52,8 +52,8 @@ The following need be styled and templated out in html:
 - [] JD Platform
 
 This also needs to happen:
-[] Fetch all buckets at once and cache them
-[] Handle edit webhooks and refetch and cache buckets
+- [x] Fetch all buckets at once and cache them (done: see reduction in response times on subsequent refreshes)
+- [] Handle edit webhooks and refetch and cache buckets
 
 ## What's this stack?
 
