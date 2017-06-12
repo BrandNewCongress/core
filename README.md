@@ -44,12 +44,12 @@ and mark that a bucket should exist here with a comment `TODO - bucket`.
 ## TODO
 
 The following need be styled and templated out in html:
-[] BNC Footer
-[] JD Footer
-[] BNC Header
-[] JD Header
-[] BNC Platform
-[] JD Platform
+- [] BNC Footer
+- [] JD Footer
+- [] BNC Header
+- [] JD Header
+- [] BNC Platform
+- [] JD Platform
 
 This also needs to happen:
 [] Fetch all buckets at once and cache them

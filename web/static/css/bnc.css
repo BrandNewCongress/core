@@ -1,2 +1,31 @@
-.milk
-  display none
+/* Header styles */
+
+/* Platform / text styles */
+.bnc .page-title {
+  background-color: #171717;
+  color: white;
+  text-align: center;
+  line-height: 37px;
+  font-family: sans-serif;
+}
+
+.bnc #star-five {
+   margin: 50px 0;
+   position: relative;
+   display: block;
+   color: red;
+   width: 0px;
+   height: 0px;
+   border-right:  100px solid transparent;
+   border-bottom: 70px  solid red;
+   border-left:   100px solid transparent;
+   -moz-transform:    rotate(35deg);
+   -webkit-transform: rotate(35deg);
+   -ms-transform:     rotate(35deg);
+   -o-transform:      rotate(35deg);
+}
+
+.bnc .small-star {
+  font-size: small;
+  line-height: 37px;
+}

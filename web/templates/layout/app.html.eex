@@ -12,7 +12,7 @@
   </head>
 
   <body class="<%= @brand %>">
-    <%= render Core.LayoutView, "header.#{@brand}.html" %>
+    <%= render Core.LayoutView, "header.#{@brand}.html", [conn: @conn, mobile: @mobile] %>
     <div class="container">
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>

@@ -1,8 +1,11 @@
 <header class="header">
   <nav role="navigation">
-    <ul class="nav nav-pills pull-right">
-      <li><a href="http://www.phoenixframework.org/docs">JD Header</a></li>
-    </ul>
+    <img src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+    <a class="hamburger-menu" id="sidebar-toggle">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </a>
   </nav>
   <span class="logo"></span>
 </header>
