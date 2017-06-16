@@ -13,8 +13,13 @@ use Mix.Config
 # which you typically run after static files are built.
 config :core, Core.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [host: "example.com", port: 80],
-  cache_static_manifest: "priv/static/manifest.json"
+  url: [scheme: "https", host: "#{System.get_env("APP_NAME")}.herokuapp.com", port: 443],
+  force_ssl: [rewrite_on: [:x_forwarded_proto]],
+  cache_static_manifest: "priv/static/manifest.json",
+  secret_key_base: System.get_env("SECRET_KEY_BASE")
+
+# Nationbuilder API Key
+config :core, [nb_slug: "brandnewcampaign", nb_token: System.get_env("NB_TOKEN")]
 
 # Do not print debug messages in production
 config :logger, level: :info

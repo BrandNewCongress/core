@@ -1,0 +1,17 @@
+<h4> Subscriptions </h4>
+<%= if length(@to_subscribe) == 0 do %>
+  You did not add any subscriptions.
+<% else %>
+  <span>
+    You will now receive emails from <%= Enum.join(@to_subscribe, ", ") %>
+  </span>
+<% end %>
+
+<h4> Unsubscriptions </h4>
+<%= if length(@to_unsubscribe) == 0 do %>
+  You did not remove any subscriptions.
+<% else %>
+  <span>
+    You have been unsubscribed from <%= Enum.join(@to_unsubscribe, ", ") %>
+  </span>
+<% end %>

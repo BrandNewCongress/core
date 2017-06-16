@@ -15,6 +15,9 @@ config :core, Core.Endpoint,
                     cd: Path.expand("../", __DIR__)]]
 
 
+# Nationbuilder API Key
+config :core, [nb_slug: "brandnewcampaign", nb_token: System.get_env("NB_TOKEN")]
+
 # Watch static and templates for browser reloading.
 config :core, Core.Endpoint,
   live_reload: [

@@ -1,5 +1,9 @@
-<footer class="footer">
-  <nav role="navigation">
-    <%= raw(get_footer_links(@brand)) %>
-  </nav>
-</footer>
+<%= if assigns[:no_footer] do %>
+  <span></span>
+<% else %>
+  <footer class="footer">
+    <nav role="navigation">
+      <%= raw(get_footer_links(@brand)) %>
+    </nav>
+  </footer>
+<% end %>

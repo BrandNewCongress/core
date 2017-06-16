@@ -9,8 +9,6 @@ use Mix.Config
 config :core,
   ecto_repos: [Core.Repo]
 
-config :core, [nb_slug: "dummy", nb_token: "dummy"]
-
 # Configures the endpoint
 config :core, Core.Endpoint,
   url: [host: "localhost"],

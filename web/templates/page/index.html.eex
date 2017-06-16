@@ -1,3 +1,6 @@
-<div>
-  <%= gettext "Welcome to %{name}", name: "Brand New Congress's new website!" %>
-</div>
+<script>
+  window.location.href = 'https://brandnewcongress.org'
+</script>
+// <div>
+  // <%= gettext "Welcome to %{name}", name: "Brand New Congress's new website!" %>
+// </div>

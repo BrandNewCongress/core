@@ -1,11 +1,11 @@
-<header class="header">
+<header style="background-color: #5B919F;" class="header">
   <nav role="navigation">
     <img src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
-    <a class="hamburger-menu" id="sidebar-toggle">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </a>
+    <!-- <a class="hamburger-menu" id="sidebar-toggle"> -->
+      <!-- <div class="bar"></div> -->
+      <!-- <div class="bar"></div> -->
+      <!-- <div class="bar"></div> -->
+    <!-- </a> -->
   </nav>
   <span class="logo"></span>
 </header>

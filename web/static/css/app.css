@@ -1,4 +1,12 @@
 /*This file is for your main application css.*/
+body {
+  margin: 0;
+}
+
+.container {
+  padding: 20px;
+}
+
 header {
   height: 40;
   padding-top: 15px;

@@ -17,11 +17,10 @@ defmodule Core.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    get "/platform", PageController, :platform
+    # get "/platform", PageController, :platform
+    # get "/candidates", PageController, :candidates
+    # get "/candidates/:candidate", PageController, :candidate
+    get "/unsubscribe", SubscriptionController, :unsubscribe_get
+    post "/unsubscribe", SubscriptionController, :unsubscribe_post
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", Core do
-  #   pipe_through :api
-  # end
 end

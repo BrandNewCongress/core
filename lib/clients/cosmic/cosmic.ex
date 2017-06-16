@@ -1,5 +1,16 @@
 defmodule Cosmic do
+  def fetch_all() do
+    %{body: {:ok, %{
+      "bucket" => %{
+        "objects" => objects
+      }
+    }}} = Cosmic.Api.get("")
+
+    Enum.map(objects, fn bucket -> Stash.set(:cosmic_cache, bucket["slug"], bucket) end)
+  end
+
   defp on_no_exist(path) do
+    IO.puts "Path #{path} is not cached. fetching..."
     resp = Cosmic.Api.get(path)
     Stash.set(:cosmic_cache, path, resp)
     resp

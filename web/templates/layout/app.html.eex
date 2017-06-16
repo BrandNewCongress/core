@@ -22,7 +22,7 @@
       </main>
 
     </div> <!-- /container -->
-    <%= render Core.LayoutView, "footer.html", [brand: @brand] %>
+    <%= render Core.LayoutView, "footer.html", [brand: @brand, no_footer: assigns[:no_footer]] %>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

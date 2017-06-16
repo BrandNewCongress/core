@@ -6,9 +6,12 @@ defmodule Core do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    # Fill initial cache
+    Cosmic.fetch_all
+
     # Define workers and child supervisors to be supervised
     children = [
-  
+
       # Start the Ecto repository
       # supervisor(Core.Repo, []),
       # can be readded when we have a database

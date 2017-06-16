@@ -1,0 +1,25 @@
+<%= form_tag("/unsubscribe", method: :post) %>
+  Hi <input type="email" readonly name="email" style="min-width: 200px" value="<%=@email%>" />,
+  <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
+  <br/>
+  <br/>
+  You are signed up to receive emails from the following candidates/lists below.
+  Please uncheck the email lists you would no longer like to be subscribed to
+  and press submit.
+  <br/>
+  <br/>
+  <%= for {tag, subscribed} <- @subscriptions do %>
+    <input
+      type="checkbox"
+      name="<%=tag%>"
+      value="<%=tag%>"
+      <%= if subscribed do %>
+        checked="<%= subscribed %>"
+      <% end %>
+    />
+    <%= tag %>
+    <br/>
+  <% end %>
+    <br/>
+  <input type="submit" value="Submit"/>
+</form>

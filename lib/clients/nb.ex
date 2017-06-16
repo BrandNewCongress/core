@@ -3,6 +3,7 @@ defmodule NB do
 
   @nb_slug Application.get_env(:core, :nb_slug)
   @nb_token Application.get_env(:core, :nb_token)
+  # @nb_token System.get_env("NB_TOKEN")
   @default_params %{
     limit: 100,
     access_token: @nb_token
