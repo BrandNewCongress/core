@@ -10,7 +10,6 @@ defmodule NB do
   }
 
   defp process_url(url) do
-    IO.puts "useing token #{@nb_token}"
     cond do
       String.starts_with? url, "/api/v1" ->
         "https://#{@nb_slug}.nationbuilder.com" <> url
