@@ -7,7 +7,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello Core!</title>
+    <title>
+      <%= if @brand == "jd" do %>Justice Democrats<% else %>Brand New Congress<% end %>
+      <%= gettext "| %{title}", title: assigns[:title] %>
+    </title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 

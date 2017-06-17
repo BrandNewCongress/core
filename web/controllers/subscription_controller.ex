@@ -50,7 +50,10 @@ defmodule Core.SubscriptionController do
 
     render conn,
       "unsubscribing.html",
-      [email: email, subscriptions: subscriptions, no_footer: true] ++ GlobalOpts.get(conn, params)
+      [
+        email: email, subscriptions: subscriptions, no_footer: true,
+        title: "Unsubscribe"
+      ] ++ GlobalOpts.get(conn, params)
   end
 
   @doc"""
@@ -109,10 +112,8 @@ defmodule Core.SubscriptionController do
     render conn,
       "unsubscribed.html",
       [
-        email: email,
-        no_footer: true,
-        to_unsubscribe: to_unsubscribe,
-        to_subscribe: to_subscribe
+        email: email, no_footer: true, to_unsubscribe: to_unsubscribe,
+        to_subscribe: to_subscribe, title: "Unsubscribe"
       ] ++ GlobalOpts.get(conn, params)
   end
 end
