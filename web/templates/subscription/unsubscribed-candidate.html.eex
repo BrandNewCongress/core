@@ -1,0 +1,6 @@
+<span>
+  You have been unsubscribed from <%= @candidate %>.
+  <br/>
+  <br/>
+  To rejoin the email list, sign up at: <a href=<%=@url%>> <%=@url%></a>.
+</span>

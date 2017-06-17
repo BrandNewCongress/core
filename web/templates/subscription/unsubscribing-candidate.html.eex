@@ -1,0 +1,13 @@
+<%= form_tag("/unsubscribe/#{@slug}", method: :post) %>
+  Hi <input type="email" readonly name="email" style="min-width: 200px" value="<%=@email%>" />,
+  <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
+  <br/>
+  <br/>
+  Are you sure you want to unsubscribe from <%= @candidate %>?
+  <br/>
+  <br/>
+  You can resubscribe at any time by filling out the signup form on their website.
+  <br/>
+  <br/>
+  <input type="submit" value="Unsubscribe Me"/>
+</form>
