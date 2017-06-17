@@ -1,25 +1,31 @@
-<%= form_tag("/unsubscribe", method: :post) %>
-  Hi <input type="email" readonly name="email" style="min-width: 200px" value="<%=@email%>" />,
-  <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
-  <br/>
-  <br/>
-  You are signed up to receive emails from the following candidates/lists below.
-  Please uncheck the email lists you would no longer like to be subscribed to
-  and press submit.
-  <br/>
-  <br/>
-  <%= for {tag, subscribed} <- @subscriptions do %>
-    <input
-      type="checkbox"
-      name="<%=tag%>"
-      value="<%=tag%>"
-      <%= if subscribed do %>
-        checked="<%= subscribed %>"
-      <% end %>
-    />
-    <%= tag %>
+<%= if is_atom(@subscriptions) do %>
+  It doesn't look like your email is in our database. If you're still receiving
+  emails from us, please contact <a href="mailto:<%=@help_email%>">
+  <%=@help_email%></a>.
+<% else %>
+  <%= form_tag("/unsubscribe", method: :post) %>
+    Hi <input type="email" readonly name="email" style="min-width: 200px" value="<%=@email%>" />,
+    <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
     <br/>
-  <% end %>
     <br/>
-  <input type="submit" value="Submit"/>
-</form>
+    You are signed up to receive emails from the following candidates/lists below.
+    Please uncheck the email lists you would no longer like to be subscribed to
+    and press submit.
+    <br/>
+    <br/>
+    <%= for {tag, subscribed} <- @subscriptions do %>
+      <input
+        type="checkbox"
+        name="<%=tag%>"
+        value="<%=tag%>"
+        <%= if subscribed do %>
+          checked="<%= subscribed %>"
+        <% end %>
+      />
+      <%= tag %>
+      <br/>
+    <% end %>
+      <br/>
+    <input type="submit" value="Submit"/>
+  </form>
+<% end %>

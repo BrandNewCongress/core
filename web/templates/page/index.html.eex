@@ -1,10 +1,3 @@
-<script>
-  <%= if @brand == "jd" do %>
-    window.location.href = 'https://justicedemocrats.com'
-  <% else %>
-    window.location.href = 'https://brandnewcongress.org'
-  <% end %>
-</script>
-// <div>
-  // <%= gettext "Welcome to %{name}", name: "Brand New Congress's new website!" %>
-// </div>
+<div>
+  <%= gettext "Welcome to %{name}", name: "Brand New Congress's new website!" %>
+</div>

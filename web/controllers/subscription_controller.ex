@@ -26,9 +26,9 @@ defmodule Core.SubscriptionController do
     "brandnewcongress" => "Brand New Congress"
   }
 
-  @doc"""
-  Tag Manipulation Helpers
-  """
+  # ---------------------------------------------------------------------------
+  # ----------------------  Tag Manipulation Helpers --------------------------
+  # ---------------------------------------------------------------------------
   defp is_source_tag(tag) do
     String.split(tag, ":", [global: true])
     |> Enum.map(&(String.trim(&1)))
@@ -54,36 +54,57 @@ defmodule Core.SubscriptionController do
     |> String.trim
   end
 
+  # ---------------------------------------------------------------------------
+  # ----------------------  Endpoint Handlers ---------------------------------
+  # ---------------------------------------------------------------------------
+
   @doc"""
-  Fetch the user's tags from nation builder to present different unsubscribe options
+    GET /unsubscribe?email=email
+
+    Fetch the user's tags from nation builder to present different unsubscribe options
   """
   def unsubscribe_get(conn, params = %{"email" => email}) do
-    %{body: {:ok, %{"person" => %{
-      "tags" => tags
-    }}}} = NB.get "people/match", [query: %{"email" => email}]
+    tags = case NB.get "people/match", [query: %{"email" => email}] do
+      %{body: {:ok, %{"person" => %{ "tags" => tags }}}} -> tags
+      _ -> nil
+    end
 
-    unsubscribed_tags = tags
-      |> Enum.filter(&(is_unsubscribe_tag(&1)))
-      |> Enum.map(&(extract_candidate(&1)))
+    if tags do
+      unsubscribed_tags = tags
+        |> Enum.filter(&(is_unsubscribe_tag(&1)))
+        |> Enum.map(&(extract_candidate(&1)))
 
-    subscribed_tags = tags
-      |> Enum.filter(&(is_source_tag(&1)))
-      |> Enum.map(&(extract_candidate(&1)))
+      subscribed_tags = tags
+        |> Enum.filter(&(is_source_tag(&1)))
+        |> Enum.map(&(extract_candidate(&1)))
 
-    subscriptions = subscribed_tags
-      |> Enum.map(fn tag -> {tag, not Enum.member?(unsubscribed_tags, tag)} end)
+      subscriptions = subscribed_tags
+        |> Enum.map(fn tag -> {tag, not Enum.member?(unsubscribed_tags, tag)} end)
 
-    render conn,
-      "unsubscribing.html",
-      [
-        email: email, subscriptions: subscriptions, no_footer: true,
-        title: "Unsubscribe"
-      ] ++ GlobalOpts.get(conn, params)
+      render conn,
+        "unsubscribing.html",
+        [email: email, subscriptions: subscriptions, no_footer: true,
+         title: "Unsubscribe"] ++ GlobalOpts.get(conn, params)
+    else
+      global_opts = GlobalOpts.get(conn, params)
+
+      help_email = case Keyword.get(global_opts, :brand) do
+        "jd" -> "help@justicedemocrats.com"
+        "bnc" -> "help@brandnewcongress.org"
+      end
+
+      render conn,
+        "unsubscribing.html",
+        [email: email, subscriptions: nil, no_footer: true,
+         help_email: help_email, title: "Unsubscribe"] ++ global_opts
+    end
   end
 
   @doc"""
-  Handle the different unsubscribe options, adding tags unsubscribe for those
-  sources not present on the request's params
+    GET /unsubscribe?email=email with post body
+
+    Handle the different unsubscribe options, adding tags unsubscribe for those
+    sources not present on the request's params
   """
   def unsubscribe_post(conn, params = %{"email" => email}) do
     %{body: {:ok, %{"person" => %{
@@ -136,50 +157,75 @@ defmodule Core.SubscriptionController do
 
     render conn,
       "unsubscribed.html",
-      [
-        email: email, no_footer: true, to_unsubscribe: to_unsubscribe,
-        to_subscribe: to_subscribe, title: "Unsubscribe"
-      ] ++ GlobalOpts.get(conn, params)
+      [email: email, no_footer: true, to_unsubscribe: to_unsubscribe,
+       to_subscribe: to_subscribe, title: "Unsubscribe"] ++ GlobalOpts.get(conn, params)
   end
 
+
+  @doc"""
+    GET /unsubscribe/:candidate?email=email
+
+    Simple are you sure for candidate unsubscribe - doesn't matter if currently
+    subscribed
+  """
   def unsubscribe_candidate_get(conn, params = %{"email" => email, "candidate" => candidate}) do
     nice_name = @sources[candidate]
-    IO.puts candidate
 
     render conn,
       "unsubscribing-candidate.html",
-      [
-        email: email, no_footer: true, title: "Unsubscribe",
-        candidate: nice_name, slug: candidate
-      ] ++ GlobalOpts.get(conn, params)
+      [email: email, no_footer: true, title: "Unsubscribe",
+       candidate: nice_name, slug: candidate] ++ GlobalOpts.get(conn, params)
   end
 
+  @doc"""
+    GET /unsubscribe/:candidate?email=email with post body
+
+    Do the unsubscription and show a success page
+  """
   def unsubscribe_candidate_post(conn, params = %{"email" => email, "candidate" => candidate}) do
-    global_opts = GlobalOpts.get(conn, params)
     nice_name = @sources[candidate]
 
+    # Find the person
+    id = case NB.get "people/match", [query: %{"email" => email}] do
+      %{body: {:ok, %{"person" => %{ "id" => id }}}} -> id
+      _ -> nil
+    end
+
+    # Construct body and put it for the taggings
+    {:ok, put_body_string} = Poison.encode(%{"tagging" => %{
+      "tag": "Action: Unsubscribed: #{nice_name}"
+    }})
+
+    if id do
+      NB.put("people/#{id}/taggings", [body: put_body_string])
+    end
+
+    # Determine the resubscribe link
+    global_opts = GlobalOpts.get(conn, params)
     base = case Keyword.get(global_opts, :brand) do
       "jd" -> "https://justicedemocrats.com/"
       "bnc" -> "https://brandnewcongress.org/"
     end
 
-    url = base <> candidate
-
-    %{body: {:ok, %{"person" => %{
-      "id" => id,
-    }}}} = NB.get "people/match", [query: %{"email" => email}]
-
-    {:ok, put_body_string} = Poison.encode(%{"tagging" => %{
-      "tag": "Action: Unsubscribed: #{nice_name}"
-    }})
-
-    NB.put("people/#{id}/taggings", [body: put_body_string])
-
     render conn,
       "unsubscribed-candidate.html",
-      [
-        email: email, no_footer: true, title: "Unsubscribe", candidate: nice_name,
-        url: url
-      ] ++ global_opts
+      [email: email, no_footer: true, title: "Unsubscribe", candidate: nice_name,
+       url: base <> candidate] ++ global_opts
   end
+
+  # Private function for any situation where the email is missing
+  defp do_homepage_redirect(conn, params) do
+    url = case GlobalOpts.get(conn, params) |> Keyword.get(:brand) do
+      "jd" -> "https://justicedemocrats.com"
+      "bnc" -> "https://brandnewcongress.org"
+    end
+
+    redirect(conn, external: url)
+  end
+
+  # Redirect if no email
+  def unsubscribe_get(conn, params), do: do_homepage_redirect(conn, params)
+  def unsubscribe_post(conn, params), do: do_homepage_redirect(conn, params)
+  def unsubscribe_candidate_get(conn, params), do: do_homepage_redirect(conn, params)
+  def unsubscribe_candidate_post(conn, params), do: do_homepage_redirect(conn, params)
 end
