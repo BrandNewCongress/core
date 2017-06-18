@@ -1,9 +1,23 @@
-<%= if assigns[:no_footer] do %>
-  <span></span>
-<% else %>
-  <footer class="footer">
+<footer class="footer">
+  <%= if assigns[:no_footer] == nil do %>
     <nav role="navigation">
-      <%= raw(get_footer_links(@brand)) %>
     </nav>
-  </footer>
-<% end %>
+  <% end %>
+
+  <div id="footer" class="legal">
+    <div class="logo">
+      <img src="<%=logo_source(@brand)%>" alt="">
+    </div>
+    <p>
+      <span class="wiggle-room"> Press contact <a href="mailto:<%=press(@brand)%>"><%=press(@brand)%></a> </span>
+      <span style="font-size: x-large;">|</span>
+      <span class="wiggle-room"> General contact <a href="mailto:<%=contact(@brand)%>"><%=contact(@brand)%></a> </span>
+    </p>
+    <div class="copyright">
+      ©2017 <%=copyright(@brand)%>. All rights reserved. <%=address(@brand)%>.
+      <br>
+      Paid for by <%=copyright(@brand)%>, <%=homepage(@brand)%>, not authorized by any candidate or
+      candidate's committee.
+    </div>
+  </div>
+</footer>

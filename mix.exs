@@ -35,7 +35,6 @@ defmodule Core.Mixfile do
      {:phoenix_ecto, "~> 3.0"},
      {:postgrex, ">= 0.0.0"},
      {:phoenix_html, "~> 2.6"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:quantum, ">= 1.9.1"},
@@ -43,7 +42,9 @@ defmodule Core.Mixfile do
      {:httpotion, "~> 3.0.2"},
      {:phoenix_expug, git: "https://github.com/rstacruz/phoenix_expug.git"},
      {:browser, "~> 0.1.0"},
-     {:stash, "~> 1.0.0"}]
+     {:stash, "~> 1.0.0"},
+     {:phoenix_live_reload, "~> 1.0", only: :dev},
+     {:credo, "~> 0.8", only: [:dev, :text], runtime: false}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

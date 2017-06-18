@@ -1,0 +1,151 @@
+<div class="two-column" style="background-image: url(<%=@background_image%>);">
+  <div class="right-column">
+    <div class="external-content-wrapper">
+      <%= raw(@content) %>
+    </div>
+    <%= form_tag("/#{@slug}/sign", method: :post) %>
+      <div class="petition-container">
+        <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
+        <div>
+          <label>Name</label>
+          <input class="text" type="text" name="name" required="required"/>
+        </div>
+        <div>
+          <label>Email</label>
+          <input class="text" type="email" name="email" required="required"/>
+        </div>
+        <div>
+          <label>Zip</label>
+          <input class="text" name="zip" maxlength="5" required="required" />
+        </div>
+        <div style="text-align: center; width: calc(100% + 2em);">
+          <input class="petition-submit" type="submit" value="<%=@sign_button_text%>">
+        </div>
+        <span class="disclaimer">
+          By signing this petition, I consent to receiving emails from
+          <a href="<%=homepage(@brand)%>"><%=copyright(@brand)%></a>.
+        </span>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+.two-column {
+  width: 100%;
+  height: 100%;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.right-column {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px;
+  background-color: rgba(30,30,30,0.8);
+}
+
+.right-column h1, .right-column h2 {
+  color: #fff !important;
+  font-family: 'Roboto Condensed', sans-serif !important;
+}
+
+.right-column h3 {
+  color: #FF7A65 !important;
+  font-family: 'Roboto Slab', sans-serif;
+}
+
+.right-column h1 {
+  font-size: 2.0em;
+  text-transform: uppercase;
+}
+
+.right-column p {
+  font-size: inherit !important;
+  color: #ccc !important;
+  line-height: 1.6em !important;
+  font-weight: 400 !important;
+  font-family: 'Roboto Slab', sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+.petition-container {
+  padding-left: 10%;
+  padding-right: 20%;
+}
+
+.petition-container input.text  {
+  color: white;
+  width: 100%;
+  font-size: 16px;
+  height: 20px;
+  border: 1px solid #ddd;
+  font-weight: 300;
+  padding: 1em;
+  transition: border-color 500ms linear;
+  margin-bottom: 1em;
+  margin-top: 5px;
+  background-color: rgba(255,255,255,0.1);
+}
+
+.petition-container label {
+  display: block;
+  padding-bottom: 5px;
+  font-family: 'Roboto Slab', sans-serif;
+  color: white !important;
+}
+
+.petition-container input[type="submit"] {
+  cursor: pointer;
+  font-size: 1.1em;
+  font-weight: bold;
+  height: 3.4em;
+  letter-spacing: 1px;
+  border: 0;
+  transition: all .2s ease-out;
+  text-transform: uppercase;
+  width: 100%;
+  margin-bottom: 1em;
+  margin-top: .5em;
+}
+
+.petition-container .disclaimer {
+  font-size: smaller;
+  color: #ccc;
+  margin-top: 5px;
+}
+
+.petition-container .disclaimer a {
+  color: #5b919f;
+  text-decoration: none;
+}
+
+.bnc .petition-container input[type="submit"]  {
+  background-color: rgb(95, 39, 135);
+  color: white;
+}
+
+.bnc .petition-container input[type="submit"]:hover {
+  background-color: white;
+  color: rgb(95, 39, 135);
+}
+
+.jd .petition-container input[type="submit"]  {
+  background-color: #F6FF00;
+  color: black;
+}
+
+.jd .petition-container input[type="submit"]:hover {
+  background-color: #DDE600;
+  border: 1px solid black;
+}
+
+.external-content-wrapper h1,
+.external-content-wrapper h2,
+.external-content-wrapper h3,
+.external-content-wrapper p {
+  background: none !important;
+}
+
+</style>

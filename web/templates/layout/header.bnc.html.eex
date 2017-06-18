@@ -1,11 +1,11 @@
 <header class="header">
   <nav role="navigation">
     <img src="<%= static_path(@conn, "/images/horizontal-logo-bnc.png")%>" />
-    <a class="hamburger-menu" id="sidebar-toggle">
+    <!-- <a class="hamburger-menu" id="sidebar-toggle">
       <div class="bar"></div>
       <div class="bar"></div>
       <div class="bar"></div>
-    </a>
+    </a> -->
   </nav>
   <span class="logo"></span>
 </header>

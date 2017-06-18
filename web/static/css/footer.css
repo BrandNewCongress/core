@@ -1,0 +1,33 @@
+footer {
+  background-color: #111;
+  padding: 5%;
+  color: #6D6D6D;
+  text-align: center;
+  font-family: 'Roboto', serif
+}
+
+footer img {
+  opacity: .4;
+}
+
+.bnc footer img {
+  width: 100px;
+}
+
+.jd footer img {
+  width: 40px;
+}
+
+footer .legal a {
+  color: #5b919f;
+  text-decoration: none;
+}
+
+footer .wiggle-room {
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+footer .copyright {
+  line-height: 1.8em;
+}

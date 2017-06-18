@@ -20,9 +20,14 @@ defmodule Core.Router do
     # get "/platform", PageController, :platform
     # get "/candidates", PageController, :candidates
     # get "/candidates/:candidate", PageController, :candidate
+
+    get "/petition/:petition", PetitionController, :get
+    post "/petition/:petition", PetitionController, :post
+
     get "/unsubscribe", SubscriptionController, :unsubscribe_get
     post "/unsubscribe", SubscriptionController, :unsubscribe_post
     get "/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_get
     post "/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_post
+
   end
 end

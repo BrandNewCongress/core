@@ -3,32 +3,6 @@ body {
   margin: 0;
 }
 
-.container {
-  padding: 20px;
-}
-
-header {
-  height: 40;
-  padding-top: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #DDD;
-}
-
-header img {
-  width: 220px;
-  margin-left: 40px;
-}
-
-header .hamburger-menu .bar {
-  width: 100%;
-  border-bottom: 3px solid black;
-  clear: both;
-  padding-bottom: 2px;
-}
-
-header .hamburger-menu {
-  float: right;
-  width: 20px;
-  margin-right: 40px;
-  margin-top: 11px;
+.alert {
+  margin: 0;
 }
