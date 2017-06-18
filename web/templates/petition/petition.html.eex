@@ -1,32 +1,86 @@
+<!-- for Google -->
+<meta name="description" content="<%=@title%>" />
+<meta name="keywords" content="<%=@title <> "" <> copyright(@brand)%>" />
+<meta name="author" content="copyright(@brand)%>" />
+<meta name="copyright" content="copyright(@brand)%>" />
+
+<!-- for Facebook -->
+<meta property="og:title" content="<%=@title%>" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="@background_image" />
+<meta property="og:description" content="@content" />
+
+<!-- for Twitter -->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="@title" />
+<meta name="twitter:description" content="@content" />
+<meta name="twitter:image" content="@background_image" />
+
 <div class="two-column" style="background-image: url(<%=@background_image%>);">
   <div class="right-column">
-    <div class="external-content-wrapper">
-      <%= raw(@content) %>
-    </div>
-    <%= form_tag("/#{@slug}/sign", method: :post) %>
-      <div class="petition-container">
-        <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
-        <div>
-          <label>Name</label>
-          <input class="text" type="text" name="name" required="required"/>
-        </div>
-        <div>
-          <label>Email</label>
-          <input class="text" type="email" name="email" required="required"/>
-        </div>
-        <div>
-          <label>Zip</label>
-          <input class="text" name="zip" maxlength="5" required="required" />
-        </div>
-        <div style="text-align: center; width: calc(100% + 2em);">
-          <input class="petition-submit" type="submit" value="<%=@sign_button_text%>">
-        </div>
-        <span class="disclaimer">
-          By signing this petition, I consent to receiving emails from
-          <a href="<%=homepage(@brand)%>"><%=copyright(@brand)%></a>.
-        </span>
+    <%= if not @signed do %>
+      <div class="external-content-wrapper">
+        <%= raw(@content) %>
       </div>
-    </form>
+      <%= form_tag("/petition/#{@slug}", method: :post) %>
+        <div class="petition-container">
+          <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
+          <div>
+            <label>Name</label>
+            <input class="text" type="text" name="name" required="required"/>
+          </div>
+          <div>
+            <label>Email</label>
+            <input class="text" type="email" name="email" required="required"/>
+          </div>
+          <div>
+            <label>Zip</label>
+            <input class="text" name="zip" maxlength="5" required="required" />
+          </div>
+          <div style="text-align: center; width: calc(100% + 2em);">
+            <input class="petition-submit" type="submit" value="<%=@sign_button_text%>">
+          </div>
+          <span class="disclaimer">
+            By signing this petition, I consent to receiving emails from
+            <a href="<%=homepage(@brand)%>"><%=copyright(@brand)%></a>.
+          </span>
+        </div>
+      </form>
+
+    <% else %>
+
+      <div class="external-content-wrapper">
+        <%= raw(@post_sign_text) %>
+      </div>
+
+      <!--  Load Twitter Widget -->
+      <script>window.twttr = (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {};
+        if (d.getElementById(id)) return t; js = d.createElement(s);
+        js.id = id; js.src = "https://platform.twitter.com/widgets.js";
+        fjs.parentNode.insertBefore(js, fjs); t._e = [];
+        t.ready = function(f) { t._e.push(f); }; return t;
+      }(document, "script", "twitter-wjs"));</script>
+
+      <!--  Load Facebook Widget -->
+      <div id="fb-root"></div>
+      <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return; js = d.createElement(s); js.id = id;
+        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1";
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));</script>
+
+      <a class="twitter-share-button" href="<%=@twitter_href%>" data-size="large">
+        Tweet
+      </a>
+
+      <div class="fb-share-button" data-href="<%=@url%>" data-layout="button_count" data-size="large">
+        <a class="fb-xfbml-parse-ignore" target="_blank" href="<%=@fb_href%>">
+          Share on Facebook
+        </a>
+      </div>
+    <% end %>
   </div>
 </div>
 
@@ -34,6 +88,7 @@
 .two-column {
   width: 100%;
   height: 100%;
+  min-height: 80vh;
   padding-top: 30px;
   padding-bottom: 30px;
 }
