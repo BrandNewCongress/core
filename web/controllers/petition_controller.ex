@@ -3,6 +3,10 @@ defmodule Core.PetitionController do
 
   def get(conn, params = %{"petition" => petition}) do
     object = Cosmic.get(petition)
+
+    IO.puts petition
+    IO.inspect object
+
     render_petition(conn, params, object)
   end
 
