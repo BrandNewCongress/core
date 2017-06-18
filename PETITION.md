@@ -18,3 +18,8 @@ available at `https://now.brandnewcongress.org/petition/#{slug}`. If you select
 If you select both, it will be available at both.
 
 Good good?
+
+## Updating
+
+To see your updates, visit `https://now.brandnewcongress.org/api/update/cosmic?secret=`
+and paste in the secret that Ben gave you when you asked him for it.
