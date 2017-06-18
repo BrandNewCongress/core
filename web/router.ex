@@ -28,6 +28,11 @@ defmodule Core.Router do
     post "/unsubscribe", SubscriptionController, :unsubscribe_post
     get "/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_get
     post "/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_post
+  end
 
+
+  scope "/api", Core do
+    get "/update/cosmic", UpdateController, :cosmic
+    # get "/update/typeform", UpdateController, :typeform
   end
 end

@@ -23,13 +23,17 @@ defmodule Core.PetitionController do
     end
   end
 
+  # Match petition is nil
+  defp render_petition(conn, params, nil) do
+    render conn, "404.html", GlobalOpts.get(conn, params)
+  end
+
   # Extract and render petition
-  defp do_render_petition(conn, params = %{"petition" => petition}, %{
+  defp do_render_petition(conn, params, %{
     "slug" => slug,
     "title" => title,
     "content" => content,
     "metadata" => %{
-      "brands" => brands,
       "sign_button_text" => sign_button_text,
       "post_sign_text" => post_sign_text,
       "background_image" => %{
@@ -43,11 +47,6 @@ defmodule Core.PetitionController do
        no_footer: true, signed: false] ++ GlobalOpts.get(conn, params)
   end
 
-  # Match petition is nil
-  defp render_petition(conn, params, nil) do
-    render conn, "404.html", GlobalOpts.get(conn, params)
-  end
-
   def post(conn, params = %{"petition" => petition, "name" => name, "email" => email, "zip" => zip}) do
     global_opts = GlobalOpts.get(conn, params)
 
@@ -55,7 +54,6 @@ defmodule Core.PetitionController do
       "title" => title,
       "content" => content,
       "metadata" => %{
-        "brands" => brands,
         "sign_button_text" => sign_button_text,
         "post_sign_text" => post_sign_text,
         "tweet_template" => tweet_template,

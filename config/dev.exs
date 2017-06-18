@@ -18,6 +18,9 @@ config :core, Core.Endpoint,
 # Nationbuilder API Key
 config :core, [nb_slug: "brandnewcampaign", nb_token: System.get_env("NB_TOKEN")]
 
+# Update secret
+config :core, [update_secret: System.get_env("UPDATE_SECRET")]
+
 # Watch static and templates for browser reloading.
 config :core, Core.Endpoint,
   live_reload: [

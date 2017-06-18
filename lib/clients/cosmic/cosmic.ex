@@ -22,4 +22,10 @@ defmodule Cosmic do
       val -> val
     end
   end
+
+  def update() do
+    Stash.clear(:cosmic_cache)
+    fetch_all()
+    IO.puts "Cleared cosmic cache and updated it"
+  end
 end
