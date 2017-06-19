@@ -17,8 +17,6 @@ available at `https://now.brandnewcongress.org/petition/#{slug}`. If you select
 `jd`, it will be available at `https://now.justicedemocratcs.com/petition/#{slug}`.
 If you select both, it will be available at both.
 
-Good good?
-
 ## Updating
 
 To see your updates, visit `https://now.brandnewcongress.org/api/update/cosmic?secret=`
