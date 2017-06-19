@@ -1,0 +1,3 @@
+<div>
+  <%= raw(@share_html) %>
+</div>
