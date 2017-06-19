@@ -7,7 +7,8 @@ defmodule Core.UpdateController do
     json conn, %{"ok" => "Successfully updated Cosmic cache"}
   end
 
-  def cosmic(conn, %{"secret" => _}) do
+  def cosmic(conn, %{"secret" => s}) do
+    IO.puts "User put incorrect secret #{s}. Should be #{@secret}"
     json conn, %{"error" => "Wrong secret. Contact Ben for the right one."}
   end
 

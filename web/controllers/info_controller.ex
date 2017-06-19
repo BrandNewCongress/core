@@ -1,16 +1,15 @@
-defmodule Core.FormController do
+defmodule Core.InfoController do
   use Core.Web, :controller
 
   def get(conn, params = %{"form" => slug, "draft" => draft}) do
     global_opts = GlobalOpts.get(conn, params)
 
-    %{"title" => title, "metadata" => %{
-      "share_html" => share_html,
+    %{"title" => title, "content" => content, "metadata" => %{
       "brands" => brands
     }} = Cosmic.get(slug)
 
     if Enum.member? brands, Keyword.get(global_opts, :brand) do
-      render conn, "form.html", [share_html: share_html, title: title] ++ global_opts
+      render conn, "form.html", [content: content, title: title] ++ global_opts
     else
       redirect_home(conn, params)
     end
@@ -19,15 +18,14 @@ defmodule Core.FormController do
   def get(conn, params = %{"form" => slug}) do
     global_opts = GlobalOpts.get(conn, params)
 
-    %{"title" => title, "metadata" => %{
+    %{"title" => title, "content" => content, "metadata" => %{
       "visibility" => visibility,
-      "share_html" => share_html,
       "brands" => brands
     }} = Cosmic.get(slug)
 
     if Enum.member? brands, Keyword.get(global_opts, :brand) do
       case visibility do
-        "Published" -> render conn, "form.html", [share_html: share_html, title: title] ++ global_opts
+        "Published" -> render conn, "form.html", [content: content, title: title] ++ GlobalOpts.get(conn, params)
         "Draft" -> redirect_home(conn, params)
       end
     else
