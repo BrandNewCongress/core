@@ -2,11 +2,18 @@ defmodule Core.FormController do
   use Core.Web, :controller
 
   def get(conn, params = %{"form" => slug, "draft" => draft}) do
+    global_opts = GlobalOpts.get(conn, params)
+
     %{"title" => title, "metadata" => %{
-      "share_html" => share_html
+      "share_html" => share_html,
+      "brands" => brands
     }} = Cosmic.get(slug)
 
-    render conn, "form.html", [share_html: share_html, title: title] ++ GlobalOpts.get(conn, params)
+    if Enum.member? brands, Keyword.get(global_opts, :brand) do
+      render conn, "form.html", [share_html: share_html, title: title] ++ global_opts
+    else
+      redirect_home(conn, params)
+    end
   end
 
   def get(conn, params = %{"form" => slug}) do
