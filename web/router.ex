@@ -24,6 +24,8 @@ defmodule Core.Router do
     get "/petition/:petition", PetitionController, :get
     post "/petition/:petition", PetitionController, :post
 
+    get "/form/:form", FormController, :get
+
     get "/unsubscribe", SubscriptionController, :unsubscribe_get
     post "/unsubscribe", SubscriptionController, :unsubscribe_post
     get "/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_get
