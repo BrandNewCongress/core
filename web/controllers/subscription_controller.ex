@@ -24,7 +24,8 @@ defmodule Core.SubscriptionController do
     "ryan-stone" => "Ryan Stone",
     "paul-perry" => "Paul Perry",
     "brandnewcongress" => "Brand New Congress",
-    "justicedemocrats" => "Justice Democrats"
+    "justicedemocrats" => "Justice Democrats",
+    "justice-democrats" => "Justice Democrats"
   }
 
   # ---------------------------------------------------------------------------
