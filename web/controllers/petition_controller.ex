@@ -71,13 +71,23 @@ defmodule Core.PetitionController do
     fb_href = "https://www.facebook.com/sharer/sharer.php?#{fb_query}&amp;src=sdkpreparse"
 
     # Get person's id / create them
-    [first_name | [last_name]] = String.split(name, " ")
+    names = name |> String.trim() |> String.split(" ")
+    first_name = List.first(names)
+    last_name = if length(names) > 1 do
+      List.last(names)
+    else
+      ""
+    end
+
     {:ok, post_body_string} = Poison.encode(%{"person" => %{
       "email" => email,
       "first_name" => first_name,
       "last_name" => last_name,
       "mailing_address" => %{"zip" => zip}
     }})
+
+    IO.puts post_body_string
+
     %{body: {:ok, %{"person" => %{"id" => id}}}} = NB.post("people", [body: post_body_string])
 
     # Add the petition signed tag
