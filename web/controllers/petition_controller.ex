@@ -86,8 +86,6 @@ defmodule Core.PetitionController do
       "mailing_address" => %{"zip" => zip}
     }})
 
-    IO.puts post_body_string
-
     %{body: {:ok, %{"person" => %{"id" => id}}}} = NB.post("people", [body: post_body_string])
 
     # Add the petition signed tag
