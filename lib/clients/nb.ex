@@ -3,18 +3,17 @@ defmodule NB do
 
   @nb_slug Application.get_env(:core, :nb_slug)
   @nb_token Application.get_env(:core, :nb_token)
-  # @nb_token System.get_env("NB_TOKEN")
+
   @default_params %{
     limit: 100,
     access_token: @nb_token
   }
 
   defp process_url(url) do
-    cond do
-      String.starts_with? url, "/api/v1" ->
-        "https://#{@nb_slug}.nationbuilder.com" <> url
-      true ->
-        "https://#{@nb_slug}.nationbuilder.com/api/v1/" <> url
+    if String.starts_with? url, "/api/v1" do
+      "https://#{@nb_slug}.nationbuilder.com" <> url
+    else
+      "https://#{@nb_slug}.nationbuilder.com/api/v1/" <> url
     end
   end
 
@@ -39,7 +38,7 @@ defmodule NB do
   # -----------------------------------
 
   # If results exist, send them, passing only the tail
-  defp _stream({:ok, %{"next" => next, "results" => [ head | tail ]}}) do
+  defp _stream({:ok, %{"next" => next, "results" => [head | tail]}}) do
     {head, {:ok, %{"next" => next, "results" => tail}}}
   end
 
@@ -50,13 +49,17 @@ defmodule NB do
 
   # If results don't exist, and next is not null, serve it
   defp _stream({:ok, %{"next" => next, "results" => _}}) do
-    [ core, params ] = String.split(next, "?")
-    case get(core, [query: Query.decode(params)]).body do
-      {:ok, %{ "next" => next, "results" => [ head | tail] }} ->
+    [core, params] = String.split(next, "?")
+    case get(core, [query: Plug.Conn.Query.decode(params)]).body do
+      {:ok, %{"next" => next, "results" => [head | tail]}} ->
         {head, {:ok, %{"next" => next, "results" => tail}}}
       true ->
         nil
     end
+  end
+
+  defp _stream({:error, message}) do
+    message
   end
 
   # Wrap it all
