@@ -3,6 +3,14 @@ body {
   margin: 0;
 }
 
+html, body {
+  height: 100%;
+}
+
+main, .container {
+  height: calc(100vh - 75px);
+}
+
 .alert {
   margin: 0;
 }

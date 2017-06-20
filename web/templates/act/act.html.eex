@@ -1,0 +1,35 @@
+<div id="work-app"></div>
+<%= if @mobile do %>
+  <script defer="defer" src="<%= static_path(@conn, "/js/act.mobile.js") %>"></script>
+<% else %>
+  <script defer="defer" src="<%= static_path(@conn, "/js/act.desktop.js") %>"></script>
+<% end %>
+
+<style>
+
+#work-app {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#explanation {
+  background-color: #393939;
+  color: white;
+  font-family: 'Roboto Slab', sans-serif;
+  border-radius: 2px;
+  padding: 10px;
+}
+
+#strategy {
+  /*background-image: url(https://www.maps.com/media/catalog/product/cache/1/thumbnail/2500x/17f82f742ffe127f42dca9de82fb58b1/s/i/signature_world_wall_map-2.jpeg);*/
+  height: 60vh;
+  width: 60vw;
+}
+
+#strategy-explanation {
+  background-color: rgba(30,30,30,0.8);
+}
+
+</style>

@@ -27,6 +27,8 @@ defmodule Core.Router do
     get "/form/:form", FormController, :get
     get "/info/:info", InfoController, :get
 
+    get "/act", ActController, :get
+
     get "/unsubscribe", SubscriptionController, :unsubscribe_get
     post "/unsubscribe", SubscriptionController, :unsubscribe_post
     get "/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_get
