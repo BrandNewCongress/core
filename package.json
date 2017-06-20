@@ -3,8 +3,7 @@
   "license": "MIT",
   "scripts": {
     "deploy": "webpack -p",
-    "watch": "webpack --watch-stdin --progress --color",
-    "heroku-postbuild": "webpack -p"
+    "watch": "webpack --watch-stdin --progress --color"
   },
   "dependencies": {
     "antd": "^2.11.1",
