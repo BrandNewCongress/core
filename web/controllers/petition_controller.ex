@@ -71,7 +71,7 @@ defmodule Core.PetitionController do
     fb_href = "https://www.facebook.com/sharer/sharer.php?#{fb_query}&amp;src=sdkpreparse"
 
     # Get person's id / create them
-    [first_name | last_name] = String.split(name, " ")
+    [first_name | [last_name]] = String.split(name, " ")
     {:ok, post_body_string} = Poison.encode(%{"person" => %{
       "email" => email,
       "first_name" => first_name,
