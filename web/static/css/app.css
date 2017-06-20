@@ -7,7 +7,7 @@ html, body {
   height: 100%;
 }
 
-main, .container {
+main {
   height: calc(100vh - 75px);
 }
 
