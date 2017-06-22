@@ -11,7 +11,7 @@ config :core,
 
 # Configures the endpoint
 config :core, Core.Endpoint,
-  url: [host: System.get_env("HOST") || 'localhost'],
+  url: [host: 'localhost'],
   secret_key_base: "GxtfaDIKOkay5x2k0cxuJYQPX4BEyeo9fHynynmVqtiJoDgZqM8gvXT8dSMXekhI",
   render_errors: [view: Core.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Core.PubSub,

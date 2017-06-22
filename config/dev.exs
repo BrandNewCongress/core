@@ -16,6 +16,10 @@ config :core, Core.Endpoint,
 # Nationbuilder API Key
 config :core, [nb_slug: "brandnewcampaign", nb_token: System.get_env("NB_TOKEN")]
 
+# Mailgun
+config :core, [mailgun_domain: System.get_env("MAILGUN_DOMAIN"),
+               mailgun_key: System.get_env("MAILGUN_KEY")]
+
 # Update secret
 config :core, [update_secret: System.get_env("UPDATE_SECRET")]
 
