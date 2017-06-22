@@ -2,17 +2,17 @@ defmodule Core.PageController do
   use Core.Web, :controller
 
   defp get_platform(brand) do
-    %{ "content" => html } = Cosmic.get "#{brand}-platform"
+    %{"content" => html} = Cosmic.get "#{brand}-platform"
     html
   end
 
   def index(conn, params) do
-    url = case GlobalOpts.get(conn, params) |> Keyword.get("brand") do
+    url = case conn |> GlobalOpts.get(params) |> Keyword.get(:brand) do
       "jd" -> "https://justicedemocrats.com"
       "bnc" -> "https://brandnewcongress.org"
     end
 
-    redirect(conn, to: url)
+    redirect(conn, external: url)
     # render conn, "index.html", GlobalOpts.get(conn, params)
   end
 

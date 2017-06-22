@@ -103,12 +103,10 @@
 
 .right-column h1, .right-column h2 {
   color: #fff !important;
-  font-family: 'Roboto Condensed', sans-serif !important;
 }
 
 .right-column h3 {
   color: #FF7A65 !important;
-  font-family: 'Roboto Slab', sans-serif;
 }
 
 .right-column h1 {
@@ -121,7 +119,6 @@
   color: #ccc !important;
   line-height: 1.6em !important;
   font-weight: 400 !important;
-  font-family: 'Roboto Slab', sans-serif !important;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -130,24 +127,9 @@
   padding-right: 20%;
 }
 
-.petition-container input.text  {
-  color: white;
-  width: 100%;
-  font-size: 16px;
-  height: 20px;
-  border: 1px solid #ddd;
-  font-weight: 300;
-  padding: 1em;
-  transition: border-color 500ms linear;
-  margin-bottom: 1em;
-  margin-top: 5px;
-  background-color: rgba(255,255,255,0.1);
-}
-
 .petition-container label {
   display: block;
   padding-bottom: 5px;
-  font-family: 'Roboto Slab', sans-serif;
   color: white !important;
 }
 

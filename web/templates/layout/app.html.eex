@@ -5,28 +5,43 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="author" content="<%= homepage(@brand) %>">
 
     <title>
       <%= if @brand == "jd" do %>Justice Democrats<% else %>Brand New Congress<% end %>
       <%= gettext "| %{title}", title: assigns[:title] %>
     </title>
+
+    <!-- Conditional font includes -->
+    <%= if @brand == "jd" do %>
+      <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One|Anonymous+Pro|Roboto" rel="stylesheet">
+      <link href="<%= static_path(@conn, "/css/jd.css") %>" rel="stylesheet">
+    <% else %>
+      <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed|Roboto+Slab+" rel="stylesheet">
+      <link href="<%= static_path(@conn, "/css/bnc.css") %>" rel="stylesheet">
+    <% end %>
+
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   </head>
 
   <body class="<%= @brand %>">
-    <%= render Core.LayoutView, "header.#{@brand}.html", [conn: @conn, mobile: @mobile] %>
+    <%= render Core.LayoutView, "header.#{@brand}.html", [conn: @conn, mobile: @mobile, header_text: assigns[:header_text]] %>
     <div class="container">
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-
       <main role="main">
         <%= render @view_module, @view_template, assigns %>
       </main>
+    </div>
 
-    </div> <!-- /container -->
     <%= render Core.LayoutView, "footer.html", [brand: @brand, no_footer: assigns[:no_footer]] %>
+
+    <!-- Load main app -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+
+    <!-- Define global opts -->
+    <script>
+      window.opts = {
+        brand: '<%=@brand%>'
+      }
+    </script>
   </body>
 </html>

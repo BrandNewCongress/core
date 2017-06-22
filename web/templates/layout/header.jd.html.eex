@@ -1,6 +1,10 @@
 <header style="background-color: #5B919F;" class="header">
-  <nav role="navigation">
-    <img src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+  <nav role="navigation" style="display: flex; justify-content: space-between; align-items: center; height: 75px;">
+    <%= if @mobile do %>
+      <img src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+    <% else %>
+      <img src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+    <% end %>
     <!-- <a class="hamburger-menu" id="sidebar-toggle"> -->
       <!-- <div class="bar"></div> -->
       <!-- <div class="bar"></div> -->

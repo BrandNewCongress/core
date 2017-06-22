@@ -1,11 +1,14 @@
 header {
-  padding-top: 15px;
-  padding-bottom: 15px;
+  height: 75px;
   border-bottom: 1px solid #DDD;
+  font-family: 'Roboto Condensed', sans-serif;
+  text-transform: uppercase;
+  font-weight: 400;
 }
 
 header img {
-  width: 220px;
+  min-width: 220px;
+  max-width: 220px;
   margin-left: 40px;
 }
 

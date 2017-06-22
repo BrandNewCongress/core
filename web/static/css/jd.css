@@ -1,6 +1,29 @@
+.jd {
+  --jd-dark-blue: #185661;
+  --jd-light-blue: #5B919F;
+  --jd-peach: #FF9B65;
+  --jd-periwinkle: #493FFB;
+  --jd-yellow: #FFF600;
+  --jd-black: #000000;
+
+  --color-primary: var(--jd-dark-blue);
+  --color-secondary: var(--jd-yellow);
+  --color-accent-one: var(--jd-light-blue);
+  --color-accent-two: var(--jd-peach);
+  --color-border: var(--jd-black);
+}
+
+.jd h1, .jd h2 {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.jd p {
+  font-family: 'Roboto', sans-serif !important;
+}
+
 .jd .page-title {
-  color: black;
-  border-bottom: 7px solid #111;
+  color: var(--color-border);
+  border-bottom: 7px solid var(--color-border);
   text-align: left;
   line-height: 37px;
   font-family: sans-serif;

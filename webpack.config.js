@@ -12,7 +12,8 @@ module.exports = {
       './web/static/css/bnc.css',
       './web/static/css/jd.css',
       './web/static/css/footer.css',
-      './web/static/css/header.css'
+      './web/static/css/header.css',
+      './web/static/css/tab-menu.css'
     ]
   },
 
@@ -36,7 +37,7 @@ module.exports = {
               'import',
               {
                 libraryName: 'antd',
-                style: false
+                style: 'css'
               }
             ]
           ]
@@ -50,6 +51,16 @@ module.exports = {
         })
       }
     ]
+  },
+
+  resolve: {
+    alias: {
+      phoenix_html:
+        __dirname + '/deps/phoenix_html/web/static/js/phoenix_html.js',
+      phoenix: __dirname + '/deps/phoenix/web/static/js/phoenix.js',
+      react: 'preact-compat',
+      'react-dom': 'preact-compat'
+    }
   },
 
   plugins: [

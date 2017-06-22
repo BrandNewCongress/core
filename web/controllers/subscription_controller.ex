@@ -32,24 +32,26 @@ defmodule Core.SubscriptionController do
   # ----------------------  Tag Manipulation Helpers --------------------------
   # ---------------------------------------------------------------------------
   defp is_source_tag(tag) do
-    String.split(tag, ":", [global: true])
-    |> Enum.map(&(String.trim(&1)))
-    |> is_source_tag_list()
+    tag
+      |> String.split(":", [global: true])
+      |> Enum.map(&(String.trim(&1)))
+      |> is_source_tag_list()
   end
 
   defp is_unsubscribe_tag(tag) do
-    String.split(tag, ":", [global: true])
-    |> Enum.map(&(String.trim(&1)))
-    |> is_unsubscribed_tag_list()
+    tag
+      |> String.split(":", [global: true])
+      |> Enum.map(&(String.trim(&1)))
+      |> is_unsubscribed_tag_list()
   end
 
-  defp is_source_tag_list(["Action" | [ "Joined Website" | _ ]]), do: true
+  defp is_source_tag_list(["Action" | ["Joined Website" | _]]), do: true
   defp is_source_tag_list(_), do: false
-  defp is_unsubscribed_tag_list(["Action" | [ "Unsubscribed" | _ ]]), do: true
+  defp is_unsubscribed_tag_list(["Action" | ["Unsubscribed" | _]]), do: true
   defp is_unsubscribed_tag_list(_), do: false
 
   defp extract_candidate(tag) do
-    ["Action" | [ _ | candidate ]] = String.split(tag, ":", [global: true])
+    ["Action" | [_ | candidate]] = String.split(tag, ":", [global: true])
 
     candidate
     |> List.to_string
@@ -67,7 +69,7 @@ defmodule Core.SubscriptionController do
   """
   def unsubscribe_get(conn, params = %{"email" => email}) do
     tags = case NB.get "people/match", [query: %{"email" => email}] do
-      %{body: {:ok, %{"person" => %{ "tags" => tags }}}} -> tags
+      %{body: {:ok, %{"person" => %{"tags" => tags}}}} -> tags
       _ -> nil
     end
 
@@ -114,16 +116,19 @@ defmodule Core.SubscriptionController do
       "tags" => tags
     }}}} = NB.get "people/match", [query: %{"email" => email}]
 
-    current_sources = tags
+    current_sources =
+      tags
       |> Enum.filter(&(is_source_tag(&1)))
       |> Enum.map(&(extract_candidate(&1)))
 
     # Add unsubscription tags
     unsubscribe_task = Task.async(fn ->
-      to_unsub = current_sources
+      to_unsub =
+        current_sources
         |> Enum.filter(fn tag -> not Map.has_key?(params, tag) end)
 
-      tags_to_add = to_unsub
+      tags_to_add =
+        to_unsub
         |> Enum.map(fn tag -> "Action: Unsubscribed: #{tag}" end)
 
       {:ok, put_body_string} = Poison.encode(%{"tagging" => %{
@@ -189,7 +194,7 @@ defmodule Core.SubscriptionController do
 
     # Find the person
     id = case NB.get "people/match", [query: %{"email" => email}] do
-      %{body: {:ok, %{"person" => %{ "id" => id }}}} -> id
+      %{body: {:ok, %{"person" => %{"id" => id}}}} -> id
       _ -> nil
     end
 
@@ -217,7 +222,7 @@ defmodule Core.SubscriptionController do
 
   # Private function for any situation where the email is missing
   defp do_homepage_redirect(conn, params) do
-    url = case GlobalOpts.get(conn, params) |> Keyword.get(:brand) do
+    url = case conn |> GlobalOpts.get(params) |> Keyword.get(:brand) do
       "jd" -> "https://justicedemocrats.com"
       "bnc" -> "https://brandnewcongress.org"
     end

@@ -44,7 +44,9 @@ defmodule Core.Mixfile do
      {:browser, "~> 0.1.0"},
      {:stash, "~> 1.0.0"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:credo, "~> 0.8", only: [:dev, :text], runtime: false}]
+     {:credo, "~> 0.8", only: [:dev, :text], runtime: false},
+     {:distance_api_matrix, "~> 2.0"},
+     {:csv, "~> 2.0.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

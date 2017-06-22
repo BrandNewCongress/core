@@ -1,23 +1,51 @@
-/* Header styles */
+/* -------------------------- Brand definitions -------------------------- */
+.bnc {
+  --bnc-purple: #7932AC;
+  --bnc-salmon: #FF7A65;
+  --bnc-blue: #598089;
+  --bnc-green: #8C8B02;
+  --bnc-yellow: #FFFE00;
+  --bnc-white: #FFFFFF;
+  --bnc-black: #111111;
+
+  --color-primary: var(--bnc-purple);
+  --color-secondary: var(--bnc-white);
+  --color-accent-one: var(--bnc-salmon);
+  --color-accent-two: var(--bnc-green);
+}
 
 /* Platform / text styles */
+.bnc h1 {
+  font-family: 'Roboto Condensed', sans-serif !important;
+  text-transform: uppercase;
+  padding: 5px;
+}
+
+.bnc h2, .bnc h3 {
+  letter-spacing: .01em;
+  font-family: 'Roboto Condensed', sans-serif !important;
+}
+
+.bnc p, .bnc label, .bnc span, .bnc div {
+  font-family: 'Roboto Slab', sans-serif !important;
+}
+
 .bnc .page-title {
-  background-color: #171717;
-  color: white;
+  background-color: var(--bnc-black);
+  color: var(--bnc-white);
   text-align: center;
   line-height: 37px;
-  font-family: sans-serif;
 }
 
 .bnc #star-five {
    margin: 50px 0;
    position: relative;
    display: block;
-   color: red;
+   color: var(--bnc-salmon);
    width: 0px;
    height: 0px;
    border-right:  100px solid transparent;
-   border-bottom: 70px  solid red;
+   border-bottom: 70px  solid var(--bnc-salmon);
    border-left:   100px solid transparent;
    -moz-transform:    rotate(35deg);
    -webkit-transform: rotate(35deg);
