@@ -1,16 +1,16 @@
-defmodule  do
+defmodule Core.TypeformController do
   use Core.Web, :controller
 
   def submit_event(conn, %{"form_response" => %{"answers" => answers, "definition" => definition}}) do
     questions =
-      definitions["fields"]
+      definition["fields"]
       |> Enum.map(&field_name/1)
 
     responses =
       answers
       |> Enum.map(&get_answer/1)
 
-    together = questions |> Enum.zip(answers) |> Enum.into(%{}})
+    together = questions |> Enum.zip(answers) |> Enum.into(%{})
 
     names = String.split(together["host_name"], " ")
     first_name = List.first(names)
@@ -34,9 +34,9 @@ defmodule  do
 
     event = %{
       contact: %{
-        name: req.body.host_name,
-        phone: req.body.host_phone,
-        email: req.body.host_email
+        name: together["host_name"],
+        phone: together["host_phone"],
+        email: together["host_email"]
       },
       rsvp_form: %{
         phone: "optional",
