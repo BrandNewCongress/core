@@ -66,7 +66,7 @@ defmodule Core.TypeformController do
   defp field_name(%{"title" => "When will it start?"}), do: "start_time"
   defp field_name(%{"title" => "When will it end?"}), do: "end_time"
   defp field_name(%{"title" => "What should we call it?"}), do: "event_name"
-  defp field_name(%{"title" => "Give us a little description.."}), do: "intro"
+  defp field_name(%{"title" => "Give us a little description..."}), do: "intro"
   defp field_name(%{"title" => "What is the place called?"}), do: "venue_name"
   defp field_name(%{"title" => "What's the address?"}), do: "venue_address"
   defp field_name(%{"title" => "What city is it in?"}), do: "venue_city"
