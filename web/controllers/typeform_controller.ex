@@ -36,8 +36,8 @@ defmodule Core.TypeformController do
       name: together["event_name"],
       status: "unlisted",
       intro: together["event_intro"],
-      start_time: together["event_date"] <> "T" <> process_time(together["start_time"])
-      end_time: together["event_date"] <> "T" <> process_time(together["end_time"])
+      start_time: together["event_date"] <> "T" <> process_time(together["start_time"]),
+      end_time: together["event_date"] <> "T" <> process_time(together["end_time"]),
       contact: %{
         name: together["host_name"],
         phone: together["host_phone"],
@@ -88,11 +88,13 @@ defmodule Core.TypeformController do
   defp get_answer(%{"boolean" => val}), do: val
   defp get_answer(%{"number" => val}), do: val
 
-  defp process_time(hours_and_mintes <> "PM") do
-    hours <> ":" <> minutes = hours_and_minutes
-    "#{Integer.parse(hours) + 12}:#{minutes}"
+  def process_time(time) do
+    case String.split(time, " ") do
+      [hours_and_minutes, "AM"] -> hours_and_minutes |> String.split(":") |> output_time("AM")
+      [hours_and_minutes, "PM"] -> hours_and_minutes |> String.split(":") |> output_time("PM")
+    end
   end
-  defp process_time(hours_and_minutes <> "AM") do
-    hours_and_minutes
-  end
+
+  defp output_time([hours, minute], "AM"), do: "#{hours}:#{minutes}"
+  defp output_time([hours, minute], "PM"), do: "#{Integer.parse(hours) + 12}:#{minutes}"
 end
