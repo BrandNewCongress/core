@@ -27,14 +27,18 @@ defmodule Core.TypeformController do
       last_name: last_name
     }
 
-    IO.puts "Inspecting person"
-    IO.inspect person
+    {:ok, post_body_string} = Poison.encode(%{"person" => person})
+    %{body: {:ok, %{"person" => %{"id" => id}}}} = NB.post("people", [body: post_body_string])
 
-    # TODO - NB create person
+    tags = case together["sharing_permission"] do
+      true -> []
+      false -> ["Event: Hide Address"]
+    end
 
     event = %{
       name: together["event_name"],
       status: "unlisted",
+      author_id: id,
       intro: together["event_intro"],
       start_time: together["event_date"] <> "T" <> process_time(together["start_time"]),
       end_time: together["event_date"] <> "T" <> process_time(together["end_time"]),
@@ -57,11 +61,13 @@ defmodule Core.TypeformController do
           city: "venue_city",
           state: "venue_state"
         }
-      }
+      },
+      tags: tags,
+      calendar_id: 10
     }
 
-    IO.puts "Inspecting event"
-    IO.inspect event
+    {:ok, post_body_string} = Poison.encode(%{"event" => event})
+    %{body: {:ok, %{"event" => %{"id" => id}}}} = NB.post("events", [body: post_body_string])
 
     json conn, %{"ok" => "There you go!"}
   end
@@ -96,5 +102,8 @@ defmodule Core.TypeformController do
   end
 
   defp output_time([hours, minutes], "AM"), do: "#{hours}:#{minutes}"
-  defp output_time([hours, minutes], "PM"), do: "#{Integer.parse(hours) + 12}:#{minutes}"
+  defp output_time([hours, minutes], "PM") do
+    {hrs, _} = Integer.parse(hours)
+    "#{hrs + 12}:#{minutes}"
+  end
 end
