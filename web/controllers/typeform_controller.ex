@@ -95,6 +95,6 @@ defmodule Core.TypeformController do
     end
   end
 
-  defp output_time([hours, minute], "AM"), do: "#{hours}:#{minutes}"
-  defp output_time([hours, minute], "PM"), do: "#{Integer.parse(hours) + 12}:#{minutes}"
+  defp output_time([hours, minutes], "AM"), do: "#{hours}:#{minutes}"
+  defp output_time([hours, minutes], "PM"), do: "#{Integer.parse(hours) + 12}:#{minutes}"
 end
