@@ -10,7 +10,7 @@ defmodule Core.TypeformController do
       answers
       |> Enum.map(&get_answer/1)
 
-    together = questions |> Enum.zip(answers) |> Enum.into(%{})
+    together = questions |> Enum.zip(responses) |> Enum.into(%{})
 
     names = String.split(together["host_name"], " ")
     first_name = List.first(names)
