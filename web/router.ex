@@ -38,6 +38,6 @@ defmodule Core.Router do
 
   scope "/api", Core do
     get "/update/cosmic", UpdateController, :cosmic
-    get "/tf-submit/submit-event/", TypeformController, :submit_event
+    post "/tf-submit/submit-event", TypeformController, :submit_event
   end
 end
