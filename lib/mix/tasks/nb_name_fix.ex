@@ -4,7 +4,7 @@ defmodule Mix.Tasks.NbNameFix do
   def run(_) do
     "lists/1794/people"
     |> NB.stream()
-    |> Enum.map(fn person = %{"id" => id, "last_name" => last_name} ->
+    |> Enum.map(fn %{"id" => id, "last_name" => last_name} ->
       IO.puts id
 
       ln = last_name

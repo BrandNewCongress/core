@@ -1,7 +1,7 @@
 defmodule Core.InfoController do
   use Core.Web, :controller
 
-  def get(conn, params = %{"info" => slug, "draft" => draft}) do
+  def get(conn, params = %{"info" => slug, "draft" => _draft}) do
     global_opts = GlobalOpts.get(conn, params)
 
     %{"title" => title, "content" => content, "metadata" => %{

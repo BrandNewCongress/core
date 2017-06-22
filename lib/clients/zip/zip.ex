@@ -28,7 +28,7 @@ defmodule Zip do
       candidates
       |> Enum.zip(meter_distances)
       |> Enum.filter_map(
-          fn {cand, meters} -> meters < @meter_limit end,
+          fn {_cand, meters} -> meters < @meter_limit end,
           fn {cand, _} -> cand end
         )
 
@@ -41,7 +41,6 @@ defmodule Zip do
   defp get_zip(%{"metadata" => %{"zip" => zip}}), do: "#{zip}"
   defp distance_task(zip1, zip2) do
     Task.async(fn ->
-      travels =
         DistanceMatrixApi.TravelList.new
         |> DistanceMatrixApi.TravelList.add_entry(%{origin: "#{zip1}", destination: "#{zip2}"})
         |> DistanceMatrixApi.distances
