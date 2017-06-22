@@ -67,7 +67,7 @@ defmodule Core.TypeformController do
     }
 
     {:ok, post_body_string} = Poison.encode(%{"event" => event})
-    %{body: {:ok, %{"event" => %{"id" => id}}}} = NB.post("events", [body: post_body_string])
+    %{body: {:ok, %{"event" => %{"id" => id}}}} = NB.post("sites/brandnewcongress/pages/events", [body: post_body_string])
 
     json conn, %{"ok" => "There you go!"}
   end
