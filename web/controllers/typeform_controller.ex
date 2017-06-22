@@ -33,6 +33,11 @@ defmodule Core.TypeformController do
     # TODO - NB create person
 
     event = %{
+      name: together["event_name"],
+      status: "unlisted",
+      intro: together["event_intro"],
+      start_time: together["event_date"] <> "T" <> process_time(together["start_time"])
+      end_time: together["event_date"] <> "T" <> process_time(together["end_time"])
       contact: %{
         name: together["host_name"],
         phone: together["host_phone"],
@@ -57,16 +62,18 @@ defmodule Core.TypeformController do
 
     IO.puts "Inspecting event"
     IO.inspect event
+
+    json conn, %{"ok" => "There you go!"}
   end
 
   defp field_name(%{"title" => "What's your name?"}), do: "host_name"
   defp field_name(%{"title" => "What's your email?"}), do: "host_email"
   defp field_name(%{"title" => "What's your phone number?"}), do: "host_phone"
-  defp field_name(%{"title" => "When will it be?"}), do: "start_time"
+  defp field_name(%{"title" => "When will it be?"}), do: "event_date"
   defp field_name(%{"title" => "When will it start?"}), do: "start_time"
   defp field_name(%{"title" => "When will it end?"}), do: "end_time"
   defp field_name(%{"title" => "What should we call it?"}), do: "event_name"
-  defp field_name(%{"title" => "Give us a little description..."}), do: "intro"
+  defp field_name(%{"title" => "Give us a little description..."}), do: "event_intro"
   defp field_name(%{"title" => "What is the place called?"}), do: "venue_name"
   defp field_name(%{"title" => "What's the address?"}), do: "venue_address"
   defp field_name(%{"title" => "What city is it in?"}), do: "venue_city"
@@ -81,4 +88,11 @@ defmodule Core.TypeformController do
   defp get_answer(%{"boolean" => val}), do: val
   defp get_answer(%{"number" => val}), do: val
 
+  defp process_time(hours_and_mintes <> "PM") do
+    hours <> ":" <> minutes = hours_and_minutes
+    "#{Integer.parse(hours) + 12}:#{minutes}"
+  end
+  defp process_time(hours_and_minutes <> "AM") do
+    hours_and_minutes
+  end
 end
