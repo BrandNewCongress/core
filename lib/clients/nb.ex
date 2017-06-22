@@ -30,7 +30,10 @@ defmodule NB do
   end
 
   defp process_response_body(raw) do
-    Poison.decode(raw)
+    case Poison.decode(raw) do
+      {:ok, body} -> {:ok, body}
+      {:error, raw} -> {:error, raw}
+    end
   end
 
   # -----------------------------------

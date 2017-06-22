@@ -9,8 +9,6 @@ defmodule Zip do
     |> (fn [_head | tail] -> tail end).()
     |> Enum.into(%{})
 
-  IO.inspect @coords
-
   def closest_candidate(zip) do
     candidates = Cosmic.get_type "candidates"
 
@@ -45,7 +43,7 @@ defmodule Zip do
     Task.async(fn ->
       travels =
         DistanceMatrixApi.TravelList.new
-        |> DistanceMatrixApi.TravelList.add_entry(%{origin: zip1, destination: zip2})
+        |> DistanceMatrixApi.TravelList.add_entry(%{origin: "#{zip1}", destination: "#{zip2}"})
         |> DistanceMatrixApi.distances
     end)
   end

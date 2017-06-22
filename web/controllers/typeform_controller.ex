@@ -27,6 +27,11 @@ defmodule Core.TypeformController do
       last_name: last_name
     }
 
+    calendar_id = case Zip.closest_candidate(together["venue_zip"]) do
+      %{"calendar_id": result} -> result
+      _ -> 9
+    end
+
     {:ok, post_body_string} = Poison.encode(%{"person" => person})
     %{body: {:ok, %{"person" => %{"id" => id}}}} = NB.post("people", [body: post_body_string])
 
@@ -57,17 +62,17 @@ defmodule Core.TypeformController do
       venue: %{
         name: together["venue_name"],
         address: %{
-          address1: "venue_address",
-          city: "venue_city",
-          state: "venue_state"
+          address1: together["venue_address"],
+          city: together["venue_city"],
+          state: together["venue_state"]
         }
       },
       tags: tags,
-      calendar_id: 10
+      calendar_id: calendar_id
     }
 
     {:ok, post_body_string} = Poison.encode(%{"event" => event})
-    %{body: {:ok, %{"event" => %{"id" => id}}}} = NB.post("sites/brandnewcongress/pages/events", [body: post_body_string])
+    %{body: {:ok, %{"event" => %{"id" => _}}}} = NB.post("sites/brandnewcongress/pages/events", [body: post_body_string])
 
     json conn, %{"ok" => "There you go!"}
   end
