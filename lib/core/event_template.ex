@@ -1,31 +1,53 @@
-# defmodule Core.EventTemplate do
-#   def text(event) do
-# "
-# Hi!
-#
-# A user, #{contact_name}, has submitted a new event for #{candidate}.
-#
-# Please go to your candidate's calendar and modify and approve or delete it.
-#
-# Here are some details: <br/>
-# Headline: #{title} <br />
-# Intro: #{intro} <br />
-# From #{start_time} to #{end_time}<br />
-# Time zone: #{time_zone}<br />
-#
-# At #{venue.name}, <br />
-# #{venue.address.address1}, <br />
-# #{venue.address.city}, #{venue.address.state}, #{venue.address.zip5} <br />
-#
-# Host info: <br />
-# Name: #{contact.name} <br />
-# Email: #{contact.email} <br />
-# Phone: #{contact.phone} <br />
-#
-# Other: <br />
-# Event ID: #{id} <br />
-# Campaign: #{candidate} <br />
-# URL: #{url} <br />
-# "
-#   end
-# end
+defmodule Core.EventTemplate do
+  use Swoosh.Mailer, otp_app: :core
+  import Swoosh.Email
+
+  def send(id, slug, event) do
+    IO.inspect new()
+    |> to({"Sam Briggs", "ben@brandnewcongress.org"})
+    |> from({event.contact.name, "us@mail.brandnewcongress.org"})
+    |> subject("New User Submitted Event!")
+    |> text_body(text(id, slug, event))
+    |> deliver
+  end
+
+  def text(id, slug, event) do
+    %{
+      calendar_id: candidate,
+      contact: contact,
+      intro: intro,
+      name: title,
+      start_time: start_time,
+      end_time: end_time,
+      venue: venue,
+      time_zone: time_zone
+    } = event
+"
+Hi!
+
+A user, #{contact.name}, has submitted a new event for #{candidate}.
+
+Please go to your candidate's calendar and modify and approve or delete it.
+
+Here are some details:
+Headline: #{title}
+Intro: #{intro}
+From #{start_time} to #{end_time}
+Time zone: #{time_zone}
+
+At #{venue.name},
+#{venue.address.address1},
+#{venue.address.city}, #{venue.address.state}, #{venue.address.zip}
+
+Host info:
+Name: #{contact.name}
+Email: #{contact.email}
+Phone: #{contact.phone}
+
+Other:
+Event ID: #{id}
+Campaign: #{candidate}
+URL: http://go.brandnewcongress.org/#{slug}
+"
+  end
+end

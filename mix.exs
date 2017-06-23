@@ -19,7 +19,7 @@ defmodule Core.Mixfile do
   def application do
     [mod: {Core, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :httpotion]]
+                    :phoenix_ecto, :postgrex, :httpotion, :swoosh]]
   end
 
   # Specifies which paths to compile per environment.
@@ -33,20 +33,20 @@ defmodule Core.Mixfile do
     [{:phoenix, "~> 1.2.4"},
      {:phoenix_pubsub, "~> 1.0"},
      {:phoenix_ecto, "~> 3.0"},
-     {:postgrex, ">= 0.0.0"},
+     {:postgrex, "~> 0.11.1"},
      {:phoenix_html, "~> 2.6"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:quantum, ">= 1.9.1"},
-     {:timex, "~> 3.0"},
      {:httpotion, "~> 3.0.2"},
      {:phoenix_expug, git: "https://github.com/rstacruz/phoenix_expug.git"},
      {:browser, "~> 0.1.0"},
      {:stash, "~> 1.0.0"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:credo, "~> 0.8", only: [:dev, :text], runtime: false},
-     {:distance_api_matrix, "~> 2.0"},
-     {:csv, "~> 2.0.0"}]
+     {:csv, "~> 2.0.0"},
+     {:hackney, "~> 1.6.0"},
+     {:swoosh, "~> 0.8.1"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

@@ -12,32 +12,43 @@ defmodule Core.TypeformController do
 
     together = questions |> Enum.zip(responses) |> Enum.into(%{})
 
-    names = String.split(together["host_name"], " ")
-    first_name = List.first(names)
-    last_name = if length(names) > 1 do
-      List.last(names)
-    else
-      ""
-    end
+    ensure_host = Task.async(fn ->
+      names = String.split(together["host_name"], " ")
+      first_name = List.first(names)
+      last_name = if length(names) > 1 do
+        List.last(names)
+      else
+        ""
+      end
 
-    person = %{
-      email: together["host_email"],
-      phone: together["host_phone"],
-      first_name: first_name,
-      last_name: last_name
-    }
+      person = %{
+        email: together["host_email"],
+        phone: together["host_phone"],
+        first_name: first_name,
+        last_name: last_name
+      }
 
-    IO.puts together["venue_zip"]
+      {:ok, post_body_string} = Poison.encode(%{"person" => person})
+      IO.puts post_body_string
+      %{body: {:ok, %{"person" => %{"id" => id}}}} = NB.put("people/push", [body: post_body_string])
+      id
+    end)
 
-    calendar_id = case Zip.closest_candidate(together["venue_zip"]) do
-      %{"metadata" => %{"calendar_id" => result}} -> result
-      _ -> 9
-    end
+    find_calendar = Task.async(fn ->
+      calendar_id = case Zip.closest_candidate(together["venue_zip"]) do
+        %{"metadata" => %{"calendar_id" => result}} -> result
+        _ -> 9
+      end
+      calendar_id
+    end)
 
-    json conn, %{"ok" => "There you go!"}
+    find_time_zone = Task.async(fn ->
+      Zip.time_zone_of(together["venue_zip"])
+    end)
 
-    {:ok, post_body_string} = Poison.encode(%{"person" => person})
-    %{body: {:ok, %{"person" => %{"id" => id}}}} = NB.post("people", [body: post_body_string])
+    host_id = Task.await(ensure_host)
+    calendar_id = Task.await(find_calendar)
+    time_zone = Task.await(find_time_zone)
 
     tags = case together["sharing_permission"] do
       true -> []
@@ -47,7 +58,8 @@ defmodule Core.TypeformController do
     event = %{
       name: together["event_name"],
       status: "unlisted",
-      author_id: id,
+      author_id: host_id,
+      time_zone: time_zone,
       intro: together["event_intro"],
       start_time: together["event_date"] <> "T" <> process_time(together["start_time"]),
       end_time: together["event_date"] <> "T" <> process_time(together["end_time"]),
@@ -68,7 +80,8 @@ defmodule Core.TypeformController do
         address: %{
           address1: together["venue_address"],
           city: together["venue_city"],
-          state: together["venue_state"]
+          state: together["venue_state"],
+          zip: together["venue_zip"]
         }
       },
       tags: tags,
@@ -78,7 +91,10 @@ defmodule Core.TypeformController do
     IO.puts "Creating event on calendar #{calendar_id}"
 
     {:ok, post_body_string} = Poison.encode(%{"event" => event})
-    %{body: {:ok, %{"event" => %{"id" => _}}}} = NB.post("sites/brandnewcongress/pages/events", [body: post_body_string])
+    %{body: {:ok, %{"event" => %{"id" => event_id, "slug" => event_slug}}}} =
+      NB.post("sites/brandnewcongress/pages/events", [body: post_body_string])
+
+    Core.EventTemplate.send(event_id, event_slug, event)
 
     json conn, %{"ok" => "There you go!"}
   end

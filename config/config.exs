@@ -26,6 +26,11 @@ config :logger, :console,
 config :phoenix, :template_engines,
   pug: PhoenixExpug.Engine
 
+config :core, Core.EventTemplate,
+  adapter: Swoosh.Adapters.Mailgun,
+  api_key: System.get_env("MAILGUN_KEY"),
+  domain: System.get_env("MAILGUN_DOMAIN")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

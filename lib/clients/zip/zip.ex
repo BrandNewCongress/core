@@ -1,10 +1,12 @@
 defmodule Zip do
-  @meter_limit 80_467.2
-  @coords "./lib/clients/zip/zipcodes.tsv"
+  @mile_limit 50
+
+  @coords "./lib/clients/zip/zipcode.csv"
     |> File.stream!()
-    |> CSV.decode(separator: ?\t)
+    |> CSV.decode()
     |> Enum.map(fn
-        {:ok, [lng, lat, zip]} -> {zip, [lat, lng]}
+        {:ok, [zip, _city, _state, lat, lng, timezone, _dst]} ->
+          {Format.as_zip(zip), [Format.as_float(lat), Format.as_float(lng), Format.as_int(timezone)]}
       end)
     |> (fn [_head | tail] -> tail end).()
     |> Enum.into(%{})
@@ -12,23 +14,17 @@ defmodule Zip do
   def closest_candidate(zip) do
     candidates = Cosmic.get_type "candidates"
 
-    meter_distances =
+    mile_distances =
       candidates
       |> Enum.map(&get_zip/1)
       |> Enum.map(&(distance_task(&1, zip)))
       |> Enum.map(&Task.await/1)
-      |> Enum.map(fn
-          %{"rows" => [%{"elements" => [%{"distance" => %{"value" => meters}}]}| _]}
-            -> meters
-          _ # Likely because of invalid zip
-            -> 10_000_000_000
-          end)
 
     matches =
       candidates
-      |> Enum.zip(meter_distances)
+      |> Enum.zip(mile_distances)
       |> Enum.filter_map(
-          fn {_cand, meters} -> meters < @meter_limit end,
+          fn {_cand, meters} -> meters < @mile_limit end,
           fn {cand, _} -> cand end
         )
 
@@ -39,15 +35,29 @@ defmodule Zip do
   end
 
   defp get_zip(%{"metadata" => %{"zip" => zip}}), do: "#{zip}"
-  defp distance_task(zip1, zip2) do
+  def distance_task(zip1, zip2) do
     Task.async(fn ->
-        DistanceMatrixApi.TravelList.new
-        |> DistanceMatrixApi.TravelList.add_entry(%{origin: "#{zip1}", destination: "#{zip2}"})
-        |> DistanceMatrixApi.distances
+      [lat1, lng1] = coords_of(zip1)
+      [lat2, lng2] = coords_of(zip2)
+      degrees = :math.sqrt((:math.pow(lat2 - lat1, 2) + :math.pow(lng2 - lng1, 2)))
+      degrees * 69
     end)
   end
 
   def coords_of(zip) do
-    @coords["#{zip}"]
+    [lat, lng, _] = @coords["#{zip}"]
+    [lat, lng]
+  end
+
+  def time_zone_of(zip) do
+    [_lat, _lng, timezone] = @coords["#{zip}"]
+    as_string = "#{timezone}"
+
+    case as_string do
+      "-5" -> "Eastern Time (US & Canada)"
+      "-6" -> "Central Time (US & Canada)"
+      "-7" -> "Mountain Time (US & Canada)"
+      "-8" -> "Pacific Time (US & Canada)"
+    end
   end
 end
