@@ -7,7 +7,7 @@ defmodule Vox do
   def logins_for_day do
     date = "#{Timex.now("America/New_York") |> Timex.to_date}"
 
-    logins = case Mongo.find_one(:core, "logins", %{date: date}) do
+    logins = case Mongo.find_one(:mongo, "logins", %{date: date}, pool: DBConnection.Poolboy) do
       nil -> create_and_return_logins(date)
       %{"logins" => logins} -> logins
     end
@@ -36,7 +36,8 @@ defmodule Vox do
           ]
         end)
 
-    Mongo.insert_one(:core, "logins", %{date: date, logins: logins, claimed: -1})
+    IO.inspect logins
+    Mongo.insert_one(:mongo, "logins", %{date: date, logins: logins, claimed: -1}, pool: DBConnection.Poolboy)
 
     logins
   end
@@ -49,7 +50,7 @@ defmodule Vox do
     date = "#{Timex.now("America/New_York") |> Timex.to_date}"
 
     {:ok, %{"claimed" => claimed, "logins" => logins}} =
-      Mongo.find_one_and_update(:core, "logins", %{date: date}, %{"$inc": %{"claimed": 1}})
+      Mongo.find_one_and_update(:mongo, "logins", %{date: date}, %{"$inc": %{"claimed": 1}}, pool: DBConnection.Poolboy)
 
     [email | [password | _]] = Enum.at(logins, claimed, nil)
     [email, password]
@@ -58,7 +59,7 @@ defmodule Vox do
   def password_for(username) do
     date = "#{Timex.now("America/New_York") |> Timex.to_date}"
 
-    %{"logins" => logins} = Mongo.find_one(:core, "logins", %{date: date})
+    %{"logins" => logins} = Mongo.find_one(:mongo, "logins", %{date: date}, pool: DBConnection.Poolboy)
 
     [password] =
       logins
