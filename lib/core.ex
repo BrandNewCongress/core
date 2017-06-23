@@ -11,16 +11,19 @@ defmodule Core do
 
     # Define workers and child supervisors to be supervised
     children = [
-
       # Start the Ecto repository
       # supervisor(Core.Repo, []),
       # can be readded when we have a database
-
 
       # Start the endpoint when the application starts
       supervisor(Core.Endpoint, []),
       # Start your own worker by calling: Core.Worker.start_link(arg1, arg2, arg3)
       # worker(Core.Worker, [arg1, arg2, arg3]),
+      worker(Mongo, [[name: :core,
+                      host: Application.get_env(:core, :mongodb_name, "MONGODB_HOST"),
+                      username: System.get_env("MONGODB_USERNAME"),
+                      password: System.get_env("MONGODB_PASSWORD"),
+                      database: "core"]])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

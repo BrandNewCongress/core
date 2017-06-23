@@ -1,0 +1,6 @@
+Thanks for signing up to make calls! Here's your username and password.
+<br/>
+<br/>
+
+Username: <%= @username %> <br/>
+Password: <%= @password %> <br/>
