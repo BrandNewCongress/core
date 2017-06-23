@@ -1,12 +1,18 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet'
 import Intro from './act/intro'
 import menuConfig from './act/menu-config'
 import callVotersEmbed from './act/call-voters-embed'
 import TabMenu from './components/tab-menu'
+import EventMap from './components/event-map'
 import socket from './socket'
+import request from 'superagent'
 import 'phoenix_html'
+
+const print = s => {
+  console.log(s)
+  return s
+}
 
 class Act extends Component {
   state = {
@@ -15,7 +21,8 @@ class Act extends Component {
     center: [38.805470223177466, -100.23925781250001],
     zoom: 4,
     candidate: undefined,
-    selected: 'attend-event'
+    selected: 'attend-event',
+    events: []
   }
 
   channel = null
@@ -40,7 +47,7 @@ class Act extends Component {
       const [a, b] = center
       this.setState({
         center: [parseFloat(a), parseFloat(b)],
-        zoom: 13
+        zoom: 10
       })
     })
   }
@@ -51,8 +58,9 @@ class Act extends Component {
   onTabSelect = key => {
     const altOpens = {
       'call-voters': window.location.origin + '/form/call-from-home',
-      'nominate': window.location.origin.replace('now.', '') + '/nominate',
-      'tell-us': 'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com'
+      nominate: window.location.origin.replace('now.', '') + '/nominate',
+      'tell-us':
+        'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com'
     }
 
     if (altOpens[key]) {
@@ -63,13 +71,20 @@ class Act extends Component {
     }
   }
 
-  go = ({ candidate, zip }) => this.setState({ candidate, zip })
+  go = ({ candidate, zip }) => {
+    this.setState({ candidate, zip })
+
+    request
+      .get('https://api.brandnewcongress.org/events')
+      .query({ candidate: candidate.slug })
+      .end((err, res) => {
+        this.setState({ events: res.body || [] })
+      })
+  }
 
   render() {
-    const { zip, center, zoom, candidate, selected } = this.state
+    const { zip, center, zoom, candidate, selected, events } = this.state
     const { brand } = this.props
-
-    console.log(selected)
 
     return (
       <div
@@ -115,23 +130,19 @@ class Act extends Component {
 
           {candidate === undefined
             ? <Intro channel={this.state.channel} go={this.go} />
-            : <TabMenu initialSelected={0} onSelect={this.onTabSelect} options={menuConfig}/>}
+            : <TabMenu
+                initialSelected={0}
+                onSelect={this.onTabSelect}
+                options={menuConfig}
+              />}
 
           {(candidate === undefined || selected == 'attend-event') &&
-            <Map
-              viewport={{ center, zoom }}
+            <EventMap
+              center={center}
+              zoom={zoom}
               onViewportChanged={this.onViewportChanged}
-            >
-              <TileLayer
-                attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-                url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={center}>
-                <Popup>
-                  <span>A pretty CSS3 popup. <br /> Easily customizable.</span>
-                </Popup>
-              </Marker>
-            </Map>}
+              events={events}
+            />}
 
         </div>
 

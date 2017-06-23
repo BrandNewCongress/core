@@ -57,3 +57,11 @@
   font-size: small;
   line-height: 37px;
 }
+
+.bnc path.leaflet-interactive {
+  fill: var(--bnc-purple);
+  stroke: var(--bnc-white);
+  fill-opacity: .8;
+  width: 30px;
+  height: 30px;
+}

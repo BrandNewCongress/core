@@ -28,3 +28,11 @@
   line-height: 37px;
   font-family: sans-serif;
 }
+
+.jd path.leaflet-interactive {
+  fill: var(--jd-dark-blue);
+  stroke: white;
+  fill-opacity: .8;
+  width: 30px;
+  height: 30px;
+}
