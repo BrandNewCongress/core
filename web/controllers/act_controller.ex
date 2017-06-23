@@ -3,7 +3,7 @@ defmodule Core.ActController do
 
   def get(conn, params) do
     render conn, "act.html",
-      [title: "Let's get to work", header_text: "Let's get to work"] ++ GlobalOpts.get(conn, params)
+      [title: "Let's get to work", header_text: "Let's get to work", candidate: ""] ++ GlobalOpts.get(conn, params)
   end
 
   def get_candidate(conn, params = %{"candidate" => slug}) do

@@ -33,6 +33,8 @@ class Act extends Component {
 
     if (window.initialState) {
       Object.assign(this.state, window.initialState)
+      if (this.state.candidate === "")
+        this.state.candidate === undefined
     }
   }
 
