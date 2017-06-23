@@ -65,14 +65,18 @@ export default class TabMenu extends Component {
           className={`tab-menu-option selected ${inverted ? 'inverted' : ''}`}
           onClick={this.select(level, idx, o)}
         >
-          {o.text}
+          <div>
+            {o.text}
+          </div>
         </div>
       : <div
           key={o.key}
           className={`tab-menu-option ${inverted ? 'inverted' : ''}`}
           onClick={this.select(level, idx, o)}
         >
-          {o.text}
+          <div>
+            {o.text}
+          </div>
         </div>
       }
 }

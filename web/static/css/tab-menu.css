@@ -6,6 +6,9 @@
   text-align: center;
   width: 100%;
   height: 100%;
+  align-items: stretch;
+  flex-basis: 0;
+  flex-grow: 1;
 }
 
 .jd .tab-menu-option {

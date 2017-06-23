@@ -8,10 +8,9 @@ defmodule Core.ActController do
 
   def get_candidate(conn, params = %{"candidate" => slug}) do
     {:ok, candidate_json} = Poison.encode(Cosmic.get(slug))
-    {:ok, metadata_json} = Poison.encode(Cosmic.get("act-page"))
 
     render conn, "act.html",
       [title: "Let's get to work", header_text: "Let's get to work",
-       candidate: candidate_json, metadata: metadata_json] ++ GlobalOpts.get(conn, params)
+       candidate: candidate_json] ++ GlobalOpts.get(conn, params)
   end
 end

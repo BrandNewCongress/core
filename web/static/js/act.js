@@ -68,10 +68,13 @@ class Act extends Component {
   onViewportChanged = ({ center, zoom }) => this.setState({ center, zoom })
 
   onTabSelect = key => {
+    const domain = window.location.origin.replace('now.', '')
+
     const altOpens = {
-      nominate: window.location.origin.replace('now.', '') + '/nominate',
+      nominate: domain + '/nominate',
       'tell-us':
-        'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com'
+        'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com',
+      'join-national': domain + '/volunteer'
     }
 
     if (altOpens[key]) {
@@ -164,18 +167,24 @@ class Act extends Component {
             <p> Sam Diaaler give me!!! </p>
           )}
 
-          {(selected === 'call-voters' && this.isTimeToCall()) && (
+          {(selected === 'call-voters' && !this.isTimeToCall()) && (
             <p>
               At the moment, we're making calls from 5PM - 9PM on weekdays and
               10AM - 9PM on weekends.
 
-              Since we're not calling right now, please fill out
+              {`Since we're not calling right now, please fill out `}
                 <a href='https://now.brandnewcongress.org/form/call-from-home' target='_blank'>
                   this form
                 </a>
-              and we'll get you set up soon.
+              {` and we'll get you set up soon.`}
             </p>
           )}
+
+          {(selected === 'gather-online' && (
+            <p>
+              Saikat, what goes here?
+            </p>
+          ))}
 
         </div>
 
