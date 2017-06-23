@@ -50,7 +50,7 @@ defmodule Vox do
     date = "#{Timex.now("America/New_York") |> Timex.to_date}"
 
     {:ok, raw} = Redix.command(:redix, ["GET", date])
-    {:ok, logins} = decode_logins(raw)
+    logins = decode_logins(raw)
 
     {:ok, claimed} = Redix.command(:redix, ["INCR", "claimed"])
 
