@@ -7,14 +7,12 @@ defmodule Vox do
   def logins_for_day do
     date = "#{Timex.now("America/New_York") |> Timex.to_date}"
 
-    logins = case Mongo.find_one(:mongo, "logins", %{date: date}, pool: DBConnection.Poolboy) do
-      nil -> create_and_return_logins(date)
-      %{"logins" => logins} -> logins
+    logins = case Redix.command(:redix, ["GET", date]) do
+      {:ok, nil} -> create_and_return_logins(date)
+      {:ok, logins} -> logins
     end
 
     logins
-    |> Enum.map(fn l -> Enum.join(l, ",") end)
-    |> Enum.join("\n")
   end
 
   defp create_and_return_logins(date) do
@@ -35,9 +33,11 @@ defmodule Vox do
             1
           ]
         end)
+      |> Enum.map(fn l -> Enum.join(l, ",") end)
+      |> Enum.join("\n")
 
-    IO.inspect logins
-    Mongo.insert_one(:mongo, "logins", %{date: date, logins: logins, claimed: -1}, pool: DBConnection.Poolboy)
+    Redix.command(:redix, ["SET", date, logins])
+    Redix.command(:redix, ["SET", "claimed", -1])
 
     logins
   end
@@ -49,8 +49,10 @@ defmodule Vox do
   def next_login() do
     date = "#{Timex.now("America/New_York") |> Timex.to_date}"
 
-    {:ok, %{"claimed" => claimed, "logins" => logins}} =
-      Mongo.find_one_and_update(:mongo, "logins", %{date: date}, %{"$inc": %{"claimed": 1}}, pool: DBConnection.Poolboy)
+    {:ok, raw} = Redix.command(:redix, ["GET", date])
+    {:ok, logins} = decode_logins(raw)
+
+    {:ok, claimed} = Redix.command(:redix, ["INCR", "claimed"])
 
     [email | [password | _]] = Enum.at(logins, claimed, nil)
     [email, password]
@@ -59,7 +61,8 @@ defmodule Vox do
   def password_for(username) do
     date = "#{Timex.now("America/New_York") |> Timex.to_date}"
 
-    %{"logins" => logins} = Mongo.find_one(:mongo, "logins", %{date: date}, pool: DBConnection.Poolboy)
+    {:ok, raw} = Redix.command(:redix, ["GET", date])
+    logins = decode_logins(raw)
 
     [password] =
       logins
@@ -69,5 +72,11 @@ defmodule Vox do
         )
 
     password
+  end
+
+  defp decode_logins(string) do
+    string
+    |> String.split("\n")
+    |> Enum.map(fn line -> String.split(line, (",")) end)
   end
 end

@@ -19,20 +19,14 @@ defmodule Core do
       supervisor(Core.Endpoint, []),
       # Start your own worker by calling: Core.Worker.start_link(arg1, arg2, arg3)
       # worker(Core.Worker, [arg1, arg2, arg3]),
-      worker(Mongo, [[name: :mongo,
-                      hostname: String.replace(System.get_env("MONGODB_HOST"), "'", ""),
-                      username: System.get_env("MONGODB_USERNAME"),
-                      password: System.get_env("MONGODB_PASSWORD"),
-                      database: "heroku_6ljxc24f",
-                      port: System.get_env("MONGODB_PORT"),
-                      skip_auth: false,
-                      pool: DBConnection.Poolboy]])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     Supervisor.start_link(children, opts)
+
+    {:ok, conn} = Redix.start_link(System.get_env("REDIS_URL"), name: :redix)
   end
 
   # Tell Phoenix to update the endpoint configuration
