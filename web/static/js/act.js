@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
+import request from 'superagent'
+import createHistory from 'history/createBrowserHistory'
 import Intro from './act/intro'
 import menuConfig from './act/menu-config'
-import callVotersEmbed from './act/call-voters-embed'
 import TabMenu from './components/tab-menu'
 import EventMap from './components/event-map'
 import socket from './socket'
-import request from 'superagent'
 import 'phoenix_html'
 
 const print = s => {
@@ -25,18 +25,29 @@ class Act extends Component {
     events: []
   }
 
-  channel = null
+  history = null
 
   componentWillMount() {
     this.state.channel = socket.channel('act')
+    this.history = createHistory()
+
+    if (window.initialState) {
+      Object.assign(this.state, window.initialState)
+    }
   }
 
   componentDidMount() {
+    this.fetchEvents()
+
     this.state.channel
       .join()
       .receive('ok', msg => {
         console.log(`Connected with ${JSON.stringify(msg)}`)
         console.log(msg)
+
+        if (this.state.candidate) {
+          this.state.channel.push('zip', { zip: this.state.candidate.metadata.zip })
+        }
       })
       .receive('error', msg => {
         console.log(`Could not connect with ${JSON.stringify(msg)}`)
@@ -50,6 +61,7 @@ class Act extends Component {
         zoom: 10
       })
     })
+
   }
 
   set = prop => val => this.setState({ [prop]: val });
@@ -57,14 +69,12 @@ class Act extends Component {
 
   onTabSelect = key => {
     const altOpens = {
-      'call-voters': window.location.origin + '/form/call-from-home',
       nominate: window.location.origin.replace('now.', '') + '/nominate',
       'tell-us':
         'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com'
     }
 
     if (altOpens[key]) {
-      debugger
       window.open(altOpens[key])
     } else {
       this.setState({ selected: key })
@@ -73,18 +83,24 @@ class Act extends Component {
 
   go = ({ candidate, zip }) => {
     this.setState({ candidate, zip })
+    this.history.push(`/act/${candidate.slug}`)
+  }
 
+  fetchEvents = () =>
     request
       .get('https://api.brandnewcongress.org/events')
-      .query({ candidate: candidate.slug })
+      .query()
       .end((err, res) => {
         this.setState({ events: res.body || [] })
       })
-  }
 
   render() {
     const { zip, center, zoom, candidate, selected, events } = this.state
     const { brand } = this.props
+
+    console.log(candidate)
+
+    console.log(selected)
 
     return (
       <div
@@ -144,10 +160,38 @@ class Act extends Component {
               events={events}
             />}
 
+          {(selected === 'call-voters' && this.isTimeToCall()) && (
+            <p> Sam Diaaler give me!!! </p>
+          )}
+
+          {(selected === 'call-voters' && this.isTimeToCall()) && (
+            <p>
+              At the moment, we're making calls from 5PM - 9PM on weekdays and
+              10AM - 9PM on weekends.
+
+              Since we're not calling right now, please fill out
+                <a href='https://now.brandnewcongress.org/form/call-from-home' target='_blank'>
+                  this form
+                </a>
+              and we'll get you set up soon.
+            </p>
+          )}
+
         </div>
 
       </div>
     )
+  }
+
+  isTimeToCall = () => {
+    const now = new Date()
+    const isWeekend = now.getDay() == 6 || now.getDay() == 0
+    const hours = now.getHours()
+    if (isWeekend) {
+      return hours >= 10 && hours < 21
+    } else {
+      return hours >= 17 && hours < 21
+    }
   }
 }
 

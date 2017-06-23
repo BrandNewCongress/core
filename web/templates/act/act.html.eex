@@ -5,6 +5,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
 <script defer="defer" src="<%= static_path(@conn, "/js/act.js") %>"></script>
+<script>
+  window.initialState = {
+    candidate: JSON.parse('<%= raw(@candidate) %>')
+  }
+</script>
 
 <style>
 

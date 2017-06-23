@@ -28,6 +28,7 @@ defmodule Core.Router do
     get "/info/:info", InfoController, :get
 
     get "/act", ActController, :get
+    get "/act/:candidate", ActController, :get_candidate
 
     get "/vox", VoxController, :get
     get "/vox/logins", VoxController, :get_logins

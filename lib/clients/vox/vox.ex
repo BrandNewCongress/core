@@ -43,7 +43,7 @@ defmodule Vox do
   end
 
   defp random_password do
-    @words |> Enum.take_random(3) |> Enum.join("_")
+    "#{@words |> Enum.take_random(1)}#{1..4 |> Enum.map(fn n -> Enum.random(1..9) end) |> Enum.join("")}"
   end
 
   def next_login() do
