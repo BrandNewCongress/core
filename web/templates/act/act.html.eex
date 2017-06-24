@@ -11,6 +11,7 @@
   }
 
   window.callable = JSON.parse('<%= raw(@callable) %>')
+  window.initialSelected = '<%= @initial_selected %>'
 </script>
 
 <style>

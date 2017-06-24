@@ -25,12 +25,12 @@ export default [
         text: 'Tell us about your district',
         key: 'tell-us',
         children: []
-      },
-      {
-        text: 'Gather supporters online',
-        key: 'gather-online',
-        children: []
       }
+      // {
+      //   text: 'Gather supporters online',
+      //   key: 'gather-online',
+      //   children: []
+      // }
     ]
   },
   {

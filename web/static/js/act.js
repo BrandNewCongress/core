@@ -20,7 +20,7 @@ class Act extends Component {
     zip: '',
     center: [38.805470223177466, -100.23925781250001],
     zoom: 4,
-    candidate: undefined,
+    candidate: {},
     selected: 'attend-event',
     events: []
   }
@@ -29,12 +29,15 @@ class Act extends Component {
 
   componentWillMount() {
     this.state.channel = socket.channel('act')
+
+    this.state.selected = window.initialSelected != ''
+      ? window.initialSelected
+      : 'attend-event'
+
     this.history = createHistory()
 
     if (window.initialState) {
       Object.assign(this.state, window.initialState)
-      if (this.state.candidate === "")
-        this.state.candidate === undefined
     }
   }
 
@@ -48,7 +51,9 @@ class Act extends Component {
         console.log(msg)
 
         if (this.state.candidate) {
-          this.state.channel.push('zip', { zip: this.state.candidate.metadata.zip })
+          this.state.channel.push('zip', {
+            zip: this.state.candidate.metadata.zip
+          })
         }
       })
       .receive('error', msg => {
@@ -63,7 +68,6 @@ class Act extends Component {
         zoom: 10
       })
     })
-
   }
 
   set = prop => val => this.setState({ [prop]: val });
@@ -76,7 +80,7 @@ class Act extends Component {
       nominate: domain + '/nominate',
       'tell-us':
         'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com',
-      'join-national': domain + '/volunteer'
+      'join-national': domain + '/form/teams'
     }
 
     if (altOpens[key]) {
@@ -88,7 +92,8 @@ class Act extends Component {
 
   go = ({ candidate, zip }) => {
     this.setState({ candidate, zip })
-    this.history.push(`/act/${candidate.slug}`)
+
+    if (candidate) this.history.push(`/act/${candidate.slug}`)
   }
 
   fetchEvents = () =>
@@ -102,8 +107,6 @@ class Act extends Component {
   render() {
     const { zip, center, zoom, candidate, selected, events } = this.state
     const { brand } = this.props
-
-    console.log(candidate)
 
     console.log(selected)
 
@@ -124,7 +127,7 @@ class Act extends Component {
               &#9733;
             </span>}
 
-          {candidate === undefined
+          {candidate && Object.keys(candidate).length == 0
             ? `Let's get to work`
             : candidate === null
               ? `Help from home`
@@ -149,7 +152,7 @@ class Act extends Component {
           }}
         >
 
-          {candidate === undefined
+          {candidate && Object.keys(candidate).length == 0
             ? <Intro channel={this.state.channel} go={this.go} />
             : <TabMenu
                 initialSelected={0}
@@ -157,7 +160,7 @@ class Act extends Component {
                 options={menuConfig}
               />}
 
-          {(candidate === undefined || selected == 'attend-event') &&
+          {(selected == 'attend-event') &&
             <EventMap
               center={center}
               zoom={zoom}
@@ -165,28 +168,25 @@ class Act extends Component {
               events={events}
             />}
 
-          {(selected === 'call-voters' && this.isTimeToCall()) && (
-            <p> Sam Diaaler give me!!! </p>
-          )}
+          {selected === 'call-voters' &&
+            this.isTimeToCall() &&
+            this.renderOnHours()}
 
-          {(selected === 'call-voters' && !this.isTimeToCall()) && (
+          {selected === 'call-voters' &&
+            !this.isTimeToCall() &&
             <p>
               At the moment, we're making calls from 5PM - 9PM on weekdays and
               10AM - 9PM on weekends.
 
               {`Since we're not calling right now, please fill out `}
-                <a href='https://now.brandnewcongress.org/form/call-from-home' target='_blank'>
-                  this form
-                </a>
+              <a
+                href="https://now.brandnewcongress.org/form/call-from-home"
+                target="_blank"
+              >
+                this form
+              </a>
               {` and we'll get you set up soon.`}
-            </p>
-          )}
-
-          {(selected === 'gather-online' && (
-            <p>
-              Saikat, what goes here?
-            </p>
-          ))}
+            </p>}
 
         </div>
 
@@ -197,11 +197,95 @@ class Act extends Component {
   isTimeToCall = () => {
     const now = new Date()
     const isWeekend = now.getDay() == 6 || now.getDay() == 0
-    const hours = now.getHours()
+    const hours = now.getUTCHours() - 5
+    return true
     if (isWeekend) {
-      return hours >= 10 && hours < 21
+      return hours >= 10
     } else {
-      return hours >= 17 && hours < 21
+      return hours >= 17
+    }
+  }
+
+  renderOnHours = () => {
+    if (
+      window.callable &&
+      this.state.candidate &&
+      window.callable
+        .map(({ slug, name }) => slug)
+        .includes(this.state.candidate.slug)
+    ) {
+      console.log('hi')
+      return (
+        <p>
+          Here's how you make calls!
+
+          <li>
+            <ol>
+              {' '}Pull up{' '}
+              <a
+                href={this.state.candidate.metadata.calling_script_link}
+                target="_blank"
+              >
+                {' '}this script{' '}
+              </a>{' '}
+            </ol>
+            <ol>
+              {' '}Fill out this form{' '}
+              <a href={window.location.origin + '/call'} target="_blank">
+                {' '}here{' '}
+              </a>, and wait for your login info to arrive in your email.{' '}
+            </ol>
+            <ol> Do the LiveVox thing! </ol>
+          </li>
+        </p>
+      )
+    } else if (this.state.candidate) {
+      return (
+        <p>
+          We've made all of our calls for {this.state.candidate.title} for
+          today! <br />
+          <br />
+          Please make calls for one of our other candidates: <br />
+          {window.callable.map(({ slug, name }) =>
+            <div>
+              <a
+                href={
+                  window.location.origin +
+                  '/act/' +
+                  slug +
+                  '?selected=call-voters'
+                }
+                target="_blank"
+              >
+                {' '}{name}{' '}
+              </a>
+            </div>
+          )}
+        </p>
+      )
+    } else {
+      return (
+        <p>
+          Sorry, we don't have a candidate in your district yet. <br />
+          <br />
+          Please make calls for one of our other candidates: <br />
+          {window.callable.map(({ slug, name }) =>
+            <div>
+              <a
+                href={
+                  window.location.origin +
+                  '/act/' +
+                  slug +
+                  '?selected=call-voters'
+                }
+                target="_blank"
+              >
+                {' '}{name}{' '}
+              </a>
+            </div>
+          )}
+        </p>
+      )
     }
   }
 }

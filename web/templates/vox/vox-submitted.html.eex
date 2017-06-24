@@ -1,6 +1,9 @@
-Thanks for signing up to make calls! Here's your username and password.
-<br/>
-<br/>
-
-Username: <%= @username %> <br/>
-Password: <%= @password %> <br/>
+<div style="padding: 50px;">
+  <p>
+    Thanks for signing up to make calls! You will be emailed a username and password.
+    <br/>
+    <br/>
+    Please allow some time (up to 20 minutes) for this to happen, as actual human
+    action is required to enable your account.
+  </p>
+</div>

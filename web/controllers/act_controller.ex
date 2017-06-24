@@ -3,8 +3,8 @@ defmodule Core.ActController do
 
   def get(conn, params) do
     render conn, "act.html",
-      [title: "Let's get to work", header_text: "Let's get to work", candidate: "",
-       callable: callable_json()] ++ GlobalOpts.get(conn, params)
+      [title: "Let's get to work", header_text: "Let's get to work", candidate: "{}",
+       callable: callable_json(), initial_selected: "attend-event"] ++ GlobalOpts.get(conn, params)
   end
 
   def get_candidate(conn, params = %{"candidate" => slug}) do
@@ -12,7 +12,8 @@ defmodule Core.ActController do
 
     render conn, "act.html",
       [title: "Let's get to work", header_text: "Let's get to work",
-       candidate: candidate_json, callable: callable_json()] ++ GlobalOpts.get(conn, params)
+       candidate: candidate_json, callable: callable_json(),
+       initial_selected: Map.get(params, "selected", "attend-event")] ++ GlobalOpts.get(conn, params)
   end
 
   defp callable_json do
@@ -23,7 +24,7 @@ defmodule Core.ActController do
           %{"metadata" => %{"callable" => callables}} -> length(callables) > 0
           _ -> false
         end)
-      |> Enum.map(fn %{"slug" => slug} -> slug end)
+      |> Enum.map(fn %{"slug" => slug, "title" => name} -> %{slug: slug, name: name} end)
       |> Poison.encode()
 
     callable_candidates
