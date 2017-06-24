@@ -9,6 +9,9 @@ defmodule Core.ActController do
 
   def get_candidate(conn, params = %{"candidate" => slug}) do
     candidate = Cosmic.get(slug)
+    candidate = put_in(candidate["metadata"]["calling_prompt"], "")
+    candidate = put_in(candidate["metafields"], %{})
+
     {:ok, candidate_json} = Poison.encode(candidate)
 
     render conn, "act.html",
@@ -29,5 +32,10 @@ defmodule Core.ActController do
       |> Poison.encode()
 
     callable_candidates
+  end
+
+  def candidate_calling_html(conn, %{"candidate" => slug}) do
+    candidate = Cosmic.get(slug)
+    text conn, candidate["metadata"]["calling_prompt"]
   end
 end

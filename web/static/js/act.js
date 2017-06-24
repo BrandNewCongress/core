@@ -22,7 +22,8 @@ class Act extends Component {
     zoom: 4,
     candidate: {},
     selected: 'attend-event',
-    events: []
+    events: [],
+    candidateCallingHTML: ''
   }
 
   history = null
@@ -50,10 +51,16 @@ class Act extends Component {
         console.log(`Connected with ${JSON.stringify(msg)}`)
         console.log(msg)
 
-        if (this.state.candidate) {
+        if (this.state.candidate.metadata) {
           this.state.channel.push('zip', {
             zip: this.state.candidate.metadata.zip
           })
+
+          request
+            .get(`/act/calling-html/${this.state.candidate.slug}`)
+            .end((err, res) => {
+              this.setState({ candidateCallingHTML: res.text})
+            })
         }
       })
       .receive('error', msg => {
@@ -160,7 +167,7 @@ class Act extends Component {
                 options={menuConfig}
               />}
 
-          {(selected == 'attend-event') &&
+          {selected == 'attend-event' &&
             <EventMap
               center={center}
               zoom={zoom}
@@ -215,27 +222,99 @@ class Act extends Component {
         .includes(this.state.candidate.slug)
     ) {
       return (
-        <div style={{textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-          <div style={{marginTop: 10, marginBottom: 10}} dangerouslySetInnerHTML={{ __html: this.state.candidate.metadata.calling_prompt }} />
+        <div
+          style={{
+            textAlign: 'center',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
+          <div
+            style={{ marginTop: 10, marginBottom: 10, textAlign: 'left' }}
+            dangerouslySetInnerHTML={{
+              __html: this.state.candidateCallingHTML
+            }}
+          />
           <label> First, </label>
-          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href="https://docs.google.com/document/d/1AKs90WQvTLzA9-fzt7RkR_V1Af8p5-xXgDT2JenOw5k/edit?usp=sharing">
+          <a
+            style={{
+              width: '200px',
+              padding: 10,
+              textTransform: 'none',
+              textDecoration: 'none'
+            }}
+            target="_blank"
+            className="primary-button"
+            href="https://docs.google.com/document/d/1AKs90WQvTLzA9-fzt7RkR_V1Af8p5-xXgDT2JenOw5k/edit?usp=sharing"
+          >
             Read the guide on how to make calls for BNC
           </a>
 
           <label> Second, </label>
-          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href={this.state.candidate.metadata.calling_script_link}>
+          <a
+            style={{
+              width: '200px',
+              padding: 10,
+              textTransform: 'none',
+              textDecoration: 'none'
+            }}
+            target="_blank"
+            className="primary-button"
+            href={this.state.candidate.metadata.calling_script_link}
+          >
             Read the calling script
           </a>
 
           <label> Third, </label>
-          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href="https://now.brandnewcongress.org/call">
+          <a
+            style={{
+              width: '200px',
+              padding: 10,
+              textTransform: 'none',
+              textDecoration: 'none'
+            }}
+            target="_blank"
+            className="primary-button"
+            href="https://now.brandnewcongress.org/call"
+          >
             Claim your login
           </a>
 
           <label> Fourth, </label>
-          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href="https://portal.na4.livevox.com">
+          <a
+            style={{
+              width: '200px',
+              padding: 10,
+              textTransform: 'none',
+              textDecoration: 'none'
+            }}
+            target="_blank"
+            className="primary-button"
+            href="https://portal.na4.livevox.com/BrandNewCampaign/AgentLogin"
+          >
             Login to our dialer, and get calling!
           </a>
+
+          <div style={{ textAlign: 'left' }}>
+            <h3> Calling hours </h3>
+            <p>
+              We make calls from 5PM - 9PM on weekdays and 10AM - 9PM on
+              weekends,
+              so check back anytime you want to make calls.
+              <br />
+              However, your login information will change each day, so you'll
+              need to reclaim it.
+            </p>
+            <h3> Questions? </h3>
+            <p>
+              Please email{' '}
+              <a href="mailto:dailer@brandnewcongress.org" target="-blank">
+                {' '}dailer@brandnewcongress.org{' '}
+              </a>.
+              We'll get back to you as soon as we can.
+            </p>
+          </div>
         </div>
       )
     } else if (this.state.candidate) {

@@ -48,7 +48,8 @@ defmodule Core.Mixfile do
      {:hackney, "~> 1.6.0"},
      {:swoosh, "~> 0.8.1"},
      {:timex, "~> 3.0"},
-     {:redix, ">= 0.0.0"}]
+     {:redix, ">= 0.0.0"},
+     {:html_sanitize_ex, "~> 1.0.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
