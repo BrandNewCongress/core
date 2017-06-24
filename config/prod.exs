@@ -36,6 +36,9 @@ config :core, Core.Vox,
   api_key: System.get_env("MAILGUN_KEY"),
   domain: System.get_env("MAILGUN_DOMAIN")
 
+# Update secret
+config :core, [update_secret: System.get_env("UPDATE_SECRET")]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
