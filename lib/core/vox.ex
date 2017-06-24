@@ -20,7 +20,7 @@ defmodule Core.Vox do
     |> to({"Sam Briggs", "sam@brandnewcongress.org"})
     |> from({"Ben's Program", "us@mail.brandnewcongress.org"})
     |> subject("New Login Request!")
-    |> text_body(text(username, password))
+    |> text_body(text(username, password, email, phone))
     |> deliver
 
     [username, password]
@@ -32,10 +32,12 @@ defmodule Core.Vox do
     |> Enum.map(fn line -> String.split(line, (",")) end)
   end
 
-  defp text(username, password) do
+  defp text(username, password, email, phone) do
     "
 Username: #{username}
 Password: #{password}
+Email: #{email}
+Phone: #{phone}
     "
   end
 end
