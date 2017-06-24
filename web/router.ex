@@ -30,9 +30,9 @@ defmodule Core.Router do
     get "/act", ActController, :get
     get "/act/:candidate", ActController, :get_candidate
 
-    get "/vox", VoxController, :get
-    get "/vox/logins", VoxController, :get_logins
-    post "/vox", VoxController, :post
+    get "/call", VoxController, :get
+    get "/call/logins", VoxController, :get_logins
+    post "/call", VoxController, :post
 
     get "/unsubscribe", SubscriptionController, :unsubscribe_get
     post "/unsubscribe", SubscriptionController, :unsubscribe_post
