@@ -223,13 +223,13 @@ class Act extends Component {
           </a>
 
           <label> Second, </label>
-          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href="https://now.brandnewcongress.org/call">
-            Claim your login
+          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href={this.state.candidate.metadata.calling_script_link}>
+            Read the calling script
           </a>
 
           <label> Third, </label>
-          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href={this.state.candidate.metadata.calling_script_link}>
-            Read the calling script
+          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href="https://now.brandnewcongress.org/call">
+            Claim your login
           </a>
 
           <label> Fourth, </label>
