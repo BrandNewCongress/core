@@ -17,7 +17,7 @@ defmodule Core.Vox do
     [username, password] = ["#{short_email}#{short_phone}", "brandnew2018"]
 
     new()
-    |> to({"Sam Briggs", "ben@brandnewcongress.org"})
+    |> to({"Sam Briggs", "sam@brandnewcongress.org"})
     |> from({"Ben's Program", "us@mail.brandnewcongress.org"})
     |> subject("New Login Request!")
     |> text_body(text(username, password))
