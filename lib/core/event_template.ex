@@ -3,8 +3,8 @@ defmodule Core.EventTemplate do
   import Swoosh.Email
 
   def send(id, slug, event) do
-    IO.inspect new()
-    |> to({"Sam Briggs", "ben@brandnewcongress.org"})
+    new()
+    |> to({"Sam Briggs", "sam@brandnewcongress.org"})
     |> from({event.contact.name, "us@mail.brandnewcongress.org"})
     |> subject("New User Submitted Event!")
     |> text_body(text(id, slug, event))

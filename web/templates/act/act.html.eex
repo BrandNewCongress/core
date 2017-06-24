@@ -9,6 +9,8 @@
   window.initialState = {
     candidate: JSON.parse('<%= raw(@candidate) %>')
   }
+
+  window.callable = JSON.parse('<%= raw(@callable) %>')
 </script>
 
 <style>

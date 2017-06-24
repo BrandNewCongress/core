@@ -16,6 +16,17 @@ config :core, Core.Endpoint,
 # Nationbuilder API Key
 config :core, [nb_slug: "brandnewcampaign", nb_token: System.get_env("NB_TOKEN")]
 
+# Use Mailgun
+config :core, Core.EventTemplate,
+  adapter: Swoosh.Adapters.Mailgun,
+  api_key: System.get_env("MAILGUN_KEY"),
+  domain: System.get_env("MAILGUN_DOMAIN")
+
+config :core, Core.Vox,
+  adapter: Swoosh.Adapters.Mailgun,
+  api_key: System.get_env("MAILGUN_KEY"),
+  domain: System.get_env("MAILGUN_DOMAIN")
+
 # Update secret
 config :core, [update_secret: System.get_env("UPDATE_SECRET")]
 

@@ -25,8 +25,6 @@ defmodule Core do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     Supervisor.start_link(children, opts)
-
-    {:ok, conn} = Redix.start_link(System.get_env("REDIS_URL"), name: :redix)
   end
 
   # Tell Phoenix to update the endpoint configuration

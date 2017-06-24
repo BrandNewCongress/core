@@ -25,6 +25,17 @@ config :core, [nb_slug: "brandnewcampaign", nb_token: System.get_env("NB_TOKEN")
 # Do not print debug messages in production
 config :logger, level: :info
 
+# Use Mailgun
+config :core, Core.EventTemplate,
+  adapter: Swoosh.Adapters.Mailgun,
+  api_key: System.get_env("MAILGUN_KEY"),
+  domain: System.get_env("MAILGUN_DOMAIN")
+
+config :core, Core.Vox,
+  adapter: Swoosh.Adapters.Mailgun,
+  api_key: System.get_env("MAILGUN_KEY"),
+  domain: System.get_env("MAILGUN_DOMAIN")
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

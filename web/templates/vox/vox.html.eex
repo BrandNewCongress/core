@@ -2,10 +2,10 @@
   <div class="right-column">
     <div class="external-content-wrapper">
       <p>
-        TODO: Add stuff here
+        Enter your email and phone number, and you'll be emailed a log-in with instructions shortly.
       </p>
     </div>
-    <%= form_tag("/vox", method: :post) %>
+    <%= form_tag("/call", method: :post) %>
       <div class="petition-container">
         <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
         <!-- <div>
