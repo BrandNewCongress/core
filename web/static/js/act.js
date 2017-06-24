@@ -216,28 +216,27 @@ class Act extends Component {
     ) {
       console.log('hi')
       return (
-        <p>
-          Here's how you make calls!
+        <div>
+          <label> First, </label>
+          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href="https://docs.google.com/document/d/1AKs90WQvTLzA9-fzt7RkR_V1Af8p5-xXgDT2JenOw5k/edit?usp=sharing">
+            Read the guide on how to make calls for BNC
+          </a>
 
-          <li>
-            <ol>
-              {' '}Pull up{' '}
-              <a
-                href={this.state.candidate.metadata.calling_script_link}
-                target="_blank"
-              >
-                {' '}this script{' '}
-              </a>{' '}
-            </ol>
-            <ol>
-              {' '}Fill out this form{' '}
-              <a href={window.location.origin + '/call'} target="_blank">
-                {' '}here{' '}
-              </a>, and wait for your login info to arrive in your email.{' '}
-            </ol>
-            <ol> Do the LiveVox thing! </ol>
-          </li>
-        </p>
+          <label> Second, </label>
+          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href="https://now.brandnewcongress.org/call">
+            Claim your login
+          </a>
+
+          <label> Third, </label>
+          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href={this.state.candidate.metadata.calling_script_link}>
+            Read the calling script
+          </a>
+
+          <label> Fourth, </label>
+          <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href="https://portal.na4.livevox.com">
+            Login to our dialer, and get calling!
+          </a>
+        </div>
       )
     } else if (this.state.candidate) {
       return (
