@@ -115,7 +115,7 @@ class Act extends Component {
         style={{
           maxWidth: '95vw',
           minWidth: '80vw',
-          height: 'calc(100vh - 75px)'
+          minHeight: 'calc(100vh - 75px)'
         }}
       >
         <h1 className="page-title">
@@ -214,9 +214,9 @@ class Act extends Component {
         .map(({ slug, name }) => slug)
         .includes(this.state.candidate.slug)
     ) {
-      console.log('hi')
       return (
-        <div>
+        <div style={{textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <div style={{marginTop: 10, marginBottom: 10}} dangerouslySetInnerHTML={{ __html: this.state.candidate.metadata.calling_prompt }} />
           <label> First, </label>
           <a style={{width: '200px', padding: 10, textTransform: 'none', textDecoration: 'none'}} target='_blank' className="primary-button" href="https://docs.google.com/document/d/1AKs90WQvTLzA9-fzt7RkR_V1Af8p5-xXgDT2JenOw5k/edit?usp=sharing">
             Read the guide on how to make calls for BNC

@@ -8,7 +8,8 @@ defmodule Core.ActController do
   end
 
   def get_candidate(conn, params = %{"candidate" => slug}) do
-    {:ok, candidate_json} = Poison.encode(Cosmic.get(slug))
+    candidate = Cosmic.get(slug)
+    {:ok, candidate_json} = Poison.encode(candidate)
 
     render conn, "act.html",
       [title: "Let's get to work", header_text: "Let's get to work",
