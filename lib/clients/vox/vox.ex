@@ -20,7 +20,7 @@ defmodule Core.Vox do
 
   defp create_and_return_logins(date) do
     logins =
-      1..9000
+      1..8000
       |> Enum.map(fn n -> [
             "BNCVolunteer#{n}",
             random_password(),
@@ -28,6 +28,8 @@ defmodule Core.Vox do
             "Vol#{n}",
             1234,
             30,
+            1,
+            0,
             "",
             "",
             1008479,
@@ -46,7 +48,7 @@ defmodule Core.Vox do
   end
 
   defp random_password do
-    "#{@words |> Enum.take_random(1)}#{1..4 |> Enum.map(fn n -> Enum.random(1..9) end) |> Enum.join("")}"
+    "#{@words |> Enum.take_random(2) |> Enum.join("_")}#{1..4 |> Enum.map(fn n -> Enum.random(1..9) end) |> Enum.join("")}"
   end
 
   def next_login() do
