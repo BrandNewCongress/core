@@ -310,7 +310,7 @@ class Act extends Component {
             <p>
               Please email{' '}
               <a href="mailto:dialer@brandnewcongress.org" target="-blank">
-                {' '}dailer@brandnewcongress.org{' '}
+                {' '}dialer@brandnewcongress.org{' '}
               </a>.
               We'll get back to you as soon as we can.
             </p>
