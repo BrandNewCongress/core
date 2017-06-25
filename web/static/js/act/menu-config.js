@@ -8,7 +8,7 @@ export default [
     children: []
   },
   {
-    text: 'Work from Home',
+    text: 'Volunteer from Home',
     key: 'from-home',
     children: [
       {
