@@ -15,6 +15,7 @@ defmodule Core.Vox do
       {:ok, logins} -> logins
     end
 
+    # create_and_return_logins(date)
     logins
   end
 

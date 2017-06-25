@@ -18,7 +18,6 @@ defmodule Core do
       # Start the endpoint when the application starts
       supervisor(Core.Endpoint, []),
       # Start your own worker by calling: Core.Worker.start_link(arg1, arg2, arg3)
-      # worker(Core.Worker, [arg1, arg2, arg3]),
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
@@ -26,7 +25,7 @@ defmodule Core do
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     Supervisor.start_link(children, opts)
 
-    {:ok, _conn} = Redix.start_link(System.get_env("REDIS_URL"), name: :redix)
+    {:ok, _conn} = Redix.start_link(Application.get_env(:core, :redis_url), name: :redix)
   end
 
   # Tell Phoenix to update the endpoint configuration

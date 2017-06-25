@@ -87,7 +87,7 @@ class Act extends Component {
       nominate: domain + '/nominate',
       'tell-us':
         'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com',
-      'join-national': domain + '/form/teams'
+      'join-national': window.location.origin + '/form/teams'
     }
 
     if (altOpens[key]) {
@@ -309,7 +309,7 @@ class Act extends Component {
             <h3> Questions? </h3>
             <p>
               Please email{' '}
-              <a href="mailto:dailer@brandnewcongress.org" target="-blank">
+              <a href="mailto:dialer@brandnewcongress.org" target="-blank">
                 {' '}dailer@brandnewcongress.org{' '}
               </a>.
               We'll get back to you as soon as we can.

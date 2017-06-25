@@ -30,6 +30,9 @@ config :core, Core.Vox,
 # Update secret
 config :core, [update_secret: System.get_env("UPDATE_SECRET")]
 
+# Redis url
+config :core, [redis_url: System.get_env("REDIS_URL")]
+
 # Watch static and templates for browser reloading.
 config :core, Core.Endpoint,
   live_reload: [

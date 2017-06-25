@@ -39,6 +39,9 @@ config :core, Core.Vox,
 # Update secret
 config :core, [update_secret: System.get_env("UPDATE_SECRET")]
 
+# Redis url
+config :core, [redis_url: System.get_env("REDIS_URL")]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

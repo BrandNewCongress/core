@@ -2,7 +2,7 @@
   <div class="right-column">
     <div class="external-content-wrapper">
       <p>
-        Enter your email and phone number, and you'll be emailed a log-in with instructions shortly.
+        Enter your email and phone number to get your daily dialer login..
       </p>
     </div>
     <%= form_tag("/call", method: :post) %>
