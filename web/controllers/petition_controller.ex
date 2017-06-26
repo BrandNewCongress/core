@@ -8,24 +8,32 @@ defmodule Core.PetitionController do
 
   # Match petition exists and is proper brand
   defp render_petition(conn, params, object = %{"metadata" => %{
-    "brands" => brands
+    "brands" => brands,
+    "visibility" => visibility
   }}) do
     brand = Keyword.get(GlobalOpts.get(conn, params), :brand)
 
     if Enum.member?(brands, brand) do
-      do_render_petition(conn, params, object)
-    else
-      url = case (conn |> GlobalOpts.get(params) |> Keyword.get(:brand)) do
-        "jd" -> "https://justicedemocrats.com"
-        "bnc" -> "https://brandnewcongress.org"
+      case visibility do
+        "Draft" -> do_render_draft(conn, params, object)
+        "Published" -> do_render_petition(conn, params, object)
       end
-      redirect(conn, external: url)
+    else
+      redirect_home(conn, params)
     end
   end
 
   # Match petition is nil
   defp render_petition(conn, params, nil) do
     render conn, "404.html", GlobalOpts.get(conn, params)
+  end
+
+  defp do_render_draft(conn, params, object) do
+    if Map.has_key?(params, "draft") do
+      do_render_petition(conn, params, object)
+    else
+      redirect_home(conn, params)
+    end
   end
 
   # Extract and render petition
@@ -38,9 +46,10 @@ defmodule Core.PetitionController do
       "post_sign_text" => post_sign_text,
       "background_image" => %{
         "imgix_url" => background_image
-      }
+      },
     }
   }) do
+
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
        post_sign_text: post_sign_text, background_image: background_image,
@@ -106,5 +115,13 @@ defmodule Core.PetitionController do
        post_sign_text: post_sign_text, background_image: background_image,
        twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
        signed: true] ++ GlobalOpts.get(conn, params)
+  end
+
+  def redirect_home(conn, params) do
+    url = case (conn |> GlobalOpts.get(params) |> Keyword.get(:brand)) do
+      "jd" -> "https://justicedemocrats.com"
+      "bnc" -> "https://brandnewcongress.org"
+    end
+    redirect(conn, external: url)
   end
 end
