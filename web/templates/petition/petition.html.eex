@@ -91,6 +91,8 @@
   min-height: 80vh;
   padding-top: 30px;
   padding-bottom: 30px;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .right-column {
