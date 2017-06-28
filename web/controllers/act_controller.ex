@@ -25,7 +25,7 @@ defmodule Core.ActController do
       "candidates"
       |> Cosmic.get_type()
       |> Enum.filter(fn
-          %{"metadata" => %{"callable" => callables}} -> length(callables) > 0
+          %{"metadata" => %{"callable" => "Callable"}} -> true
           _ -> false
         end)
       |> Enum.map(fn %{"slug" => slug, "title" => name} -> %{slug: slug, name: name} end)
