@@ -40,6 +40,8 @@ defmodule Core.Router do
     post "/unsubscribe", SubscriptionController, :unsubscribe_post
     get "/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_get
     post "/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_post
+
+    get "/entry", EntryController, :get
   end
 
 

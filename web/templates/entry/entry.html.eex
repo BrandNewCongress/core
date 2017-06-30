@@ -1,0 +1,31 @@
+<div id=entry-app>
+</div>
+<script>
+  window.campaigns = <%= raw(@campaigns) %>
+</script>
+<script defer="defer" src="<%= static_path(@conn, "/js/entry.js") %>"></script>
+
+<style>
+.field {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  width: 200px;
+  margin: 10px;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid black;
+  padding: 10px;
+  margin: 5px;
+}
+
+.entry-header,
+.entry-header > div {
+  display: flex;
+  justify-content: space-around;
+}
+
+</style>
