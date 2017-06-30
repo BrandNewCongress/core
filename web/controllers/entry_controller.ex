@@ -8,6 +8,6 @@ defmodule Core.EntryController do
       |> Enum.map(&(Map.take(&1, ["title", "slug"])))
       |> Poison.encode()
 
-    render conn, "entry.html", [campaigns: campaigns] ++ GlobalOpts.get(conn, params)
+    render conn, "entry.html", [title: "Entry", campaigns: campaigns] ++ GlobalOpts.get(conn, params)
   end
 end

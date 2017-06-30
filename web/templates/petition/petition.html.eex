@@ -76,7 +76,10 @@
       </a>
 
       <div class="fb-share-button" data-href="<%=@url%>" data-layout="button_count" data-size="large">
-        <a class="fb-xfbml-parse-ignore" target="_blank" href="<%=@fb_href%>">
+        <a class="fb-xfbml-parse-ignore" target="_blank"
+          style="background-color: #3b5998; color: white; padding: 5px; text-decoration: none; margin-top: 5px;"
+          href="<%=@fb_href%>"
+        >
           Share on Facebook
         </a>
       </div>
@@ -185,6 +188,9 @@
 .external-content-wrapper h3,
 .external-content-wrapper p {
   background: none !important;
+}
+.external-content-wrapper a {
+  color: white;
 }
 
 </style>
