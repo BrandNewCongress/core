@@ -1,23 +1,10 @@
-<!--  4th of July only -->
-<!--  Uncommment stuff below on a normal day -->
-
 <div
   id="work-app"
   style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 10px;"
->
+> </div>
 
-  <h1> Happy 4th of July! </h1>
-  <br/>
-  <iframe src="https://giphy.com/embed/TmT51OyQLFD7a" width="400" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/america-fireworks-4th-of-july-TmT51OyQLFD7a">via GIPHY</a></p>
-  <br/>
-  <h3>
-    Calls will resume July 5th at 10am eastern
-  </h3>
-
-</div>
-
-<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" /> -->
-<!-- <script defer="defer" src="<%= static_path(@conn, "/js/act.js") %>"></script> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
+<script defer="defer" src="<%= static_path(@conn, "/js/act.js") %>"></script>
 <script>
   window.initialState = {
     candidate: JSON.parse('<%= raw(@candidate) %>')

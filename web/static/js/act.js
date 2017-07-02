@@ -166,7 +166,7 @@ class Act extends Component {
                 onSelect={this.onTabSelect}
                 options={menuConfig}
               />}
-
+{/*
           {selected == 'attend-event' &&
             <EventMap
               center={center}
@@ -174,7 +174,7 @@ class Act extends Component {
               onViewportChanged={this.onViewportChanged}
               events={events}
             />}
-
+ */}
           {selected === 'call-voters' &&
             this.isTimeToCall() &&
             this.renderOnHours()}
