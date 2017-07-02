@@ -1,3 +1,4 @@
 <div>
   <%= gettext "Welcome to %{name}", name: "Brand New Congress's new website!" %>
+  <a href="/platform"> Platform </a>
 </div>

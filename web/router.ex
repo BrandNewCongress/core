@@ -17,7 +17,7 @@ defmodule Core.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
-    # get "/platform", PageController, :platform
+    get "/platform", PageController, :platform
     # get "/candidates", PageController, :candidates
     # get "/candidates/:candidate", PageController, :candidate
 
