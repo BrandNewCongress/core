@@ -13,12 +13,10 @@ defmodule Core.VoxController do
     brand = Keyword.get(global_opts, :brand)
     date = "#{Timex.now("America/New_York") |> Timex.to_date}"
 
-    {:ok, put_body_string} = Poison.encode(%{"person" => %{
-      "email" => email, "phone" => phone, "first_name" => first_name, "last_name" => last_name
-    }})
-
-    %{body: {:ok, %{"person" => %{"id" => id, "tags" => tags}}}} =
-      NB.put("people/push", [body: put_body_string])
+    %{"id" => id, "tags" => tags} = Nb.People.push(%{
+      "email" => email, "phone" => phone,
+      "first_name" => first_name, "last_name" => last_name
+    })
 
     current_username =
       tags
@@ -32,14 +30,11 @@ defmodule Core.VoxController do
       un -> [un, Core.Vox.password_for(un)]
     end
 
-    {:ok, put_body_string} = Poison.encode(%{"tagging" => %{
-      "tag": [
-        "Action: Made Calls: #{copyright(brand)}",
-        "Vox Alias: #{username}: #{date}"
-      ]
-    }})
+    Nb.People.add_tags(id, [
+      "Action: Made Calls: #{copyright(brand)}",
+      "Vox Alias: #{username}: #{date}"
+    ])
 
-    %{body: {:ok, stuff}} = NB.put("people/#{id}/taggings", [body: put_body_string])
     render conn, "vox-submitted.html", [username: username, password: password] ++ GlobalOpts.get(conn, params)
   end
 

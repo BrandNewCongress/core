@@ -1,5 +1,6 @@
 defmodule Core.TypeformController do
   use Core.Web, :controller
+  require Logger
 
   def submit_event(conn, %{"form_response" => %{"answers" => answers, "definition" => definition}}) do
     questions =
@@ -21,16 +22,13 @@ defmodule Core.TypeformController do
         ""
       end
 
-      person = %{
+      %{"id" => id} = Nb.People.push(%{
         email: together["host_email"],
         phone: together["host_phone"],
         first_name: first_name,
         last_name: last_name
-      }
+      })
 
-      {:ok, post_body_string} = Poison.encode(%{"person" => person})
-      IO.puts post_body_string
-      %{body: {:ok, %{"person" => %{"id" => id}}}} = NB.put("people/push", [body: post_body_string])
       id
     end)
 
@@ -88,13 +86,10 @@ defmodule Core.TypeformController do
       calendar_id: calendar_id
     }
 
-    IO.puts "Creating event on calendar #{calendar_id}"
+    Logger.info "Creating event on calendar #{calendar_id}"
+    %{"id" => event_id, "slug" => event_slug} = Nb.Events.create(event)
 
-    {:ok, post_body_string} = Poison.encode(%{"event" => event})
-    %{body: {:ok, %{"event" => %{"id" => event_id, "slug" => event_slug}}}} =
-      NB.post("sites/brandnewcongress/pages/events", [body: post_body_string])
-
-    Core.EventTemplate.send(event_id, event_slug, event)
+    Core.Mailer.on_event_create(event_id, event_slug, event)
 
     json conn, %{"ok" => "There you go!"}
   end

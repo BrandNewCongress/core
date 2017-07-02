@@ -1,4 +1,4 @@
-defmodule NB do
+defmodule Nb.Api do
   use HTTPotion.Base
 
   @nb_slug Application.get_env(:core, :nb_slug)
@@ -9,6 +9,7 @@ defmodule NB do
     access_token: @nb_token
   }
 
+  # --------------- Process request ---------------
   defp process_url(url) do
     if String.starts_with? url, "/api/v1" do
       "https://#{@nb_slug}.nationbuilder.com" <> url
@@ -17,7 +18,7 @@ defmodule NB do
     end
   end
 
-  defp process_request_headers(hdrs \\ %{}) do
+  defp process_request_headers(hdrs) do
     Dict.merge(hdrs, [
         "Accept": "application/json",
         "Content-Type": "application/json"
@@ -29,9 +30,21 @@ defmodule NB do
     |> Keyword.update(:query, @default_params, &(Map.merge(@default_params, &1)))
   end
 
+  defp process_request_body(body) when is_map(body) do
+    case Poison.encode(body) do
+      {:ok, encoded} -> encoded
+      {:error, problem} -> problem
+    end
+  end
+
+  defp process_request_body(body) do
+    body
+  end
+
+  # --------------- Process response ---------------
   defp process_response_body(raw) do
     case Poison.decode(raw) do
-      {:ok, body} -> {:ok, body}
+      {:ok, body} -> body
       {:error, raw} -> {:error, raw}
     end
   end
@@ -41,17 +54,17 @@ defmodule NB do
   # -----------------------------------
 
   # If results exist, send them, passing only the tail
-  defp _stream({:ok, %{"next" => next, "results" => [head | tail]}}) do
+  defp unfolder({:ok, %{"next" => next, "results" => [head | tail]}}) do
     {head, {:ok, %{"next" => next, "results" => tail}}}
   end
 
   # If results don't exist, and next is nil, we're done
-  defp _stream({:ok, %{"next" => nil, "results" => _}}) do
+  defp unfolder({:ok, %{"next" => nil, "results" => _}}) do
     nil
   end
 
   # If results don't exist, and next is not null, serve it
-  defp _stream({:ok, %{"next" => next, "results" => _}}) do
+  defp unfolder({:ok, %{"next" => next, "results" => _}}) do
     [core, params] = String.split(next, "?")
     case get(core, [query: Plug.Conn.Query.decode(params)]).body do
       {:ok, %{"next" => next, "results" => [head | tail]}} ->
@@ -61,13 +74,14 @@ defmodule NB do
     end
   end
 
-  defp _stream({:error, message}) do
+  # Handle errors
+  defp unfolder({:error, message}) do
     message
   end
 
   # Wrap it all
   def stream(url) do
     get(url).body
-    |> Stream.unfold(fn state -> _stream(state) end)
+    |> Stream.unfold(fn state -> unfolder(state) end)
   end
 end

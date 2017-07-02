@@ -88,14 +88,12 @@ defmodule Core.PetitionController do
       ""
     end
 
-    {:ok, post_body_string} = Poison.encode(%{"person" => %{
+    %{"id" => id} = Nb.People.push(%{
       "email" => email,
       "first_name" => first_name,
       "last_name" => last_name,
       "mailing_address" => %{"zip" => zip}
-    }})
-
-    %{body: {:ok, %{"person" => %{"id" => id}}}} = NB.post("people", [body: post_body_string])
+    })
 
     # Add the petition signed tag
     brand = Keyword.get(global_opts, :brand)
@@ -105,10 +103,7 @@ defmodule Core.PetitionController do
     end
     tag = "Action: Signed Petition: #{source}: #{title}"
 
-    {:ok, put_body_string} = Poison.encode(%{"tagging" => %{
-      "tag": tag
-    }})
-    NB.put("people/#{id}/taggings", [body: put_body_string])
+    Nb.People.add_tags(id, tag)
 
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,

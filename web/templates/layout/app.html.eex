@@ -15,10 +15,8 @@
     <!-- Conditional font includes -->
     <%= if @brand == "jd" do %>
       <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One|Anonymous+Pro|Roboto" rel="stylesheet">
-      <link href="<%= static_path(@conn, "/css/jd.css") %>" rel="stylesheet">
     <% else %>
       <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed|Roboto+Slab+" rel="stylesheet">
-      <link href="<%= static_path(@conn, "/css/bnc.css") %>" rel="stylesheet">
     <% end %>
 
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">

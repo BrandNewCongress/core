@@ -68,8 +68,8 @@ defmodule Core.SubscriptionController do
     Fetch the user's tags from nation builder to present different unsubscribe options
   """
   def unsubscribe_get(conn, params = %{"email" => email}) do
-    tags = case NB.get "people/match", [query: %{"email" => email}] do
-      %{body: {:ok, %{"person" => %{"tags" => tags}}}} -> tags
+    tags = case Nb.People.match(%{"email" => email}) do
+      %{"tags" => tags} -> tags
       _ -> nil
     end
 
@@ -104,6 +104,9 @@ defmodule Core.SubscriptionController do
     end
   end
 
+  # Handle no email
+  def unsubscribe_get(conn, params), do: do_homepage_redirect(conn, params)
+
   @doc"""
     GET /unsubscribe?email=email with post body
 
@@ -111,10 +114,7 @@ defmodule Core.SubscriptionController do
     sources not present on the request's params
   """
   def unsubscribe_post(conn, params = %{"email" => email}) do
-    %{body: {:ok, %{"person" => %{
-      "id" => id,
-      "tags" => tags
-    }}}} = NB.get "people/match", [query: %{"email" => email}]
+    %{"id" => id, "tags" => tags} = Nb.People.match %{"email" => email}
 
     current_sources =
       tags
@@ -123,6 +123,7 @@ defmodule Core.SubscriptionController do
 
     # Add unsubscription tags
     unsubscribe_task = Task.async(fn ->
+
       to_unsub =
         current_sources
         |> Enum.filter(fn tag -> not Map.has_key?(params, tag) end)
@@ -131,12 +132,7 @@ defmodule Core.SubscriptionController do
         to_unsub
         |> Enum.map(fn tag -> "Action: Unsubscribed: #{tag}" end)
 
-      {:ok, put_body_string} = Poison.encode(%{"tagging" => %{
-        "tag": tags_to_add
-      }})
-
-      NB.put("people/#{id}/taggings", [body: put_body_string])
-
+      Nb.People.add_tags(id, tags_to_add)
       to_unsub
     end)
 
@@ -150,12 +146,7 @@ defmodule Core.SubscriptionController do
       tags_to_remove = unsubs_to_remove
         |> Enum.map(fn tag -> "Action: Unsubscribed: #{tag}" end)
 
-      {:ok, put_body_string} = Poison.encode(%{"tagging" => %{
-        "tag": tags_to_remove
-      }})
-
-      NB.delete("people/#{id}/taggings", [body: put_body_string])
-
+      Nb.People.delete_tags(id, tags_to_remove)
       unsubs_to_remove
     end)
 
@@ -168,6 +159,8 @@ defmodule Core.SubscriptionController do
        to_subscribe: to_subscribe, title: "Unsubscribe"] ++ GlobalOpts.get(conn, params)
   end
 
+  # Redirect if no email
+  def unsubscribe_post(conn, params), do: do_homepage_redirect(conn, params)
 
   @doc"""
     GET /unsubscribe/:candidate?email=email
@@ -184,6 +177,9 @@ defmodule Core.SubscriptionController do
        candidate: nice_name, slug: candidate] ++ GlobalOpts.get(conn, params)
   end
 
+  # Redirect if no email
+  def unsubscribe_candidate_get(conn, params), do: do_homepage_redirect(conn, params)
+
   @doc"""
     GET /unsubscribe/:candidate?email=email with post body
 
@@ -193,18 +189,13 @@ defmodule Core.SubscriptionController do
     nice_name = @sources[candidate]
 
     # Find the person
-    id = case NB.get "people/match", [query: %{"email" => email}] do
-      %{body: {:ok, %{"person" => %{"id" => id}}}} -> id
+    id = case Nb.People.match %{"email" => email} do
+      %{"id" => id} -> id
       _ -> nil
     end
 
-    # Construct body and put it for the taggings
-    {:ok, put_body_string} = Poison.encode(%{"tagging" => %{
-      "tag": "Action: Unsubscribed: #{nice_name}"
-    }})
-
     if id do
-      NB.put("people/#{id}/taggings", [body: put_body_string])
+      Nb.People.add_tags(id, "Action: Unsubscribed: #{nice_name}")
     end
 
     # Determine the resubscribe link
@@ -220,6 +211,9 @@ defmodule Core.SubscriptionController do
        url: base <> candidate] ++ global_opts
   end
 
+  # Redirect if no email
+  def unsubscribe_candidate_post(conn, params), do: do_homepage_redirect(conn, params)
+
   # Private function for any situation where the email is missing
   defp do_homepage_redirect(conn, params) do
     url = case conn |> GlobalOpts.get(params) |> Keyword.get(:brand) do
@@ -229,10 +223,4 @@ defmodule Core.SubscriptionController do
 
     redirect(conn, external: url)
   end
-
-  # Redirect if no email
-  def unsubscribe_get(conn, params), do: do_homepage_redirect(conn, params)
-  def unsubscribe_post(conn, params), do: do_homepage_redirect(conn, params)
-  def unsubscribe_candidate_get(conn, params), do: do_homepage_redirect(conn, params)
-  def unsubscribe_candidate_post(conn, params), do: do_homepage_redirect(conn, params)
 end

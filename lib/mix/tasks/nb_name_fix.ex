@@ -3,17 +3,15 @@ defmodule Mix.Tasks.NbNameFix do
 
   def run(_) do
     "lists/1794/people"
-    |> NB.stream()
+    |> Nb.Api.stream()
     |> Enum.map(fn %{"id" => id, "last_name" => last_name} ->
-      IO.puts id
 
       ln = last_name
       |> String.replace("[", "")
       |> String.replace("]", "")
       |> String.replace("\"", "")
 
-      {:ok, put_body_string} = Poison.encode(%{"person" => %{"last_name" => ln}})
-      NB.put("people/#{id}", [body: put_body_string])
+      Nb.People.update(id, %{"last_name" => ln})
     end)
   end
 end

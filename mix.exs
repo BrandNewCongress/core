@@ -39,7 +39,6 @@ defmodule Core.Mixfile do
      {:cowboy, "~> 1.0"},
      {:quantum, ">= 1.9.1"},
      {:httpotion, "~> 3.0.2"},
-     {:phoenix_expug, git: "https://github.com/rstacruz/phoenix_expug.git"},
      {:browser, "~> 0.1.0"},
      {:stash, "~> 1.0.0"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},

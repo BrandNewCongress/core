@@ -1,19 +1,20 @@
-defmodule Core.EventTemplate do
+defmodule Core.Mailer do
   use Swoosh.Mailer, otp_app: :core
   import Swoosh.Email
+  require Logger
 
-  def send(id, slug, event) do
-    IO.puts "Sending email to Sam for event #{id}"
-  
+  def on_event_create(id, slug, event) do
+    Logger.info "Sending email to Sam for event #{id}"
+
     new()
-    |> to({"Sam Briggs", "sam@brandnewcongress.org"})
+    |> to({"Sam Briggs", "ben@brandnewcongress.org"})
     |> from({event.contact.name, "us@mail.brandnewcongress.org"})
     |> subject("New User Submitted Event!")
-    |> text_body(text(id, slug, event))
+    |> text_body(event_create_text(id, slug, event))
     |> deliver
   end
 
-  def text(id, slug, event) do
+  def event_create_text(id, slug, event) do
     %{
       calendar_id: candidate,
       contact: contact,
