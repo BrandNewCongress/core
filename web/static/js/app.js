@@ -20,3 +20,5 @@
 // import socket from './socket'
 import modernizr from './modernizr'
 import 'phoenix_html'
+import fakeSpa from './fake-spa'
+fakeSpa.bind()
