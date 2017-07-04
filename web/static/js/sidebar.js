@@ -1,50 +1,16 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
-
-const siteMap = {
-  '/join': {
-    label: 'Join',
-    children: {}
-  },
-  '/candidates': {
-    label: 'Candidates',
-    children: {
-      '/candidates': 'Candidates',
-      '/nominate': 'Nominate'
-    }
-  },
-  '/act': {
-    label: 'Action',
-    children: {
-      '/act': 'Action Portal',
-      '/events': 'Find an Event Near You',
-      '/call': 'Call from Home'
-    }
-  },
-  '/plan': {
-    label: 'The Plan',
-    children: {
-      '/plan': 'Our Plan',
-      '/platform': 'Platform'
-    }
-  }
-}
+import siteMap from './sidebar/sitemap'
 
 class Sidebar extends Component {
   state = {
     page: '/',
     open: false,
-    closing: false,
-    opening: false
   }
 
-  open = () => {
-    this.setState({ open: true })
-  }
+  open = () => this.setState({ open: true })
+  close = () => this.setState({ open: false })
 
-  close = () => {
-    this.setState({ open: false })
-  }
 
   render() {
     return this.state.open ? this.renderOpen() : this.renderClosed()
@@ -56,22 +22,27 @@ class Sidebar extends Component {
     return (
       <div className={open ? 'opening': ''}>
         <div id="overlay" onClick={this.close} />
-        <div
-          id="drawer"
-          style={{
-            position: 'fixed',
-            right: 0,
-            top: 0,
-            left: 'auto',
-            height: '100vh',
-            overflowY: 'scroll',
-            backgroundColor: 'black'
-          }}
-        >
-          Hello!
+        <div id="drawer">
+          {siteMap.map(entry => (
+            <span className="nav-section"> {entry.label} </span>
+          ))}
         </div>
       </div>
     )
+  }
+
+  renderEntry(entry) {
+    const href = hrefOfEntry(entry)
+    if (href === null) {
+      return (
+        <div className="nav-section">
+          <span className="nav-section-header"> {entry.label} </span>
+          <a className="nav-item">
+
+          </a>
+        </div>
+      )
+    }
   }
 
   renderClosed() {
@@ -86,3 +57,15 @@ class Sidebar extends Component {
 }
 
 render(<Sidebar {...window.opts} />, document.getElementById('sidebar'))
+
+// This needs to change when now. gets deployed to @
+const apexDomain = window.location.origin.replace('now.', '')
+function hrefOfEntry(entry) {
+  if (entry.children === undefined || entry.children.length === 0) {
+    return entry.subdomained
+      ? entry.path
+      : apexDomain + entry.path
+  } else {
+    return null
+  }
+}
