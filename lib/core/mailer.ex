@@ -12,7 +12,20 @@ defmodule Core.Mailer do
     |> from({event.contact.name, "us@mail.brandnewcongress.org"})
     |> subject("New User Submitted Event!")
     |> text_body(event_create_text(id, slug, event))
-    |> deliver
+    |> deliver()
+  end
+
+  def typeform_failure_alert(body) do
+    Logger.info "Sending email to Ben because of failure on Typeform webhook"
+
+    {:ok, stringified} = Poison.encode(body)
+
+    new()
+    |> to({"Ben Packer", "ben@brandnewcongress.org"})
+    |> from({"BNC Errors", "us@mail.brandnewcongress.org"})
+    |> subject("Typeform Error")
+    |> text_body(stringified)
+    |> deliver()
   end
 
   def event_create_text(id, slug, event) do

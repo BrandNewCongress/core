@@ -3,7 +3,13 @@ defmodule Core.TypeformController do
   require Logger
 
   def submit_event(conn, params) do
-    response = Typeform.SubmitEvent.on_event_submit(params)
-    json conn, %{"ok" => "There you go!"}
+    try do
+      response = Typeform.SubmitEvent.on_event_submit(params)
+      json conn, response
+    rescue
+      _e in FunctionClauseError ->
+        Core.Mailer.typeform_failure_alert(params)
+        json conn, %{"ok" => "But error"}
+    end
   end
 end
