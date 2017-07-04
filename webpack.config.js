@@ -58,8 +58,8 @@ module.exports = {
       phoenix_html:
         __dirname + '/deps/phoenix_html/web/static/js/phoenix_html.js',
       phoenix: __dirname + '/deps/phoenix/web/static/js/phoenix.js',
-      react: 'preact-compat',
-      'react-dom': 'preact-compat'
+      react: 'react-lite',
+      'react-dom': 'react-lite'
     }
   },
 
