@@ -26,7 +26,7 @@ config :core, [nb_slug: "brandnewcampaign", nb_token: System.get_env("NB_TOKEN")
 config :logger, level: :info
 
 # Use Mailgun
-config :core, Core.EventTemplate,
+config :core, Core.Mailer,
   adapter: Swoosh.Adapters.Mailgun,
   api_key: System.get_env("MAILGUN_KEY"),
   domain: System.get_env("MAILGUN_DOMAIN")
