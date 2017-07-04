@@ -7,7 +7,8 @@ defmodule Core.Mailer do
     Logger.info "Sending email to Sam for event #{id}"
 
     new()
-    |> to({"Sam Briggs", "ben@brandnewcongress.org"})
+    |> to({"Sam Briggs", "sam@brandnewcongress.org"})
+    |> to({"Ben Packer", "ben@brandnewcongress.org"})
     |> from({event.contact.name, "us@mail.brandnewcongress.org"})
     |> subject("New User Submitted Event!")
     |> text_body(event_create_text(id, slug, event))

@@ -5,7 +5,10 @@ defmodule Core.EntryController do
     {:ok, campaigns} =
       "candidates"
       |> Cosmic.get_type()
-      |> Enum.map(&(Map.take(&1, ["title", "slug"])))
+      |> Enum.map(fn
+          %{"title" => title, "slug" => slug, "metadata" => %{"district" => district}}
+            -> %{"title" => title, "slug" => slug, "district" => district}
+        end)
       |> Poison.encode()
 
     render conn, "entry.html", [title: "Entry", campaigns: campaigns] ++ GlobalOpts.get(conn, params)

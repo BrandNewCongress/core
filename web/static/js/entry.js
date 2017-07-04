@@ -66,8 +66,8 @@ class Entry extends Component {
               <br />
               <select name="campaign" onChange={this.setCampaign}>
                 <option value={undefined}></option>
-                {window.campaigns.map(({ title, slug }) =>
-                  <option value={slug}>{title}</option>
+                {window.campaigns.map(({ district, title, slug }) =>
+                  <option value={slug}>{`${district} – ${title}`}</option>
                 )}
               </select>
             </div>
