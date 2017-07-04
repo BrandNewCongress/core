@@ -44,8 +44,6 @@ defmodule Typeform.SubmitEvent do
       calendar_id
     end)
 
-    Logger.info(together["venue_zip"])
-  
     find_time_zone = Task.async(fn ->
       Zip.time_zone_of(together["venue_zip"])
     end)
