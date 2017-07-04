@@ -34,5 +34,4 @@ https://now.brandnewcongress.org/form/host-event?draft=true, with that little
 
 ## Updating
 
-To see your updates, visit `https://now.brandnewcongress.org/api/update/cosmic?secret=`
-and paste in the secret that Ben gave you when you asked him for it.
+To see your updates, wait up to a minute.
