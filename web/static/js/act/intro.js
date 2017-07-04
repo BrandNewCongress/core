@@ -40,7 +40,7 @@ export default class Intro extends Component {
       <div>
         <h1> Happy 4th of July! </h1>
         <br/>
-        <iframe src="https://giphy.com/embed/TmT51OyQLFD7a" width="400" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/america-fireworks-4th-of-july-TmT51OyQLFD7a">via GIPHY</a></p>
+        <iframe src="https://giphy.com/embed/TmT51OyQLFD7a" width="400" height="480" frameBorder="0" className="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/america-fireworks-4th-of-july-TmT51OyQLFD7a">via GIPHY</a></p>
         <br/>
         <h3>
           Calls will resume July 5th at 10am eastern

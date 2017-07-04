@@ -37,4 +37,6 @@ function bind() {
     })
 }
 
+window.navigateTo = navigateTo
+
 module.exports = { bind: bind }
