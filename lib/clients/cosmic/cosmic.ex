@@ -1,4 +1,6 @@
 defmodule Cosmic do
+  require Logger
+
   def fetch_all() do
     %{body: {:ok, %{
       "bucket" => %{
@@ -46,6 +48,6 @@ defmodule Cosmic do
   def update() do
     Stash.clear(:cosmic_cache)
     fetch_all()
-    IO.puts "Cleared cosmic cache and updated it"
+    Logger.info "Cleared cosmic cache and updated it"
   end
 end
