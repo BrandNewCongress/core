@@ -44,6 +44,8 @@ defmodule Typeform.SubmitEvent do
       calendar_id
     end)
 
+    Logger.info(together["venue_zip"])
+  
     find_time_zone = Task.async(fn ->
       Zip.time_zone_of(together["venue_zip"])
     end)
@@ -127,7 +129,7 @@ And you can invite others to join you at the event with this link:
   defp field_name(%{"title" => "What city is it in?"}), do: "venue_city"
   defp field_name(%{"title" => "What state is it in?"}), do: "venue_state"
   defp field_name(%{"title" => "Can we share the address of the event on our map?"}), do: "sharing_permission"
-  defp field_name(%{"title" => "What's your zip code?"}), do: "venue_zip"
+  defp field_name(%{"title" => "What's the zip code?"}), do: "venue_zip"
 
   defp get_answer(%{"text" => val}), do: val
   defp get_answer(%{"email" => val}), do: val
