@@ -54,21 +54,21 @@ defmodule Nb.Api do
   # -----------------------------------
 
   # If results exist, send them, passing only the tail
-  defp unfolder({:ok, %{"next" => next, "results" => [head | tail]}}) do
-    {head, {:ok, %{"next" => next, "results" => tail}}}
+  defp unfolder(%{"next" => next, "results" => [head | tail]}) do
+    {head, %{"next" => next, "results" => tail}}
   end
 
-  # If results don't exist, and next is nil, we're done
-  defp unfolder({:ok, %{"next" => nil, "results" => _}}) do
+  # If results don't exist, and next is nil, we're done (base case)
+  defp unfolder(%{"next" => nil, "results" => _}) do
     nil
   end
 
   # If results don't exist, and next is not null, serve it
-  defp unfolder({:ok, %{"next" => next, "results" => _}}) do
+  defp unfolder(%{"next" => next, "results" => _}) do
     [core, params] = String.split(next, "?")
     case get(core, [query: Plug.Conn.Query.decode(params)]).body do
-      {:ok, %{"next" => next, "results" => [head | tail]}} ->
-        {head, {:ok, %{"next" => next, "results" => tail}}}
+      %{"next" => next, "results" => [head | tail]} ->
+        {head, %{"next" => next, "results" => tail}}
       true ->
         nil
     end
@@ -80,8 +80,8 @@ defmodule Nb.Api do
   end
 
   # Wrap it all
-  def stream(url) do
-    get(url).body
+  def stream(url, opts \\ []) do
+    get(url, opts).body
     |> Stream.unfold(fn state -> unfolder(state) end)
   end
 end
