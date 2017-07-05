@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     act: './web/static/js/act.js',
     entry: './web/static/js/entry.js',
+    sidebar: './web/static/js/sidebar.js',
     app: './web/static/js/app.js',
     css: [
       './web/static/css/app.css',
@@ -58,8 +59,8 @@ module.exports = {
       phoenix_html:
         __dirname + '/deps/phoenix_html/web/static/js/phoenix_html.js',
       phoenix: __dirname + '/deps/phoenix/web/static/js/phoenix.js',
-      react: 'react-lite',
-      'react-dom': 'react-lite'
+      // react: 'react-lite',
+      // 'react-dom': 'react-lite'
     }
   },
 
