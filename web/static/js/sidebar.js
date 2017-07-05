@@ -86,7 +86,7 @@ render(<Sidebar {...window.opts} />, document.getElementById('sidebar'))
 const apexDomain = window.location.origin.replace('now.', '')
 function hrefOfEntry(entry) {
   if (entry.children === undefined || entry.children.length === 0) {
-    return entry.subdomained ? apexDomain + entry.path : entry.path
+    return entry.subdomained ? entry.path : apexDomain + entry.path
   } else {
     return null
   }
