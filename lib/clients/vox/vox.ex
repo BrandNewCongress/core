@@ -18,6 +18,11 @@ defmodule Core.Vox do
     logins
   end
 
+  def clear_logins do
+    date = "#{Timex.now("America/New_York") |> Timex.to_date}"
+    Redix.command(:redix, ["DEL", date])
+  end
+
   defp create_and_return_logins(date) do
     logins =
       1..8000
@@ -30,7 +35,7 @@ defmodule Core.Vox do
             30,
             1,
             0,
-            "",
+            "Callers",
             "",
             1008479,
             1008489,
@@ -48,7 +53,7 @@ defmodule Core.Vox do
   end
 
   defp random_password do
-    "#{@words |> Enum.take_random(2) |> Enum.join("_")}#{1..4 |> Enum.map(fn _n -> Enum.random(1..9) end) |> Enum.join("")}"
+    "#{@words |> Enum.take_random(1) |> Enum.join("_")}#{1..6 |> Enum.map(fn _n -> Enum.random(1..9) end) |> Enum.join("")}"
   end
 
   def next_login() do
