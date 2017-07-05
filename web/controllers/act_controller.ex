@@ -2,9 +2,10 @@ defmodule Core.ActController do
   use Core.Web, :controller
 
   def get(conn, params) do
+    district = params["district"]
+
     render conn, "act.html",
-      [title: "Let's get to work", header_text: "Let's get to work", candidate: "{}",
-       callable: callable_json(), initial_selected: "attend-event"] ++ GlobalOpts.get(conn, params)
+      [title: "Act", district: district] ++ GlobalOpts.get(conn, params)
   end
 
   def get_candidate(conn, params = %{"candidate" => slug}) do

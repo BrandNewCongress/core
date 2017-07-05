@@ -1,0 +1,12 @@
+.dictrict-picker
+  - case @district do
+    - nil ->
+      .dp-header{style: "font-weight:bold;font-size:larger;"} What congressional district are you in?
+      .cd-prompt{style: "font-size:smaller;"} If you know your congressional district, type it in – otherwise, type in your address and we'll figure it out.
+      .input-container
+        - form_tag("/act/district", method: "post")
+          %input{placeholder: "", id: "cd-swiss-army"}
+          %input{type: "submit", value: "Submit"}
+    - cd ->
+      .dp-header= "We think you're in #{cd}."
+        %a.not-true{href: "/act?district="} Not true?
