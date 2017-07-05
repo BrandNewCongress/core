@@ -2,27 +2,35 @@ defmodule Cosmic do
   require Logger
 
   def fetch_all() do
-    %{body: {:ok, %{
-      "bucket" => %{
-        "objects" => objects
-      }
-    }}} = Cosmic.Api.get("")
+    try do
+      %{body: {:ok, %{
+        "bucket" => %{
+          "objects" => objects
+        }
+      }}} = Cosmic.Api.get("")
 
-    # Store each object
-    Enum.each(objects, fn bucket -> Stash.set(:cosmic_cache, bucket["slug"], bucket) end)
+      # Store each object
+      Enum.each(objects, fn bucket -> Stash.set(:cosmic_cache, bucket["slug"], bucket) end)
 
-    # For each type, store an array of slugs
-    objects
-    |> Enum.map(fn %{"type_slug" => type} -> type end)
-    |> MapSet.new
-    |> Enum.each(fn type ->
-        matches =
-          objects
-          |> Enum.filter(fn %{"type_slug" => match} -> match == type end)
-          |> Enum.map(fn %{"slug" => slug} -> slug end)
+      # For each type, store an array of slugs
+      objects
+      |> Enum.map(fn %{"type_slug" => type} -> type end)
+      |> MapSet.new
+      |> Enum.each(fn type ->
+          matches =
+            objects
+            |> Enum.filter(fn %{"type_slug" => match} -> match == type end)
+            |> Enum.map(fn %{"slug" => slug} -> slug end)
 
-        Stash.set(:cosmic_cache, type, matches)
-      end)
+          Stash.set(:cosmic_cache, type, matches)
+        end)
+
+      Stash.persist(:cosmic_cache, "./cosmic_cache")
+    rescue
+      _e in MatchError ->
+        Logger.error("Could not fetch cosmic data - using latest cached version")
+        Stash.load(:cosmic_cache, "./cosmic_cache")
+    end
   end
 
   defp on_no_exist(path) do

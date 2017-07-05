@@ -1,0 +1,23 @@
+%a.link-square
+  .ls-icon
+    %img{src: @icon}
+  .ls-label= @label
+
+:css
+  a.link-square {
+    width: 200px;
+    height: 200px;
+    border: 1px solid black;
+    border-radius: 3px;
+    display: block;
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  div.ls-icon > img {
+    height: 175px;
+    width: 175px;
+    border-bottom: 1px solid black;
+  }

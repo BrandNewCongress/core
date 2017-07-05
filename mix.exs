@@ -19,7 +19,7 @@ defmodule Core.Mixfile do
   def application do
     [mod: {Core, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :httpotion, :swoosh, :timex, :google_maps]]
+                    :phoenix_ecto, :postgrex, :httpotion, :swoosh, :timex]]
   end
 
   # Specifies which paths to compile per environment.
@@ -49,8 +49,9 @@ defmodule Core.Mixfile do
      {:timex, "~> 3.0"},
      {:redix, ">= 0.0.0"},
      {:html_sanitize_ex, "~> 1.0.0"},
-     {:phoenix_haml, "~> 0.2"},
-     {:google_maps, "~> 0.5"}]
+    #  {:phoenix_haml, "~> 0.2"},
+     {:phoenix_haml, "~> 0.2"}]
+    #  {:google_maps, "~> 0.5"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

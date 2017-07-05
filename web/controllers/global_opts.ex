@@ -14,7 +14,7 @@ defmodule GlobalOpts do
   end
 
   defp is_mobile?(conn, _params) do
-    case List.keyfind(conn.req_headers, "user-gent", 0, "") do
+    case List.keyfind(conn.req_headers, "user-agent", 0, "") do
       {_head, tail} -> Browser.mobile?(tail)
       _ -> false
     end

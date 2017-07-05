@@ -27,7 +27,7 @@ config :phoenix, :template_engines,
   haml: PhoenixHaml.Engine
 
 # Use google_maps
-config :google_maps, api_key: System.get_env("GOOG_MATRIX_KEY")
+# config :google_maps, api_key: System.get_env("GOOG_MATRIX_KEY")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
