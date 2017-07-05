@@ -14,7 +14,7 @@ export default class TabMenu extends Component {
   }
 
   componentWillMount() {
-    this.state.selected.push(this.props.initialSelected)
+    this.state.selected = this.state.selected.concat(this.props.initialSelected)
   }
 
   render() {

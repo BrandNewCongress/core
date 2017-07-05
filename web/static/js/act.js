@@ -115,7 +115,9 @@ class Act extends Component {
     const { zip, center, zoom, candidate, selected, events } = this.state
     const { brand } = this.props
 
-    console.log(selected)
+    const initialSelected = selected == 'call-voters'
+      ? [1, 0]
+      : [0]
 
     return (
       <div
@@ -162,11 +164,11 @@ class Act extends Component {
           {candidate && Object.keys(candidate).length == 0
             ? <Intro channel={this.state.channel} go={this.go} />
             : <TabMenu
-                initialSelected={0}
+                initialSelected={initialSelected}
                 onSelect={this.onTabSelect}
                 options={menuConfig}
               />}
-{/*
+
           {selected == 'attend-event' &&
             <EventMap
               center={center}
@@ -174,7 +176,7 @@ class Act extends Component {
               onViewportChanged={this.onViewportChanged}
               events={events}
             />}
- */}
+
           {selected === 'call-voters' &&
             this.isTimeToCall() &&
             this.renderOnHours()}
