@@ -1,7 +1,7 @@
 const siteMap = [
   {
     label: 'Join',
-    path: '/join',
+    path: '/',
     subdomained: false,
     children: []
   },

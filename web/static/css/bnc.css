@@ -30,6 +30,10 @@
   font-family: 'Roboto Slab', sans-serif !important;
 }
 
+.bnc .condensed {
+  font-family: 'Roboto Condensed', sans-serif !important;
+}
+
 .bnc .page-title {
   background-color: var(--bnc-black);
   color: var(--bnc-white);

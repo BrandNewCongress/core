@@ -19,6 +19,10 @@
 
 <style>
 
+header #drawer #inner-drawer {
+  font-family: 'Roboto Condensed', sans-serif !important;
+}
+
 #drawer {
   min-width: 250px;
   max-width: 500px;
@@ -30,6 +34,11 @@
   height: 100vh;
   overflow-y: scroll;
   background-color: black;
+}
+
+#inner-drawer {
+  margin-top: 60px;
+  margin-left: 30px;
 }
 
 .closing > #drawer { animation: slideout .3s 1; }
@@ -67,6 +76,44 @@
 @keyframes transparenten {
   from { opacity: .5 }
   from { opacity: 0 }
+}
+
+.nav-section,
+.nav-element {
+  display: block;
+  text-decoration: none;
+}
+
+.nav-section { margin-top: 30px; }
+
+.nav-section-header {
+  color: white;
+  font-size: 25px;
+}
+
+.children-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.nav-element {
+  text-transform: capitalize;
+  color: rgb(204, 204, 204);
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+#drawer svg {
+  float: right;
+  height: 40px;
+  margin: 20px;
+  stroke-width: 3;
+}
+
+#drawer a {
+  cursor: pointer;
 }
 
 </style>
