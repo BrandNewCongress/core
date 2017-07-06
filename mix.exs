@@ -49,9 +49,7 @@ defmodule Core.Mixfile do
      {:timex, "~> 3.0"},
      {:redix, ">= 0.0.0"},
      {:html_sanitize_ex, "~> 1.0.0"},
-    #  {:phoenix_haml, "~> 0.2"},
      {:phoenix_haml, "~> 0.2"}]
-    #  {:google_maps, "~> 0.5"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

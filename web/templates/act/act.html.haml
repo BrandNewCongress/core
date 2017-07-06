@@ -5,12 +5,12 @@
     .option-group-header Events
     .option-container
       - for item <- @event_action_options do
-        = render Core.ActView, "link-square.html", [icon: item.icon, label: item.label]
+        = render Core.ActView, "link-square.html", [icon: item.icon, label: item.label, href: item.href]
   .act-option-group-header
     .option-group-header Help from Home
     .option-container
       - for item <- @home_action_options do
-        = render Core.ActView, "link-square.html", [icon: item.icon, label: item.label]
+        = render Core.ActView, "link-square.html", [icon: item.icon, label: item.label, href: item.href]
 
 :css
   body .page-body {

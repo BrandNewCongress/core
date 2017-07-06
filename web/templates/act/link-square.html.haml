@@ -1,6 +1,6 @@
-%a.link-square
+%a.link-square{href: @href}
   .ls-icon
-    %img{src: @icon}
+    = render Core.ActView, @icon, assigns
   .ls-label= @label
 
 :css
@@ -14,10 +14,35 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
   }
 
-  div.ls-icon > img {
+  div.ls-icon {
     height: 175px;
     width: 175px;
-    border-bottom: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  div.ls-icon > svg {
+    height: 90px;
+    width: 90px;
+  }
+
+  -# div.ls-icon path {
+  -#   stroke: var(--bnc-purple);
+  -#   fill: var(--bnc-purple);
+  -# }
+  -#
+  -# div.ls-icon .inverted { fill: none; }
+  -# div.ls-icon .inverted:nth-child(1) { fill: var(--bnc-purple); }
+
+
+  div.ls-label {
+    padding: 5px;
+    font-size: 16px;
+    border-top: 1px solid black;
   }
