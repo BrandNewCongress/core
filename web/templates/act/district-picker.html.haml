@@ -3,7 +3,7 @@
     - nil ->
       .dp-header{style: "font-weight:bold;font-size:larger;"} What congressional district are you in?
       .cd-prompt{style: "font-size:smaller;"} If you know your congressional district, type it in – otherwise, type in your address and we'll figure it out.
-      %form{action: "/act/district", method: "post"}
+      %form{action: "/act", method: "post"}
         .input-container
           %input{type: "hidden", name: "_csrf_token", value: csrf_token()}
           %input{type: "text", placeholder: "", id: "cd-swiss-army", name: "district"}

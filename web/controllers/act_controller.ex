@@ -10,8 +10,8 @@ defmodule Core.ActController do
        home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
   end
 
-  def district(conn, params = %{"district" => district}) do
-    # {district, district_error} = District.get(district) do
+  def post(conn, params = %{"district" => district}) do
+    {district, district_error} = District.from_unknown(district)
 
     render conn, "act.html",
       [title: "Act", district: district, district_error: nil,

@@ -56,6 +56,7 @@ function bind() {
 
       superagent(form.method, ev.target.action)
         .send(body)
+        .query({ empty: true })
         .end(function(err, res) {
           postFetch(res.text, form.getAttribute('action'))
         })

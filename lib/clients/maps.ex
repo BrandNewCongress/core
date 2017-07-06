@@ -36,6 +36,6 @@ defmodule Maps do
   def geocode(address) do
     %{body: %{"results" => [%{"geometry" => %{"location" => location}} | _]}} = Maps.get("geocode/json", [query: %{"address" => address}])
     %{"lat" => lat, "lng" => lng} = location
-    {lat, lng}
+    {lng, lat}
   end
 end
