@@ -5,6 +5,7 @@
       .cd-prompt{style: "font-size:smaller;"} If you know your congressional district, type it in – otherwise, type in your address and we'll figure it out.
       %form{action: "/act/district", method: "post"}
         .input-container
+          %input{type: "hidden", name: "_csrf_token", value: csrf_token()}
           %input{type: "text", placeholder: "", id: "cd-swiss-army", name: "district"}
           %input.primary-button{type: "submit", value: "Submit"}
     - cd ->
