@@ -9,21 +9,22 @@ var vdomCache = parser(nodeCache)
 
 var hist = createHistory()
 
-function postFetch(text, path) {
+function postFetch(text, path, skipHistory) {
   const newVTree = parser(text)
   const patches = diff(vdomCache, newVTree)
 
   nodeCache = patch(nodeCache, patches)
   vdomCache = newVTree
 
-  hist.push(path)
+  if (!skipHistory)
+    hist.push(path)
 
   bind()
 }
 
-function navigateTo(path) {
+function navigateTo(path, skipHistory) {
   superagent.get(path).query({ empty: true }).end(function(err, res) {
-    postFetch(res.text, path)
+    postFetch(res.text, path, skipHistory)
   })
 }
 
@@ -38,7 +39,7 @@ function bind() {
     .forEach(function(a) {
       a.onclick = function(ev) {
         ev.preventDefault()
-        navigateTo(a.pathname)
+        navigateTo(a.getAttribute('href'), a.getAttribute('data-skip-history'))
         return false
       }
     })

@@ -1,0 +1,50 @@
+<div class="district-picker">
+  <%= if @district do %>
+    <div class="dp-header">
+      <%= "We think you're in #{@district}." %>
+      <a class="not-true" href="/act?district=clear" data-skip-history="true" > Not true? </a>
+    </div>
+  <% else %>
+    <div class="dp-header"> What congressional district are you in? </div>
+    <div class="cd-prompt"> If you know your congressional district, type it in – otherwise, type in your address and we'll figure it out. </div>
+    <form action="/act" method="post">
+      <div class="input-container">
+        <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
+        <input type="text" name="district" id="cd-swiss-army" />
+        <input type="submit" class="primary-button" value="Submit" />
+      </div>
+    </form>
+  <% end %>
+</div>
+
+<style>
+div.input-container {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+div.input-container input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  margin-right: 10px;
+  height: 100%;
+  font-size: 15px;
+  border: 1px solid black;
+}
+
+div.input-container input[type="submit"] {
+  padding: 10px;
+  margin: 0;
+}
+
+div.input-container > .primary-button {
+  width: 140px;
+}
+
+.dp-header {
+  font-weight: bold;
+  font-size: larger;
+}
+</style>

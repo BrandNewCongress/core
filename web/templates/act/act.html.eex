@@ -1,0 +1,52 @@
+<h1 class="page-title"> What You Can Do </h1>
+<div class="page-body">
+  <%= render Core.ActView, "district-picker.html", assigns %>
+
+  <%= if @candidate do %>
+    <%= render Core.ActView, "candidate-blurb.html", assigns %>
+  <% end %>
+
+  <%= if @closest_candidate do %>
+    <%= render Core.ActView, "candidate-blurb.html", assigns %>
+  <% end %>
+
+  <div class="act-option-group">
+    <div class="option-group-header"> Events </div>
+    <div class="option-container">
+      <%= for item <- @event_action_options do %>
+        <%= render Core.ActView, "link-square.html", [item: item] %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="act-option-group">
+    <div class="option-group-header"> Help from Home </div>
+    <div class="option-container">
+      <%= for item <- @home_action_options do %>
+        <%= render Core.ActView, "link-square.html", [item: item] %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+.page-body {
+  margin: 20px;
+}
+
+.option-group-header {
+  font-size: larger;
+  border-bottom: 1px solid black;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.option-container {
+  display: flex;
+  flex-wrap: wrap;
+  <%= if @mobile do %>
+    justify-content: space-around;
+  <% end %>
+}
+
+</style>

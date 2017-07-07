@@ -1,0 +1,54 @@
+<a class="link-square" href="<%= @item.href %>">
+  <div class="ls-icon">
+    <%= render Core.ActView, @item.icon, [] %>
+  </div>
+  <div class="ls-label">
+    <%= @item.label %>
+  </div>
+</a>
+
+<style>
+a.link-square {
+  width: 200px;
+  height: 200px;
+  border: 1px solid black;
+  border-radius: 3px;
+  display: block;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: none;
+  color: black;
+}
+
+div.ls-icon {
+  height: 175px;
+  width: 175px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+div.ls-icon > svg {
+  height: 90px;
+  width: 90px;
+}
+/*
+div.ls-icon path {
+ stroke: var(--bnc-purple);
+ fill: var(--bnc-purple);
+}
+
+div.ls-icon .inverted { fill: none; }
+div.ls-icon .inverted:nth-child(1) { fill: var(--bnc-purple); }
+*/
+
+div.ls-label {
+  padding: 5px;
+  font-size: 16px;
+  border-top: 1px solid black;
+}
+
+</style>

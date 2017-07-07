@@ -49,7 +49,6 @@ defmodule Core.Mixfile do
      {:timex, "~> 3.0"},
      {:redix, ">= 0.0.0"},
      {:html_sanitize_ex, "~> 1.0.0"},
-     {:phoenix_haml, "~> 0.2"},
      {:geo, "~> 1.5"},
      {:topo, "~> 0.1.0"}]
   end

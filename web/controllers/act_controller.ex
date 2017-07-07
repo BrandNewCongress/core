@@ -2,21 +2,53 @@ defmodule Core.ActController do
   use Core.Web, :controller
 
   def get(conn, params) do
-    district = params["district"]
+    district = params["district"] || conn.cookies["district"]
 
-    render conn, "act.html",
-      [title: "Act", district: district, district_error: nil,
-       event_action_options: event_action_options(conn, params),
-       home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
+    district =
+      if district == "clear" do
+        nil
+      else
+        district
+      end
+
+    conn
+    |> render_act(params, {district, nil})
   end
 
   def post(conn, params = %{"district" => district}) do
     {district, district_error} = District.from_unknown(district)
 
-    render conn, "act.html",
-      [title: "Act", district: district, district_error: nil,
+    conn
+    |> put_resp_cookie("district", district)
+    |> render_act(params, {district, district_error})
+  end
+
+  defp render_act(conn, params, {district, district_error}) do
+    candidate =
+      case district do
+        nil -> nil
+        district -> District.get_candidate(district)
+      end
+
+    closest_candidate =
+      if district do
+        case candidate do
+          nil -> District.closest_candidate(district)
+          _cand -> nil
+        end
+      else
+        nil
+      end
+
+    IO.inspect candidate
+  
+    params =
+      [title: "Act", district: district, district_error: district_error,
+       candidate: candidate, closest_candidate: closest_candidate,
        event_action_options: event_action_options(conn, params),
        home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
+
+    render conn, "act.html", params
   end
 
   def get_candidate(conn, params = %{"candidate" => slug}) do
@@ -51,12 +83,12 @@ defmodule Core.ActController do
     text conn, candidate["metadata"]["calling_prompt"]
   end
 
-  defp event_action_options(conn, params) do
+  defp event_action_options(_conn, _params) do
     [%{icon: "event.html", label: "Attend an Event", href: "https://events.brandnewcongress.org"},
      %{icon: "host.html", label: "Host an Event", href: "/form/submit-event"}]
   end
 
-  defp home_action_options(conn, params) do
+  defp home_action_options(_conn, _params) do
     # TODO - route to call candidate near them
     [%{icon: "call.html", label: "Call Voters", href: "/act/call"},
      %{icon: "nominate.html", label: "Nominate a Candidate", href: "https://brandnewcongress.org/nominate"},
