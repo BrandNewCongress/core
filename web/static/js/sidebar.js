@@ -19,15 +19,17 @@ class Sidebar extends Component {
   renderOpen() {
     const { open } = this.state
 
+    const ordered = order(siteMap)
+
     return (
       <div className={open ? 'opening' : ''}>
         <div id="overlay" onClick={this.close} />
         <div id="drawer">
-          <a onClick={this.close} >
+          <a onClick={this.close}>
             <CloseIcon />
           </a>
           <div id="inner-drawer">
-            {siteMap.map(this.renderEntry)}
+            {ordered.map(this.renderEntry)}
           </div>
         </div>
       </div>
@@ -90,4 +92,16 @@ function hrefOfEntry(entry) {
   } else {
     return null
   }
+}
+
+function order(siteMap) {
+  const first = siteMap.filter(({ path }) =>
+    window.location.pathname.match(path) && path !== '/'
+  )
+
+  const others = siteMap.filter(
+    ({ path }) => !window.location.pathname.match(path) || path === '/'
+  )
+
+  return first.concat(others)
 }

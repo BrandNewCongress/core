@@ -29,7 +29,30 @@ const siteMap = [
     path: '/act',
     subdomained: 'now',
     children: [
-      // TODO
+      {
+        label: 'Action Portal',
+        path: '/act',
+        subdomained: 'now',
+        children: []
+      },
+      {
+        label: 'Attend an Event',
+        path: '/',
+        subdomained: 'events',
+        children: []
+      },
+      {
+        label: 'Host an Event',
+        path: '/form/submit-event',
+        subdomained: 'now',
+        children: []
+      },
+      {
+        label: 'Call Voters',
+        path: '/act/call',
+        subdomained: 'now',
+        children: []
+      }
     ]
   },
   {

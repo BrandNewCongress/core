@@ -40,8 +40,6 @@ defmodule Core.ActController do
         nil
       end
 
-    IO.inspect candidate
-  
     params =
       [title: "Act", district: district, district_error: district_error,
        candidate: candidate, closest_candidate: closest_candidate,
