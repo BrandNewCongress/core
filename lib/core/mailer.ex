@@ -49,8 +49,8 @@ Please go to your candidate's calendar and modify and approve or delete it.
 Here are some details:
 Headline: #{title}
 Intro: #{intro}
-From: #{start_time}
-To: #{end_time}
+From: #{start_time}Z
+To: #{end_time}Z
 Time zone: #{time_zone}
 
 Venue Name: #{venue.name}
