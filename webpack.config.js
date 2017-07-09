@@ -2,7 +2,7 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-module.exports = {
+const config = {
   entry: {
     act: './web/static/js/act.js',
     entry: './web/static/js/entry.js',
@@ -69,3 +69,10 @@ module.exports = {
     new CopyWebpackPlugin([{ from: './web/static/assets' }])
   ]
 }
+
+if (process.env.NODE_ENV == 'production') {
+  config.resolve.alias['react'] = 'react-lite'
+  config.resolve.alias['react-dom'] = 'react-lite'
+}
+
+module.exports = config
