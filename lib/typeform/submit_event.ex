@@ -50,12 +50,14 @@ defmodule Typeform.SubmitEvent do
 
     host_id = Task.await(ensure_host)
     calendar_id = Task.await(find_calendar)
-    time_zone = Task.await(find_time_zone)
+    [utc_offset, time_zone, zone_abbr] = Task.await(find_time_zone)
 
     tags = case together["sharing_permission"] do
       true -> []
       false -> ["Event: Hide Address"]
     end
+
+    time_zone_info = %{utc_offset: utc_offset, time_zone: time_zone, zone_abbr: zone_abbr}
 
     event = %{
       name: together["event_name"],
@@ -63,8 +65,8 @@ defmodule Typeform.SubmitEvent do
       author_id: host_id,
       time_zone: time_zone,
       intro: together["event_intro"],
-      start_time: together["event_date"] <> "T" <> process_time(together["start_time"]),
-      end_time: together["event_date"] <> "T" <> process_time(together["end_time"]),
+      start_time: to_iso(together["start_time"], together["event_date"], time_zone_info),
+      end_time: to_iso(together["end_time"], together["event_date"], time_zone_info),
       contact: %{
         name: together["host_name"],
         phone: together["host_phone"],
@@ -136,16 +138,39 @@ And you can invite others to join you at the event with this link:
   defp get_answer(%{"boolean" => val}), do: val
   defp get_answer(%{"number" => val}), do: val
 
-  def process_time(time) do
-    case String.split(time, " ") do
-      [hours_and_minutes, "AM"] -> hours_and_minutes |> String.split(":") |> output_time("AM")
-      [hours_and_minutes, "PM"] -> hours_and_minutes |> String.split(":") |> output_time("PM")
-    end
+  def to_iso(time, date, time_zone_info) do
+    %{utc_offset: utc_offset, time_zone: time_zone, zone_abbr: zone_abbr} = time_zone_info
+
+    [hours, minutes] =
+      time
+      |> String.split(" ")
+      |> military_time()
+
+    [year, month, day] = String.split(date, "-")
+
+    dt = %DateTime{
+      year: easy_int(year), month: easy_int(month), day: easy_int(day),
+      time_zone: time_zone, hour: easy_int(hours),
+      minute: easy_int(minutes), second: 0, std_offset: 0,
+      zone_abbr: zone_abbr, utc_offset: utc_offset
+    }
+
+    dt
   end
 
-  defp output_time([hours, minutes], "AM"), do: "#{hours}:#{minutes}"
-  defp output_time([hours, minutes], "PM") do
+  defp military_time([hours_minutes, "AM"]) do
+    [hours, minutes] = String.split(hours_minutes, ":")
+    ["#{hours}", "#{minutes}"]
+  end
+
+  defp military_time([hours_minutes, "PM"]) do
+    [hours, minutes] = String.split(hours_minutes, ":")
     {hrs, _} = Integer.parse(hours)
-    "#{hrs + 12}:#{minutes}"
+    ["#{hrs + 12}", "#{minutes}"]
+  end
+
+  defp easy_int(str) do
+    {int, _} = Integer.parse(str)
+    int
   end
 end

@@ -49,19 +49,22 @@ Please go to your candidate's calendar and modify and approve or delete it.
 Here are some details:
 Headline: #{title}
 Intro: #{intro}
-From #{start_time} to #{end_time}
+From: #{start_time}
+To: #{end_time}
 Time zone: #{time_zone}
 
-At #{venue.name},
-#{venue.address.address1},
-#{venue.address.city}, #{venue.address.state}, #{venue.address.zip}
+Venue Name: #{venue.name}
+Venue Address: #{venue.address.address1}
+Venue City: #{venue.address.city}
+Venue State: #{venue.address.state}
+Venue Zip: #{venue.address.zip}
 
-Host info:
+Host info
 Name: #{contact.name}
 Email: #{contact.email}
 Phone: #{contact.phone}
 
-Other:
+Other
 Event ID: #{id}
 Campaign: #{candidate}
 URL: http://go.brandnewcongress.org/#{slug}
