@@ -52,10 +52,17 @@ defmodule Typeform.SubmitEvent do
     calendar_id = Task.await(find_calendar)
     [utc_offset, time_zone, zone_abbr] = Task.await(find_time_zone)
 
-    tags = case together["sharing_permission"] do
+    # Calc tags
+    type_tag = ["Event Type: #{together["event_type"]}"]
+    sharing_tag = case together["sharing_permission"] do
       true -> []
       false -> ["Event: Hide Address"]
     end
+    contact_tag = case together["should_contact"] do
+      true -> ["Event: Should Contact Host"]
+      false -> []
+    end
+    tags = type_tag ++ sharing_tag ++ contact_tag
 
     time_zone_info = %{utc_offset: utc_offset, time_zone: time_zone, zone_abbr: zone_abbr}
 
@@ -116,9 +123,9 @@ And you can invite others to join you at the event with this link:
     %{"ok" => "There you go!"}
   end
 
-  defp field_name(%{"title" => "What's the host's name?"}), do: "host_name"
-  defp field_name(%{"title" => "What's the host's email?"}), do: "host_email"
-  defp field_name(%{"title" => "What's the host's phone number?"}), do: "host_phone"
+  defp field_name(%{"title" => "What's your name?"}), do: "host_name"
+  defp field_name(%{"title" => "What's your email?"}), do: "host_email"
+  defp field_name(%{"title" => "What's your phone number?"}), do: "host_phone"
   defp field_name(%{"title" => "When will it be?"}), do: "event_date"
   defp field_name(%{"title" => "When will it start?"}), do: "start_time"
   defp field_name(%{"title" => "When will it end?"}), do: "end_time"
@@ -130,6 +137,8 @@ And you can invite others to join you at the event with this link:
   defp field_name(%{"title" => "What state is it in?"}), do: "venue_state"
   defp field_name(%{"title" => "Can we share the address of the event on our map?"}), do: "sharing_permission"
   defp field_name(%{"title" => "What's the zip code?"}), do: "venue_zip"
+  defp field_name(%{"title" => "Do you want someone from the BNC/JD Events Team to contact you about your" <> rest}), do: "should_contact"
+  defp field_name(%{"title" => "What type of event are you hosting?"}), do: "event_type"
 
   defp get_answer(%{"text" => val}), do: val
   defp get_answer(%{"email" => val}), do: val
