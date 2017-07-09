@@ -16,7 +16,11 @@
   </nav>
   <span class="logo"></span>
 </header>
-<script defer="defer" src="<%= static_path(@conn, "/js/sidebar.js") %>"></script>
+<%= if @mobile do %>
+  <script defer="defer" src="<%= static_path(@conn, "/js/nav.mobile.js") %>"></script>
+<% else %>
+  <script defer="defer" src="<%= static_path(@conn, "/js/nav.desktop.js") %>"></script>
+<% end %>
 
 <style>
 
@@ -115,6 +119,20 @@ header #drawer #inner-drawer {
 
 #drawer a {
   cursor: pointer;
+}
+
+.drop-down {
+  display: flex;
+  cursor: pointer;
+}
+
+.top-level {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.panel {
+  position: absolute;
 }
 
 </style>

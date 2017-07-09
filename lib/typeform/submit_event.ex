@@ -155,7 +155,7 @@ And you can invite others to join you at the event with this link:
       zone_abbr: zone_abbr, utc_offset: utc_offset
     }
 
-    dt
+    DateTime.to_iso8601(dt)
   end
 
   defp military_time([hours_minutes, "AM"]) do

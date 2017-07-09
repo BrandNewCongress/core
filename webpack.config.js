@@ -6,7 +6,8 @@ const config = {
   entry: {
     act: './web/static/js/act.js',
     entry: './web/static/js/entry.js',
-    sidebar: './web/static/js/sidebar.js',
+    'nav.desktop': './web/static/js/nav.desktop.js',
+    'nav.mobile': './web/static/js/nav.mobile.js',
     app: './web/static/js/app.js',
     css: [
       './web/static/css/app.css',
