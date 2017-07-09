@@ -37,8 +37,15 @@ defmodule Core.Mailer do
       start_time: start_time,
       end_time: end_time,
       venue: venue,
-      time_zone: time_zone
+      time_zone: time_zone,
+      tags: tags
     } = event
+
+    event_type = Enum.find tags, "Unknown", fn
+      "Event Type:" <> rest -> true
+      _ -> false
+    end
+
 "
 Hi!
 
@@ -68,6 +75,9 @@ Other
 Event ID: #{id}
 Campaign: #{candidate}
 URL: http://go.brandnewcongress.org/#{slug}
+
+Should Contact Host: #{Enum.member?(tags, "Event: Should Contact Host")}
+#{event_type}
 "
   end
 end
