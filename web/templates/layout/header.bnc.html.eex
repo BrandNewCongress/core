@@ -1,10 +1,11 @@
 <header class="header">
   <nav role="navigation" style="display: flex; justify-content: space-between; align-items: center; height: 75px;">
     <%= if @mobile do %>
-      <img src="<%= static_path(@conn, "/images/horizontal-logo-smaller-bnc.png")%>" />
+      <img class="mobile" src="<%= static_path(@conn, "/images/horizontal-logo-smaller-bnc.png")%>" />
     <% else %>
-      <img src="<%= static_path(@conn, "/images/horizontal-logo-bnc.png")%>" />
+      <img class="desktop" src="<%= static_path(@conn, "/images/horizontal-logo-bnc.png")%>" />
     <% end %>
+    <div style="width:100;"></div>
     <div id="sidebar">
       <a class="hamburger-menu" id="sidebar-toggle">
         <div class="bar"></div>

@@ -6,10 +6,15 @@ header {
   font-weight: 400;
 }
 
-header img {
+header img.desktop {
   min-width: 220px;
   max-width: 220px;
   margin-left: 40px;
+}
+
+header img.mobile {
+  height: 40px;
+  margin-left: 30px;
 }
 
 header .hamburger-menu .bar {
