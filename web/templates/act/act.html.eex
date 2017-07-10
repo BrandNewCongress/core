@@ -1,35 +1,45 @@
-<h1 class="page-title"> What You Can Do </h1>
-<div class="page-body">
-  <%= render Core.ActView, "district-picker.html", assigns %>
+<%= render Core.LayoutView, "h1.html", [brand: @brand, text: "What You Can Do"] %>
 
-  <%= if @candidate do %>
-    <%= render Core.ActView, "candidate-blurb.html", assigns %>
-  <% end %>
+<div class="nav-body-container">
+  <%= render Core.LayoutView, "left-nav.html", assigns %>
 
-  <%= if @closest_candidate do %>
-    <%= render Core.ActView, "candidate-blurb.html", assigns %>
-  <% end %>
+  <div class="page-body">
+    <%= render Core.ActView, "district-picker.html", assigns %>
 
-  <div class="act-option-group">
-    <div class="option-group-header"> Events </div>
-    <div class="option-container">
-      <%= for item <- @event_action_options do %>
-        <%= render Core.ActView, "link-square.html", [item: item] %>
-      <% end %>
+    <%= if @candidate do %>
+      <%= render Core.ActView, "candidate-blurb.html", assigns %>
+    <% end %>
+
+    <%= if @closest_candidate do %>
+      <%= render Core.ActView, "candidate-blurb.html", assigns %>
+    <% end %>
+
+    <div class="act-option-group">
+      <div class="option-group-header"> Events </div>
+      <div class="option-container">
+        <%= for item <- @event_action_options do %>
+          <%= render Core.ActView, "link-square.html", [item: item] %>
+        <% end %>
+      </div>
     </div>
-  </div>
 
-  <div class="act-option-group">
-    <div class="option-group-header"> Help from Home </div>
-    <div class="option-container">
-      <%= for item <- @home_action_options do %>
-        <%= render Core.ActView, "link-square.html", [item: item] %>
-      <% end %>
+    <div class="act-option-group">
+      <div class="option-group-header"> Help from Home </div>
+      <div class="option-container">
+        <%= for item <- @home_action_options do %>
+          <%= render Core.ActView, "link-square.html", [item: item] %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
 
 <style>
+
+.nav-body-container {
+  display: flex;
+}
+
 .page-body {
   margin: 20px;
 }
@@ -48,5 +58,6 @@
     justify-content: space-around;
   <% end %>
 }
+
 
 </style>

@@ -27,7 +27,7 @@ class Sidebar extends Component {
             <CloseIcon />
           </a>
           <div id="inner-drawer">
-            {siteMap.map(this.renderEntry)}
+            {this.order(siteMap).map(this.renderEntry)}
           </div>
         </div>
       </div>
@@ -78,6 +78,18 @@ class Sidebar extends Component {
       </a>
     )
   }
+
+  order = entries => {
+    const current = this.current(entries)
+    const rest = entries.filter(
+      e => !window.location.href.match(e.path) || e.path === '/'
+    )
+
+    return current ? current.concat(rest) : rest
+  }
+
+  current = entries =>
+    entries.filter(e => window.location.href.match(e.path) && e.path !== '/')
 }
 
 render(<Sidebar {...window.opts} />, document.getElementById('sidebar'))

@@ -1,0 +1,9 @@
+<h1 class="page-title">
+  <%= if @brand == "bnc" do %>
+    <span class="small-star" style="float: left; margin-left: 10px;"> &#9733; </span>
+  <% end %>
+  <%= @text %>
+  <%= if @brand == "bnc" do %>
+    <span class="small-star" style="float: right; margin-right: 10px;"> &#9733; </span>
+  <% end %>
+</h1>

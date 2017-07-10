@@ -19,16 +19,18 @@ class TopNav extends Component {
       <div className="drop-down">
         {siteMap.map((tl, idx) => [
           <div
+            key={tl.label}
             className="top-level"
             onClick={this.visit(tl)}
             onMouseEnter={this.showOpts(idx)}
             onMouseLeave={this.hideOpts(idx)}
           >
             {tl.label}
+
             {hover == idx &&
               <div className="panel">
                 {siteMap[idx].children.map(child =>
-                  <div className="item">
+                  <div key={child.label} className="item">
                     {child.label}
                   </div>
                 )}
@@ -39,6 +41,9 @@ class TopNav extends Component {
       </div>
     )
   }
+
+  current = entries =>
+    entries.filter(e => window.location.href.match(e.path) && e.path !== '/')
 }
 
 class SideNav extends Component {
@@ -49,14 +54,33 @@ class SideNav extends Component {
   render() {
     return (
       <div className="side-nav-container">
-        TODO
+        <div className="section-header-container">
+          {this.current(siteMap)[0].label}
+        </div>
+
+        {this.current(siteMap)[0].children &&
+          this.current(siteMap)[0].children.map(entry =>
+            <a
+              className="side-nav-item"
+              href={hrefOfEntry(entry)}
+              key={entry.label}
+            >
+              {entry.label}
+            </a>
+          )}
       </div>
     )
   }
+
+  current = entries =>
+    entries.filter(e => window.location.href.match(e.path) && e.path !== '/')
 }
 
 render(<TopNav {...window.opts} />, document.getElementById('sidebar'))
-render(<SideNav {...window.opts} />, document.getElementById('side-nav'))
+
+const target = document.getElementById('side-nav')
+if (target)
+  render(<SideNav {...window.opts} />, target)
 
 // This needs to change when now. gets deployed to @
 const apexDomain = window.location.origin.replace('now.', '')

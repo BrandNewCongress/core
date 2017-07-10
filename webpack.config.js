@@ -59,7 +59,7 @@ const config = {
     alias: {
       phoenix_html:
         __dirname + '/deps/phoenix_html/web/static/js/phoenix_html.js',
-      phoenix: __dirname + '/deps/phoenix/web/static/js/phoenix.js',
+      phoenix: __dirname + '/deps/phoenix/web/static/js/phoenix.js'
       // react: 'react-lite',
       // 'react-dom': 'react-lite'
     }
