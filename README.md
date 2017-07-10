@@ -15,7 +15,7 @@ To start the app locally:
   * Run `npm install` to install Javascript + build dependencies
   * Start Phoenix endpoint with `mix phoenix.server`
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+Now you can visit [`localhost:4000/act`](http://localhost:4000) from your browser.
 
 ## What's Happening Here
 
@@ -24,36 +24,14 @@ templates, but most of the content lives in [CosmicJS](cosmicjs.com). There,
 we created "buckets", which are little bits of content (either plain text or
 html) that are editable in the admin view.
 
-When it's time for a page to be rendered here, code in `views/layout_view.ex` and
-`controllers/page_controller.ex` fetches the data from Cosmic and passes it to
-the templates. This lets us clearly separate display from content, allowing a
-non-technical group of people to edit content while the technical people are in
-control of its display.
+Each time the server starts, it fetches all of our buckets from Cosmic and stores
+them in `./cosmic_cache`. In order to develop without internet access, you'll need
+to run the server at least once to create that cache, which the server will lead
+on in the event of network failure.
 
 ## Roadmap
 
-Right now, I've created a few buckets and gotten them to show up on the page.
-We are sprinting to recreate the entire sites https://brandnewcongress.org and
-https://justicedemocrats.com. There exist buckets `jd-platform`, `bnc-platform`,
-`jd-footer-links` (incomplete), `bnc-footer-links` (incomplete), and `cori-bush`.
-
-We need to create the website component by component and section by section, as
-modularly as possible. For the moment, it's sufficient to insert some dummy data
-and mark that a bucket should exist here with a comment `TODO - bucket`.
-
-## TODO
-
-The following need be styled and templated out in html:
-- [] BNC Footer
-- [] JD Footer
-- [] BNC Header
-- [] JD Header
-- [] BNC Platform
-- [] JD Platform
-
-This also needs to happen:
-- [x] Fetch all buckets at once and cache them (done: see reduction in response times on subsequent refreshes)
-- [] Handle edit webhooks and refetch and cache buckets
+See issues!
 
 ## What's this stack?
 
