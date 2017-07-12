@@ -29,6 +29,13 @@ config :phoenix, :template_engines,
 # Use google_maps
 config :core, goog_key: System.get_env("GOOG_GEOCODE_KEY")
 
+# Quantum config
+config :core, Core.Scheduler,
+  jobs: [
+    # Every 15 minutes
+    {"*/15 * * * *", Core.Jobs.EventCache, :update},
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

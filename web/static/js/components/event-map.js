@@ -15,7 +15,7 @@ export default class EventMap extends Component {
           attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
           url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
         />
-        {events.map(e => <EventMarker event={e} />)}
+        {events.map(e => <EventMarker key={e.name} event={e} />)}
       </Map>
     )
   }
@@ -24,30 +24,43 @@ export default class EventMap extends Component {
 class EventMarker extends Component {
   render() {
     const {
-      venue,
-      intro,
-      startTime,
-      endTime,
-      url,
+      type,
       title,
-      timeZoneOffset
+      summary,
+      start_date,
+      end_date,
+      name,
+      location: { venue, region, location: { longitude, latitude }, locality },
+      featured_image_url,
+      description,
+      browser_url,
+      time_zone
     } = this.props.event
 
-    const offset = parseInt(timeZoneOffset.split(':')[0])
+    const timeZoneMap = {
+      'Eastern Time (US & Canada)': -5,
+      'Central Time (US & Canada)': -6,
+      'Mountain Time (US & Canada)': -7,
+      'Pacific Time (US & Canada)': -8,
+      Alaska: -9,
+      Hawaii: -10
+    }
 
-    const start = moment(new Date(startTime), offset)
-    const end = moment(new Date(endTime), offset)
+    const offset = timeZoneMap[time_zone]
+
+    const start = moment(new Date(start_date), offset)
+    const end = moment(new Date(end_date), offset)
 
     return (
       <CircleMarker
         radius={10}
-        center={[parseFloat(venue.address.lat), parseFloat(venue.address.lng)]}
+        center={[parseFloat(latitude), parseFloat(longitude)]}
       >
         <Popup style={{ overflow: 'scroll' }}>
           <div className="event-item event">
             <h5 className="time-info">
               <div className="dateblock">
-                <span className="left" style="text-transform: uppercase">
+                <span className="left" style={{ textTransform: 'uppercase' }}>
                   {start.dayOfWeek}
                 </span>
                 <span className="right">
@@ -56,24 +69,23 @@ class EventMarker extends Component {
               </div>
             </h5>
             <h3>
-              <a target="_blank" href={url} className="event-title">
+              <a target="_blank" href={browser_url} className="event-title">
                 {title}
               </a>
             </h3>
             <span className="label-icon" />
-            <p>{venue.name}</p>
-            <p dangerouslySetInnerHTML={{ __html: intro }}/>
+            <p>
+              {venue}
+            </p>
+            <p dangerouslySetInnerHTML={{ __html: description }} />
             <div>
-              <a
-                className="rsvp-link"
-                href="http://go.brandnewcongress.org/call_out_corruption_phone_bank_minneapolis_minneapolis_1117"
-                target="_blank"
-              >
+              <a className="rsvp-link" href={browser_url} target="_blank">
                 DETAILS/RSVP
               </a>
+
               <span
                 className="time-info-dist"
-                style="float: right; padding-top: 10px"
+                style={{ float: 'right', paddingTop: '10px' }}
               />
             </div>
           </div>

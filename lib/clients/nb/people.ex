@@ -16,6 +16,13 @@ defmodule Nb.People do
   def match(body) do
     case get "people/match", [query: body] do
       %{body: %{"person" => person}} -> person
+      does_not_exist -> {:error, does_not_exist}
+    end
+  end
+
+  def show(id) do
+    case get "people/#{id}" do
+      %{body: %{"person" => person}} -> person
       _does_not_exist -> {:error, "Does not exist"}
     end
   end

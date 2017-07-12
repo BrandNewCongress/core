@@ -111,7 +111,7 @@ defmodule District do
   def centroid(map = %{}) do
     key = map |> Map.keys() |> List.first()
     val = map[key]
-    {key, dist} = centroid({key, val})
+    {_key, dist} = centroid({key, val})
     dist
   end
 

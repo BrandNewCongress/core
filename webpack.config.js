@@ -6,6 +6,7 @@ const config = {
   entry: {
     act: './web/static/js/act.js',
     entry: './web/static/js/entry.js',
+    events: './web/static/js/events.js',
     'nav.desktop': './web/static/js/nav.desktop.js',
     'nav.mobile': './web/static/js/nav.mobile.js',
     app: './web/static/js/app.js',

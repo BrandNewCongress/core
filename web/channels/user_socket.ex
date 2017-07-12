@@ -3,6 +3,8 @@ defmodule Core.UserSocket do
 
   ## Channels
   channel "act", Core.ActChannel
+  channel "events", Core.EventsChannel
+  channel "entry", Core.EntryChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

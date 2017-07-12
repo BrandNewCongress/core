@@ -34,6 +34,8 @@ defmodule Core.Router do
     get "/act/call/:candidate", ActController, :get_call_candidate
     get "/act/calling-html/:candidate", ActController, :candidate_calling_html
 
+    get "/events", EventsController, :get
+
     get "/call", VoxController, :get
     get "/call/logins", VoxController, :get_logins
     post "/call", VoxController, :post
