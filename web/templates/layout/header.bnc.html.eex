@@ -125,16 +125,32 @@ header #drawer #inner-drawer {
   display: flex;
   cursor: pointer;
   font-size: 22px;
-  font-family: 'u.s._101regular';
 }
 
 .top-level {
   margin-left: 10px;
   margin-right: 10px;
+  font-family: 'Roboto Condensed';
+  font-weight: bold;
 }
 
 .panel {
   position: absolute;
+  background-color: black;
+  color: white;
+  padding: 10px;
+  font-size: smaller;
+  font-family: 'Roboto Slab', sans-serif;
+  text-transform: capitalize;
+  font-weight: normal;
+}
+
+.item {
+  padding: 3px;
+}
+
+.item:hover {
+  font-weight: bold;
 }
 
 

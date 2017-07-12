@@ -5,11 +5,12 @@ import siteMap from './sidebar/sitemap'
 
 class TopNav extends Component {
   state = {
-    hover: null
+    hover: 2
   }
 
   showOpts = idx => ev => this.setState({ hover: idx })
-  hideOpts = idx => ev => this.setState({ hover: null })
+  // hideOpts = idx => ev => this.setState({ hover: null })
+  hideOpts = idx => ev => this.setState({})
   visit = entry => ev => window.navigateTo(hrefOfEntry(entry))
 
   render() {
