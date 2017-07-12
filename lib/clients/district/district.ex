@@ -29,7 +29,7 @@ defmodule District do
     end
   end
 
-  defp normalize(string) do
+  def normalize(string) do
     [state, cd] = String.split(string, "-")
 
     state = String.upcase(state)
@@ -108,7 +108,8 @@ defmodule District do
   end
 
   def closest_candidate(district_string) do
-    centroid(district_string)
+    district_string
+    |> centroid()
     |> closest_candidate()
   end
 

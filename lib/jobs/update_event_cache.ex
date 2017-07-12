@@ -23,9 +23,9 @@ defmodule Core.Jobs.EventCache do
     |> MapSet.new()
     |> Enum.each(fn calendar -> calendar |> events_for_calendar(all_events) |> cache_calendar(calendar) end)
 
-    all_events
-
     Stash.persist(:event_cache, "event_cache")
+  
+    all_events
   end
 
   def load_cached do

@@ -81,7 +81,7 @@ defmodule Core.EntryChannel do
   end
 
   defp get_existing_person(entry = %{"id_type" => "id"}), do: Nb.People.show(entry["identifier"])
-  defp get_existing_person(entry = %{"id_type" => "new"}), do: nil
+  defp get_existing_person(%{"id_type" => "new"}), do: nil
   defp get_existing_person(entry = %{"id_type" => _id_type}), do: entry |> extract_matchers() |> Nb.People.match()
 
   defp extract_matchers(payload = %{"id_type" => "email"}) do

@@ -137,7 +137,7 @@ And you can invite others to join you at the event with this link:
   defp field_name(%{"title" => "What state is it in?"}), do: "venue_state"
   defp field_name(%{"title" => "Can we share the address of the event on our map?"}), do: "sharing_permission"
   defp field_name(%{"title" => "What's the zip code?"}), do: "venue_zip"
-  defp field_name(%{"title" => "Do you want someone from the BNC/JD Events Team to contact you about your" <> rest}), do: "should_contact"
+  defp field_name(%{"title" => "Do you want someone from the BNC/JD Events Team to contact you about your" <> _rest}), do: "should_contact"
   defp field_name(%{"title" => "What type of event are you hosting?"}), do: "event_type"
 
   defp get_answer(%{"text" => val}), do: val

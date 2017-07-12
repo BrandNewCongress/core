@@ -7,7 +7,7 @@ defmodule Core.Vox do
     |> Enum.map(fn {:ok, word} -> word end)
 
   def logins_for_day do
-    date = "#{Timex.now("America/New_York") |> Timex.to_date}"
+    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
 
     logins = case Redix.command(:redix, ["GET", date]) do
       {:ok, nil} -> create_and_return_logins(date)
@@ -19,7 +19,7 @@ defmodule Core.Vox do
   end
 
   def clear_logins do
-    date = "#{Timex.now("America/New_York") |> Timex.to_date}"
+    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
     Redix.command(:redix, ["DEL", date])
   end
 
@@ -37,10 +37,10 @@ defmodule Core.Vox do
             0,
             "Callers",
             "",
-            1008479,
-            1008489,
-            1008488,
-            1007839
+            1_008_479,
+            1_008_489,
+            1_008_488,
+            1_007_839
           ]
         end)
       |> Enum.map(fn l -> Enum.join(l, ",") end)
@@ -57,7 +57,7 @@ defmodule Core.Vox do
   end
 
   def next_login() do
-    date = "#{Timex.now("America/New_York") |> Timex.to_date}"
+    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
 
     {:ok, raw} = Redix.command(:redix, ["GET", date])
     logins = decode_logins(raw)
@@ -69,7 +69,7 @@ defmodule Core.Vox do
   end
 
   def password_for(username) do
-    date = "#{Timex.now("America/New_York") |> Timex.to_date}"
+    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
 
     {:ok, raw} = Redix.command(:redix, ["GET", date])
     logins = decode_logins(raw)

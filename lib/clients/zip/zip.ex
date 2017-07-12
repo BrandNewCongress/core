@@ -53,7 +53,15 @@ defmodule Zip do
     [_lat, _lng, timezone] = @coords["#{zip}"]
     as_string = "#{timezone}"
 
-    full = case as_string do
+    full = full_tz_from_offset(as_string)
+    abbrev = abbrev_tz_from_offset(as_string)
+
+    utc_offset = timezone * 3600
+    [utc_offset, full, abbrev]
+  end
+
+  def full_tz_from_offset(offset_string) do
+    case offset_string do
       "-5" -> "Eastern Time (US & Canada)"
       "-6" -> "Central Time (US & Canada)"
       "-7" -> "Mountain Time (US & Canada)"
@@ -61,8 +69,10 @@ defmodule Zip do
       "-9" -> "Alaska"
       "-10" -> "Hawaii"
     end
+  end
 
-    abbrev = case as_string do
+  def abbrev_tz_from_offset(offset_string) do
+    case offset_string do
       "-5" -> "EST"
       "-6" -> "CST"
       "-7" -> "MST"
@@ -70,8 +80,5 @@ defmodule Zip do
       "-9" -> "AKST"
       "-10" -> "HST"
     end
-
-    utc_offset = timezone * 3600
-    [utc_offset, full, abbrev]
   end
 end

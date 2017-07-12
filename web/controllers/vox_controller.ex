@@ -11,7 +11,7 @@ defmodule Core.VoxController do
   def post(conn, params = %{"email" => email, "phone" => phone, "first" => first_name, "last" => last_name}) do
     global_opts = GlobalOpts.get(conn, params)
     brand = Keyword.get(global_opts, :brand)
-    date = "#{Timex.now("America/New_York") |> Timex.to_date}"
+    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
 
     %{"id" => id, "tags" => tags} = Nb.People.push(%{
       "email" => email, "phone" => phone,
