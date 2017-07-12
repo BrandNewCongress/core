@@ -16,10 +16,13 @@ defmodule Core.ActController do
   end
 
   def post(conn, params = %{"district" => district}) do
-    {district, district_error} = District.from_unknown(district)
+    {district, {x, y}, district_error} = District.from_unknown(district)
+
+    {:ok, json_coordinates} = Poison.encode([x, y])
 
     conn
-    |> put_resp_cookie("district", district)
+    |> put_resp_cookie("district", district, [http_only: false])
+    |> put_resp_cookie("coordinates", json_coordinates, [http_only: false])
     |> render_act(params, {district, district_error})
   end
 

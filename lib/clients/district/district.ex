@@ -58,11 +58,18 @@ defmodule District do
   end
 
   def from_unknown(string) do
-    if is_short_form(string) do
-      {normalize(string), nil}
+    district = if is_short_form(string) do
+      normalize(string)
     else
-      {from_address(string), nil}
+      from_address(string)
     end
+
+    coordinates =
+      @geojsons
+      |> Map.take([district])
+      |> centroid()
+
+    {district, coordinates, nil}
   end
 
   def get_candidate(string) do
@@ -101,11 +108,8 @@ defmodule District do
   end
 
   def closest_candidate(district_string) do
-    @geojsons
-    |> Map.take([district_string])
-    |> centroid()
+    centroid(district_string)
     |> closest_candidate()
-
   end
 
   def centroid(map = %{}) do
@@ -123,6 +127,12 @@ defmodule District do
 
     {sum_x, sum_y} = list |> Enum.reduce(fn ({x, y}, {acc_x, acc_y}) -> {acc_x + x, acc_y + y} end)
     {key, {sum_x / length(list), sum_y / length(list)}}
+  end
+
+  def centroid(district_string) do
+    @geojsons
+    |> Map.take([district_string])
+    |> centroid()
   end
 
   def naive_distance({x1, y1}, {x2, y2}) do

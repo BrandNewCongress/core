@@ -33,6 +33,11 @@ class Events extends Component {
         events: this.state.events.concat([event])
       })
     )
+
+    if (window.startingCoordinates) {
+      const [y, x] = window.startingCoordinates
+      this.setState({ center: [x, y], zoom: 7 })
+    }
   }
 
   onViewportChanged = ({ center, zoom }) => this.setState({ center, zoom })
@@ -53,3 +58,9 @@ class Events extends Component {
 }
 
 render(<Events {...window.opts} />, document.getElementById('events-app'))
+
+function getCookie(name) {
+  var value = '; ' + document.cookie
+  var parts = value.split('; ' + name + '=')
+  if (parts.length == 2) return parts.pop().split(';').shift()
+}
