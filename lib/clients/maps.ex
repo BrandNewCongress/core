@@ -31,8 +31,36 @@ defmodule Maps do
   end
 
   def geocode(address) do
-    %{body: %{"results" => [%{"geometry" => %{"location" => location}} | _]}} = Maps.get("geocode/json", [query: %{"address" => address}])
+    %{body: %{"results" => [%{"geometry" => %{"location" => location}} | _]}}
+      = Maps.get("geocode/json", [query: %{"address" => address}])
+
     %{"lat" => lat, "lng" => lng} = location
-    {lng, lat}
+    {lat, lng}
+  end
+
+  def time_zone_of({x, y}) do
+    %{body: %{
+      "dstOffset" => dst_offset, "rawOffset" => raw_offset,
+      "timeZoneId" => time_zone_id, "timeZoneName" => time_zone_name
+    }}
+      = Maps.get(
+          "timezone/json",
+          [query: %{"location" => "#{x},#{y}",
+                    "timestamp" => DateTime.utc_now() |> DateTime.to_unix()}])
+
+    %{utc_offset: raw_offset + dst_offset, time_zone_id: time_zone_id,
+      time_zone: time_zone_name, zone_abbr: abbreviate_zone(time_zone_name)}
+  end
+
+  def time_zone_of(address_string) do
+    address_string
+    |> geocode()
+    |> time_zone_of()
+  end
+
+  defp abbreviate_zone(time_zone) do
+    time_zone
+    |> String.split(" ")
+    |> Enum.map(fn word -> String.slice(word, 0..0) end)
   end
 end

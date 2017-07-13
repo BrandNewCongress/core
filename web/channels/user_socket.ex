@@ -2,7 +2,6 @@ defmodule Core.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "act", Core.ActChannel
   channel "events", Core.EventsChannel
   channel "entry", Core.EntryChannel
 

@@ -3,7 +3,8 @@
 <style>
 
 #side-nav {
-  min-width: 180px;
+  min-width: 150px;
+  margin-right: 30px;
 }
 
 .side-nav-item {
@@ -46,7 +47,5 @@
   font-size: larger;
   text-transform: uppercase;
 }
-
-
 
 </style>

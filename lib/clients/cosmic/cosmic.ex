@@ -27,7 +27,7 @@ defmodule Cosmic do
 
       Stash.persist(:cosmic_cache, "./cosmic_cache")
     rescue
-      _e in MatchError ->
+      e in MatchError ->
         Logger.error("Could not fetch cosmic data - using latest cached version")
         Stash.load(:cosmic_cache, "./cosmic_cache")
     end
