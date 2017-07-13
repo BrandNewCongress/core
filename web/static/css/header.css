@@ -9,6 +9,7 @@ header {
 header img.desktop {
   min-width: 220px;
   max-width: 220px;
+  max-height: 50px;
   margin-left: 40px;
 }
 

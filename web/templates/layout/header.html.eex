@@ -1,10 +1,35 @@
-<header class="header">
-  <nav role="navigation" style="display: flex; justify-content: space-between; align-items: center; height: 75px;">
-    <%= if @mobile do %>
-      <img class="mobile" src="<%= static_path(@conn, "/images/horizontal-logo-smaller-bnc.png")%>" />
-    <% else %>
-      <img class="desktop" src="<%= static_path(@conn, "/images/horizontal-logo-bnc.png")%>" />
-    <% end %>
+<%
+  background_color = case @brand do
+    "bnc" -> "none"
+    "jd" -> "#5B919F"
+  end
+%>
+
+<header class="header" style="background-color: <%= background_color %>">
+  <nav
+    role="navigation"
+    style="display: flex; justify-content: space-between; align-items: center; height: 75px;"
+  >
+    <a href="https://brandnewcongress.org">
+      <%= if @brand == "jd" do %>
+
+        <%= if @mobile do %>
+          <img src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+        <% else %>
+          <img src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+        <% end %>
+
+      <% else %>
+
+        <%= if @mobile do %>
+          <img class="mobile" src="<%= static_path(@conn, "/images/horizontal-logo-smaller-bnc.png")%>" />
+        <% else %>
+          <img class="desktop" src="<%= static_path(@conn, "/images/horizontal-logo-bnc.png")%>" />
+        <% end %>
+
+      <% end %>
+    </a>
+
     <div style="width:100;"></div>
     <div id="sidebar">
       <a class="hamburger-menu" id="sidebar-toggle">
@@ -14,8 +39,10 @@
       </a>
     </div>
   </nav>
+
   <span class="logo"></span>
 </header>
+
 <%= if @mobile do %>
   <script defer="defer" src="<%= static_path(@conn, "/js/nav.mobile.js") %>"></script>
 <% else %>
@@ -132,9 +159,17 @@ header #drawer #inner-drawer {
   margin-right: 10px;
   font-family: 'Roboto Condensed';
   font-weight: bold;
+  /*padding-left: 3px;
+  padding-right: 3px;*/
+}
+
+.top-level.hovering {
+  color: white;
+  background-color: black;
 }
 
 .panel {
+  padding-top: 10px;
   position: absolute;
   background-color: black;
   color: white;
@@ -145,6 +180,10 @@ header #drawer #inner-drawer {
   font-weight: normal;
 }
 
+.drop-down > div:nth-child(n+5) > .panel {
+  transform: translateX(-50%);
+}
+
 .item {
   padding: 3px;
 }
@@ -153,5 +192,17 @@ header #drawer #inner-drawer {
   font-weight: bold;
 }
 
+.panel > .item:first-child {
+  border-top: none;
+}
+
+.panel > .item:last-child {
+  border-bottom: none;
+}
+
+.panel > .item {
+  border-top: .5px solid white;
+  border-bottom: .5px solid white;
+}
 
 </style>

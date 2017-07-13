@@ -44,5 +44,6 @@ erl_crash.dump
 # variables.
 # /config/prod.secret.exs
 
-# Cosmic cache!
+# Caches for offline development!
 cosmic_cache
+event_cache

@@ -5,12 +5,11 @@ import siteMap from './sidebar/sitemap'
 
 class TopNav extends Component {
   state = {
-    hover: 2
+    hover: undefined
   }
 
   showOpts = idx => ev => this.setState({ hover: idx })
-  // hideOpts = idx => ev => this.setState({ hover: null })
-  hideOpts = idx => ev => this.setState({})
+  hideOpts = idx => ev => this.setState({ hover: null })
   visit = entry => ev => window.navigateTo(hrefOfEntry(entry))
 
   render() {
@@ -21,7 +20,7 @@ class TopNav extends Component {
         {siteMap.map((tl, idx) => [
           <div
             key={tl.label}
-            className="top-level"
+            className={`top-level ${hover == idx ? 'hovering' : ''}`}
             onClick={this.visit(tl)}
             onMouseEnter={this.showOpts(idx)}
             onMouseLeave={this.hideOpts(idx)}
@@ -29,6 +28,7 @@ class TopNav extends Component {
             {tl.label}
 
             {hover == idx &&
+              siteMap[idx].children.length > 0 &&
               <div className="panel">
                 {siteMap[idx].children.map(child =>
                   <div key={child.label} className="item">
@@ -66,6 +66,13 @@ class SideNav extends Component {
               href={hrefOfEntry(entry)}
               key={entry.label}
             >
+              {window.opts.brand == 'bnc' &&
+                <span
+                  className="side-star"
+                  style={{ float: 'left' }}
+                >
+                  &#9733;
+                </span>}
               {entry.label}
             </a>
           )}
@@ -80,8 +87,7 @@ class SideNav extends Component {
 render(<TopNav {...window.opts} />, document.getElementById('sidebar'))
 
 const target = document.getElementById('side-nav')
-if (target)
-  render(<SideNav {...window.opts} />, target)
+if (target) render(<SideNav {...window.opts} />, target)
 
 // This needs to change when now. gets deployed to @
 const apexDomain = window.location.origin.replace('now.', '')

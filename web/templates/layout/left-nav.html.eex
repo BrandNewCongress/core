@@ -7,18 +7,46 @@
 }
 
 .side-nav-item {
-  display: block;
   text-decoration: none;
   color: black;
   padding-top: 10px;
   padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease-out;
+  transform: translateX(0px);
+  font-family: 'Roboto Slab', serif;
+  letter-spacing: .5px;
+}
+
+.side-star {
+  color: var(--bnc-purple);
+  margin-right: 10px;
+  margin-left: -25px;
+  transition: transform 0.3s ease-out;
+  transform: scale(0);
+}
+
+.side-nav-item:hover {
+  transform: translateX(25px);
+  color: var(--bnc-purple);
+}
+
+.side-nav-item:hover > .side-star {
+  display: inline;
+  transform: scale(1);
 }
 
 .section-header-container {
-  font-weight: 400;
+  font-weight: bold;
   padding-bottom: 20px;
   border-bottom: 1px dashed grey;
   margin-bottom: 20px;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: larger;
+  text-transform: uppercase;
 }
+
+
 
 </style>

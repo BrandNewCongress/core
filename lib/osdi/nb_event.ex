@@ -5,17 +5,22 @@ defmodule Transformers.Nb.Event do
               :location, :featured_image_url, :start_date, :end_date, :calendar]
 
   def location(event) do
-    %{
-      venue: event.venue.name,
-      address_lines: [event.venue.address.address1],
-      locality: event.venue.address.city,
-      region: event.venue.address.state,
-      location: %{
-        latitude: event.venue.address.lat,
-        longitude: event.venue.address.lng
-      },
-      time_zone: event.time_zone
-    }
+    location = %{venue: event.venue.name}
+
+    location = if event.venue.address do
+      %{address_lines: [event.venue.address.address1],
+        locality: event.venue.address.city, region: event.venue.address.state,
+        location: %{
+          latitude: event.venue.address.lat,
+          longitude: event.venue.address.lng
+        },
+        time_zone: event.time_zone}
+      |> Map.merge(location)
+    else
+      location
+    end
+
+    location
   end
 
   def name(event), do: event.slug
