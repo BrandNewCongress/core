@@ -51,9 +51,10 @@ defmodule Typeform.SubmitEvent do
       true -> []
       false -> ["Event: Hide Address"]
     end
+
     contact_tag = case together["should_contact"] do
       true -> ["Event: Should Contact Host"]
-      false -> []
+      _ -> []
     end
     tags = type_tag ++ sharing_tag ++ contact_tag
 

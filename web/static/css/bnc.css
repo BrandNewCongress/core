@@ -26,9 +26,9 @@
   font-family: 'Roboto Condensed', sans-serif !important;
 }
 
-/*.bnc p, .bnc label, .bnc span, .bnc div {
+.bnc p, .bnc label {
   font-family: 'Roboto Slab', sans-serif !important;
-}*/
+}
 
 .bnc .condensed {
   font-family: 'Roboto Condensed', sans-serif !important;

@@ -1,96 +1,89 @@
 import React, { Component } from 'react'
 import { Map, TileLayer, CircleMarker, Popup } from 'react-leaflet'
-import moment from '../lib/mini-moment'
+import EventMarker from './event-marker'
+import GeoSuggest from 'react-geosuggest'
+import socket from '../socket'
 
 export default class EventMap extends Component {
+  state = {
+    events: [],
+    center: [38.805470223177466, -100.23925781250001],
+    zoom: 4
+  }
+
+  channel = null
+
+  componentDidMount() {
+    this.channel = socket.channel('events')
+
+    this.channel
+      .join()
+      .receive('ok', msg => {
+        console.log(`Connected with ${JSON.stringify(msg)}`)
+        console.log(msg)
+
+        this.channel.push('ready', {})
+      })
+      .receive('error', msg => {
+        console.log(`Could not connect with ${JSON.stringify(msg)}`)
+        console.log(msg)
+      })
+
+    this.channel.on('event', ({ event }) =>
+      this.setState({
+        events: this.state.events.concat([event])
+      })
+    )
+
+    if (window.startingCoordinates) {
+      this.setState({
+        center: window.startingCoordinates,
+        zoom:
+          JSON.stringify([38.805470223177466, -100.23925781250001]) ==
+          JSON.stringify(window.startingCoordinates)
+            ? 4
+            : 7
+      })
+    }
+  }
+
+  onViewportChanged = ({ center, zoom }) => this.setState({ center, zoom })
+
   render() {
-    const { center, zoom, events } = this.props
+    const { center, zoom, events } = this.state
 
     return (
-      <Map
-        viewport={{ center, zoom }}
-        onViewportChanged={this.props.onViewportChanged}
-      >
-        <TileLayer
-          attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-        />
-        {events.map(e => <EventMarker key={e.name} event={e} />)}
-      </Map>
+      <div>
+        <div className="district-selector">
+          <div className="district-selector-header">
+            <h2> Events Near You </h2>
+          </div>
+          <div className="district-selector-prompt">
+            <p>Type in your address, zip code, or congressional district</p>
+            <div className="input-container">
+              <input ref={ref => this.locationInput = ref}/>
+              <a onClick={this.getDistrict}> Go </a>
+            </div>
+          </div>
+        </div>
+
+        <Map
+          viewport={{ center, zoom }}
+          onViewportChanged={this.props.onViewportChanged}
+        >
+          <TileLayer
+            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
+            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+          />
+          {events.map(e => <EventMarker key={e.name} event={e} />)}
+        </Map>
+      </div>
     )
   }
 }
 
-class EventMarker extends Component {
-  render() {
-    const {
-      type,
-      title,
-      summary,
-      start_date,
-      end_date,
-      name,
-      location: { venue, region, location: { longitude, latitude }, locality },
-      featured_image_url,
-      description,
-      browser_url,
-      time_zone
-    } = this.props.event
-
-    const timeZoneMap = {
-      'Eastern Time (US & Canada)': -5,
-      'Central Time (US & Canada)': -6,
-      'Mountain Time (US & Canada)': -7,
-      'Pacific Time (US & Canada)': -8,
-      Alaska: -9,
-      Hawaii: -10
-    }
-
-    const offset = timeZoneMap[time_zone]
-
-    const start = moment(new Date(start_date), offset)
-    const end = moment(new Date(end_date), offset)
-
-    return (
-      <CircleMarker
-        radius={10}
-        center={[parseFloat(latitude), parseFloat(longitude)]}
-      >
-        <Popup style={{ overflow: 'scroll' }}>
-          <div className="event-item event">
-            <h5 className="time-info">
-              <div className="dateblock">
-                <span className="left" style={{ textTransform: 'uppercase' }}>
-                  {start.dayOfWeek}
-                </span>
-                <span className="right">
-                  {`${start.month} ${start.dayOfMonth} ${start.humanTime} – ${end.humanTime}`}
-                </span>
-              </div>
-            </h5>
-            <h3>
-              <a target="_blank" href={browser_url} className="event-title">
-                {title}
-              </a>
-            </h3>
-            <span className="label-icon" />
-            <p>
-              {venue}
-            </p>
-            <p dangerouslySetInnerHTML={{ __html: description }} />
-            <div>
-              <a className="rsvp-link" href={browser_url} target="_blank">
-                DETAILS/RSVP
-              </a>
-
-              <span
-                className="time-info-dist"
-                style={{ float: 'right', paddingTop: '10px' }}
-              />
-            </div>
-          </div>
-        </Popup>
-      </CircleMarker>
-    )
-  }
+function getCookie(name) {
+  var value = '; ' + document.cookie
+  var parts = value.split('; ' + name + '=')
+  if (parts.length == 2) return parts.pop().split(';').shift()
 }
