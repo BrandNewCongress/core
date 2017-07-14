@@ -12,6 +12,7 @@ export default class EventMap extends Component {
   }
 
   channel = null
+  l = null
 
   componentDidMount() {
     this.channel = socket.channel('events')
@@ -35,9 +36,9 @@ export default class EventMap extends Component {
       })
     )
 
-    if (window.startingCoordinates) {
+    if (this.props.startingCoordinates || window.startingCoordinates) {
       this.setState({
-        center: window.startingCoordinates,
+        center: this.props.startingCoordinates || window.startingCoordinates,
         zoom:
           JSON.stringify([38.805470223177466, -100.23925781250001]) ==
           JSON.stringify(window.startingCoordinates)
@@ -50,24 +51,27 @@ export default class EventMap extends Component {
   onViewportChanged = ({ center, zoom }) => this.setState({ center, zoom })
 
   render() {
+    const { showDistrictSelector } = this.props
     const { center, zoom, events } = this.state
 
     return (
       <div>
-        <div className="district-selector">
-          <div className="district-selector-header">
-            <h2> Events Near You </h2>
-          </div>
-          <div className="district-selector-prompt">
-            <p>Type in your address, zip code, or congressional district</p>
-            <div className="input-container">
-              <input ref={ref => this.locationInput = ref}/>
-              <a onClick={this.getDistrict}> Go </a>
+        {showDistrictSelector &&
+          <div className="district-selector">
+            <div className="district-selector-header">
+              <h2> Events Near You </h2>
             </div>
-          </div>
-        </div>
+            <div className="district-selector-prompt">
+              <p>Type in your address, zip code, or congressional district</p>
+              <div className="input-container">
+                <input ref={ref => (this.locationInput = ref)} />
+                <a onClick={this.getDistrict}> Go </a>
+              </div>
+            </div>
+          </div>}
 
         <Map
+          animate={true}
           viewport={{ center, zoom }}
           onViewportChanged={this.props.onViewportChanged}
         >
@@ -80,10 +84,4 @@ export default class EventMap extends Component {
       </div>
     )
   }
-}
-
-function getCookie(name) {
-  var value = '; ' + document.cookie
-  var parts = value.split('; ' + name + '=')
-  if (parts.length == 2) return parts.pop().split(';').shift()
 }

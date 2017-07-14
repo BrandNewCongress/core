@@ -42,8 +42,7 @@ defmodule Typeform.SubmitEvent do
     end))
 
     host_id = Task.await(ensure_host)
-    %{utc_offset: utc_offset, time_zone: time_zone} = time_zone_info
-    IO.puts calendar_id
+    %{time_zone: time_zone} = time_zone_info
 
     # Calc tags
     type_tag = ["Event Type: #{together["event_type"]}"]

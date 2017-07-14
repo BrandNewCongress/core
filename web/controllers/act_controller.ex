@@ -8,7 +8,7 @@ defmodule Core.ActController do
 
   def post(conn, params = %{"district" => district}) do
     {district, {x, y}} = District.from_unknown(district)
-    {:ok, json_coordinates} = Poison.encode([x, y])
+    {:ok, json_coordinates} = Poison.encode([y, x])
 
     conn
     |> put_resp_cookie("district", district, [http_only: false])
@@ -97,7 +97,7 @@ defmodule Core.ActController do
 
     case weekday do
       n when n in [5, 6] -> est_hours >= 10
-      n -> est_hours >= 17
+      _n -> est_hours >= 17
     end
   end
 

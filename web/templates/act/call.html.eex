@@ -1,7 +1,9 @@
 <%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Call Voters"] %>
 
 <div class="nav-body-container">
-  <%= render Core.LayoutView, "left-nav.html", assigns %>
+  <%= if (not @mobile) do %>
+    <%= render Core.LayoutView, "left-nav.html", assigns %>
+  <% end %>
 
   <div class="page-body">
     <%= if @on_hours do %>

@@ -45,7 +45,7 @@ defmodule District do
   def from_point({lat, lng}) do
     @geojsons
     |> Enum.filter_map(
-        fn {_district, polygon} -> Topo.contains?(polygon, {lat, lng}) end,
+        fn {_district, polygon} -> Topo.contains?(polygon, {lng, lat}) end,
         fn {district, _polygon} -> district end
       )
     |> List.first()
@@ -130,7 +130,7 @@ defmodule District do
     {key, {sum_x / length(list), sum_y / length(list)}}
   end
 
-  def centroid(district_string) do
+  def centroid(district_string) when is_binary(district_string) do
     @geojsons
     |> Map.take([district_string])
     |> centroid()

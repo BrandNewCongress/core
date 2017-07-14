@@ -1,5 +1,4 @@
 <div id="events-app"></div>
-<script defer="defer" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCreWmaYXibVT8NesvuROe6LDwwgccaKak&libraries=places"></script>
 <script defer="defer" src="<%= static_path(@conn, "/js/events.js") %>"></script>
 <script>
   window.startingCoordinates = <%= @coordinates %>

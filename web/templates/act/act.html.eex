@@ -1,7 +1,9 @@
 <%= render Core.LayoutView, "h1.html", [brand: @brand, text: "What You Can Do"] %>
 
 <div class="nav-body-container">
-  <%= render Core.LayoutView, "left-nav.html", assigns %>
+  <%= if (not @mobile) do %>
+    <%= render Core.LayoutView, "left-nav.html", assigns %>
+  <% end %>
 
   <div class="page-body">
     <%= render Core.ActView, "district-picker.html", assigns %>
@@ -14,23 +16,32 @@
       <%= render Core.ActView, "candidate-blurb.html", assigns %>
     <% end %>
 
-    <div class="act-option-group">
-      <div class="option-group-header"> Events </div>
-      <div class="option-container">
-        <%= for item <- @event_action_options do %>
-          <%= render Core.ActView, "link-square.html", [item: item] %>
-        <% end %>
+    <%= if @mobile do %>
+      <div class="act-option-group">
+        <div class="option-group-header"> Events </div>
+        <div class="option-container">
+          <%= for item <- @event_action_options do %>
+            <%= render Core.ActView, "link-square.html", [item: item] %>
+          <% end %>
+        </div>
       </div>
-    </div>
 
-    <div class="act-option-group">
-      <div class="option-group-header"> Help from Home </div>
-      <div class="option-container">
-        <%= for item <- @home_action_options do %>
-          <%= render Core.ActView, "link-square.html", [item: item] %>
-        <% end %>
+      <div class="act-option-group">
+        <div class="option-group-header"> Help from Home </div>
+        <div class="option-container">
+          <%= for item <- @home_action_options do %>
+            <%= render Core.ActView, "link-square.html", [item: item] %>
+          <% end %>
+        </div>
       </div>
-    </div>
+    <% else %>
+
+      <br/>
+      <div id="events-app" data-show-prompt="false"></div>
+      <script defer="defer" src="<%= static_path(@conn, "/js/events.js") %>"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
+
+    <% end %>
   </div>
 </div>
 
@@ -69,6 +80,58 @@
 
 .container {
   padding: 30px;
+}
+
+.page-body {
+  width: 100%;
+}
+
+#events-app {
+  height: 600px;
+  width: 100%;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 600px;
+}
+
+.events-app {
+  width: 100%;
+  height: 600px;
+}
+
+.district-selector {
+  position: absolute;
+  z-index: 500;
+  background-color: #ebebeb;
+  right: 0;
+  width: 300px;
+}
+
+.district-selector-header > h2 {
+  background-color: var(--bnc-purple);
+  color: white;
+  margin: 0;
+  text-align: center;
+  padding: 5px;
+}
+
+.district-selector-prompt {
+  padding: 5px;
+}
+
+.district-selector-prompt a {
+  display: block;
+}
+
+.district-selector-prompt input {
+  width: 100%;
+}
+
+.district-selector-prompt .input-container {
+  display: flex;
+  justify-content: space-between;
 }
 
 </style>
