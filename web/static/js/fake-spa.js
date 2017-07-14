@@ -24,6 +24,7 @@ function postFetch(text, path, skipHistory) {
 
 function navigateTo(path, skipHistory) {
   superagent.get(path).query({ empty: true }).end(function(err, res) {
+    if (window.checkNavChange) window.checkNavChange()
     postFetch(res.text, path, skipHistory)
   })
 }

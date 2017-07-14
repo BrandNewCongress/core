@@ -38,6 +38,12 @@
   transform: scale(1);
 }
 
+.side-nav-item.selected {
+  background-color: var(--bnc-purple);
+  color: white;
+  padding: 5px;
+}
+
 .section-header-container {
   font-weight: bold;
   padding-bottom: 20px;

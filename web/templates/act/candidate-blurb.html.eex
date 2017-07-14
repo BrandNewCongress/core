@@ -74,4 +74,9 @@
   margin: 10px;
   font-style: italic;
 }
+
+.candidate-blurb {
+  font-family: 'Roboto Slab', sans-serif !important;
+}
+
 </style>

@@ -10,7 +10,10 @@ class TopNav extends Component {
 
   showOpts = idx => ev => this.setState({ hover: idx })
   hideOpts = idx => ev => this.setState({ hover: null })
-  visit = entry => ev => window.navigateTo(hrefOfEntry(entry))
+  visit = entry => ev => {
+    ev.stopPropagation()
+    window.navigateTo(hrefOfEntry(entry))
+  }
 
   render() {
     const { hover } = this.state
@@ -31,7 +34,11 @@ class TopNav extends Component {
               siteMap[idx].children.length > 0 &&
               <div className="panel">
                 {siteMap[idx].children.map(child =>
-                  <div key={child.label} className="item">
+                  <div
+                    key={child.label}
+                    className="item"
+                    onClick={this.visit(child)}
+                  >
                     {child.label}
                   </div>
                 )}
@@ -43,8 +50,7 @@ class TopNav extends Component {
     )
   }
 
-  current = entries =>
-    entries.filter(e => window.location.href.match(e.path) && e.path !== '/')
+  current = entries => entries.filter(e => e.matches())
 }
 
 class SideNav extends Component {
@@ -62,15 +68,12 @@ class SideNav extends Component {
         {this.current(siteMap)[0].children &&
           this.current(siteMap)[0].children.map(entry =>
             <a
-              className="side-nav-item"
+              className={`side-nav-item ${entry.matches() ? 'selected' : ''}`}
               href={hrefOfEntry(entry)}
               key={entry.label}
             >
               {window.opts.brand == 'bnc' &&
-                <span
-                  className="side-star"
-                  style={{ float: 'left' }}
-                >
+                <span className="side-star" style={{ float: 'left' }}>
                   &#9733;
                 </span>}
               {entry.label}
@@ -80,21 +83,20 @@ class SideNav extends Component {
     )
   }
 
-  current = entries =>
-    entries.filter(e => window.location.href.match(e.path) && e.path !== '/')
+  current = entries => entries.filter(e => e.matches())
 }
 
-render(<TopNav {...window.opts} />, document.getElementById('sidebar'))
+window.checkNavChange = () => {
+  render(<TopNav {...window.opts} />, document.getElementById('sidebar'))
 
-const target = document.getElementById('side-nav')
-if (target) render(<SideNav {...window.opts} />, target)
+  const target = document.getElementById('side-nav')
+  if (target) render(<SideNav {...window.opts} />, target)
+}
+
+window.checkNavChange()
 
 // This needs to change when now. gets deployed to @
 const apexDomain = window.location.origin.replace('now.', '')
 function hrefOfEntry(entry) {
-  if (entry.children === undefined || entry.children.length === 0) {
-    return entry.subdomained ? entry.path : apexDomain + entry.path
-  } else {
-    return null
-  }
+  return entry.subdomained ? entry.path : apexDomain + entry.path
 }

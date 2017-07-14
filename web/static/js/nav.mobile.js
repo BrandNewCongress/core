@@ -88,8 +88,7 @@ class Sidebar extends Component {
     return current ? current.concat(rest) : rest
   }
 
-  current = entries =>
-    entries.filter(e => window.location.href.match(e.path) && e.path !== '/')
+  current = entries => entries.filter(e => e.matches())
 }
 
 render(<Sidebar {...window.opts} />, document.getElementById('sidebar'))

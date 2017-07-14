@@ -37,6 +37,11 @@
     <% else %>
 
       <br/>
+      <% use = @candidate || @closest_candidate %>
+      <%= if use do %>
+        <p> Find and attend one of <%= use["title"] %>'s events below! <p> 
+      <% end %>
+
       <div id="events-app" data-show-prompt="false"></div>
       <script defer="defer" src="<%= static_path(@conn, "/js/events.js") %>"></script>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
