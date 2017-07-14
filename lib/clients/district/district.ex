@@ -69,7 +69,7 @@ defmodule District do
       |> Map.take([district])
       |> centroid()
 
-    {district, coordinates, nil}
+    {district, coordinates}
   end
 
   def get_candidate(string) do

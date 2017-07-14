@@ -44,6 +44,14 @@
   margin: 20px;
 }
 
+.page-body > .link-container > a {
+  width: 200px;
+  padding: 10px;
+  text-transform: none;
+  text-decoration: none;
+  text-align: center;
+}
+
 .option-group-header {
   font-size: larger;
   border-bottom: 1px solid black;

@@ -2,86 +2,62 @@ defmodule Core.ActController do
   use Core.Web, :controller
 
   def get(conn, params) do
-    district = params["district"] || conn.cookies["district"]
-
-    district =
-      if district == "clear" do
-        nil
-      else
-        district
-      end
-
-    conn
-    |> render_act(params, {district, nil})
+    district = extract_district(conn, params)
+    render_act(conn, params, district)
   end
 
   def post(conn, params = %{"district" => district}) do
-    {district, {x, y}, district_error} = District.from_unknown(district)
-
+    {district, {x, y}} = District.from_unknown(district)
     {:ok, json_coordinates} = Poison.encode([x, y])
 
     conn
     |> put_resp_cookie("district", district, [http_only: false])
     |> put_resp_cookie("coordinates", json_coordinates, [http_only: false])
-    |> render_act(params, {district, district_error})
+    |> render_act(params, district)
   end
 
-  defp render_act(conn, params, {district, district_error}) do
-    candidate =
-      case district do
-        nil -> nil
-        district -> District.get_candidate(district)
-      end
-
-    closest_candidate =
-      if district do
-        case candidate do
-          nil -> District.closest_candidate(district)
-          _cand -> nil
-        end
-      else
-        nil
-      end
-
-    params =
-      [title: "Act", district: district, district_error: district_error,
-       candidate: candidate, closest_candidate: closest_candidate,
-       event_action_options: event_action_options(conn, params),
-       home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
-
-    render conn, "act.html", params
+  def get_call(conn, params) do
+    district = extract_district(conn, params)
+    render_call(conn, params, district)
   end
 
-  def get_candidate(conn, params = %{"candidate" => slug}) do
-    candidate = Cosmic.get(slug)
-    candidate = put_in(candidate["metadata"]["calling_prompt"], "")
-    candidate = put_in(candidate["metafields"], %{})
+  def get_candidate_call(conn, params = %{"candidate" => candidate}) do
+    %{"metadata" => %{"district" => district}} = Cosmic.get(candidate)
+    render_call(conn, params, district)
+  end
 
-    {:ok, candidate_json} = Poison.encode(candidate)
+  defp render_act(conn, params, district) do
+    %{candidate: candidate, closest_candidate: closest_candidate}
+      = candidate_options(district)
 
     render conn, "act.html",
-      [title: "Let's get to work", header_text: "Let's get to work",
-       candidate: candidate_json, callable: callable_json(),
-       initial_selected: Map.get(params, "selected", "attend-event")] ++ GlobalOpts.get(conn, params)
+      [title: "Act", district: district, candidate: candidate,
+       closest_candidate: closest_candidate,
+       event_action_options: event_action_options(conn, params),
+       home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
   end
 
-  defp callable_json do
-    {:ok, callable_candidates} =
-      "candidates"
-      |> Cosmic.get_type()
-      |> Enum.filter(fn
-          %{"metadata" => %{"callable" => "Callable"}} -> true
-          _ -> false
-        end)
-      |> Enum.map(fn %{"slug" => slug, "title" => name} -> %{slug: slug, name: name} end)
-      |> Poison.encode()
+  defp render_call(conn, params, district) do
+    %{candidate: candidate, closest_candidate: closest_candidate}
+      = candidate_options(district)
 
-    callable_candidates
-  end
+    candidate_calling_page = cond do
+      candidate != nil -> candidate["metadata"]["calling_prompt"]
+      closest_candidate != nil -> closest_candidate["metadata"]["calling_prompt"]
+      true -> ""
+    end
 
-  def candidate_calling_html(conn, %{"candidate" => slug}) do
-    candidate = Cosmic.get(slug)
-    text conn, candidate["metadata"]["calling_prompt"]
+    callable_maps = callable_candidates()
+    callable_slugs = Enum.map(callable_maps, fn %{slug: slug} -> slug end)
+
+    render conn, "call.html",
+      [title: "Call Voters", district: district, candidate: candidate,
+       on_hours: on_hours?(), closest_candidate: closest_candidate,
+       calling_script_link: candidate["metadata"]["calling_script_link"],
+       candidate_calling_page: candidate_calling_page,
+       callable_candidates: callable_maps, callable_slugs: callable_slugs,
+       event_action_options: event_action_options(conn, params),
+       home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
   end
 
   defp event_action_options(_conn, _params) do
@@ -90,10 +66,48 @@ defmodule Core.ActController do
   end
 
   defp home_action_options(_conn, _params) do
-    # TODO - route to call candidate near them
-    [%{icon: "call.html", label: "Call Voters", href: "/act/call"},
-     %{icon: "nominate.html", label: "Nominate a Candidate", href: "https://brandnewcongress.org/nominate"},
-     %{icon: "district.html", label: "Tell Us About Your District", href: "https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com"},
-     %{icon: "team.html", label: "Join a National Team", href: "/form/teams"}]
+    [%{icon: "call-icon.html", label: "Call Voters", href: "/act/call"},
+     %{icon: "nominate-icon.html", label: "Nominate a Candidate", href: "https://brandnewcongress.org/nominate"},
+     %{icon: "district-icon.html", label: "Tell Us About Your District", href: "https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com"},
+     %{icon: "team-icon.html", label: "Join a National Team", href: "/form/teams"}]
   end
+
+  defp candidate_options(district) do
+    candidate = if district, do: District.get_candidate(district), else: nil
+    closest_candidate =
+      if district != nil and candidate == nil do
+        District.closest_candidate(district)
+      else
+        nil
+      end
+
+    %{candidate: candidate, closest_candidate: closest_candidate}
+  end
+
+  defp extract_district(conn, params) do
+    district = params["district"] || conn.cookies["district"]
+    district = if district == "clear", do: nil, else: district
+    district
+  end
+
+  defp on_hours? do
+    now = "America/New_York" |> Timex.now()
+    est_hours = now.hour
+    weekday = Timex.weekday(now)
+
+    case weekday do
+      n when n in [5, 6] -> est_hours >= 10
+      n -> est_hours >= 17
+    end
+  end
+
+  defp callable_candidates do
+    "candidates"
+    |> Cosmic.get_type()
+    |> Enum.filter(&(is_callable(&1)))
+    |> Enum.map(fn %{"slug" => slug, "title" => name} -> %{slug: slug, name: name} end)
+  end
+
+  defp is_callable(%{"metadata" => %{"callable" => "Callable"}}), do: true
+  defp is_callable(_else), do: false
 end
