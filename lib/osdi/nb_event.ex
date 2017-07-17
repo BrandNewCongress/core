@@ -26,7 +26,7 @@ defmodule Transformers.Nb.Event do
   def name(event), do: event.slug
   def description(event), do: event.intro
   def calendar(event), do: event.calendar_id
-  def browser_url(event), do: "https://go.brandnewcongress.org/#{event.slug}"
+  def browser_url(event), do: "http://go.brandnewcongress.org/#{event.slug}"
   def start_date(event), do: event.start_time
   def end_date(event), do: event.end_time
 end

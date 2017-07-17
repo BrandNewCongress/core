@@ -14,9 +14,9 @@
       <%= if @brand == "jd" do %>
 
         <%= if @mobile do %>
-          <img src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+          <img class="mobile" src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
         <% else %>
-          <img src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+          <img class="desktop" src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
         <% end %>
 
       <% else %>
