@@ -44,7 +44,7 @@ class TopNav extends Component {
                 )}
               </div>}
           </div>,
-          idx < siteMap.length - 1 && <div> / </div>
+          idx < siteMap.length - 1 && <div style={{marginTop: '5px'}}> / </div>
         ])}
       </div>
     )
@@ -62,10 +62,11 @@ class SideNav extends Component {
     return (
       <div className="side-nav-container">
         <div className="section-header-container">
-          {this.current(siteMap)[0].label}
+          {this.current(siteMap)[0] && this.current(siteMap)[0].label}
         </div>
 
-        {this.current(siteMap)[0].children &&
+        {this.current(siteMap)[0] &&
+          this.current(siteMap)[0].children &&
           this.current(siteMap)[0].children.map(entry =>
             <a
               className={`side-nav-item ${entry.matches() ? 'selected' : ''}`}
@@ -86,14 +87,15 @@ class SideNav extends Component {
   current = entries => entries.filter(e => e.matches())
 }
 
-window.checkNavChange = () => {
+function doRender() {
   render(<TopNav {...window.opts} />, document.getElementById('sidebar'))
 
   const target = document.getElementById('side-nav')
   if (target) render(<SideNav {...window.opts} />, target)
 }
 
-window.checkNavChange()
+doRender()
+window.bus.on('page-change', () => doRender())
 
 // This needs to change when now. gets deployed to @
 const apexDomain = window.location.origin.replace('now.', '')

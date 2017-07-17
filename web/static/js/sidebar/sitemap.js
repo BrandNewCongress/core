@@ -32,13 +32,17 @@ const siteMap = [
     label: 'Action',
     path: '/act',
     subdomained: 'now',
-    matches: () => window.location.href.match('/act'),
+    matches: () =>
+      window.location.href.match('/act') ||
+      window.location.href.match('/form/submit-event'),
     children: [
       {
         label: 'Action Portal',
         path: '/act',
         subdomained: 'now',
-        matches: () => window.location.href.match('/act') && window.location.href.endsWith('act'),
+        matches: () =>
+          window.location.href.match('/act') &&
+          window.location.href.endsWith('act'),
         children: []
       },
       {

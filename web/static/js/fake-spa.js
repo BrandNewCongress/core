@@ -3,7 +3,7 @@ import patch from 'virtual-dom/patch'
 import superagent from 'superagent'
 import createHistory from 'history/createBrowserHistory'
 import parser from 'vdom-parser'
-import Emitter from 'emitter'
+const Emitter = require('emitter').EventEmitter
 
 const bus = new Emitter()
 window.bus = bus
@@ -22,8 +22,7 @@ function postFetch(text, path, skipHistory) {
   nodeCache = patch(nodeCache, patches)
   vdomCache = newVTree
 
-  if (!skipHistory)
-    hist.push(path)
+  if (!skipHistory) hist.push(path)
 
   bind()
 }

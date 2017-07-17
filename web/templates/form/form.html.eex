@@ -1,3 +1,7 @@
-<div style="height: calc(100vh - 75px);">
+<div class="nav-body-container" style="height: calc(100vh - 75px); padding: 30px 0px 30px 30px;">
+  <%= if (not @mobile) and (@slug == "submit-event") do %>
+    <%= render Core.LayoutView, "left-nav.html", assigns %>
+  <% end %>
+
   <%= raw(@share_html) %>
 </div>

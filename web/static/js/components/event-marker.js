@@ -34,7 +34,7 @@ export default class EventMarker extends Component {
 
     return (
       <CircleMarker
-        radius={10}
+        radius={8}
         center={[parseFloat(latitude), parseFloat(longitude)]}
       >
         <Popup style={{ overflow: 'scroll' }}>

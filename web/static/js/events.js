@@ -27,6 +27,4 @@ function getCookie(name) {
 }
 
 doRender()
-window.bus.on('page-change', () => {
-  doRender()
-})
+window.bus.on('page-change', () => doRender())

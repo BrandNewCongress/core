@@ -39,7 +39,7 @@
       <br/>
       <% use = @candidate || @closest_candidate %>
       <%= if use do %>
-        <p> Find and attend one of <%= use["title"] %>'s events below! <p> 
+        <p> Find and attend one of <%= use["title"] %>'s events below! <p>
       <% end %>
 
       <div id="events-app" data-show-prompt="false"></div>
@@ -51,10 +51,6 @@
 </div>
 
 <style>
-
-.nav-body-container {
-  display: flex;
-}
 
 .page-body {
   margin: 20px;

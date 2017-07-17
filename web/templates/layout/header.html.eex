@@ -10,7 +10,7 @@
     role="navigation"
     style="display: flex; justify-content: space-between; align-items: center; height: 75px;"
   >
-    <a href="https://brandnewcongress.org">
+    <a href="https://<%= homepage(@brand) %>">
       <%= if @brand == "jd" do %>
 
         <%= if @mobile do %>
@@ -30,7 +30,6 @@
       <% end %>
     </a>
 
-    <div style="width:100;"></div>
     <div id="sidebar">
       <a class="hamburger-menu" id="sidebar-toggle">
         <div class="bar"></div>
@@ -38,9 +37,11 @@
         <div class="bar"></div>
       </a>
     </div>
-  </nav>
 
-  <span class="logo"></span>
+    <a class="donate-link" target="_blank" href="https://<%= homepage(@brand) %>/donate">
+      Support <%= abbr(@brand) %>
+    </a>
+  </nav>
 </header>
 
 <%= if @mobile do %>
@@ -53,6 +54,16 @@
 
 header #drawer #inner-drawer {
   font-family: 'Roboto Condensed', sans-serif !important;
+}
+
+header .donate-link {
+  display: block;
+  color: white;
+  background-color: black;
+  text-decoration: none;
+  padding: 5px;
+  margin-right: 40px;
+  margin-left: 110px;
 }
 
 #drawer {
@@ -70,7 +81,6 @@ header #drawer #inner-drawer {
 
 #inner-drawer {
   margin-top: 60px;
-  margin-left: 30px;
 }
 
 .closing > #drawer { animation: slideout .3s 1; }
@@ -155,12 +165,12 @@ header #drawer #inner-drawer {
 }
 
 .top-level {
+  z-index: 1000;
   margin-left: 10px;
   margin-right: 10px;
   font-family: 'Roboto Condensed';
   font-weight: bold;
-  /*padding-left: 3px;
-  padding-right: 3px;*/
+  padding: 5px;
 }
 
 .top-level.hovering {
@@ -169,19 +179,16 @@ header #drawer #inner-drawer {
 }
 
 .panel {
-  padding-top: 10px;
   position: absolute;
   background-color: black;
   color: white;
-  padding: 10px;
+  padding: 15px;
   font-size: smaller;
   font-family: 'Roboto Slab', sans-serif;
   text-transform: capitalize;
   font-weight: normal;
-}
-
-.drop-down > div:nth-child(n+5) > .panel {
-  transform: translateX(-50%);
+  width: 160px;
+  margin-left: -5px;
 }
 
 .item {
@@ -189,10 +196,10 @@ header #drawer #inner-drawer {
 }
 
 .item:hover {
-  font-weight: bold;
+  border-bottom: .5px solid white;
 }
 
-.panel > .item:first-child {
+/*.panel > .item:first-child {
   border-top: none;
 }
 
@@ -204,5 +211,5 @@ header #drawer #inner-drawer {
   border-top: .5px solid white;
   border-bottom: .5px solid white;
 }
-
+*/
 </style>

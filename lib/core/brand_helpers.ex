@@ -11,6 +11,9 @@ defmodule Core.BrandHelpers do
   def copyright("bnc"), do: "Brand New Congress"
   def copyright("jd"), do: "Justice Democrats"
 
+  def abbr("bnc"), do: "BNC"
+  def abbr("jd"), do: "JD"
+
   def address("bnc"), do: "P. O. BOX 621264 CHARLOTTE, NC 28262"
   def address("jd"), do: "P. O. BOX 621264 CHARLOTTE, NC 28262"
 

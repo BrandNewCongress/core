@@ -8,6 +8,7 @@
   "dependencies": {
     "antd": "^2.12.0",
     "babel-preset-react": "^6.24.1",
+    "emitter": "0.0.5",
     "history": "^4.6.3",
     "leaflet": "^1.0.3",
     "phoenix": "file:deps/phoenix",
