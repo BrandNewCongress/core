@@ -28,11 +28,15 @@ function postFetch(text, path, skipHistory) {
 }
 
 function navigateTo(path, skipHistory) {
-  superagent.get(path).query({ empty: true }).end(function(err, res) {
-    if (window.checkNavChange) window.checkNavChange()
-    postFetch(res.text, path, skipHistory)
-    bus.emit('page-change')
-  })
+  if (path.indexOf('https://') > -1) {
+    window.location.href = path
+  } else {
+    superagent.get(path).query({ empty: true }).end(function(err, res) {
+      if (window.checkNavChange) window.checkNavChange()
+      postFetch(res.text, path, skipHistory)
+      bus.emit('page-change')
+    })
+  }
 }
 
 function bind() {

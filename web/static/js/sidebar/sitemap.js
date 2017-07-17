@@ -30,7 +30,8 @@ const siteMap = [
     path: '/act',
     matches: () =>
       window.location.href.match('/act') ||
-      window.location.href.match('/form/submit-event'),
+      window.location.href.match('/form/submit-event') ||
+      window.location.href.match('/form/teams'),
     children: [
       {
         label: 'Action Portal',
@@ -56,6 +57,18 @@ const siteMap = [
         label: 'Call Voters',
         path: '/act/call',
         matches: () => window.location.href.match('/act/call'),
+        children: []
+      },
+      {
+        label: 'Join a National Team',
+        path: '/form/teams',
+        matches: () => false,
+        children: []
+      },
+      {
+        label: 'Tell Us About Your District',
+        path: 'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com',
+        matches: () => false,
         children: []
       }
     ]
