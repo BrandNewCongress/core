@@ -5,6 +5,7 @@ defmodule Core.UpdateController do
   require Logger
 
   def cosmic(conn, params) do
-    json conn, %{"unnecessary" => "Ben implemented webhooks! No need to visit hit this link any more. If it's not updating, contact Ben. Thanks!"}
+    Cosmic.update()
+    json conn, %{"unnecessary" => "Ben implemented webhooks! No need to visit hit this link any more, but an update just happened just in case. If it's not updating, contact Ben. Thanks!"}
   end
 end
