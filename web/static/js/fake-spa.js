@@ -1,8 +1,14 @@
-var diff = require('virtual-dom/diff')
-var patch = require('virtual-dom/patch')
-var superagent = require('superagent')
+import diff from 'virtual-dom/diff'
+import patch from 'virtual-dom/patch'
+import superagent from 'superagent'
 import createHistory from 'history/createBrowserHistory'
-var parser = require('vdom-parser')
+import parser from 'vdom-parser'
+import Emitter from 'emitter'
+
+const bus = new Emitter()
+window.bus = bus
+
+window.onpopstate = () => bus.emit('page-change')
 
 var nodeCache = document.querySelector('main')
 var vdomCache = parser(nodeCache)
@@ -26,6 +32,7 @@ function navigateTo(path, skipHistory) {
   superagent.get(path).query({ empty: true }).end(function(err, res) {
     if (window.checkNavChange) window.checkNavChange()
     postFetch(res.text, path, skipHistory)
+    bus.emit('page-change')
   })
 }
 
