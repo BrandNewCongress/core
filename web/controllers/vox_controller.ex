@@ -5,7 +5,7 @@ defmodule Core.VoxController do
   import Core.BrandHelpers
 
   def get(conn, params) do
-    render conn, "vox.html", GlobalOpts.get(conn, params)
+    render conn, "vox.html", [title: "Call"] ++ GlobalOpts.get(conn, params)
   end
 
   def post(conn, params = %{"email" => email, "phone" => phone, "first" => first_name, "last" => last_name}) do
@@ -35,7 +35,7 @@ defmodule Core.VoxController do
       "Vox Alias: #{username}: #{date}"
     ])
 
-    render conn, "vox-submitted.html", [username: username, password: password] ++ GlobalOpts.get(conn, params)
+    render conn, "vox-submitted.html", [username: username, password: password, title: "Call"] ++ GlobalOpts.get(conn, params)
   end
 
   def get_logins(conn, %{"secret" => @secret}) do

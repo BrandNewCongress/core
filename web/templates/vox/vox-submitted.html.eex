@@ -7,4 +7,18 @@
     Username: <%= @username %> <br/>
     Password: <%= @password %> <br/>
   </p>
+
+  <p>
+    <a target="_blank" class="primary-button" href="https://portal.na4.livevox.com/BrandNewCampaign/AgentLogin"
+      style="width: 200px; padding: 20px; text-decoration: none;"
+    >
+      Login to our dialer, and get calling!
+    </a>
+  </p>
+
+  <p>
+    <hr style="color:#ff7a65;" size="4" color="#ff7a65" width="75%">
+    <p dir="ltr" style="text-align: center;">
+      <strong><span style="color: rgb(235, 107, 86); font-size: 16pt;">NOTE: Turn off your popup blocker to use the dialer</span></strong><br><span style="font-family: Roboto-Slab,sans-serif; color: rgb(86, 22, 120); background-color: transparent; vertical-align: baseline;">(click on an image to see the fullsize animation)</span></p><table style="margin: 0 auto;"><thead><tr><th colspan="2"><span style="font-size: 14pt;font-family: Roboto-Slab,sans-serif; color: rgb(86, 22, 120); background-color: transparent; vertical-align: baseline;">Change <em>before</em> you login</span></th><th colspan="2"><span style="font-size: 14pt;font-family: Roboto-Slab,sans-serif; color: rgb(86, 22, 120); background-color: transparent; vertical-align: baseline;">Change <em>while</em> you login</span></th></tr></thead><tbody><tr><td style="padding:10px;"><div style="width:200px; text-align:center;"><a href="https://cosmicjs.com/uploads/7bf85520-6a36-11e7-8e92-5f0a6431fba8-Safari%20Popup%20Blocker.gif" style="text-decoration:none;" target="_blank"><img src="https://cosmicjs.com/uploads/7bf85520-6a36-11e7-8e92-5f0a6431fba8-Safari%20Popup%20Blocker.gif" style="max-width: 200px; padding: 10px;" class="fr-fic fr-dii"><strong>Safari</strong></a></div></td><td style="padding:10px 30px 10px 10px;border-right:solid;color: rgb(235, 107, 86);"><div style="width:200px; text-align:center;"><a href="https://cosmicjs.com/uploads/743b6fc0-6a36-11e7-9554-0968c6aee140-Edge%20Popup%20Blocker.gif" style="text-decoration:none;" target="_blank"><img src="https://cosmicjs.com/uploads/743b6fc0-6a36-11e7-9554-0968c6aee140-Edge%20Popup%20Blocker.gif" style="width: 200px; padding: 10px;" class="fr-fic fr-dii"><strong>Edge</strong></a></div></td><td style="padding:10px;"><div style="width:200px; text-align:center;"><a href="https://cosmicjs.com/uploads/78143d20-6a36-11e7-8e92-5f0a6431fba8-Chrome%20Popup%20Blocker.gif" style="text-decoration:none;" target="_blank"><img src="https://cosmicjs.com/uploads/78143d20-6a36-11e7-8e92-5f0a6431fba8-Chrome%20Popup%20Blocker.gif" style="max-width: 200px; padding: 10px 10px 5px;" class="fr-fic fr-dii"><strong>Chrome</strong></a></div></td><td style="padding:10px;"><div style="width:200px; text-align:center;"><a href="https://cosmicjs.com/uploads/81ba54e0-6a36-11e7-8e92-5f0a6431fba8-Firefox%20Popup%20Blocker.gif" style="text-decoration:none;" target="_blank"><img src="https://cosmicjs.com/uploads/81ba54e0-6a36-11e7-8e92-5f0a6431fba8-Firefox%20Popup%20Blocker.gif" style="max-width: 200px; padding: 10px;" class="fr-fic fr-dii"><strong>Firefox</strong></a></div></td></tr></tbody></table><hr style="color:#ff7a65;" size="4" color="#ff7a65" width="75%"><p dir="ltr" style="text-align: center;"><strong><span style="color: rgb(235, 107, 86); font-size: 20pt;">4 Steps to Make Calls:</span></strong></p></div>
+  </p>
 </div>
