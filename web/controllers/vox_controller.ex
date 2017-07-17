@@ -5,13 +5,13 @@ defmodule Core.VoxController do
   import Core.BrandHelpers
 
   def get(conn, params) do
-    render conn, "vox.html", GlobalOpts.get(conn, params)
+    render conn, "vox.html", [title: "Call"] ++ GlobalOpts.get(conn, params)
   end
 
   def post(conn, params = %{"email" => email, "phone" => phone, "first" => first_name, "last" => last_name}) do
     global_opts = GlobalOpts.get(conn, params)
     brand = Keyword.get(global_opts, :brand)
-    date = "#{Timex.now("America/New_York") |> Timex.to_date}"
+    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
 
     %{"id" => id, "tags" => tags} = Nb.People.push(%{
       "email" => email, "phone" => phone,
@@ -35,7 +35,7 @@ defmodule Core.VoxController do
       "Vox Alias: #{username}: #{date}"
     ])
 
-    render conn, "vox-submitted.html", [username: username, password: password] ++ GlobalOpts.get(conn, params)
+    render conn, "vox-submitted.html", [username: username, password: password, title: "Call"] ++ GlobalOpts.get(conn, params)
   end
 
   def get_logins(conn, %{"secret" => @secret}) do

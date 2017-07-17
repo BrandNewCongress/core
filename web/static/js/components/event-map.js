@@ -1,84 +1,87 @@
 import React, { Component } from 'react'
 import { Map, TileLayer, CircleMarker, Popup } from 'react-leaflet'
-import moment from '../lib/mini-moment'
+import EventMarker from './event-marker'
+import GeoSuggest from 'react-geosuggest'
+import socket from '../socket'
 
 export default class EventMap extends Component {
-  render() {
-    const { center, zoom, events } = this.props
-
-    return (
-      <Map
-        viewport={{ center, zoom }}
-        onViewportChanged={this.props.onViewportChanged}
-      >
-        <TileLayer
-          attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
-          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-        />
-        {events.map(e => <EventMarker event={e} />)}
-      </Map>
-    )
+  state = {
+    events: [],
+    center: [38.805470223177466, -100.23925781250001],
+    zoom: 4
   }
-}
 
-class EventMarker extends Component {
+  channel = null
+  l = null
+
+  componentDidMount() {
+    this.channel = socket.channel('events')
+
+    this.channel
+      .join()
+      .receive('ok', msg => {
+        console.log(`Connected with ${JSON.stringify(msg)}`)
+        console.log(msg)
+
+        this.channel.push('ready', {})
+      })
+      .receive('error', msg => {
+        console.log(`Could not connect with ${JSON.stringify(msg)}`)
+        console.log(msg)
+      })
+
+    this.channel.on('event', ({ event }) =>
+      this.setState({
+        events: this.state.events.concat([event])
+      })
+    )
+
+    if (this.props.startingCoordinates || window.startingCoordinates) {
+      this.setState({
+        center: this.props.startingCoordinates || window.startingCoordinates,
+        zoom:
+          JSON.stringify([38.805470223177466, -100.23925781250001]) ==
+          JSON.stringify(window.startingCoordinates)
+            ? 4
+            : 7
+      })
+    }
+  }
+
+  onViewportChanged = ({ center, zoom }) => this.setState({ center, zoom })
+
   render() {
-    const {
-      venue,
-      intro,
-      startTime,
-      endTime,
-      url,
-      title,
-      timeZoneOffset
-    } = this.props.event
-
-    const offset = parseInt(timeZoneOffset.split(':')[0])
-
-    const start = moment(new Date(startTime), offset)
-    const end = moment(new Date(endTime), offset)
+    const { showDistrictSelector } = this.props
+    const { center, zoom, events } = this.state
 
     return (
-      <CircleMarker
-        radius={10}
-        center={[parseFloat(venue.address.lat), parseFloat(venue.address.lng)]}
-      >
-        <Popup style={{ overflow: 'scroll' }}>
-          <div className="event-item event">
-            <h5 className="time-info">
-              <div className="dateblock">
-                <span className="left" style="text-transform: uppercase">
-                  {start.dayOfWeek}
-                </span>
-                <span className="right">
-                  {`${start.month} ${start.dayOfMonth} ${start.humanTime} – ${end.humanTime}`}
-                </span>
-              </div>
-            </h5>
-            <h3>
-              <a target="_blank" href={url} className="event-title">
-                {title}
-              </a>
-            </h3>
-            <span className="label-icon" />
-            <p>{venue.name}</p>
-            <p dangerouslySetInnerHTML={{ __html: intro }}/>
-            <div>
-              <a
-                className="rsvp-link"
-                href="http://go.brandnewcongress.org/call_out_corruption_phone_bank_minneapolis_minneapolis_1117"
-                target="_blank"
-              >
-                DETAILS/RSVP
-              </a>
-              <span
-                className="time-info-dist"
-                style="float: right; padding-top: 10px"
-              />
+      <div>
+        {showDistrictSelector &&
+          <div className="district-selector">
+            <div className="district-selector-header">
+              <h2> Events Near You </h2>
             </div>
-          </div>
-        </Popup>
-      </CircleMarker>
+            <div className="district-selector-prompt">
+              <p>Type in your address, zip code, or congressional district</p>
+              <div className="input-container">
+                <input ref={ref => (this.locationInput = ref)} />
+                <a onClick={this.getDistrict}> Go </a>
+              </div>
+            </div>
+          </div>}
+
+        <Map
+          animate={true}
+          viewport={{ center, zoom }}
+          onViewportChanged={this.props.onViewportChanged}
+        >
+          <TileLayer
+            attribution="&copy; <a href=&quot;https://openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors"
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          />
+          {events.map(e => <EventMarker key={e.name} event={e} />)}
+        </Map>
+      </div>
     )
   }
 }

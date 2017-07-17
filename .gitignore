@@ -43,3 +43,7 @@ erl_crash.dump
 # secrets file as long as you replace its contents by environment
 # variables.
 # /config/prod.secret.exs
+
+# Caches for offline development!
+cosmic_cache
+event_cache

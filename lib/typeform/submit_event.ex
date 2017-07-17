@@ -5,52 +5,44 @@ defmodule Typeform.SubmitEvent do
   Takes a typeform post body from a webhook, creates the event in NB, and sends an email
   """
   def on_event_submit(%{"form_response" => %{"answers" => answers, "definition" => definition}}) do
-    questions =
-      definition["fields"]
-      |> Enum.map(&field_name/1)
-
-    responses =
-      answers
-      |> Enum.map(&get_answer/1)
-
+    questions = definition["fields"] |> Enum.map(&field_name/1)
+    responses = answers |> Enum.map(&get_answer/1)
     together = questions |> Enum.zip(responses) |> Enum.into(%{})
 
     ensure_host = Task.async(fn ->
       names = String.split(together["host_name"], " ")
       first_name = List.first(names)
+      last_name = List.last(names) || ""
 
-      last_name = if length(names) > 1 do
-        List.last(names)
-      else
-        ""
-      end
-
-      %{"id" => id} = Nb.People.push(%{
-        email: together["host_email"],
-        phone: together["host_phone"],
-        first_name: first_name,
-        last_name: last_name
-      })
+      %{"id" => id} = Nb.People.push(
+        %{email: together["host_email"], phone: together["host_phone"],
+          first_name: first_name, last_name: last_name})
 
       id
     end)
 
-    find_calendar = Task.async(fn ->
-      calendar_id = case Zip.closest_candidate(together["venue_zip"]) do
-        %{"metadata" => %{"calendar_id" => result}} -> result
-        _ -> 9
-      end
+    {calendar_id, time_zone_info} = Task.await(Task.async(fn ->
+      # First, geocode
+      {lat, lng} = Maps.geocode(together["venue_zip"])
 
-      calendar_id
-    end)
+      # Use geocode for calendar_id
+      calendar_id = Task.async(fn ->
+        case District.closest_candidate({lat, lng}) do
+          %{"metadata" => %{"calendar_id" => result}} -> result
+          _ -> 9
+        end
+      end)
 
-    find_time_zone = Task.async(fn ->
-      Zip.time_zone_of(together["venue_zip"])
-    end)
+      # Use geocode for time zone
+      time_zone_info = Task.async(fn ->
+        Maps.time_zone_of({lat, lng})
+      end)
+
+      {Task.await(calendar_id), Task.await(time_zone_info)}
+    end))
 
     host_id = Task.await(ensure_host)
-    calendar_id = Task.await(find_calendar)
-    [utc_offset, time_zone, zone_abbr] = Task.await(find_time_zone)
+    %{time_zone: time_zone} = time_zone_info
 
     # Calc tags
     type_tag = ["Event Type: #{together["event_type"]}"]
@@ -58,13 +50,12 @@ defmodule Typeform.SubmitEvent do
       true -> []
       false -> ["Event: Hide Address"]
     end
+
     contact_tag = case together["should_contact"] do
       true -> ["Event: Should Contact Host"]
-      false -> []
+      _ -> []
     end
     tags = type_tag ++ sharing_tag ++ contact_tag
-
-    time_zone_info = %{utc_offset: utc_offset, time_zone: time_zone, zone_abbr: zone_abbr}
 
     event = %{
       name: together["event_name"],
@@ -137,7 +128,7 @@ And you can invite others to join you at the event with this link:
   defp field_name(%{"title" => "What state is it in?"}), do: "venue_state"
   defp field_name(%{"title" => "Can we share the address of the event on our map?"}), do: "sharing_permission"
   defp field_name(%{"title" => "What's the zip code?"}), do: "venue_zip"
-  defp field_name(%{"title" => "Do you want someone from the BNC/JD Events Team to contact you about your" <> rest}), do: "should_contact"
+  defp field_name(%{"title" => "Do you want someone from the BNC/JD Events Team to contact you about your" <> _rest}), do: "should_contact"
   defp field_name(%{"title" => "What type of event are you hosting?"}), do: "event_type"
 
   defp get_answer(%{"text" => val}), do: val
@@ -148,7 +139,8 @@ And you can invite others to join you at the event with this link:
   defp get_answer(%{"number" => val}), do: val
 
   def to_iso(time, date, time_zone_info) do
-    %{utc_offset: utc_offset, time_zone: time_zone, zone_abbr: zone_abbr} = time_zone_info
+    %{utc_offset: utc_offset, time_zone: time_zone,
+      zone_abbr: zone_abbr} = time_zone_info
 
     [hours, minutes] =
       time
@@ -161,10 +153,10 @@ And you can invite others to join you at the event with this link:
       year: easy_int(year), month: easy_int(month), day: easy_int(day),
       time_zone: time_zone, hour: easy_int(hours),
       minute: easy_int(minutes), second: 0, std_offset: 0,
-      zone_abbr: zone_abbr, utc_offset: utc_offset
+      utc_offset: utc_offset, zone_abbr: zone_abbr
     }
 
-    dt
+    DateTime.to_iso8601(dt)
   end
 
   defp military_time([hours_minutes, "AM"]) do

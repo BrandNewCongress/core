@@ -9,17 +9,21 @@ defmodule Nb.Events do
   end
 
   def stream_all() do
-    stream("sites/brandnewcongress/pages/events", [query: %{
-      starting: "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
-    }])
+    "sites/brandnewcongress/pages/events"
+    |> stream([query: %{starting: "#{"America/New_York" |> Timex.now() |> Timex.to_date}"}])
+    |> Enum.filter(&(is_published(&1)))
   end
 
   def stream_for(%{"candidate" => slug}) do
     %{"metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(slug)
 
-    stream("sites/brandnewcongress/pages/events", [query: %{
-      starting: "#{"America/New_York" |> Timex.now() |> Timex.to_date}",
-      calendar_id: calendar_id
-    }])
+    "sites/brandnewcongress/pages/events"
+    |> stream([query:
+        %{starting: "#{"America/New_York" |> Timex.now() |> Timex.to_date}",
+          calendar_id: calendar_id}])
+    |> Enum.filter(&(is_published(&1)))
   end
+
+  defp is_published(%{"venue" => %{"address" => %{"address1" => _something}}}), do: true
+  defp is_published(_else), do: false
 end

@@ -1,42 +1,138 @@
-<div
-  id="work-app"
-  style="display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 10px;"
-> </div>
+<%= render Core.LayoutView, "h1.html", [brand: @brand, text: "What You Can Do"] %>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
-<script defer="defer" src="<%= static_path(@conn, "/js/act.js") %>"></script>
-<script>
-  window.initialState = {
-    candidate: JSON.parse('<%= raw(@candidate) %>')
-  }
+<div class="nav-body-container">
+  <%= if (not @mobile) do %>
+    <%= render Core.LayoutView, "left-nav.html", assigns %>
+  <% end %>
 
-  window.callable = JSON.parse('<%= raw(@callable) %>')
-  window.initialSelected = '<%= @initial_selected %>'
-</script>
+  <div class="page-body">
+    <%= render Core.ActView, "district-picker.html", assigns %>
+
+    <%= if @candidate do %>
+      <%= render Core.ActView, "candidate-blurb.html", assigns %>
+    <% end %>
+
+    <%= if @closest_candidate do %>
+      <%= render Core.ActView, "candidate-blurb.html", assigns %>
+    <% end %>
+
+    <%= if @mobile do %>
+      <div class="act-option-group">
+        <div class="option-group-header"> Events </div>
+        <div class="option-container">
+          <%= for item <- @event_action_options do %>
+            <%= render Core.ActView, "link-square.html", [item: item] %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="act-option-group">
+        <div class="option-group-header"> Help from Home </div>
+        <div class="option-container">
+          <%= for item <- @home_action_options do %>
+            <%= render Core.ActView, "link-square.html", [item: item] %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+
+      <br/>
+      <% use = @candidate || @closest_candidate %>
+      <%= if use do %>
+        <p> Find and attend one of <%= use["title"] %>'s events below! <p>
+      <% end %>
+
+      <div id="events-app" data-show-prompt="false"></div>
+      <script defer="defer" src="<%= static_path(@conn, "/js/events.js") %>"></script>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
+
+    <% end %>
+  </div>
+</div>
 
 <style>
 
-#work-app {
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.page-body {
+  margin: 20px;
 }
 
-#explanation {
-  background-color: #393939;
-  color: white;
-  border-radius: 2px;
+.page-body > .link-container > a {
+  width: 200px;
   padding: 10px;
+  text-transform: none;
+  text-decoration: none;
+  text-align: center;
 }
 
-#strategy-explanation {
-  background-color: rgba(30,30,30,0.8);
+.option-group-header {
+  font-size: larger;
+  border-bottom: 1px solid black;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.option-container {
+  display: flex;
+  flex-wrap: wrap;
+  <%= if @mobile do %>
+    justify-content: space-around;
+  <% end %>
+}
+
+.container {
+  padding: 30px;
+}
+
+.page-body {
+  width: 100%;
+}
+
+#events-app {
+  height: 600px;
+  width: 100%;
 }
 
 .leaflet-container {
-  min-height: 70vh;
   width: 100%;
+  height: 600px;
+}
+
+.events-app {
+  width: 100%;
+  height: 600px;
+}
+
+.district-selector {
+  position: absolute;
+  z-index: 500;
+  background-color: #ebebeb;
+  right: 0;
+  width: 300px;
+}
+
+.district-selector-header > h2 {
+  background-color: var(--bnc-purple);
+  color: white;
+  margin: 0;
+  text-align: center;
+  padding: 5px;
+}
+
+.district-selector-prompt {
+  padding: 5px;
+}
+
+.district-selector-prompt a {
+  display: block;
+}
+
+.district-selector-prompt input {
+  width: 100%;
+}
+
+.district-selector-prompt .input-container {
+  display: flex;
+  justify-content: space-between;
 }
 
 </style>

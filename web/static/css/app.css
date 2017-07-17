@@ -26,6 +26,14 @@ html, body {
   animation: loading 1s ease-in-out infinite;
 }
 
+.nav-body-container {
+  display: flex;
+}
+
+.container {
+  min-height: calc(100vh - 135px);
+}
+
 .loading-bar:nth-child(1) {
   animation-delay: 0;
 }

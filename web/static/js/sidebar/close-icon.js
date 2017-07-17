@@ -24,6 +24,6 @@ export default () =>
           />
         </g>
       </g>
-      <circle class="oval" stroke="#999" cx="24.7258128" cy="24" r="24" />
+      <circle className="oval" stroke="#999" cx="24.7258128" cy="24" r="24" />
     </g>
   </svg>

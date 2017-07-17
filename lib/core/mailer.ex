@@ -42,7 +42,7 @@ defmodule Core.Mailer do
     } = event
 
     event_type = Enum.find tags, "Unknown", fn
-      "Event Type:" <> rest -> true
+      "Event Type:" <> _rest -> true
       _ -> false
     end
 

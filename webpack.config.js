@@ -2,11 +2,13 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
-module.exports = {
+const config = {
   entry: {
     act: './web/static/js/act.js',
     entry: './web/static/js/entry.js',
-    sidebar: './web/static/js/sidebar.js',
+    events: './web/static/js/events.js',
+    'nav.desktop': './web/static/js/nav.desktop.js',
+    'nav.mobile': './web/static/js/nav.mobile.js',
     app: './web/static/js/app.js',
     css: [
       './web/static/css/app.css',
@@ -58,7 +60,7 @@ module.exports = {
     alias: {
       phoenix_html:
         __dirname + '/deps/phoenix_html/web/static/js/phoenix_html.js',
-      phoenix: __dirname + '/deps/phoenix/web/static/js/phoenix.js',
+      phoenix: __dirname + '/deps/phoenix/web/static/js/phoenix.js'
       // react: 'react-lite',
       // 'react-dom': 'react-lite'
     }
@@ -69,3 +71,10 @@ module.exports = {
     new CopyWebpackPlugin([{ from: './web/static/assets' }])
   ]
 }
+
+if (process.env.NODE_ENV == 'production') {
+  config.resolve.alias['react'] = 'react-lite'
+  config.resolve.alias['react-dom'] = 'react-lite'
+}
+
+module.exports = config

@@ -29,9 +29,13 @@ defmodule Core.Router do
     get "/info/:info", InfoController, :get
 
     get "/act", ActController, :get
-    get "/act/:candidate", ActController, :get_candidate
-    get "/act/call/:candidate", ActController, :get_call_candidate
-    get "/act/calling-html/:candidate", ActController, :candidate_calling_html
+    post "/act", ActController, :post # used for setting the district
+
+    get "/act/call", ActController, :get_call
+    get "/act/call/:candidate", ActController, :get_candidate_call
+    get "/act/:candidate", ActController, :legacy_redirect
+
+    get "/events", EventsController, :get
 
     get "/call", VoxController, :get
     get "/call/logins", VoxController, :get_logins

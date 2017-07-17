@@ -17,7 +17,8 @@ defmodule Core.FormController do
 
   def render_form(conn, params, %{"title" => title, "metadata" =>
       %{"jd_share_html" => jd_share_html,
-        "bnc_share_html" => bnc_share_html}}) do
+        "bnc_share_html" => bnc_share_html},
+        "slug" => slug}) do
 
     global_opts = GlobalOpts.get(conn, params)
     brand = Keyword.get(global_opts, :brand)
@@ -29,7 +30,8 @@ defmodule Core.FormController do
     end
 
     if Enum.member?(brands, brand) do
-      render conn, "form.html", [share_html: share_html, title: title] ++ global_opts
+      render conn, "form.html",
+        [share_html: share_html, title: title, slug: slug] ++ global_opts
     else
       redirect_home(conn, params)
     end

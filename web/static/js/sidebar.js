@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { render } from 'react-dom'
 import CloseIcon from './sidebar/close-icon'
 import siteMap from './sidebar/sitemap'
+import hrefOfEntry from './lib/href-of-entry'
 
 class Sidebar extends Component {
   state = {
@@ -19,15 +20,17 @@ class Sidebar extends Component {
   renderOpen() {
     const { open } = this.state
 
+    const ordered = order(siteMap)
+
     return (
       <div className={open ? 'opening' : ''}>
         <div id="overlay" onClick={this.close} />
         <div id="drawer">
-          <a onClick={this.close} >
+          <a onClick={this.close}>
             <CloseIcon />
           </a>
           <div id="inner-drawer">
-            {siteMap.map(this.renderEntry)}
+            {ordered.map(this.renderEntry)}
           </div>
         </div>
       </div>
@@ -82,12 +85,14 @@ class Sidebar extends Component {
 
 render(<Sidebar {...window.opts} />, document.getElementById('sidebar'))
 
-// This needs to change when now. gets deployed to @
-const apexDomain = window.location.origin.replace('now.', '')
-function hrefOfEntry(entry) {
-  if (entry.children === undefined || entry.children.length === 0) {
-    return entry.subdomained ? entry.path : apexDomain + entry.path
-  } else {
-    return null
-  }
+function order(siteMap) {
+  const first = siteMap.filter(({ path }) =>
+    window.location.pathname.match(path) && path !== '/'
+  )
+
+  const others = siteMap.filter(
+    ({ path }) => !window.location.pathname.match(path) || path === '/'
+  )
+
+  return first.concat(others)
 }

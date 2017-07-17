@@ -24,7 +24,7 @@
       </div>
       <%= form_tag("/petition/#{@slug}", method: :post) %>
         <div class="petition-container">
-          <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
+          <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
           <div>
             <label>Name</label>
             <input class="text" type="text" name="name" required="required"/>

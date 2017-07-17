@@ -1,0 +1,47 @@
+<div id="events-app"></div>
+<script defer="defer" src="<%= static_path(@conn, "/js/events.js") %>"></script>
+<script>
+  window.startingCoordinates = <%= @coordinates %>
+</script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
+
+<style>
+
+.leaflet-container {
+  height: 80vh;
+}
+
+.district-selector {
+  position: absolute;
+  z-index: 500;
+  background-color: #ebebeb;
+  right: 0;
+  width: 300px;
+}
+
+.district-selector-header > h2 {
+  background-color: var(--bnc-purple);
+  color: white;
+  margin: 0;
+  text-align: center;
+  padding: 5px;
+}
+
+.district-selector-prompt {
+  padding: 5px;
+}
+
+.district-selector-prompt a {
+  display: block;
+}
+
+.district-selector-prompt input {
+  width: 100%;
+}
+
+.district-selector-prompt .input-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+</style>

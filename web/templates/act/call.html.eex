@@ -1,0 +1,139 @@
+<%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Call Voters"] %>
+
+<div class="nav-body-container">
+  <%= if (not @mobile) do %>
+    <%= render Core.LayoutView, "left-nav.html", assigns %>
+  <% end %>
+
+  <div class="page-body">
+    <%= if @on_hours do %>
+      <%= if @candidate["slug"] in @callable_slugs do %>
+        <div style="margin-top: 10px; margin-bottom: 10px; text-align: left">
+          <%= raw(@candidate_calling_page) %>
+        </div>
+
+        <div class="link-container" style="display: flex; flex-direction: column; align-items: center;">
+          <label> First, </label>
+          <a target="_blank" class="primary-button"
+            href="https://docs.google.com/document/d/1AKs90WQvTLzA9-fzt7RkR_V1Af8p5-xXgDT2JenOw5k/edit?usp=sharing"
+          >
+            Read the guide on how to make calls for BNC
+          </a>
+
+          <label> Second, </label>
+          <a target="_blank" class="primary-button" href="<%= @calling_script_link %>">
+            Read the calling script
+          </a>
+
+          <label> Third, </label>
+          <a target="_blank" class="primary-button" href="https://now.brandnewcongress.org/call">
+            Claim your login
+          </a>
+
+          <label> Fourth, </label>
+          <a target="_blank" class="primary-button" href="https://portal.na4.livevox.com/BrandNewCampaign/AgentLogin">
+            Login to our dialer, and get calling!
+          </a>
+        </div>
+
+        <div style="text-align: left">
+          <h3> Calling hours </h3>
+            <p>
+              We make calls from 5PM - 9PM on weekdays and 10AM - 9PM on
+              weekends,
+              so check back anytime you want to make calls.
+              <br />
+              However, your login information will change each day, so you'll
+              need to reclaim it.
+            </p>
+          <h3> Questions? </h3>
+            <p>
+              Please email
+              <a href="mailto:dialer@brandnewcongress.org" target="-blank">
+                dialer@brandnewcongress.org
+              </a>.
+              We'll get back to you as soon as we can.
+            </p>
+        </div>
+
+      <% else %>
+        <%= if @candidate do %>
+          <p>
+            We've made all of our calls for <%= @candidate["title"] %> for
+            today! <br />
+            <br />
+          </p>
+        <% else %>
+
+          <p>
+            Sorry, we don't have a candidate in your district yet. <br />
+            <br />
+          </p>
+        <% end %>
+
+        <p> Please make calls for one of our other candidates: <br /> </p>
+        <ul>
+          <%= for cand <- @callable_candidates do %>
+            <li>
+              <p> <a href="<%= "https://now.#{homepage(@brand)}/act/call/#{cand.slug}" %>" target="_blank">
+                <%= cand.name %>
+              </a> </p>
+            </li>
+          <% end %>
+        </ul>
+      <% end %>
+    <% else %>
+
+      <p>
+        At the moment, we're making calls from 5PM - 9PM on weekdays and
+        10AM - 9PM on weekends.
+        <br/>
+        Since we're not calling right now, please fill out
+        <a href="https://now.brandnewcongress.org/form/call-from-home" target="_blank">
+          this form
+        </a>
+        and we'll get you set up soon.
+      </p>
+
+    <% end %>
+  </div>
+</div>
+
+<style>
+
+.nav-body-container {
+  display: flex;
+}
+
+.page-body {
+  margin: 20px;
+}
+
+.page-body > .link-container > a {
+  width: 200px;
+  padding: 10px;
+  text-transform: none;
+  text-decoration: none;
+  text-align: center;
+}
+
+.option-group-header {
+  font-size: larger;
+  border-bottom: 1px solid black;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.option-container {
+  display: flex;
+  flex-wrap: wrap;
+  <%= if @mobile do %>
+    justify-content: space-around;
+  <% end %>
+}
+
+.container {
+  padding: 30px;
+}
+
+</style>

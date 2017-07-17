@@ -1,0 +1,222 @@
+<%
+  background_color = case @brand do
+    "bnc" -> "none"
+    "jd" -> "#5B919F"
+  end
+%>
+
+<header class="header" style="background-color: <%= background_color %>">
+  <nav
+    role="navigation"
+    style="display: flex; justify-content: space-between; align-items: center; height: 75px;"
+  >
+    <a href="https://<%= homepage(@brand) %>">
+      <%= if @brand == "jd" do %>
+
+        <%= if @mobile do %>
+          <img class="mobile" src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+        <% else %>
+          <img class="desktop" src="<%= static_path(@conn, "/images/horizontal-logo-jd.png")%>" />
+        <% end %>
+
+      <% else %>
+
+        <%= if @mobile do %>
+          <img class="mobile" src="<%= static_path(@conn, "/images/horizontal-logo-smaller-bnc.png")%>" />
+        <% else %>
+          <img class="desktop" src="<%= static_path(@conn, "/images/horizontal-logo-bnc.png")%>" />
+        <% end %>
+
+      <% end %>
+    </a>
+
+    <div id="sidebar">
+      <a class="hamburger-menu" id="sidebar-toggle">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+      </a>
+    </div>
+
+    <%= if (not @mobile) do %>
+      <a class="donate-link" target="_blank" href="https://<%= homepage(@brand) %>/donate">
+        Support <%= abbr(@brand) %>
+      </a>
+    <% end %>
+  </nav>
+</header>
+
+<%= if @mobile do %>
+  <script defer="defer" src="<%= static_path(@conn, "/js/nav.mobile.js") %>"></script>
+<% else %>
+  <script defer="defer" src="<%= static_path(@conn, "/js/nav.desktop.js") %>"></script>
+<% end %>
+
+<style>
+
+header #drawer #inner-drawer {
+  font-family: 'Roboto Condensed', sans-serif !important;
+  margin-left: 30px;
+}
+
+<%= if @mobile do %>
+  .container { height: auto; }
+<% end %>
+
+header .donate-link {
+  display: block;
+  color: white;
+  background-color: black;
+  text-decoration: none;
+  padding: 5px;
+  margin-right: 40px;
+  margin-left: 110px;
+}
+
+#drawer {
+  min-width: 250px;
+  max-width: 500px;
+  z-index: 100;
+  position: fixed;
+  right: 0;
+  top: 0;
+  left: auto;
+  height: 100vh;
+  overflow-y: scroll;
+  background-color: black;
+}
+
+#inner-drawer {
+  margin-top: 60px;
+}
+
+.closing > #drawer { animation: slideout .3s 1; }
+.opening > #drawer { animation: slidein .3s 1; }
+
+@keyframes slidein {
+  from { transform: translateX(100%) }
+  to { transform: translateX(0%) }
+}
+
+@keyframes slideout {
+  from { transform: translateX(0%) }
+  to { transform: translateX(100%) }
+}
+
+#overlay {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  z-index: 90;
+  background-color: black;
+  opacity: .5;
+}
+
+.closing > #overlay { animation: transparenten .3s 1; }
+.opening > #overlay { animation: opaquen .3s 1; }
+
+@keyframes opaquen {
+  from { opacity: 0 }
+  from { opacity: .5 }
+}
+
+@keyframes transparenten {
+  from { opacity: .5 }
+  from { opacity: 0 }
+}
+
+.nav-section,
+.nav-element {
+  display: block;
+  text-decoration: none;
+}
+
+.nav-section { margin-top: 30px; }
+
+.nav-section-header {
+  color: white;
+  font-size: 25px;
+}
+
+.children-container {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.nav-element {
+  text-transform: capitalize;
+  color: rgb(204, 204, 204);
+  margin-top: 15px;
+  margin-bottom: 15px;
+  font-size: 15px;
+  letter-spacing: 1px;
+}
+
+#drawer svg {
+  float: right;
+  height: 40px;
+  margin: 20px;
+  stroke-width: 3;
+}
+
+#drawer a {
+  cursor: pointer;
+}
+
+.drop-down {
+  display: flex;
+  cursor: pointer;
+  font-size: 22px;
+}
+
+.top-level {
+  z-index: 1000;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-family: 'Roboto Condensed';
+  font-weight: bold;
+  padding: 5px;
+}
+
+.top-level.hovering {
+  color: white;
+  background-color: black;
+}
+
+.panel {
+  position: absolute;
+  background-color: black;
+  color: white;
+  padding: 15px;
+  font-size: smaller;
+  font-family: 'Roboto Slab', sans-serif;
+  text-transform: capitalize;
+  font-weight: normal;
+  width: 160px;
+  margin-left: -5px;
+}
+
+.item {
+  padding: 3px;
+}
+
+.item:hover {
+  border-bottom: .5px solid white;
+}
+
+/*.panel > .item:first-child {
+  border-top: none;
+}
+
+.panel > .item:last-child {
+  border-bottom: none;
+}
+
+.panel > .item {
+  border-top: .5px solid white;
+  border-bottom: .5px solid white;
+}
+*/
+</style>

@@ -1,35 +1,76 @@
 const siteMap = [
   {
     label: 'Join',
-    path: '/',
+    path: 'HOSTNAME',
     subdomained: false,
-    children: []
+    children: [],
+    matches: () => false
   },
+
   {
     label: 'Candidates',
-    path: '/candidates',
-    subdomained: false,
+    path: 'HOSTNAME/candidates',
+    matches: () => window.location.href.match('/candidates'),
     children: [
       {
         label: 'Candidates',
-        path: '/candidates',
-        subdomained: false,
+        path: 'HOSTNAME/candidates',
         children: []
       },
       {
         label: 'Nominate',
-        path: '/nominate',
-        subdomained: false,
+        path: 'HOSTNAME/nominate',
         children: []
       }
     ]
   },
+
   {
     label: 'Action',
     path: '/act',
-    subdomained: 'now',
+    matches: () =>
+      window.location.href.match('/act') ||
+      window.location.href.match('/form/submit-event') ||
+      window.location.href.match('/form/teams'),
     children: [
-      // TODO
+      {
+        label: 'Action Portal',
+        path: '/act',
+        matches: () =>
+          window.location.href.match('/act') &&
+          window.location.href.endsWith('act'),
+        children: []
+      },
+      {
+        label: 'Attend an Event',
+        path: 'events.HOSTNAME/',
+        matches: () => false,
+        children: []
+      },
+      {
+        label: 'Host an Event',
+        path: '/form/submit-event',
+        matches: () => window.location.href.match('/form/submit-event'),
+        children: []
+      },
+      {
+        label: 'Call Voters',
+        path: '/act/call',
+        matches: () => window.location.href.match('/act/call'),
+        children: []
+      },
+      {
+        label: 'Join a National Team',
+        path: '/form/teams',
+        matches: () => false,
+        children: []
+      },
+      {
+        label: 'Tell Us About Your District',
+        path: 'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com',
+        matches: () => false,
+        children: []
+      }
     ]
   },
   {
@@ -46,7 +87,8 @@ const siteMap = [
         path: '/platform',
         children: []
       }
-    ]
+    ],
+    matches: () => window.location.href.match('/plan')
   }
 ]
 

@@ -1,7 +1,5 @@
 defmodule Core.UpdateController do
   use Core.Web, :controller
-  @secret Application.get_env(:core, :update_secret)
-
   require Logger
 
   def cosmic(conn, params) do

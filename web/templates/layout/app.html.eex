@@ -23,7 +23,10 @@
   </head>
 
   <body class="<%= @brand %>">
-    <%= render Core.LayoutView, "header.#{@brand}.html", [conn: @conn, mobile: @mobile, header_text: assigns[:header_text]] %>
+    <%= render Core.LayoutView, "header.html",
+          [conn: @conn, mobile: @mobile, header_text: assigns[:header_text],
+           brand: @brand] %>
+
     <div class="container">
       <main role="main">
         <%= render @view_module, @view_template, assigns %>

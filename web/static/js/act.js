@@ -9,11 +9,6 @@ import EventMap from './components/event-map'
 import socket from './socket'
 import 'phoenix_html'
 
-const print = s => {
-  console.log(s)
-  return s
-}
-
 class Act extends Component {
   state = {
     channel: null,

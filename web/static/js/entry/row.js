@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
+import Input from 'antd/lib/input'
+import Select from 'antd/lib/select'
+import GeoSuggest from 'react-geosuggest'
+import Button from 'antd/lib/button'
+import Switch from 'antd/lib/switch'
 import tv4 from 'tv4'
 
-const print = s => {
-  console.log(s)
-  return s
-}
+const { Option } = Select
 
 const schema = {
   required: [
-    'emailOrPhone',
+    'id_type',
     'identifier',
     'result',
     'supportScore',
@@ -25,10 +27,7 @@ const schema = {
     },
     supportScore: 'number',
     volunteer: 'boolean',
-    emailOrPhone: {
-      type: 'string',
-      enum: ['email', 'phone']
-    },
+    id_type: 'string',
     identifier: 'string',
     phone: 'string',
     issue: 'string',
@@ -53,32 +52,33 @@ const validate = entry => tv4.validate(entry, schema)
 
 export default class Row extends Component {
   state = {
-    emailOrPhone: undefined,
+    id_type: undefined,
     identifier: undefined,
     result: undefined,
     supportScore: undefined,
     volunteer: undefined,
     issue: undefined,
-    status: 'Press Enter'
+    address: undefined,
+    status: 'Go',
   }
 
-  mutate = attr => ev => this.setState({ [attr]: ev.target.value })
-  determineIdType = ev =>
+  mutate = attr => elOrVal => {
     this.setState({
-      emailOrPhone: print(this.state.identifier).match('@')
-        ? 'email'
-        : this.state.identifier.match(/[a-zA-Z]/) ? false : 'phone'
+      status: 'Go',
+      [attr]: elOrVal.target === undefined ? elOrVal : elOrVal.target.value
     })
+  }
 
   enterSubmit = ev => ev.keyCode == 13 && this.submit()
   submit = () => {
     const {
-      emailOrPhone,
+      id_type,
       identifier,
       result,
       supportScore,
       volunteer,
-      issue
+      issue,
+      address
     } = this.state
 
     let deceased = false
@@ -92,11 +92,11 @@ export default class Row extends Component {
       normalizedResult = 'answered'
       language = 'es'
     } else {
-      normalizedResult = 'result'
+      normalizedResult = result
     }
 
     const payload = {
-      emailOrPhone,
+      id_type,
       identifier,
       supportScore,
       volunteer,
@@ -104,22 +104,36 @@ export default class Row extends Component {
       result: normalizedResult,
       deceased,
       language,
+      address,
       campaign: this.props.campaign,
       contactMethod: this.props.contactMethod
     }
 
     const errors = validate(payload)
-    console.log(errors)
 
-    console.log(payload)
+    this.props.channel.push('entry', {
+      n: this.props.counter,
+      entry: payload
+    })
 
-    // TODO - do submit
+    this.props.channel.on('update', ({ n, message }) => {
+      if (n == this.props.counter) {
+        this.setState({ status: message })
+      }
+    })
+
+    this.props.channel.on('done', ({ n }) => {
+      if (n == this.props.counter) {
+        this.setState({ status: 'Done' })
+      }
+    })
+
     this.props.addRow()
   }
 
   render() {
     const {
-      emailOrPhone,
+      id_type,
       identifier,
       result,
       supportScore,
@@ -131,65 +145,83 @@ export default class Row extends Component {
     return (
       <div className="row" onKeyPress={this.enterSubmit}>
         <div className="field">
-          <label for="identifier">
-            {emailOrPhone === undefined
-              ? 'Email or Phone'
-              : emailOrPhone === false
-                ? 'Invalid Identifier – Neither Email nor Phone'
-                : emailOrPhone === 'email' ? 'Email' : 'Phone'}
-          </label>
-          <input
-            name="identifier"
-            type="text"
+          <label>Identifier</label>
+
+          <Input
+            addonBefore={
+              <Select
+                value={id_type}
+                style={{ width: 70 }}
+                onSelect={this.mutate('id_type')}
+              >
+                <Option value="id"> NationBuilder </Option>
+                <Option value="email"> Email </Option>
+                <Option value="new"> New </Option>
+              </Select>
+            }
             value={identifier}
+            disabled={id_type == 'new'}
             onChange={this.mutate('identifier')}
-            onBlur={this.determineIdType}
           />
         </div>
 
         <div className="field">
-          <label for="result"> Result </label>
-          <select name="result" value={result} onChange={this.mutate('result')}>
+          <label> Result </label>
+          <Select name="result" value={result} onChange={this.mutate('result')}>
             {schema.properties.result.enum
               .concat(['deceased', 'language'])
-              .map(opt => <option value={opt}> {resultLabels[opt]} </option>)}
-          </select>
+              .map(opt =>
+                <Option value={opt} key={opt}>
+                  {resultLabels[opt]}
+                </Option>
+              )}
+          </Select>
         </div>
 
         <div className="field">
-          <label for="supportScore"> Support Score </label>
-          <input
-            name="supportScore"
-            type="number"
-            onChange={this.mutate('supportScore')}
-          />
+          <label> Support Score </label>
+          <Select name="supportScore" onChange={this.mutate('supportScore')}>
+            <Option value="1">1</Option>
+            <Option value="2">2</Option>
+            <Option value="3">3</Option>
+            <Option value="4">4</Option>
+            <Option value="5">5</Option>
+          </Select>
         </div>
 
         <div className="field">
-          <label for="volunteer"> Volunteer </label>{' '}
-          <span style={{ fontSize: 'small' }}> (toggle with spacebar) </span>
-          <input
+          <label> Volunteer </label>{' '}
+          <Switch
+            style={{ width: 50 }}
             name="volunteer"
-            type="checkbox"
             onChange={this.mutate('volunteer')}
           />
         </div>
 
         <div className="field">
-          <label for="issue"> Primary Issue </label>
-          <input name="issue" onChange={this.mutate('issue')} />
+          <label> Primary Issue </label>
+          <Input name="issue" onChange={this.mutate('issue')} />
         </div>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            marginLeft: '20px'
-          }}
+        <div className="field">
+          <label> Address </label>
+          <GeoSuggest onSuggestSelect={this.mutate('address')}  />
+        </div>
+
+        <div className="field">
+          <label> Phone </label>
+          <Input name="phone" />
+        </div>
+
+        <Button
+          style={{ marginTop: 15, marginLeft: 15 }}
+          type="primary"
+          disabled={status == 'Done'}
+          onClick={this.submit}
+          loading={status != 'Go' && status != 'Done'}
         >
           {status}
-        </div>
+        </Button>
       </div>
     )
   }

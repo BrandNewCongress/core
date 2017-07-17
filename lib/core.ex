@@ -7,7 +7,8 @@ defmodule Core do
     import Supervisor.Spec
 
     # Fill initial cache
-    Cosmic.fetch_all
+    Cosmic.fetch_all()
+    Core.Jobs.EventCache.fetch_or_load()
 
     # Define workers and child supervisors to be supervised
     children = [
@@ -17,7 +18,6 @@ defmodule Core do
 
       # Start the endpoint when the application starts
       supervisor(Core.Endpoint, []),
-      # Start your own worker by calling: Core.Worker.start_link(arg1, arg2, arg3)
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
