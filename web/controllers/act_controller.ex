@@ -60,6 +60,21 @@ defmodule Core.ActController do
        home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
   end
 
+  def legacy_redirect(conn, params = %{"candidate" => candidate, "selected" => selected}) do
+    %{"metadata" => %{"district" => district}} = Cosmic.get(candidate)
+    conn
+    |> put_resp_cookie("district", district, [http_only: false])
+    |> redirect(to: "/act/call")
+  end
+
+  def legacy_redirect(conn, params = %{"candidate" => candidate}) do
+    %{"metadata" => %{"district" => district}} = Cosmic.get(candidate)
+
+    conn
+    |> put_resp_cookie("district", district, [http_only: false])
+    |> redirect(to: "/act")
+  end
+
   defp event_action_options(_conn, _params) do
     [%{icon: "event.html", label: "Attend an Event", href: "https://events.brandnewcongress.org"},
      %{icon: "host.html", label: "Host an Event", href: "/form/submit-event"}]

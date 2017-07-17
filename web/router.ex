@@ -33,6 +33,7 @@ defmodule Core.Router do
 
     get "/act/call", ActController, :get_call
     get "/act/call/:candidate", ActController, :get_candidate_call
+    get "/act/:candidate", ActController, :legacy_redirect
 
     get "/events", EventsController, :get
 
