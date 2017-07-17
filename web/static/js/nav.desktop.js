@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { render } from 'react-dom'
 import CloseIcon from './sidebar/close-icon'
 import siteMap from './sidebar/sitemap'
+import hrefOfEntry from './lib/href-of-entry'
 
 class TopNav extends Component {
   state = {
@@ -96,9 +97,3 @@ function doRender() {
 
 doRender()
 window.bus.on('page-change', () => doRender())
-
-// This needs to change when now. gets deployed to @
-const apexDomain = window.location.origin.replace('now.', '')
-function hrefOfEntry(entry) {
-  return entry.subdomained ? entry.path : apexDomain + entry.path
-}

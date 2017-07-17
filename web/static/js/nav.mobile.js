@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { render } from 'react-dom'
 import CloseIcon from './sidebar/close-icon'
 import siteMap from './sidebar/sitemap'
+import hrefOfEntry from './lib/href-of-entry'
 
 class Sidebar extends Component {
   state = {
@@ -92,13 +93,3 @@ class Sidebar extends Component {
 }
 
 render(<Sidebar {...window.opts} />, document.getElementById('sidebar'))
-
-// This needs to change when now. gets deployed to @
-const apexDomain = window.location.origin.replace('now.', '')
-function hrefOfEntry(entry) {
-  if (entry.children === undefined || entry.children.length === 0) {
-    return entry.subdomained ? entry.path : apexDomain + entry.path
-  } else {
-    return null
-  }
-}

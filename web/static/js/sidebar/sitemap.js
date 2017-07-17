@@ -1,7 +1,7 @@
 const siteMap = [
   {
     label: 'Join',
-    path: '/',
+    path: 'HOSTNAME',
     subdomained: false,
     children: [],
     matches: () => false
@@ -9,20 +9,17 @@ const siteMap = [
 
   {
     label: 'Candidates',
-    path: '/candidates',
-    subdomained: false,
+    path: 'HOSTNAME/candidates',
     matches: () => window.location.href.match('/candidates'),
     children: [
       {
         label: 'Candidates',
-        path: '/candidates',
-        subdomained: false,
+        path: 'HOSTNAME/candidates',
         children: []
       },
       {
         label: 'Nominate',
-        path: '/nominate',
-        subdomained: false,
+        path: 'HOSTNAME/nominate',
         children: []
       }
     ]
@@ -31,7 +28,6 @@ const siteMap = [
   {
     label: 'Action',
     path: '/act',
-    subdomained: 'now',
     matches: () =>
       window.location.href.match('/act') ||
       window.location.href.match('/form/submit-event'),
@@ -39,7 +35,6 @@ const siteMap = [
       {
         label: 'Action Portal',
         path: '/act',
-        subdomained: 'now',
         matches: () =>
           window.location.href.match('/act') &&
           window.location.href.endsWith('act'),
@@ -47,22 +42,19 @@ const siteMap = [
       },
       {
         label: 'Attend an Event',
-        path: '/',
-        subdomained: 'events',
+        path: 'events.HOSTNAME/',
         matches: () => false,
         children: []
       },
       {
         label: 'Host an Event',
         path: '/form/submit-event',
-        subdomained: 'now',
         matches: () => window.location.href.match('/form/submit-event'),
         children: []
       },
       {
         label: 'Call Voters',
         path: '/act/call',
-        subdomained: 'now',
         matches: () => window.location.href.match('/act/call'),
         children: []
       }

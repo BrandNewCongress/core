@@ -38,9 +38,11 @@
       </a>
     </div>
 
-    <a class="donate-link" target="_blank" href="https://<%= homepage(@brand) %>/donate">
-      Support <%= abbr(@brand) %>
-    </a>
+    <%= if (not @mobile) do %>
+      <a class="donate-link" target="_blank" href="https://<%= homepage(@brand) %>/donate">
+        Support <%= abbr(@brand) %>
+      </a>
+    <% end %>
   </nav>
 </header>
 
@@ -54,7 +56,12 @@
 
 header #drawer #inner-drawer {
   font-family: 'Roboto Condensed', sans-serif !important;
+  margin-left: 30px;
 }
+
+<%= if @mobile do %>
+  .container { height: auto; }
+<% end %>
 
 header .donate-link {
   display: block;
