@@ -60,14 +60,14 @@ defmodule Core.ActController do
        home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
   end
 
-  def legacy_redirect(conn, params = %{"candidate" => candidate, "selected" => selected}) do
+  def legacy_redirect(conn, _params = %{"candidate" => candidate, "selected" => _selected}) do
     %{"metadata" => %{"district" => district}} = Cosmic.get(candidate)
     conn
     |> put_resp_cookie("district", district, [http_only: false])
     |> redirect(to: "/act/call")
   end
 
-  def legacy_redirect(conn, params = %{"candidate" => candidate}) do
+  def legacy_redirect(conn, _params = %{"candidate" => candidate}) do
     %{"metadata" => %{"district" => district}} = Cosmic.get(candidate)
 
     conn

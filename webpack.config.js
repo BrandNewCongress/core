@@ -4,7 +4,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 const config = {
   entry: {
-    act: './web/static/js/act.js',
     entry: './web/static/js/entry.js',
     events: './web/static/js/events.js',
     'nav.desktop': './web/static/js/nav.desktop.js',
