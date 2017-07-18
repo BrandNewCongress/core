@@ -20,7 +20,7 @@ config :core, Core.Endpoint,
   secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 # Nationbuilder API Key
-config :core, [nb_slug: "brandnewcampaign", nb_token: System.get_env("NB_TOKEN")]
+config :core, [nb_slug: System.get_env("NB_SLUG"), nb_token: System.get_env("NB_TOKEN")]
 
 # Do not print debug messages in production
 config :logger, level: :info

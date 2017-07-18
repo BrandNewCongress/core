@@ -14,7 +14,7 @@ config :core, Core.Endpoint,
   watchers: [npm: ["run", "watch", cd: Path.expand("../", __DIR__)]]
 
 # Nationbuilder API Key
-config :core, [nb_slug: "brandnewcampaign", nb_token: System.get_env("NB_TOKEN")]
+config :core, [nb_slug: System.get_env("NB_SLUG"), nb_token: System.get_env("NB_TOKEN")]
 
 # Use Mailgun
 config :core, Core.Mailer,

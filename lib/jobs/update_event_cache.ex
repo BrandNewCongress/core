@@ -24,7 +24,7 @@ defmodule Core.Jobs.EventCache do
     |> Enum.each(fn calendar -> calendar |> events_for_calendar(all_events) |> cache_calendar(calendar) end)
 
     Stash.persist(:event_cache, "event_cache")
-  
+
     all_events
   end
 
@@ -37,6 +37,7 @@ defmodule Core.Jobs.EventCache do
       update()
     rescue
       _e in KeyError -> load_cached()
+      _e in FunctionClauseError -> load_cached()
     end
   end
 
