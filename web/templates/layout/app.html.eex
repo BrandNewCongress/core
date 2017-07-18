@@ -33,7 +33,9 @@
       </main>
     </div>
 
-    <%= render Core.LayoutView, "footer.html", [brand: @brand, no_footer: assigns[:no_footer]] %>
+    <%= if assigns[:no_footer] != true do %>
+      <%= render Core.LayoutView, "footer.html", [brand: @brand, no_footer: assigns[:no_footer]] %>
+    <% end %>
 
     <!-- Load main app -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>

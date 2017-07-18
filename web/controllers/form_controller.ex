@@ -31,7 +31,7 @@ defmodule Core.FormController do
 
     if Enum.member?(brands, brand) do
       render conn, "form.html",
-        [share_html: share_html, title: title, slug: slug] ++ global_opts
+        [share_html: share_html, title: title, slug: slug, no_footer: true] ++ global_opts
     else
       redirect_home(conn, params)
     end
