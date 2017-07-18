@@ -50,14 +50,17 @@ defmodule Core.ActController do
     callable_maps = callable_candidates()
     callable_slugs = Enum.map(callable_maps, fn %{slug: slug} -> slug end)
 
+    draft = Map.has_key?(params, "draft")
+
     render conn, "call.html",
       [title: "Call Voters", district: district, candidate: candidate,
-       on_hours: on_hours?(), closest_candidate: closest_candidate,
+       on_hours: on_hours?(candidate), closest_candidate: closest_candidate,
        calling_script_link: candidate["metadata"]["calling_script_link"],
        candidate_calling_page: candidate_calling_page,
        callable_candidates: callable_maps, callable_slugs: callable_slugs,
        event_action_options: event_action_options(conn, params),
-       home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
+       home_action_options: home_action_options(conn, params),
+       draft: draft] ++ GlobalOpts.get(conn, params)
   end
 
   def legacy_redirect(conn, _params = %{"candidate" => candidate, "selected" => _selected}) do
@@ -105,15 +108,19 @@ defmodule Core.ActController do
     district
   end
 
-  defp on_hours? do
-    now = "America/New_York" |> Timex.now()
-    est_hours = now.hour
+  defp on_hours?(%{"metadata" => %{"time_zone" => time_zone}}) do
+    now = time_zone |> Timex.now()
+    local_hours = now.hour
     weekday = Timex.weekday(now)
 
     case weekday do
-      n when n in [5, 6] -> est_hours >= 10
-      _n -> est_hours >= 17
+      n when n in [5, 6] -> local_hours >= 10 and local_hours < 21
+      _n -> local_hours >= 17 and local_hours < 21
     end
+  end
+
+  defp on_hours?(_else) do
+    false
   end
 
   defp callable_candidates do
@@ -123,6 +130,18 @@ defmodule Core.ActController do
     |> Enum.map(fn %{"slug" => slug, "title" => name} -> %{slug: slug, name: name} end)
   end
 
-  defp is_callable(%{"metadata" => %{"callable" => "Callable"}}), do: true
-  defp is_callable(_else), do: false
+  defp is_callable(%{"metadata" => %{"callable" => "Callable", "time_zone" => time_zone}}) do
+    now = time_zone |> Timex.now()
+    local_hours = now.hour
+    weekday = Timex.weekday(now)
+
+    case weekday do
+      n when n in [5, 6] -> local_hours >= 10 and local_hours < 21
+      _n -> local_hours >= 17 and local_hours < 21
+    end
+  end
+
+  defp is_callable(_else) do
+    false
+  end
 end

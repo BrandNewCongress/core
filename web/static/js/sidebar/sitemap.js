@@ -70,6 +70,12 @@ const siteMap = [
         path: 'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com',
         matches: () => false,
         children: []
+      },
+      {
+        label: 'Any special skills?',
+        path: 'https://brandnewcongress.org/volunteer',
+        matches: () => false,
+        children: []
       }
     ]
   },

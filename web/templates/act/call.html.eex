@@ -6,8 +6,8 @@
   <% end %>
 
   <div class="page-body">
-    <%= if @on_hours do %>
-      <%= if @candidate["slug"] in @callable_slugs do %>
+    <%= if @on_hours or @draft do %>
+      <%= if (@candidate["slug"] in @callable_slugs) or @draft do %>
         <div style="margin-top: 10px; margin-bottom: 10px; text-align: left">
           <%= raw(@candidate_calling_page) %>
         </div>
@@ -75,7 +75,7 @@
         <ul>
           <%= for cand <- @callable_candidates do %>
             <li>
-              <p> <a href="<%= "https://now.#{homepage(@brand)}/act/call/#{cand.slug}" %>" target="_blank">
+              <p> <a href="<%= "/act/call/#{cand.slug}" %>" target="_blank">
                 <%= cand.name %>
               </a> </p>
             </li>
