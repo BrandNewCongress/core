@@ -49,22 +49,22 @@ export default class EventMap extends Component {
     }
 
     if (this.props.district) {
-      this.setDistrictOverlay()
+      this.setDistrictOverlay(this.props.district)
     }
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState({
-      startingCoordinates: nextProps.startingCoordinates
+      center: nextProps.startingCoordinates
     })
 
-    this.setDistrictOverlay()
+    this.setDistrictOverlay(nextProps.district)
   }
 
-  setDistrictOverlay = () => {
-    this.channel.push('get-district-overlay', { district: this.props.district })
+  setDistrictOverlay = (district) => {
+    this.channel.push('get-district-overlay', { district: district })
     this.channel.on('district-overlay', ({ polygon }) => {
-      console.log(polygon)
+      console.log(district)
       this.setState({
         overlay: polygon
       })

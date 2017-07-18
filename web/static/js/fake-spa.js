@@ -15,7 +15,7 @@ var vdomCache = parser(nodeCache)
 
 var hist = createHistory()
 
-function postFetch(text, path, skipHistory) {
+function postFetch(text, path, {skipHistory, cookies}) {
   const newVTree = parser(text)
   const patches = diff(vdomCache, newVTree)
 
@@ -23,6 +23,7 @@ function postFetch(text, path, skipHistory) {
   vdomCache = newVTree
 
   if (!skipHistory) hist.push(path)
+  bus.emit('page-change')
 
   bind()
 }
@@ -40,8 +41,7 @@ function navigateTo(path, skipHistory) {
   } else {
     superagent.get(path).query({ empty: true }).end(function(err, res) {
       if (window.checkNavChange) window.checkNavChange()
-      postFetch(res.text, path, skipHistory)
-      bus.emit('page-change')
+      postFetch(res.text, path, {skipHistory, cookies: undefined})
     })
   }
 }
@@ -77,7 +77,7 @@ function bind() {
         .send(body)
         .query({ empty: true })
         .end(function(err, res) {
-          postFetch(res.text, form.getAttribute('action'))
+          postFetch(res.text, form.getAttribute('action'), {})
         })
     }
   })
