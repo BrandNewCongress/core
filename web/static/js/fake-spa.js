@@ -29,7 +29,14 @@ function postFetch(text, path, skipHistory) {
 
 function navigateTo(path, skipHistory) {
   if (path.indexOf('https://') > -1) {
-    window.location.href = path
+    if (
+      path.indexOf('brandnewcongress') < 0 &&
+      path.indexOf('justicedemocrats') < 0
+    ) {
+      window.open(path)
+    } else {
+      window.location.href = path
+    }
   } else {
     superagent.get(path).query({ empty: true }).end(function(err, res) {
       if (window.checkNavChange) window.checkNavChange()

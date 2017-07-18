@@ -59,6 +59,12 @@ class SideNav extends Component {
     selected: ''
   }
 
+  visit = entry => ev => {
+    ev.stopPropagation()
+    window.navigateTo(hrefOfEntry(entry))
+  }
+
+
   render() {
     return (
       <div className="side-nav-container">
@@ -72,6 +78,8 @@ class SideNav extends Component {
             <a
               className={`side-nav-item ${entry.matches() ? 'selected' : ''}`}
               href={hrefOfEntry(entry)}
+              onClick={this.visit(entry)}
+              target=""
               key={entry.label}
             >
               {window.opts.brand == 'bnc' &&
