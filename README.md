@@ -13,6 +13,10 @@ should work. For anything else besides Macs, check: https://elixir-lang.org/inst
 To start the app locally:
   * Install dependencies with `mix deps.get` (equivalent of npm install)
   * Run `npm install` to install Javascript + build dependencies
+  * Set up your environment with `. dev-setup.sh`
+  * Make sure you have redis running locally (hopefully this will not be a requirement soon).
+    For macs, this means running `brew install redis` if you don't have it already, and then
+    `redis-server` in a separate terminal tab.
   * Start Phoenix endpoint with `mix phoenix.server`
 
 Now you can visit [`localhost:4000/act`](http://localhost:4000) from your browser.
