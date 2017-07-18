@@ -53,3 +53,8 @@
   width: 30px;
   height: 30px;
 }
+
+.bnc path.leaflet-interactive.district-overlay {
+  fill: var(--bnc-salmon);
+  fill-opacity: .5;
+}

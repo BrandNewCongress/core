@@ -2,29 +2,46 @@ import React, { Component } from 'react'
 import { render } from 'react-dom'
 import EventMap from './components/event-map'
 
-const eventsApp = document.getElementById('events-app')
-const showDistrictSelector =
-  eventsApp.getAttribute('data-show-prompt') != 'false'
+class EmbededMap extends Component {
+  componentWillMount() {
+    this.state = {
+      district: undefined,
+      startingCoordinates: undefined
+    }
 
-function doRender() {
-  const cookie = getCookie('coordinates')
-  const startingCoordinates = cookie ? JSON.parse(cookie) : null
+    this.fetchState()
 
-  render(
-    <EventMap
-      {...window.opts}
-      showDistrictSelector={showDistrictSelector}
-      startingCoordinates={startingCoordinates}
-    />,
-    eventsApp
-  )
+    window.bus.on('page-change', this.fetchState)
+  }
+
+  fetchState = () => {
+    const cookie = getCookie('coordinates')
+    const startingCoordinates = cookie ? JSON.parse(cookie) : null
+    const district = getCookie('district')
+
+    this.setState({
+      startingCoordinates,
+      district
+    })
+  }
+
+  render() {
+    return (
+      <EventMap
+        {...window.opts}
+        showDistrictSelector={false}
+        startingCoordinates={this.state.startingCoordinates}
+        district={this.state.district}
+      />
+    )
+  }
 }
+
+const eventsApp = document.getElementById('events-app')
+render(<EmbededMap />, eventsApp)
 
 function getCookie(name) {
   var value = '; ' + document.cookie
   var parts = value.split('; ' + name + '=')
   if (parts.length == 2) return parts.pop().split(';').shift()
 }
-
-doRender()
-window.bus.on('page-change', () => doRender())

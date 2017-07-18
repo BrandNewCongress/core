@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Map, TileLayer, CircleMarker, Popup } from 'react-leaflet'
+import { Map, TileLayer, CircleMarker, Popup, GeoJSON } from 'react-leaflet'
 import EventMarker from './event-marker'
 import GeoSuggest from 'react-geosuggest'
 import socket from '../socket'
@@ -8,7 +8,8 @@ export default class EventMap extends Component {
   state = {
     events: [],
     center: [38.805470223177466, -100.23925781250001],
-    zoom: 4
+    zoom: 4,
+    overlay: undefined
   }
 
   channel = null
@@ -43,16 +44,38 @@ export default class EventMap extends Component {
           JSON.stringify([38.805470223177466, -100.23925781250001]) ==
           JSON.stringify(window.startingCoordinates)
             ? 4
-            : 7
+            : 11
       })
     }
+
+    if (this.props.district) {
+      this.setDistrictOverlay()
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      startingCoordinates: nextProps.startingCoordinates
+    })
+
+    this.setDistrictOverlay()
+  }
+
+  setDistrictOverlay = () => {
+    this.channel.push('get-district-overlay', { district: this.props.district })
+    this.channel.on('district-overlay', ({ polygon }) => {
+      console.log(polygon)
+      this.setState({
+        overlay: polygon
+      })
+    })
   }
 
   onViewportChanged = ({ center, zoom }) => this.setState({ center, zoom })
 
   render() {
     const { showDistrictSelector } = this.props
-    const { center, zoom, events } = this.state
+    const { center, zoom, events, overlay } = this.state
 
     return (
       <div>
@@ -73,12 +96,13 @@ export default class EventMap extends Component {
         <Map
           animate={true}
           viewport={{ center, zoom }}
-          onViewportChanged={this.props.onViewportChanged}
+          onViewportChanged={this.onViewportChanged}
         >
           <TileLayer
             attribution="&copy; <a href=&quot;https://openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors"
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
           />
+          {overlay && <GeoJSON data={overlay} className="district-overlay" />}
           {events.map(e => <EventMarker key={e.name} event={e} />)}
         </Map>
       </div>

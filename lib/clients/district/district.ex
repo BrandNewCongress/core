@@ -21,6 +21,7 @@ defmodule District do
   @miles_per_degree 69
 
   def get_gjs, do: @geojsons
+  def get_polygon_of(district), do: @geojsons[district]
 
   defp is_short_form(string) do
     case Regex.run(~r/[A-Za-z][A-Za-z]-[0-9]+/, string) do
