@@ -7,23 +7,10 @@ defmodule Core.EventsChannel do
   end
 
   def handle_in("ready", %{"district" => district}, socket) do
-    events = Stash.get(:event_cache, "all_slugs")
-    Enum.each events, fn slug ->
-      slug |> fetch_event() |> push_event(socket)
-    end
+    events = :event_cache |> Stash.get("all_slugs") |> Enum.map(&fetch_event/1)
+    Enum.each events, fn event -> push_event(event, socket) end
 
-    {_key, centroid} = District.centroid(district)
-
-    near_user = Enum.filter events, fn
-      %{location: %{latitude: lat, longitude: lng}} ->
-        District.naive_distance_in_miles({lat, lng}, centroid) < 20
-      _else ->
-        false
-    end
-
-    if length(near_user) < 1 do
-      push socket, "no-events", %{}
-    end
+    check_no_events(district, socket)
 
     {:noreply, socket}
   end
@@ -31,6 +18,8 @@ defmodule Core.EventsChannel do
   def handle_in("get-district-overlay", %{"district" => district}, socket) do
     polygon = District.get_polygon_of(district)
     push socket, "district-overlay", %{"polygon" => Geo.JSON.encode(polygon)}
+
+    check_no_events(district, socket)
 
     {:noreply, socket}
   end
@@ -41,5 +30,24 @@ defmodule Core.EventsChannel do
 
   defp push_event(event, socket) do
     push socket, "event", %{"event" => event}
+  end
+
+  defp check_no_events(district, socket) do
+    events = :event_cache |> Stash.get("all_slugs") |> Enum.map(&fetch_event/1)
+
+    centroid = District.centroid(district)
+
+    near_user = Enum.filter events, fn
+      %{location: %{location: %{latitude: lat, longitude: lng}}} ->
+        {lat, _} = Float.parse(lat)
+        {lng, _} = Float.parse(lng)
+        District.naive_distance_in_miles({lng, lat}, centroid) < 20
+      _else ->
+        false
+    end
+
+    if length(near_user) < 1 do
+      push socket, "no-events", %{}
+    end
   end
 end

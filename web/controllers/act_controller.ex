@@ -7,13 +7,20 @@ defmodule Core.ActController do
   end
 
   def post(conn, params = %{"district" => district}) do
-    {district, {x, y}} = District.from_unknown(district)
-    {:ok, json_coordinates} = Poison.encode([y, x])
+    {district, error_or_coordinates} = District.from_unknown(district)
 
-    conn
-    |> put_resp_cookie("district", district, [http_only: false])
-    |> put_resp_cookie("coordinates", json_coordinates, [http_only: false])
-    |> render_act(params, district)
+    if is_binary(error_or_coordinates) do
+      conn
+      |> render_act(params, district, error_or_coordinates)
+    else
+      {district, {x, y}} = {district, error_or_coordinates}
+      {:ok, json_coordinates} = Poison.encode([y, x])
+
+      conn
+      |> put_resp_cookie("district", district, [http_only: false])
+      |> put_resp_cookie("coordinates", json_coordinates, [http_only: false])
+      |> render_act(params, district)
+    end
   end
 
   def get_call(conn, params) do
@@ -26,13 +33,18 @@ defmodule Core.ActController do
     render_call(conn, params, district)
   end
 
-  defp render_act(conn, params, district) do
+  defp render_act(conn, params, district, district_error \\ nil) do
     %{candidate: candidate, closest_candidate: closest_candidate}
-      = candidate_options(district)
+      = case district_error do
+          nil -> candidate_options(district)
+          _error -> %{candidate: nil, closest_candidate: nil}
+        end
+
+    district = if district_error !== nil, do: nil, else: district
 
     render conn, "act.html",
       [title: "Act", district: district, candidate: candidate,
-       closest_candidate: closest_candidate,
+       closest_candidate: closest_candidate, district_error: district_error,
        event_action_options: event_action_options(conn, params),
        home_action_options: home_action_options(conn, params)] ++ GlobalOpts.get(conn, params)
   end

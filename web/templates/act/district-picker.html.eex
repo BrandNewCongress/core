@@ -14,6 +14,11 @@
         <input type="submit" class="primary-button" value="Submit" />
       </div>
     </form>
+    <%= if @district_error do %>
+      <div class="dp-error">
+        <p> <%= @district_error %> </p>
+      </div>
+    <% end %>
   <% end %>
 </div>
 

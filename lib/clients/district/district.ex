@@ -75,10 +75,12 @@ defmodule District do
       from_address(string)
     end
 
-    coordinates =
-      @geojsons
-      |> Map.take([district])
-      |> centroid()
+    geoj = @geojsons |> Map.take([district])
+    coordinates = if geoj |> Map.keys() |> length() > 0 do
+      geoj |> centroid()
+    else
+      "Hmm, it doesn't seem like #{string} is a valid congressional district. Try typing your address and we'll figure it out."
+    end
 
     {district, coordinates}
   end

@@ -59,17 +59,21 @@ export default class EventMap extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.state.center = nextProps.startingCoordinates
-    this.setDistrictOverlay(nextProps.district)
+    if (nextProps.district !== this.props.district) {
+      this.state.center = nextProps.startingCoordinates
+      this.state.noEvents = false
+      this.setDistrictOverlay(nextProps.district)
+    }
   }
 
-  setDistrictOverlay = district => {
+  setDistrictOverlay = (district, center) => {
     this.channel.push('get-district-overlay', { district: district })
     this.channel.on('district-overlay', ({ polygon }) => {
-      console.log(district)
       this.setState({
         overlay: polygon
       })
+
+      this.channel.off('district-overlay')
     })
   }
 
