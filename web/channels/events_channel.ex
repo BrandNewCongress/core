@@ -15,6 +15,13 @@ defmodule Core.EventsChannel do
     {:noreply, socket}
   end
 
+  def handle_in("ready", _body, socket) do
+    events = :event_cache |> Stash.get("all_slugs") |> Enum.map(&fetch_event/1)
+    Enum.each events, fn event -> push_event(event, socket) end
+
+    {:noreply, socket}
+  end
+
   def handle_in("get-district-overlay", %{"district" => district}, socket) do
     polygon = District.get_polygon_of(district)
     push socket, "district-overlay", %{"polygon" => Geo.JSON.encode(polygon)}
