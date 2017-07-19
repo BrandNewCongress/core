@@ -16,7 +16,7 @@ defmodule Core.EventsChannel do
 
     near_user = Enum.filter events, fn
       %{location: %{latitude: lat, longitude: lng}} ->
-        District.naive_distance({lat, lng}, centroid) < 20
+        District.naive_distance_in_miles({lat, lng}, centroid) < 20
       _else ->
         false
     end

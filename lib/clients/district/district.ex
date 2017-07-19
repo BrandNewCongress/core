@@ -23,24 +23,34 @@ defmodule District do
   def get_gjs, do: @geojsons
   def get_polygon_of(district), do: @geojsons[district]
 
-  defp is_short_form(string) do
-    case Regex.run(~r/[A-Za-z][A-Za-z]-[0-9]+/, string) do
+  def is_short_form(string) do
+    case Regex.run(~r/[A-Za-z][A-Za-z][-]?[0-9]+/, string) do
       nil -> false
       _ -> true
     end
   end
 
   def normalize(string) do
-    [state, cd] = String.split(string, "-")
+    cond do
+      String.contains?(string, "-") ->
+        [state, cd] = String.split(string, "-")
+        state = String.upcase(state)
+        cd = case String.length(cd) do
+          1 -> "0" <> cd
+          2 -> cd
+        end
+        "#{state}-#{cd}"
 
-    state = String.upcase(state)
+      String.length(string) === 3 ->
+        state = string |> String.slice(0..1) |> String.upcase()
+        cd = "0" <> String.slice(string, 2..2)
+        "#{state}-#{cd}"
 
-    cd = case String.length(cd) do
-      1 -> "0" <> cd
-      2 -> cd
+      String.length(string) === 4 ->
+        state = string |> String.slice(0..1) |> String.upcase()
+        cd = String.slice(string, 2..3)
+        "#{state}-#{cd}"
     end
-
-    "#{state}-#{cd}"
   end
 
   def from_point({lat, lng}) do
@@ -141,7 +151,7 @@ defmodule District do
     :math.sqrt((:math.pow(y2 - y1, 2) + :math.pow(x2 - x1, 2)))
   end
 
-  def naive_distance({x1, y1}, {x2, y2}) do
+  def naive_distance_in_miles({x1, y1}, {x2, y2}) do
     (:math.sqrt((:math.pow(y2 - y1, 2) + :math.pow(x2 - x1, 2)))) * @miles_per_degree
   end
 end
