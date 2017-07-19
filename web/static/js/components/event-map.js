@@ -9,7 +9,8 @@ export default class EventMap extends Component {
     events: [],
     center: [38.805470223177466, -100.23925781250001],
     zoom: 4,
-    overlay: undefined
+    overlay: undefined,
+    noEvents: false
   }
 
   channel = null
@@ -21,25 +22,29 @@ export default class EventMap extends Component {
     this.channel
       .join()
       .receive('ok', msg => {
-        console.log(`Connected with ${JSON.stringify(msg)}`)
-        console.log(msg)
-
-        this.channel.push('ready', {})
+        console.log(`Connected`)
+        this.channel.push('ready', { district: this.props.district })
       })
       .receive('error', msg => {
         console.log(`Could not connect with ${JSON.stringify(msg)}`)
         console.log(msg)
       })
 
-    this.channel.on('event', ({ event }) =>
+    this.channel.on('event', ({ event }) => {
       this.setState({
         events: this.state.events.concat([event])
       })
-    )
+    })
 
-    if (this.props.startingCoordinates || window.startingCoordinates) {
+    this.channel.on('no-events', () => {
       this.setState({
-        center: this.props.startingCoordinates || window.startingCoordinates,
+        noEvents: true
+      })
+    })
+
+    if (this.props.startingCoordinates) {
+      this.setState({
+        center: this.props.startingCoordinates,
         zoom:
           JSON.stringify([38.805470223177466, -100.23925781250001]) ==
           JSON.stringify(window.startingCoordinates)
@@ -54,14 +59,11 @@ export default class EventMap extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      center: nextProps.startingCoordinates
-    })
-
+    this.state.center = nextProps.startingCoordinates
     this.setDistrictOverlay(nextProps.district)
   }
 
-  setDistrictOverlay = (district) => {
+  setDistrictOverlay = district => {
     this.channel.push('get-district-overlay', { district: district })
     this.channel.on('district-overlay', ({ polygon }) => {
       console.log(district)
@@ -72,10 +74,11 @@ export default class EventMap extends Component {
   }
 
   onViewportChanged = ({ center, zoom }) => this.setState({ center, zoom })
+  closeModal = () => this.setState({ noEvents: false })
 
   render() {
     const { showDistrictSelector } = this.props
-    const { center, zoom, events, overlay } = this.state
+    const { center, zoom, events, overlay, noEvents } = this.state
 
     return (
       <div>
@@ -98,6 +101,7 @@ export default class EventMap extends Component {
           viewport={{ center, zoom }}
           onViewportChanged={this.onViewportChanged}
         >
+          {this.renderNoEventsModal()}
           <TileLayer
             attribution="&copy; <a href=&quot;https://openstreetmap.org/copyright&quot;>OpenStreetMap</a> contributors"
             url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
@@ -108,4 +112,48 @@ export default class EventMap extends Component {
       </div>
     )
   }
+
+  renderNoEventsModal = () =>
+    this.state.noEvents &&
+    <div
+      style={{
+        position: 'absolute',
+        zIndex: '1000',
+        backgroundColor: 'black',
+        color: 'white',
+        left: '50%',
+        transform: 'translate(-50%, 150%) scale(1.3)',
+        padding: '40px',
+        fontFamily: 'Roboto Slab, sans-serif'
+      }}
+    >
+      <div
+        className="close-modal"
+        style={{
+          position: 'absolute',
+          marginTop: '-30px',
+          float: 'right',
+          right: '15px',
+          cursor: 'pointer'
+        }}
+        onClick={this.closeModal}
+      >
+        X
+      </div>
+      <div className="no-events-text">
+        There's not an event near you yet, but you can be the first.
+      </div>
+      <a
+        className="primary-button"
+        style={{
+          paddingTop: '5px',
+          margin: '0px',
+          paddingBottom: '5px',
+          marginTop: '10px'
+        }}
+        onClick={() => window.navigateTo('/form/submit-event')}
+      >
+        Host One Now
+      </a>
+    </div>
 }

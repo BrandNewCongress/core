@@ -19,6 +19,10 @@ class EmbededMap extends Component {
     const startingCoordinates = cookie ? JSON.parse(cookie) : null
     const district = getCookie('district')
 
+    console.log({
+      startingCoordinates, district
+    })
+
     this.setState({
       startingCoordinates,
       district

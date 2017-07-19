@@ -140,4 +140,8 @@ defmodule District do
   def naive_distance({x1, y1}, {x2, y2}) do
     :math.sqrt((:math.pow(y2 - y1, 2) + :math.pow(x2 - x1, 2)))
   end
+
+  def naive_distance({x1, y1}, {x2, y2}) do
+    (:math.sqrt((:math.pow(y2 - y1, 2) + :math.pow(x2 - x1, 2)))) * @miles_per_degree
+  end
 end

@@ -6,10 +6,24 @@ defmodule Core.EventsChannel do
     {:ok, socket}
   end
 
-  def handle_in("ready", _body, socket) do
-    :event_cache
-    |> Stash.get("all_slugs")
-    |> Enum.each(fn slug -> slug |> fetch_event() |> push_event(socket) end)
+  def handle_in("ready", %{"district" => district}, socket) do
+    events = Stash.get(:event_cache, "all_slugs")
+    Enum.each events, fn slug ->
+      slug |> fetch_event() |> push_event(socket)
+    end
+
+    {_key, centroid} = District.centroid(district)
+
+    near_user = Enum.filter events, fn
+      %{location: %{latitude: lat, longitude: lng}} ->
+        District.naive_distance({lat, lng}, centroid) < 20
+      _else ->
+        false
+    end
+
+    if length(near_user) < 1 do
+      push socket, "no-events", %{}
+    end
 
     {:noreply, socket}
   end
