@@ -1,4 +1,12 @@
-<%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Platform"] %>
-<div id="platform">
-  <%= raw(@html) %>
+<div class="nav-body-container" style="padding: 30px;">
+  <%= if (not @mobile) do %>
+    <%= render Core.LayoutView, "left-nav.html", assigns %>
+  <% end %>
+
+  <div class="page-body">
+    <%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Platform"] %>
+    <div id="platform">
+      <%= raw(@html) %>
+    </div>
+  </div>
 </div>
