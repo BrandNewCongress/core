@@ -57,6 +57,7 @@
         </div>
 
       <% else %>
+
         <%= if @candidate do %>
           <p>
             We've made all of our calls for <%= @candidate["title"] %> for
@@ -82,21 +83,47 @@
           <% end %>
         </ul>
       <% end %>
+
     <% else %>
 
-      <p>
-        At the moment, we're making calls from 5PM - 9PM on weekdays and
-        10AM - 9PM on weekends.
-        <br/>
-        Since we're not calling right now, please fill out
-        <a href="https://now.brandnewcongress.org/form/call-from-home" target="_blank">
-          this form
-        </a>
-        and we'll get you set up soon.
-      </p>
+      <%= if @candidate !== nil and length(@callable_candidates) > 0 do %>
+
+        <p>
+          Since we only make calls from 5PM - 9PM on weekdays and 10AM - 9PM on weekends,
+          we're not calling voters in <%= @candidate["title"] %>'s district right now.
+        <p>
+
+        <p> Please make calls for one of our other candidates: <br /> </p>
+        <ul>
+          <%= for cand <- @callable_candidates do %>
+            <li>
+              <p> <a href="<%= "/act/call/#{cand.slug}" %>" target="_blank">
+                <%= cand.name %>
+              </a> </p>
+            </li>
+          <% end %>
+        </ul>
+
+      <% else %>
+
+        <p>
+          At the moment, we're making calls from 5PM - 9PM on weekdays and
+          10AM - 9PM on weekends.
+        </p>
+
+        <p>
+          Please fill out
+          <a href="https://now.brandnewcongress.org/form/call-from-home" target="_blank">
+            this form
+          </a>
+          and we'll help you get set up soon.
+        </p>
+
+      <% end %>
 
     <% end %>
   </div>
+
 </div>
 
 <style>

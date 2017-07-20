@@ -1,5 +1,6 @@
 defmodule Core.ActController do
   use Core.Web, :controller
+  require Logger
 
   def get(conn, params) do
     district = extract_district(conn, params)
@@ -120,19 +121,12 @@ defmodule Core.ActController do
     district
   end
 
-  defp on_hours?(%{"metadata" => %{"time_zone" => time_zone}}) do
-    now = time_zone |> Timex.now()
-    local_hours = now.hour
-    weekday = Timex.weekday(now)
-
-    case weekday do
-      n when n in [5, 6] -> local_hours >= 10 and local_hours < 21
-      _n -> local_hours >= 17 and local_hours < 21
-    end
+  defp on_hours?(candidate = %{"metadata" => %{"time_zone" => time_zone}}) do
+    is_callable(candidate)
   end
 
   defp on_hours?(_else) do
-    false
+    length(callable_candidates()) > 0
   end
 
   defp callable_candidates do
@@ -142,14 +136,18 @@ defmodule Core.ActController do
     |> Enum.map(fn %{"slug" => slug, "title" => name} -> %{slug: slug, name: name} end)
   end
 
-  defp is_callable(%{"metadata" => %{"callable" => "Callable", "time_zone" => time_zone}}) do
+  defp is_callable(%{"slug" => slug, "metadata" => %{"callable" => "Callable", "time_zone" => time_zone}}) do
     now = time_zone |> Timex.now()
     local_hours = now.hour
     weekday = Timex.weekday(now)
 
     case weekday do
-      n when n in [5, 6] -> local_hours >= 10 and local_hours < 21
-      _n -> local_hours >= 17 and local_hours < 21
+      n when n in [5, 6] ->
+        # IO.puts "It's #{local_hours} for #{slug} in #{time_zone} on a weekend"
+        local_hours >= 10 and local_hours < 21
+      _n ->
+        # IO.puts "It's #{local_hours} for #{slug} in #{time_zone} on a weekday"
+        local_hours >= 17 and local_hours < 21
     end
   end
 
