@@ -1,0 +1,49 @@
+<%
+  %{
+    calendar_id: candidate,
+    contact: contact,
+    intro: intro,
+    name: title,
+    start_time: start_time,
+    end_time: end_time,
+    venue: venue,
+    time_zone: time_zone,
+    tags: tags
+  } = @event
+
+  event_type = Enum.find tags, "Unknown", fn
+    "Event Type:" <> _rest -> true
+    _ -> false
+  end
+%>
+Hi!
+
+A user, <%= contact.name %>, has submitted a new event for <%= candidate %>.
+
+Please go to your candidate's calendar and modify and approve or delete it.
+
+Here are some details:
+Headline: <%= title %>
+Intro: <%= intro %>
+From: <%= start_time %>
+To: <%= end_time %>
+Time zone: <%= time_zone %>
+
+Venue Name: <%= venue.name %>
+Venue Address: <%= venue.address.address1 %>
+Venue City: <%= venue.address.city %>
+Venue State: <%= venue.address.state %>
+Venue Zip: <%= venue.address.zip %>
+
+Host info
+Name: <%= contact.name %>
+Email: <%= contact.email %>
+Phone: <%= contact.phone %>
+
+Other
+Event ID: <%= @id %>
+Campaign: <%= candidate %>
+URL: http://go.brandnewcongress.org/<%= @slug %>
+
+Should Contact Host: <%= Enum.member?(tags, "Event: Should Contact Host") %>
+<%= event_type %>

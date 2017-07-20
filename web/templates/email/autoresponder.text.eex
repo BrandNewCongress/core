@@ -1,0 +1,5 @@
+----
+
+This email was sent to <%= @email %>.
+
+To unsubscribe, go to: https://now.brandnewcongress.org/unsubscribe/<%= @slug %>?email=<%= @email %>

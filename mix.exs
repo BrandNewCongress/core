@@ -19,7 +19,7 @@ defmodule Core.Mixfile do
   def application do
     [mod: {Core, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :httpotion, :swoosh, :timex, :quantum]]
+                    :phoenix_ecto, :postgrex, :httpotion, :phoenix_swoosh, :timex, :quantum]]
   end
 
   # Specifies which paths to compile per environment.
@@ -44,7 +44,7 @@ defmodule Core.Mixfile do
      {:credo, "~> 0.8", only: [:dev, :text], runtime: false},
      {:csv, "~> 2.0.0"},
      {:hackney, "~> 1.6.0"},
-     {:swoosh, "~> 0.8.1"},
+     {:phoenix_swoosh, "~> 0.2"},
      {:timex, "~> 3.0"},
      {:quantum, "~> 1.9.2"},
      {:redix, ">= 0.0.0"},
