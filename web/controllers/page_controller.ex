@@ -1,10 +1,5 @@
-defmodule Core.PageController do
+  defmodule Core.PageController do
   use Core.Web, :controller
-
-  defp get_platform(brand) do
-    %{"content" => html} = Cosmic.get "#{brand}-platform"
-    html
-  end
 
   def index(conn, params) do
     url = case conn |> GlobalOpts.get(params) |> Keyword.get(:brand) do
@@ -18,8 +13,15 @@ defmodule Core.PageController do
 
   def platform(conn, params) do
     opts = GlobalOpts.get(conn, params)
-    html = get_platform(Keyword.get(opts, :brand))
-    render conn, "platform.html", [html: html] ++ opts
+    brand = Keyword.get(opts, :brand)
+
+    areas =
+      "platform-areas"
+      |> Cosmic.get_type()
+      |> Enum.filter(&(by_brand(&1, brand)))
+      |> Enum.map(&normalize_area/1)
+
+    render conn, "platform.html", [areas: areas] ++ opts
   end
 
   def candidates(conn, params) do
@@ -34,4 +36,10 @@ defmodule Core.PageController do
         render conn, "candidate-page.html", [metadata: metadata] ++ GlobalOpts.get(conn, params)
     end
   end
+
+  defp normalize_area(%{"title" => title, "metadata" => %{"introduction" => introduction, "planks" => planks}}) do
+    %{title: title, introduction: introduction, planks: planks}
+  end
+
+  defp by_brand(%{"metadata" => %{"brands" => brands}}, brand), do: Enum.member?(brands, brand)
 end
