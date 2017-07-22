@@ -69,9 +69,8 @@ defmodule Core.Vox do
   end
 
   def password_for(username) do
-    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
+    {:ok, raw} = Redis.command(:redis, ["GET", "logins"])
 
-    {:ok, raw} = Redix.command(:redix, ["GET", date])
     logins = decode_logins(raw)
 
     [password] =
