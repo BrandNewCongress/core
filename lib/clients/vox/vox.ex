@@ -69,7 +69,7 @@ defmodule Core.Vox do
   end
 
   def password_for(username) do
-    {:ok, raw} = Redis.command(:redis, ["GET", "logins"])
+    {:ok, raw} = Redix.command(:redis, ["GET", "logins"])
 
     logins = decode_logins(raw)
 
