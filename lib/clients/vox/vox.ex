@@ -57,9 +57,7 @@ defmodule Core.Vox do
   end
 
   def next_login() do
-    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
-
-    {:ok, raw} = Redix.command(:redix, ["GET", date])
+    {:ok, raw} = Redix.command(:redix, ["GET", "logins"])
     logins = decode_logins(raw)
 
     {:ok, claimed} = Redix.command(:redix, ["INCR", "claimed"])
