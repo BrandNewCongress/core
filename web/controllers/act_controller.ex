@@ -142,7 +142,7 @@ defmodule Core.ActController do
     weekday = Timex.weekday(now)
 
     case weekday do
-      n when n in [5, 6] ->
+      n when n in [6, 7] ->
         # IO.puts "It's #{local_hours} for #{slug} in #{time_zone} on a weekend"
         local_hours >= 10 and local_hours < 21
       _n ->
