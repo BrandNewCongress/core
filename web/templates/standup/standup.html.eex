@@ -1,0 +1,2 @@
+<div id="standup-app"></div>
+<script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script>

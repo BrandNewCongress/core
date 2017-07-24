@@ -4,6 +4,7 @@ defmodule Core.UserSocket do
   ## Channels
   channel "events", Core.EventsChannel
   channel "entry", Core.EntryChannel
+  channel "standup", Core.StandupChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
