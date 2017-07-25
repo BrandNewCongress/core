@@ -1,9 +1,33 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
+import store from './lib/standup-store'
+
+/*
+ * Available store methods
+
+  store.get.for(district) ->
+    returns a promise that resolves with an array of videos
+    at the moment, it will not resolve if the district is invalid
+    TODO: error on bad district
+
+  store.get.recent() ->
+    returns a promise that resolves with an array of videos sorted by recency
+
+  store.create(data)
+    returns a promise that resolves with the created video
+
+ */
 
 class Standup extends Component {
   state = {
     videos: []
+  }
+
+  componentDidMount() {
+    store.get
+      .recent()
+      .then(videos => this.setState({ videos }))
+      .catch(console.error)
   }
 
   render() {
@@ -12,9 +36,11 @@ class Standup extends Component {
     return (
       <div>
         Hello, world!
-        {videos.map(v =>
+        {videos.map(({ district, first_name, email, rep, link }) =>
           <div>
-            {JSON.stringify(v)}
+            {`${first_name} in ${district} wants ${rep} to support medicare for all!`}
+            <br />
+            Watch their endorsement <a href={link}> here </a>
           </div>
         )}
       </div>
@@ -22,5 +48,5 @@ class Standup extends Component {
   }
 }
 
-const app = document.getElementById('standup-app')
-render(<Standup />, app)
+const el = document.getElementById('standup-app')
+render(<Standup />, el)
