@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import store from './lib/standup-store'
+import PledgeTally from './components/pledge-tally'
 
 /*
  * Available store methods
@@ -24,7 +25,7 @@ class Standup extends Component {
   }
 
   componentDidMount() {
-    store.get
+    store.videos
       .recent()
       .then(videos => this.setState({ videos }))
       .catch(console.error)
@@ -43,6 +44,8 @@ class Standup extends Component {
             Watch their endorsement <a href={link}> here </a>
           </div>
         )}
+
+        <PledgeTally />
       </div>
     )
   }
