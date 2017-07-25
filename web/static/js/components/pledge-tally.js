@@ -3,13 +3,15 @@ import store from '../lib/standup-store'
 
 export default class PledgeTally extends Component {
   state = {
-    congress: []
+    congress: {}
   }
 
   componentDidMount() {
     store.reps
       .get()
-      .then(congress => this.setState(congress))
+      .then(congress => {
+        this.setState(congress)
+      })
       .catch(console.error)
   }
 
@@ -22,23 +24,30 @@ export default class PledgeTally extends Component {
           display: 'flex'
         }}
       >
-        {Object.keys(congress).map(state =>
+
+        {Object.keys(congress).sort().map(state =>
           <div
+            key={state}
             style={{
               display: 'flex',
               flexDirection: 'column'
             }}
           >
+            {state}
             {congress[state].map(rep =>
               <div
-                className='grayscale'
+                key={rep.name}
+                className="grayscale"
                 style={{
-                  backgroundImage: `url(${rep.image})`
+                  backgroundImage: `url(${rep.img})`,
+                  backgroundSize: 'cover',
+                  height: '50px',
+                  width: '50px'
                 }}
               >
-                {rep.name}
               </div>
             )}
+
           </div>
         )}
       </div>
