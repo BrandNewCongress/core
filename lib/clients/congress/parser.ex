@@ -41,14 +41,13 @@ defmodule Congress.Parser do
 
   def reps_by_state do
     areas = @raw_legislators
-      |> Enum.filter_map(&is_rep/1, &state_of/1)
+      |> Enum.map(&state_of/1)
       |> MapSet.new()
 
     legislators_by_area = Enum.map(areas, fn area ->
       {
         full_state_name(area),
         @raw_legislators
-        |> Enum.filter(&is_rep/1)
         |> Enum.filter(&(is_in_state(&1, area)))
         |> Enum.map(&extract_standup_attrs/1)
       }
@@ -57,10 +56,16 @@ defmodule Congress.Parser do
     Enum.into(legislators_by_area, %{})
   end
 
-  def extract_standup_attrs(legislator) do
-    %{"party" => party, "district" => district, "state" => state} = current_appointment(legislator)
-    %{"name" => %{"official_full" => name}} = legislator
-    add_image(%{"party" => party, "district" => district, "state" => state, "name" => name})
+  def extract_standup_attrs(legislator = %{"name" => %{"official_full" => name}}) do
+    %{"party" => party, "district" => district, "state" => state}
+      = case current_appointment(legislator) do
+        %{"party" => party, "district" => district, "state" => state} ->
+          %{"party" => party, "district" => district, "state" => state}
+        %{"party" => party, "state" => state} ->
+          %{"party" => party, "district" => "Senate", "state" => state}
+      end
+
+    add_image(%{"party" => party, "district" => district || "Senate", "state" => state, "name" => name})
   end
 
   def add_image(legislator) do
@@ -127,6 +132,8 @@ defmodule Congress.Parser do
   defp image_of("David P. Joyce"), do: "https://upload.wikimedia.org/wikipedia/commons/1/15/David_Joyce.jpg"
   defp image_of("Jim Cooper"), do: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Jim_Cooper%2C_Official_Portrait%2C_ca2013.jpg/440px-Jim_Cooper%2C_Official_Portrait%2C_ca2013.jpg"
   defp image_of("Charles J. \"Chuck\" Fleischmann"), do: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Chuck_Fleischmann_official_photo.jpg/440px-Chuck_Fleischmann_official_photo.jpg"
+  defp image_of("Luther Strange"), do: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Luther_Strange_official_portrait.jpg/1200px-Luther_Strange_official_portrait.jpg"
+  defp image_of(_else), do: "PANIC PANIC PANIC"
 
   defp full_state_name("AL"), do: "Alabama"
   defp full_state_name("AK"), do: "Alaska"
