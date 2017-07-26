@@ -109,7 +109,7 @@ And you can invite others to join you at the event with this link:
     Logger.info "Creating event on calendar #{calendar_id}"
     %{"id" => event_id, "slug" => event_slug} = Nb.Events.create(event)
 
-    Core.Mailer.on_event_create(event_id, event_slug, event)
+    Core.EventMailer.on_create(event_id, event_slug, event)
 
     %{"ok" => "There you go!"}
   end
