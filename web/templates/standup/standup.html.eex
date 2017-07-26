@@ -6,33 +6,53 @@
 	color: rgb(119, 114, 126);
 	margin: auto;
 	text-align: center;
+	font-size: 0.85em;
 }
 .hero {
-	background-color: 'white'
+	background-color: rgb(244, 244, 244);
 }
 .title {
 	font-family: cursive;
-	color: rgb(215, 215, 215);
 	font-size: 2.5em;
 	font-weight: 600;
-	margin-top: 50px;
-	margin-bottom: 50px;
 }
-.hero-body {
-		
+.section-header {
+	padding-top: 50px;
+	padding-bottom: 50px;
+	color: rgb(215, 215, 215);
 }
-.hero-join {
+
+.counter {
+	color: rgb(39, 86, 97);
+}
+.secondary-title {
+	font-size: 1.15em;
+	font-weight: 600;
+	font-style: italic;
+	color: rgb(39, 86, 97);
+}
+.hero-section {
 	display: inline-block;
 	border-top: solid 7px rgb(37, 80, 90);
 	border-bottom: solid 7px rgb(37, 80, 90);
 	vertical-align: middle;
-	height: 100%;
+	width: 215px;
+	height: 285px;
+	margin-right: 2em;
+	margin-left: 2em;
+	padding-top: 2em;
+	padding-bottom: 2em;
 }
 .hero-video {
 	display: inline-block;
+	vertical-align: middle;
 }
 .hero-pledge {
 	display: inline-block;
+	min-width: 215px;
+	border-top: solid 7px rgb(37, 80, 90);
+	border-bottom: solid 7px rgb(37, 80, 90);
+	margin-left: 2em;
 }
 .logo-container {
 	height: 100%;

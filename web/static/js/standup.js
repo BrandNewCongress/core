@@ -50,12 +50,15 @@ class Standup extends Component {
           </div>
         </div>
         <div className='hero'>
-          <div className='title'>
-            [COSMIC DATA HERE]
+          <div className='title section-header'>
+            [Why Medicare For All?]
           </div>
           <div className='hero-body'>
-            <div className='hero-join'>
-              Join the People
+            <div className='hero-section'>
+              <img height='65' src='/images/temp-join.png' />
+              <div className='title counter'>[43,000]</div>
+              <div className='counter-description'>[Have Told Their Representative]</div>
+              <div className='secondary-title'>[#StandUp4Medicare]</div>
             </div>
             <div className='hero-video'>
               <video className="video-container" poster="http://content.bitsontherun.com/thumbs/bkaovAYt-320.jpg" autoPlay="" muted="muted" controls="">
@@ -64,8 +67,10 @@ class Standup extends Component {
                 <p className="warning">Your browser does not support HTML5 video.</p>
               </video> 
             </div>
-            <div className='hero-pledge'>
-              Pledge
+            <div className='hero-section'>
+              <div className='secondary-title'>[Running for Congress Or Serving a District?]</div>
+              <div className='button'>Pledge</div>
+              <div>[Take the Pledge and Stand With 73% of Americans]</div>
             </div>
           </div>
         </div>
