@@ -3,6 +3,25 @@ defmodule Core.StandupController do
   plug :put_layout, "minimal.html"
 
   def get(conn, params) do
-    render conn, "standup.html", GlobalOpts.get(conn, params)
+    {:ok, pledges_json} =
+      "standup-pledges"
+      |> Cosmic.get_type()
+      |> Enum.map(&extract_attrs/1)
+      |> Poison.encode()
+
+    IO.puts pledges_json
+
+    render conn, "standup.html", [pledges: pledges_json] ++ GlobalOpts.get(conn, params)
+  end
+
+  defp extract_attrs(
+    %{"content" => content, "metadata" =>
+      %{"name" => name, "district" => district, "position" => position,
+        "embed_code" => embed_code, "twitter" => twitter,
+        "facebook" => facebook, "instagram" => instagram}}) do
+
+    %{name: name, district: district, position: position,
+      embed_code: embed_code, content: content, twitter: twitter,
+      facebook: facebook, instagram: instagram}
   end
 end
