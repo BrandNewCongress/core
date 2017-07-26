@@ -3,15 +3,18 @@ defmodule Core.StandupController do
   plug :put_layout, "minimal.html"
 
   def get(conn, params) do
-    {:ok, pledges_json} =
+    pledges =
       "standup-pledges"
       |> Cosmic.get_type()
       |> Enum.map(&extract_attrs/1)
+
+    {:ok, pledges_json} =
+      pledges
       |> Poison.encode()
 
     IO.puts pledges_json
 
-    render conn, "standup.html", [pledges: pledges_json] ++ GlobalOpts.get(conn, params)
+    render conn, "standup.html", [pledges: pledges, pledges_json: pledges_json] ++ GlobalOpts.get(conn, params)
   end
 
   defp extract_attrs(
