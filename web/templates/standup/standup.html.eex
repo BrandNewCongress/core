@@ -36,23 +36,21 @@
 	border-top: solid 7px rgb(37, 80, 90);
 	border-bottom: solid 7px rgb(37, 80, 90);
 	vertical-align: middle;
-	width: 215px;
-	height: 285px;
+	width: 200px;
+	height: 200px;
 	margin-right: 2em;
 	margin-left: 2em;
-	padding-top: 2em;
-	padding-bottom: 2em;
+}
+.hero-section-inner {
+	display: inner-block;
+	vertical-align: middle;
+}
+.button {
+	box-shadow: -15px 0 15px -15px;
 }
 .hero-video {
 	display: inline-block;
 	vertical-align: middle;
-}
-.hero-pledge {
-	display: inline-block;
-	min-width: 215px;
-	border-top: solid 7px rgb(37, 80, 90);
-	border-bottom: solid 7px rgb(37, 80, 90);
-	margin-left: 2em;
 }
 .logo-container {
 	height: 100%;
@@ -78,7 +76,6 @@
 }
 .video-container {
     position: relative;
-    padding-bottom: 2em;
 }
 .video {
     position: absolute;

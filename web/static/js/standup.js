@@ -55,13 +55,15 @@ class Standup extends Component {
           </div>
           <div className='hero-body'>
             <div className='hero-section'>
-              <img height='65' src='/images/temp-join.png' />
-              <div className='title counter'>[43,000]</div>
-              <div className='counter-description'>[Have Told Their Representative]</div>
-              <div className='secondary-title'>[#StandUp4Medicare]</div>
+              <div className='hero-section-inner'>
+                <img height='65' src='/images/temp-join.png' />
+                <div className='title counter'>[43,000]</div>
+                <div className='counter-description'>[Have Told Their Representative]</div>
+                <div className='secondary-title'>[#StandUp4Medicare]</div>
+              </div>
             </div>
             <div className='hero-video'>
-              <video className="video-container" poster="http://content.bitsontherun.com/thumbs/bkaovAYt-320.jpg" autoPlay="" muted="muted" controls="">
+              <video width='540' className="video-container" poster="http://content.bitsontherun.com/thumbs/bkaovAYt-320.jpg" autoPlay="" muted="" controls="controls">
                 <source src="http://content.bitsontherun.com/videos/bkaovAYt-52qL9xLP.mp4" />
                 <source src="http://content.bitsontherun.com/videos/bkaovAYt-27m5HpIu.webm" />
                 <p className="warning">Your browser does not support HTML5 video.</p>
