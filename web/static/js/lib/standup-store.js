@@ -11,7 +11,7 @@ channel
     console.log(`Could not connect with ${JSON.stringify(msg)}`)
   })
 
-const get = {
+const videos = {
   for: district =>
     new Promise((resolve, reject) => {
       channel.push('videos-for', { district })
@@ -40,4 +40,15 @@ const create = data =>
     })
   })
 
-export default { get, create }
+const reps = {
+  get: () =>
+    new Promise((resolve, reject) => {
+      channel.push('congress', {})
+      channel.on('congress', data => {
+        channel.off('congress')
+        resolve(data)
+      })
+    })
+}
+
+export default { videos, reps }

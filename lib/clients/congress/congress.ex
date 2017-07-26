@@ -1,21 +1,6 @@
 defmodule Congress do
-  require Congress.Parser
+  Stash.load(:congress_cache, "./lib/clients/congress/congress.ets")
+  @reps_by_state Stash.get(:congress_cache, "congress")
 
-  {:ok, legislators} = "./lib/clients/congress/legislators-current.json"
-    |> File.read()
-    |> (fn {:ok, raw} -> Poison.decode(raw) end).()
-
-  @congress District.list()
-    |> Enum.map(&(Congress.Parser.get_congress(&1, legislators)))
-    |> Enum.into(%{})
-
-  def house_for(district) do
-    %{house: rep} = @congress[district]
-    rep
-  end
-
-  def senate_for(district) do
-    %{senate: sen} = @congress[district]
-    sen
-  end
+  def reps_by_state, do: @reps_by_state
 end

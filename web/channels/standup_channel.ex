@@ -10,14 +10,22 @@ defmodule Core.StandupChannel do
 
   def handle_in("videos-for", %{"district" => district}, socket) do
     push socket, "videos-for-#{district}", %{videos: mock_videos()}
+    {:noreply, socket}
   end
 
   def handle_in("recent-videos", _body, socket) do
     push socket, "recent-videos", %{videos: mock_videos()}
+    {:noreply, socket}
   end
 
   def handle_in("create-video", _content, socket) do
     push socket, "video-created", %{}
+    {:noreply, socket}
+  end
+
+  def handle_in("congress", _content, socket) do
+    push socket, "congress", %{congress: Congress.reps_by_state()}
+    {:noreply, socket}
   end
 
   defp mock_videos do
