@@ -18,10 +18,12 @@ defmodule Core.StandupController do
     %{"content" => content, "metadata" =>
       %{"name" => name, "district" => district, "position" => position,
         "embed_code" => embed_code, "twitter" => twitter,
-        "facebook" => facebook, "instagram" => instagram}}) do
+        "facebook" => facebook, "instagram" => instagram,
+        "state" => state, "headshot" => %{"imgix_url" => headshot}}}) do
 
     %{name: name, district: district, position: position,
       embed_code: embed_code, content: content, twitter: twitter,
-      facebook: facebook, instagram: instagram}
+      facebook: facebook, instagram: instagram, headshot: headshot,
+      state: state}
   end
 end

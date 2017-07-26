@@ -9,9 +9,7 @@ export default class PledgeTally extends Component {
   componentDidMount() {
     store.reps
       .get()
-      .then(congress => {
-        this.setState(congress)
-      })
+      .then(congress => this.setState(congress))
       .catch(console.error)
   }
 
@@ -25,9 +23,43 @@ export default class PledgeTally extends Component {
           flexDirection: 'column'
         }}
       >
+        <div style={{ display: 'flex', height: '300px' }}>
+          {this.pledgesByState().map((state, col) =>
+            <div
+              key={state}
+              style={{
+                width: '15px',
+                fontSize: '8px',
+                marginLeft: '2px',
+                marginRight: '2px',
+                position: 'relative'
+              }}
+            >
+              {state[1].map((pledge, row) =>
+                <div
+                  key={pledge.name}
+                  style={{
+                    borderRadius: '50%',
+                    width: '28px',
+                    height: '28px',
+                    position: 'absolute',
+                    bottom: `${this.calcOffset(col, row)}px`,
+                    marginLeft: '-5px',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundImage: `url("${pledge.headshot}")`
+                  }}
+                  className={`bubble ${pledge.position}`}
+                />
+              )}
+            </div>
+          )}
+        </div>
+
         <div style={{ display: 'flex', marginTop: '35px' }}>
           {Object.keys(congress).sort().map(state =>
             <div
+              key={state}
               style={{
                 width: '15px',
                 height: '50px',
@@ -92,4 +124,24 @@ export default class PledgeTally extends Component {
       </div>
     )
   }
+
+  pledgesByState = () => {
+    const byState = Object.assign({}, this.state.congress)
+
+    for (let state in byState) {
+      byState[state] = []
+    }
+
+    if (Object.keys(byState).length > 0) {
+      this.props.pledges.forEach(p => {
+        byState[p.state].push(p)
+      })
+
+      return Object.keys(byState).sort().map(state => [state, byState[state]])
+    } else {
+      return []
+    }
+  }
+
+  calcOffset = (col, row) => (col % 2 == 0 ? 50 : 100) + (row * 25)
 }

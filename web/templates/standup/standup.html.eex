@@ -159,4 +159,13 @@
 
 }
 
+.bubble {
+	border: 4px solid blue;
+}
+
+.bubble img {
+	height: 100%;
+	width: 100%;
+}
+
 </style>

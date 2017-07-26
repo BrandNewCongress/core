@@ -21,11 +21,11 @@ import PledgeTally from './components/pledge-tally'
 
 class Standup extends Component {
   state = {
-    videos: window.pledges.slice()
+    pledges: window.pledges.slice()
   }
 
   render() {
-    const { videos } = this.state
+    const { pledges } = this.state
 
     return (
       <div className="body">
@@ -82,15 +82,15 @@ class Standup extends Component {
         </div>
 
         <div>
-          <PledgeTally />
+          <PledgeTally pledges={pledges} />
         </div>
 
         <div>
-          {videos.map(v =>
+          {pledges.map(p =>
             <div className="pledge-container">
               <div
                 className="pledge-video-container"
-                dangerouslySetInnerHTML={{ __html: v.embed_code }}
+                dangerouslySetInnerHTML={{ __html: p.embed_code }}
               />
               <div className="pledge-info-container">
                 <div className="pledge-info-box">
@@ -98,21 +98,21 @@ class Standup extends Component {
 
                   <div className="pledger-info">
                     <div className="name">
-                      {v.name}
+                      {p.name}
                     </div>
                     <div className="position">
-                      {v.position + ' ' + v.district}
+                      {p.position + ' ' + p.district}
                     </div>
                   </div>
 
                   <div className="pledger-share">
-                    <a href={v.twitter} target="_blank">
+                    <a href={p.twitter} target="_blank">
                       Twitter
                     </a>
-                    <a href={v.facebook} target="_blank">
+                    <a href={p.facebook} target="_blank">
                       Facebook
                     </a>
-                    <a href={v.instagram} target="_blank">
+                    <a href={p.instagram} target="_blank">
                       Instagram
                     </a>
                   </div>
@@ -120,7 +120,7 @@ class Standup extends Component {
 
                 <div
                   className="pledge-text"
-                  dangerouslySetInnerHTML={{ __html: v.content }}
+                  dangerouslySetInnerHTML={{ __html: p.content }}
                 />
               </div>
             </div>
