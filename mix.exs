@@ -19,7 +19,9 @@ defmodule Core.Mixfile do
   def application do
     [mod: {Core, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :httpotion, :swoosh, :timex, :quantum]]
+                    :phoenix_ecto, :postgrex, :httpotion, :swoosh, :timex, :quantum,
+                    :browser, :csv, :geo, :html_sanitize_ex, :redix, :remodel, :stash, :topo 
+                    ]]
   end
 
   # Specifies which paths to compile per environment.
@@ -51,6 +53,7 @@ defmodule Core.Mixfile do
      {:html_sanitize_ex, "~> 1.0.0"},
      {:geo, "~> 1.5"},
      {:topo, "~> 0.1.0"},
+     {:distillery, "~> 1.0.0"},
      {:remodel, "~> 0.0.4"}]
   end
 
