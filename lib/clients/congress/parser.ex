@@ -1,9 +1,26 @@
 defmodule Congress.Parser do
-  {:ok, legislators} = "./lib/clients/congress/legislators-current.json"
-    |> File.read()
-    |> (fn {:ok, raw} -> Poison.decode(raw) end).()
+  def load_reps_by_state do
+    {:ok, legislators} = "./lib/clients/congress/legislators-current.json"
+      |> File.read()
+      |> (fn {:ok, raw} -> Poison.decode(raw) end).()
 
-  @raw_legislators legislators
+    raw_legislators = legislators
+
+    areas = raw_legislators
+      |> Enum.map(&state_of/1)
+      |> MapSet.new()
+
+    legislators_by_area = Enum.map(areas, fn area ->
+      {
+        full_state_name(area),
+        raw_legislators
+        |> Enum.filter(&(is_in_state(&1, area)))
+        |> Enum.map(&extract_standup_attrs/1)
+      }
+    end)
+
+    Enum.into(legislators_by_area, %{})
+  end
 
   def get_congress(district, legislators) do
     rep = legislators |> Enum.filter(&(is_rep_for(&1, district))) |> List.first()
@@ -38,23 +55,6 @@ defmodule Congress.Parser do
   end
 
   def current_appointment(_legislator = %{"terms" => terms}), do: List.last(terms)
-
-  def reps_by_state do
-    areas = @raw_legislators
-      |> Enum.map(&state_of/1)
-      |> MapSet.new()
-
-    legislators_by_area = Enum.map(areas, fn area ->
-      {
-        full_state_name(area),
-        @raw_legislators
-        |> Enum.filter(&(is_in_state(&1, area)))
-        |> Enum.map(&extract_standup_attrs/1)
-      }
-    end)
-
-    Enum.into(legislators_by_area, %{})
-  end
 
   def extract_standup_attrs(legislator = %{"name" => %{"official_full" => name}}) do
     %{"party" => party, "district" => district, "state" => state}
