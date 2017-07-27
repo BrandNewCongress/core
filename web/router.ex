@@ -52,10 +52,11 @@ defmodule Core.Router do
     get "/entry", EntryController, :get
   end
 
-
   scope "/api", Core do
     get "/update/cosmic", UpdateController, :cosmic
     post "/update/cosmic", UpdateController, :cosmic
     post "/tf-submit/submit-event", TypeformController, :submit_event
+    post "/jotform/host-event", JotformController, :submit_event
   end
+
 end
