@@ -37,6 +37,8 @@ defmodule Core.Router do
     get "/act/:candidate", ActController, :legacy_redirect
 
     get "/events", EventsController, :get
+    get "/events/:slug", EventsController, :get_one
+    post "/events/:slug", EventsController, :rsvp
 
     get "/call", VoxController, :get
     get "/call/logins", VoxController, :get_logins

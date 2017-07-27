@@ -1,0 +1,20 @@
+<div class="header">
+  <%= @event.title %>
+</div>
+<div class="description">
+  <%= @event.description %>
+</div>
+
+<div class="bar"></div>
+
+<div class="info-container">
+  <div class="when">
+    <h3> When </h3>
+    <%= @event.date_line %>
+  </div>
+  <div class="where">
+    <h3> Where </h3>
+    <%= @event.location.address_lines |> List.first() %> <br/>
+    <%= @event.location.locality %> <%= @event.location.region %>
+  </div>
+</div>

@@ -23,10 +23,8 @@ defmodule Zip do
     matches =
       candidates
       |> Enum.zip(mile_distances)
-      |> Enum.filter_map(
-          fn {_cand, meters} -> meters < @mile_limit end,
-          fn {cand, _} -> cand end
-        )
+      |> Enum.filter(fn {_cand, meters} -> meters < @mile_limit end)
+      |> Enum.map(fn {cand, _} -> cand end)
 
     case matches do
       [match | _] -> match

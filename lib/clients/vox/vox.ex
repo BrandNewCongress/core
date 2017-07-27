@@ -73,10 +73,8 @@ defmodule Core.Vox do
 
     [password] =
       logins
-      |> Enum.filter_map(
-          fn [un | _] -> un == username end,
-          fn [_ | [pwd | _]] -> pwd end
-        )
+      |> Enum.filter(fn [un | _] -> un == username end)
+      |> Enum.map(fn [_ | [pwd | _]] -> pwd end)
 
     password
   end
