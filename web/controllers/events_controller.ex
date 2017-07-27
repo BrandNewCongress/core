@@ -14,12 +14,24 @@ defmodule Core.EventsController do
 
   def get_one(conn, params = %{"slug" => slug}) do
     event = Stash.get(:event_cache, slug)
-    date_line = humanize_date(event.start_date) <> humanize_time(event.start_date) <> " - " <> humanize_time(event.end_date)
+    date_line =
+      humanize_date(event.start_date) <> "from " <>
+      humanize_time(event.start_date) <> " - " <> humanize_time(event.end_date)
     event = Map.put(event, :date_line, date_line)
 
-    IO.inspect event
-
     render conn, "rsvp.html", [event: event] ++ GlobalOpts.get(conn, params)
+  end
+
+  def rsvp(conn, params = %{"slug" => slug, "first_name" => first_name, "last_name" => last_name, "email" => email, "phone" => phone}) do
+    event = Stash.get(:event_cache, slug)
+    Nb.Events.Rsvps.create(event.id, %{"first_name" => first_name, "last_name" => last_name, "email" => email, "phone" => phone})
+
+    date_line =
+      humanize_date(event.start_date) <> "from " <>
+      humanize_time(event.start_date) <> " - " <> humanize_time(event.end_date)
+    event = Map.put(event, :date_line, date_line)
+
+    render conn, "rsvp.html", [event: event, person: true] ++ GlobalOpts.get(conn, params)
   end
 
   defp get_district(""), do: nil
@@ -59,7 +71,7 @@ defmodule Core.EventsController do
     month = ["January", "February", "March", "April", "May", "June", "July",
              "August", "September", "October", "November", "December"] |> Enum.at(month)
 
-    "#{month} #{day} "
+    "#{month}, #{day} "
   end
 
 end

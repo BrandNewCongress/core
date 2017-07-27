@@ -48,7 +48,7 @@ defmodule Core.Mixfile do
      {:timex, "~> 3.0"},
      {:quantum, "~> 1.9.2"},
      {:redix, ">= 0.0.0"},
-     {:html_sanitize_ex, "~> 1.0.0"},
+     {:html_sanitize_ex, "~> 1.3.0-rc3"},
      {:geo, "~> 1.5"},
      {:topo, "~> 0.1.0"},
      {:remodel, "~> 0.0.4"},

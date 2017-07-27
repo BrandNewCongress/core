@@ -52,6 +52,9 @@ defmodule Core.Web do
       import Core.Router.Helpers
       import Core.ErrorHelpers
       import Core.Gettext
+      import Core.BrandHelpers
+      import Core.Scrubber
+      import Core.CommonView
     end
   end
 

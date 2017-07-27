@@ -7,7 +7,7 @@
     </div>
     <%= form_tag("/call", method: :post) %>
       <div class="petition-container">
-        <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
+        <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
         <div>
           <label>First Name</label>
           <input class="text" type="text" name="first" required="required"/>
