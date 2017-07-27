@@ -12,7 +12,8 @@ defmodule Core.StandupController do
       pledges
       |> Poison.encode()
 
-    render conn, "standup.html", [pledges: pledges, pledges_json: pledges_json] ++ GlobalOpts.get(conn, params)
+    render conn, "standup.html",
+      [pledges: pledges, pledges_json: pledges_json] ++ GlobalOpts.get(conn, params)
   end
 
   defp extract_attrs(

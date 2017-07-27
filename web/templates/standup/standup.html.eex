@@ -12,7 +12,7 @@
   </div>
 
   <div class="hero">
-    <div class="title section-header">[Why Medicare For All?]</div>
+    <div class="title section-header">Why Medicare For All?</div>
     <div class="hero-body">
       <div class="hero-section">
         <div class="hero-section-inner">
@@ -45,22 +45,79 @@
         <div class="secondary-title">
           [Running for Congress Or Serving a District?]
         </div>
-        <div class="button">Pledge</div>
+        <div class="button">
+          <%= render "elevated-div.html", [uniq: "pld", color: "#295661", content: "Pledge", padding: 5, width: 100, height: 50] %>
+        </div>
         <div>[Take the Pledge and Stand With 73% of Americans]</div>
       </div>
     </div>
   </div>
 
-  <div>
-    <%= render "shaded-box.html", [uniq: "test", color: "#295661"] %>
+  <div class="section">
+    <div class="title section-header">Why Stand Up?</div>
+    <div class="two-column">
+
+      <div id="column-1">
+        <%= render "elevated-div.html",
+          [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 90,
+           width: 460, height: 285, no_hover: true,
+           template: "box1.html"] %>
+
+        <div class="circle-container">
+          <%= render "elevated-div.html",
+            [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 90,
+             width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+             template: "cr1.html"] %>
+
+          <%= render "elevated-div.html",
+            [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 90,
+             width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+             template: "cr2.html"] %>
+       </div>
+
+       <%= render "elevated-div.html",
+            [uniq: "tweet", color: "", shadow_color: "#f4f4f4", padding: 90,
+             width: 600, height: 285, no_hover: true,
+             template: "cr2.html"] %>
+     </div>
+
+
+        <div>
+          <%= render "elevated-div.html",
+            [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 90,
+             width: 460, height: 285, no_hover: true,
+             template: "video.html"] %>
+
+          <%= render "elevated-div.html",
+            [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 90,
+             width: 460, height: 285, no_hover: true,
+             template: "box1.html"] %>
+
+           <div class="circle-container">
+            <%= render "elevated-div.html",
+              [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 90,
+               width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+               template: "cr1.html"] %>
+
+            <%= render "elevated-div.html",
+              [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 90,
+               width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+               template: "cr2.html"] %>
+           </div>
+         </div>
+
+    </div>
+  </div>
+
+  <div >
   </div>
 
   <div>
-		<div id="standup-app"></div>
+		<!-- <div id="standup-app"></div> -->
   </div>
 
   <div>
-		<%= for p <- @pledges do %>
+		<!-- <%= for p <- @pledges do %>
       <div class="pledge-container">
         <div
           class="pledge-video-container"
@@ -100,7 +157,7 @@
 					</div>
         </div>
       </div>
-		<% end %>
+		<% end %> -->
   </div>
 </div>
 
@@ -112,6 +169,19 @@
 <script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script>
 
 <style>
+
+.circle-container {
+  display: flex;
+}
+
+.two-column {
+  display: flex;
+}
+
+.button {
+  display: flex;
+  justify-content: center;
+}
 
 .body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -127,8 +197,8 @@
 
 .title {
 	font-family: cursive;
-	font-size: 2.5em;
-	font-weight: 600;
+	font-size: 3.5em;
+	font-weight: bolder;
 }
 
 .section-header {
@@ -162,10 +232,6 @@
 .hero-section-inner {
 	display: inner-block;
 	vertical-align: middle;
-}
-
-.button {
-	box-shadow: -15px 0 15px -15px;
 }
 
 .hero-video {

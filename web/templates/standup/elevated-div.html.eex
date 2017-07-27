@@ -3,10 +3,18 @@
 <% padding = assigns[:padding] || 20 %>
 <% width = assigns[:width] || 200 %>
 <% height = assigns[:height] || 100 %>
+<% extra_styles = assigns[:extra_styles] || "" %>
+<% shadow_color = assigns[:shadow_color] || "black" %>
 
 <div class="<%= bxs_class %>">
   <%= for idx <- 1..padding do %>
-    <div class="<%= bx_class %>" style="<%= "box-shadow: -#{idx}px #{idx}px 0px black; " %>"></div>
+    <div class="<%= bx_class %>" style="<%= "box-shadow: -#{idx}px #{idx}px 0px #{shadow_color}; #{extra_styles}" %>">
+      <%= if assigns[:template] != nil do %>
+        <%= render @template, assigns %>
+      <% else %>
+        <%= raw(@content) %>
+      <% end %>
+    </div>
   <% end %>
 </div>
 
@@ -16,7 +24,7 @@
   position: relative;
   width: <%= padding + width %>px;
   height: <%= padding + height %>px;
-  margin-left: 100px;
+  margin-left: <%= padding %>px;
 }
 
 .<%= bx_class %> {
@@ -25,6 +33,12 @@
   height: <%= height %>px;
   position: absolute;
   transition: all .2s ease-out;
+	font-family: cursive;
+  font-size: larger;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .<%= bxs_class %>:not(:hover) > .<%= bx_class %> {
