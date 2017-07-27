@@ -4,33 +4,23 @@ defmodule Jotform.SubmitEvent do
   @doc"""
   Takes a typeform post body from a webhook, creates the event in NB, and sends an email
   """
-  def on_event_submit(data) do
-    IO.inspect data
-    %{"ok" => "There you go!"}
-  end
-end
-
-
-  @doc"""
-  Takes a typeform post body from a webhook, creates the event in NB, and sends an email
-  """
   def on_event_submit(all_data = %{"rawRequest" => raw}) do
     IO.inspect all_data
 
     %{"q3_name" => %{"first" => first_name, "last" => last_name},
       "q4_phoneNumber" => %{"area" => area, "phone" => phone_rest},
-      "q5_email" => email, "q6_whatType" => event_type, "q7_whenWould" => date,
+      "q5_email" => email, "q6_whatType" => event_type, "q7_whenWould" => event_date,
       "q8_whenWill" => start_time, "q9_whenWill9" => end_time,
-      "q10_giveUs" => description, "q14_shouldWe14" => hide_answer
+      "q10_giveUs" => description, "q14_shouldWe14" => hide_answer,
       "q13_whatIs" => venue_name, "q14_shouldWe14" => hide_address,
       "q15_whatsThe" => venue_address} = Poison.decode!(raw)
 
     phone = area <> phone_rest
     should_hide = hide_answer == "Yes"
 
-    ["City: " <> city,
-     "State: " <> state,
-     "Postal code: " <> zip,
+    ["City: " <> venue_city,
+     "State: " <> venue_state,
+     "Postal code: " <> venue_zip,
      "Country: " <> country] = String.split venue_address, "\r\n"
 
     ensure_host = Task.async(fn ->
@@ -42,7 +32,7 @@ end
 
     {calendar_id, time_zone_info} = Task.await(Task.async(fn ->
       # First, geocode
-      {lat, lng} = Maps.geocode(zip)
+      {lat, lng} = Maps.geocode(venue_zip)
 
       # Use geocode for calendar_id
       calendar_id = Task.async(fn ->
@@ -71,6 +61,7 @@ end
     end
 
     tags = type_tag ++ sharing_tag
+    event_name = "hello"
 
     event = %{
       name: event_name,
