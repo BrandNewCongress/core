@@ -1,21 +1,6 @@
 defmodule District do
-  {:ok, districts} =
-    "./lib/clients/district/geojsons"
-    |> File.ls()
-
-  geojsons =
-    districts
-    |> Enum.map(fn district ->
-      {:ok, file} = "./lib/clients/district/geojsons/#{district}" |> File.read()
-      {:ok, %{"geometry" => geometry}} = file |> Poison.decode()
-
-      geometry
-      |> Geo.JSON.decode()
-     end)
-
-  @geojsons districts
-    |> Enum.map(fn str -> str |> String.split(".") |> List.first() end)
-    |> Enum.zip(geojsons) |> Enum.into(%{})
+  Stash.load(:district_cache, "./lib/clients/district/district.ets")
+  @geojsons Stash.get(:district_cache, "district")
 
   @mile_limit 10
   @miles_per_degree 69
