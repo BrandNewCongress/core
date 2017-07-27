@@ -23,9 +23,11 @@
   </head>
 
   <body class="<%= @brand %>">
-    <%= render Core.LayoutView, "header.html",
-          [conn: @conn, mobile: @mobile, header_text: assigns[:header_text],
-           brand: @brand] %>
+    <%= if assigns[:no_header] != true do %>
+      <%= render Core.LayoutView, "header.html",
+            [conn: @conn, mobile: @mobile, header_text: assigns[:header_text],
+             brand: @brand] %>
+    <% end %>
 
     <div class="container">
       <main role="main">

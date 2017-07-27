@@ -4,12 +4,12 @@ defmodule Core.InfoController do
   def get(conn, params = %{"info" => slug, "draft" => _draft}) do
     global_opts = GlobalOpts.get(conn, params)
 
-    %{"title" => title, "content" => content, "metadata" => %{
+    object = %{"title" => title, "content" => content, "metadata" => %{
       "brands" => brands
     }} = Cosmic.get(slug)
 
     if Enum.member? brands, Keyword.get(global_opts, :brand) do
-      render conn, "info.html", [content: content, title: title] ++ global_opts
+      render conn, "info.html", [content: content, title: title] ++ global_opts ++ empty_params(object)
     else
       redirect_home(conn, params)
     end
@@ -18,14 +18,14 @@ defmodule Core.InfoController do
   def get(conn, params = %{"info" => slug}) do
     global_opts = GlobalOpts.get(conn, params)
 
-    %{"title" => title, "content" => content, "metadata" => %{
+    object = %{"title" => title, "content" => content, "metadata" => %{
       "visibility" => visibility,
       "brands" => brands
     }} = Cosmic.get(slug)
 
     if Enum.member? brands, Keyword.get(global_opts, :brand) do
       case visibility do
-        "Published" -> render conn, "info.html", [content: content, title: title] ++ GlobalOpts.get(conn, params)
+        "Published" -> render conn, "info.html", [content: content, title: title] ++ GlobalOpts.get(conn, params) ++ empty_params(object)
         "Draft" -> redirect_home(conn, params)
       end
     else
@@ -40,4 +40,7 @@ defmodule Core.InfoController do
     end
     redirect(conn, external: url)
   end
+
+  defp empty_params(%{"metadata" => %{"empty" => "Empty"}}), do: [no_header: true, no_footer: true]
+  defp empty_params(_else), do: []
 end
