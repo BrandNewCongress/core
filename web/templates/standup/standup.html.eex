@@ -1,0 +1,282 @@
+<div class="body">
+  <div class="header">
+    <div class="logo-container">
+      <img class="logo" src="/images/temp-logo.png" />
+    </div>
+    <div class="contact-bar">
+      <div class="social-icons">
+        <img height="20" src="/images/temp-social.png" />
+      </div>
+      <div class="contact-link">Contact Us</div>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="title section-header">[Why Medicare For All?]</div>
+    <div class="hero-body">
+      <div class="hero-section">
+        <div class="hero-section-inner">
+          <img height="65" src="/images/temp-join.png" />
+          <div class="title counter">[43,000]</div>
+          <div class="counter-description">
+            [Have Told Their Representative]
+          </div>
+          <div class="secondary-title">[#StandUp4Medicare]</div>
+        </div>
+      </div>
+
+      <div class="hero-video">
+        <video
+          width="540"
+          class="video-container"
+          poster="http://content.bitsontherun.com/thumbs/bkaovAYt-320.jpg"
+          autoPlay=""
+          muted=""
+          controls="controls"
+        >
+          <source src="http://content.bitsontherun.com/videos/bkaovAYt-52qL9xLP.mp4" />
+          <source src="http://content.bitsontherun.com/videos/bkaovAYt-27m5HpIu.webm" />
+          <p class="warning">
+            Your browser does not support HTML5 video.
+          </p>
+        </video>
+      </div>
+      <div class="hero-section">
+        <div class="secondary-title">
+          [Running for Congress Or Serving a District?]
+        </div>
+        <div class="button">Pledge</div>
+        <div>[Take the Pledge and Stand With 73% of Americans]</div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+		<div id="standup-app"></div>
+  </div>
+
+  <div>
+		<%= for p <- @pledges do %>
+      <div class="pledge-container">
+        <div
+          class="pledge-video-container"
+        >
+					<%= raw(p.embed_code) %>
+				</div>
+        <div class="pledge-info-container">
+          <div class="pledge-info-box">
+            <div class="standing-up">Standing Up</div>
+
+            <div class="pledger-info">
+              <div class="name">
+                <%= p.name %>
+              </div>
+              <div class="position">
+                <%= "#{p.position} #{p.district}" %>
+              </div>
+            </div>
+
+            <div class="pledger-share">
+              <a href="<%= p.twitter %>" target="_blank">
+                Twitter
+              </a>
+              <a href="<%= p.facebook %>" target="_blank">
+                Facebook
+              </a>
+              <a href="<%= p.instagram %>" target="_blank">
+                Instagram
+              </a>
+            </div>
+          </div>
+
+          <div
+            class="pledge-text"
+          >
+						<%= raw(p.content) %>
+					</div>
+        </div>
+      </div>
+		<% end %>
+  </div>
+</div>
+
+<script>
+	window.pledges = <%= raw(@pledges_json) %>
+</script>
+
+<link href="https://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet">
+<script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script>
+
+<style>
+
+.body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: rgb(119, 114, 126);
+	margin: auto;
+	text-align: center;
+	font-size: 0.85em;
+}
+
+.hero {
+	background-color: rgb(244, 244, 244);
+}
+
+.title {
+	font-family: cursive;
+	font-size: 2.5em;
+	font-weight: 600;
+}
+
+.section-header {
+	padding-top: 50px;
+	padding-bottom: 50px;
+	color: rgb(215, 215, 215);
+}
+
+.counter {
+	color: rgb(39, 86, 97);
+}
+
+.secondary-title {
+	font-size: 1.15em;
+	font-weight: 600;
+	font-style: italic;
+	color: rgb(39, 86, 97);
+}
+
+.hero-section {
+	display: inline-block;
+	border-top: solid 7px rgb(37, 80, 90);
+	border-bottom: solid 7px rgb(37, 80, 90);
+	vertical-align: middle;
+	width: 200px;
+	height: 200px;
+	margin-right: 2em;
+	margin-left: 2em;
+}
+
+.hero-section-inner {
+	display: inner-block;
+	vertical-align: middle;
+}
+
+.button {
+	box-shadow: -15px 0 15px -15px;
+}
+
+.hero-video {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.logo-container {
+	height: 100%;
+}
+
+.logo {
+	max-width:100%;
+	max-height:100%;
+}
+
+.social-icons {
+	padding-right: 16px;
+	display: inline-block;
+}
+
+.contact-link {
+	text-transform: uppercase;
+	border-left: solid 1px rgb(119, 114, 126);
+	padding-left: 16px;
+	display: inline-block;
+}
+
+.header {
+	height: 330px;
+	background-color: rgb(225, 224, 227);
+	text-align: center;
+}
+
+.video-container {
+    position: relative;
+}
+
+.video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.contact-bar {
+	height: 22px;
+	position: absolute;
+	right: 60px;
+	top: 30px;
+}
+
+@media (max-width: 1200px) {
+	.logo-container {
+		height: 90%;
+	}
+	.contact-bar {
+		position: relative;
+		top: 0px;
+		right: 0px;
+		margin-top: 20px;
+		width: 50%;
+		margin: auto;
+	}
+}
+
+@media (max-width: 480px) {
+	.header {
+		height: 200px;
+	}
+}
+
+.grayscale {
+	filter: grayscale(1);
+	-webkit-filter: grayscale(1);
+}
+
+.pledge-container {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+.pledge-video-container {
+	width: 75%;
+}
+
+.pledge-info-container {
+	width: 25%;
+}
+
+.pledge-info-box {
+}
+
+.standing-up {
+	background-color: #145762;
+}
+
+.pledger-info {
+	text-align: left;
+	padding: 50px;
+}
+
+.pledger-share {
+
+}
+
+.bubble {
+	border: 4px solid blue;
+}
+
+.bubble img {
+	height: 100%;
+	width: 100%;
+}
+
+</style>

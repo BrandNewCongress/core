@@ -47,3 +47,5 @@ erl_crash.dump
 # Caches for offline development!
 cosmic_cache
 event_cache
+
+.DS_Store

@@ -22,6 +22,13 @@ defmodule District do
 
   def get_gjs, do: @geojsons
   def get_polygon_of(district), do: @geojsons[district]
+  def list, do: Map.keys(@geojsons)
+
+  def extract_int_form(string) do
+    [state, district] = String.split(string, "-")
+    {result, _} = Integer.parse(district)
+    {state, result}
+  end
 
   def is_short_form(string) do
     case Regex.run(~r/[A-Za-z][A-Za-z][-]?[0-9]+/, string) do

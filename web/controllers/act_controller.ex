@@ -121,7 +121,7 @@ defmodule Core.ActController do
     district
   end
 
-  defp on_hours?(candidate = %{"metadata" => %{"time_zone" => time_zone}}) do
+  defp on_hours?(candidate) when is_map(candidate) do
     is_callable(candidate)
   end
 
@@ -136,7 +136,7 @@ defmodule Core.ActController do
     |> Enum.map(fn %{"slug" => slug, "title" => name} -> %{slug: slug, name: name} end)
   end
 
-  defp is_callable(%{"slug" => slug, "metadata" => %{"callable" => "Callable", "time_zone" => time_zone}}) do
+  defp is_callable(%{"slug" => _slug, "metadata" => %{"callable" => "Callable", "time_zone" => time_zone}}) do
     now = time_zone |> Timex.now()
     local_hours = now.hour
     weekday = Timex.weekday(now)

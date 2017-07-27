@@ -51,7 +51,9 @@ defmodule Core.Mixfile do
      {:html_sanitize_ex, "~> 1.0.0"},
      {:geo, "~> 1.5"},
      {:topo, "~> 0.1.0"},
-     {:remodel, "~> 0.0.4"}]
+     {:remodel, "~> 0.0.4"},
+     {:flow, "~> 0.11"},
+     {:distillery, "~> 1.0.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
