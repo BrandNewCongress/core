@@ -1,0 +1,42 @@
+<% bxs_class = @uniq <> "-bxs" %>
+<% bx_class = @uniq <> "-bx" %>
+<% padding = assigns[:padding] || 20 %>
+<% width = assigns[:width] || 200 %>
+<% height = assigns[:height] || 100 %>
+
+<div class="<%= bxs_class %>">
+  <%= for idx <- 1..padding do %>
+    <div class="<%= bx_class %>" style="<%= "box-shadow: -#{idx}px #{idx}px 0px black; " %>"></div>
+  <% end %>
+</div>
+
+<style>
+
+.<%= bxs_class %> {
+  position: relative;
+  width: <%= padding + width %>px;
+  height: <%= padding + height %>px;
+  margin-left: 100px;
+}
+
+.<%= bx_class %> {
+  background-color: <%= assigns[:color] %>;
+  width: <%= width %>px;
+  height: <%= height %>px;
+  position: absolute;
+  transition: all .2s ease-out;
+}
+
+.<%= bxs_class %>:not(:hover) > .<%= bx_class %> {
+  margin: 0px 0px 0px 0px !important;
+}
+
+<%= if assigns[:no_hover] == nil do %>
+  .<%= bxs_class %>:hover > .<%= bx_class %> {
+    margin-left: -<%= padding %>px;
+    margin-top: <%= padding %>px;
+    box-shadow: none !important;
+  }
+<% end %>
+
+</style>
