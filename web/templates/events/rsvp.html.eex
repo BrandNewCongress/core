@@ -37,6 +37,9 @@
       <% end %>
     </div>
   </div>
+
+  <div class="bar"></div>
+
   <div class="rsvp">
     <%= if assigns[:person] == nil do %>
       <h3> Who is coming? </h3>
@@ -116,6 +119,12 @@
 
 .form-el > input {
   padding: 5px;
+}
+
+.bar {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border-bottom: 1px black dashed;
 }
 
 </style>
