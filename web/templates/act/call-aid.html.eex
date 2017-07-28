@@ -9,6 +9,9 @@
 <%= for ev <- @events do %>
   <div class="event">
     <div class="box">
+      <a class="primary-button" target="_blank" href="/events/<%= ev.name %>"> RSVP </a>
+    </div>
+    <div class="box">
       <p><strong> <%= ev.title %> </strong> <br/>
        <%= ev.date_line %> </p>
     </div>
@@ -43,6 +46,10 @@
   width: 50%;
   margin: 10px;
   font-size: smaller;
+}
+
+.box > a {
+  text-decoration: none;
 }
 
 form {
