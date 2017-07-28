@@ -23,7 +23,12 @@ defmodule Core.EventsController do
         event -> Osdi.Event.add_date_line(event)
       end
 
-    render conn, "rsvp.html", [event: event, title: event.title] ++ GlobalOpts.get(conn, params)
+    %{"metadata" => %{"preview" => %{"imgix_url" => banner}}} =
+      event.type
+      |> slugize()
+      |> Cosmic.get()
+
+    render conn, "rsvp.html", [event: event, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
 
   def rsvp(conn, params = %{"slug" => slug,
@@ -36,12 +41,17 @@ defmodule Core.EventsController do
       |> Stash.get(slug)
       |> Osdi.Event.add_date_line()
 
+    %{"metadata" => %{"preview" => %{"imgix_url" => banner}}} =
+      event.type
+      |> slugize()
+      |> Cosmic.get()
+
     Nb.Events.Rsvps.create(event.id,
       %{"first_name" => first_name, "last_name" => last_name, "email" => email,
         "phone" => phone, "primary_address" => %{"address1" => address1, "zip" => zip,
         "city" => city, "state" => state}})
 
-    render conn, "rsvp.html", [event: event, person: true, title: event.title] ++ GlobalOpts.get(conn, params)
+    render conn, "rsvp.html", [event: event, person: true, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
 
   defp get_district(""), do: nil
@@ -62,4 +72,10 @@ defmodule Core.EventsController do
     coordinates
   end
 
+  defp slugize(event_type) do
+    "Event Type: " <> event_type
+    |> String.downcase()
+    |> String.replace(" ", "-")
+    |> String.replace(":", "")
+  end
 end
