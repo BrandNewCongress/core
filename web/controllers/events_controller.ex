@@ -13,23 +13,21 @@ defmodule Core.EventsController do
   end
 
   def get_one(conn, params = %{"slug" => slug}) do
-    event = Stash.get(:event_cache, slug)
-    date_line =
-      humanize_date(event.start_date) <> "from " <>
-      humanize_time(event.start_date) <> " - " <> humanize_time(event.end_date)
-    event = Map.put(event, :date_line, date_line)
+    event =
+      :event_cache
+      |> Stash.get(slug)
+      |> Osdi.Event.add_date_line()
 
     render conn, "rsvp.html", [event: event] ++ GlobalOpts.get(conn, params)
   end
 
   def rsvp(conn, params = %{"slug" => slug, "first_name" => first_name, "last_name" => last_name, "email" => email, "phone" => phone}) do
-    event = Stash.get(:event_cache, slug)
-    Nb.Events.Rsvps.create(event.id, %{"first_name" => first_name, "last_name" => last_name, "email" => email, "phone" => phone})
+    event =
+      :event_cache
+      |> Stash.get(slug)
+      |> Osdi.Event.add_date_line()
 
-    date_line =
-      humanize_date(event.start_date) <> "from " <>
-      humanize_time(event.start_date) <> " - " <> humanize_time(event.end_date)
-    event = Map.put(event, :date_line, date_line)
+    Nb.Events.Rsvps.create(event.id, %{"first_name" => first_name, "last_name" => last_name, "email" => email, "phone" => phone})
 
     render conn, "rsvp.html", [event: event, person: true] ++ GlobalOpts.get(conn, params)
   end
@@ -50,28 +48,6 @@ defmodule Core.EventsController do
       |> Tuple.to_list()
       |> Poison.encode()
     coordinates
-  end
-
-  def humanize_time(iso_string) do
-    {:ok, %{month: month, day: day, year: year, minute: minute, hour: hour}, offset} = DateTime.from_iso8601(iso_string)
-    dt = %DateTime{month: month, day: day, year: year, utc_offset: offset, hour: hour, minute: minute, second: 0, time_zone: "", zone_abbr: "", std_offset: 0}
-    %DateTime{hour: hour, minute: minute} = dt
-
-    {hour, am_pm} = if hour >= 12, do: {hour - 12, "PM"}, else: {hour, "AM"}
-    minute = if minute == 0, do: "", else: ": ${minute}"
-
-    "#{hour}#{minute} " <> am_pm
-  end
-
-  def humanize_date(iso_string) do
-    {:ok, %{month: month, day: day, year: year, minute: minute, hour: hour}, offset} = DateTime.from_iso8601(iso_string)
-    dt = %DateTime{month: month, day: day, year: year, utc_offset: offset, hour: hour, minute: minute, second: 0, time_zone: "", zone_abbr: "", std_offset: 0}
-    %DateTime{month: month, day: day} = dt
-
-    month = ["January", "February", "March", "April", "May", "June", "July",
-             "August", "September", "October", "November", "December"] |> Enum.at(month)
-
-    "#{month}, #{day} "
   end
 
 end

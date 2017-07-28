@@ -1,0 +1,26 @@
+<%= for ev <- @events do %>
+  <div class="event">
+    <div class="box">
+      <p><strong> <%= ev.title %> </strong> <br/>
+       <%= ev.date_line %> </p>
+    </div>
+    <div class="box">
+      <p><strong> <%= ev.location.venue %> </strong> <br/>
+      <%= ev.location.address_lines |> List.first() %> <br/>
+      <%= ev.location.locality %> <%= ev.location.region %> </p>
+    </div>
+  </div>
+<% end %>
+
+<style>
+
+.event {
+  display: flex;
+}
+
+.box {
+  width: 50%;
+  margin: 10px;
+}
+
+</style>
