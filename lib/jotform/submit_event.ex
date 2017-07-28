@@ -4,7 +4,7 @@ defmodule Jotform.SubmitEvent do
   @doc"""
   Takes a typeform post body from a webhook, creates the event in NB, and sends an email
   """
-  def on_event_submit(%{"rawRequest" => raw}) do
+  def on_event_submit(params = %{"rawRequest" => raw}) do
     %{"q3_name" => %{"first" => first_name, "last" => last_name},
       "q4_area_phone" => %{"area" => area, "phone" => phone_rest},
       "q5_email" => email, "q6_event_type" => event_type, "q7_event_date" => event_date,
@@ -12,6 +12,8 @@ defmodule Jotform.SubmitEvent do
       "q10_description" => description, "q13_venue_name" => venue_name,
       "q14_should_hide" => hide_address, "q15_address" => venue_address,
       "q16_event_name" => event_name, "q17_should_contact" => should_contact} = Poison.decode!(raw)
+
+    auto_whitelist = Map.has_key?(params, "whitelist")
 
     phone = area <> phone_rest
     should_hide = hide_address == "Yes"
@@ -71,13 +73,17 @@ defmodule Jotform.SubmitEvent do
     tags = type_tag ++ sharing_tag ++ contact_tag
 
     whitelisted =
-      "esm-whitelist"
-      |> Cosmic.get()
-      |> Kernel.get_in(["metadata", "emails"])
-      |> String.split(";")
-      |> Enum.map(&String.trim/1)
-      |> MapSet.new()
-      |> MapSet.member?(email)
+      if auto_whitelist do
+        true
+      else
+        "esm-whitelist"
+        |> Cosmic.get()
+        |> Kernel.get_in(["metadata", "emails"])
+        |> String.split(";")
+        |> Enum.map(&String.trim/1)
+        |> MapSet.new()
+        |> MapSet.member?(email)
+      end
 
     status = if whitelisted, do: "published", else: "unlisted"
 
