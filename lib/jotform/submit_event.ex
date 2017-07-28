@@ -5,8 +5,6 @@ defmodule Jotform.SubmitEvent do
   Takes a typeform post body from a webhook, creates the event in NB, and sends an email
   """
   def on_event_submit(%{"rawRequest" => raw}) do
-    IO.puts raw
-
     %{"q3_name" => %{"first" => first_name, "last" => last_name},
       "q4_area_phone" => %{"area" => area, "phone" => phone_rest},
       "q5_email" => email, "q6_event_type" => event_type, "q7_event_date" => event_date,
