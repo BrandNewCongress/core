@@ -5,16 +5,19 @@ defmodule Jotform.SubmitEvent do
   Takes a typeform post body from a webhook, creates the event in NB, and sends an email
   """
   def on_event_submit(%{"rawRequest" => raw}) do
+    IO.puts raw
+
     %{"q3_name" => %{"first" => first_name, "last" => last_name},
       "q4_area_phone" => %{"area" => area, "phone" => phone_rest},
       "q5_email" => email, "q6_event_type" => event_type, "q7_event_date" => event_date,
       "q8_start_time" => start_time, "q9_end_time" => end_time,
       "q10_description" => description, "q13_venue_name" => venue_name,
       "q14_should_hide" => hide_address, "q15_address" => venue_address,
-      "q16_event_name" => event_name} = Poison.decode!(raw)
+      "q16_event_name" => event_name, "q17_should_contact" => should_contact} = Poison.decode!(raw)
 
     phone = area <> phone_rest
     should_hide = hide_address == "Yes"
+    should_contact = should_contact == "Yes"
 
     ["Street name: " <> venue_street_name,
      "House number: " <> venue_house_number,
@@ -56,12 +59,18 @@ defmodule Jotform.SubmitEvent do
 
     # Calc tags
     type_tag = ["Event Type: #{event_type}"]
+
     sharing_tag = case should_hide do
       true -> []
       false -> ["Event: Hide Address"]
     end
 
-    tags = type_tag ++ sharing_tag
+    contact_tag = case should_contact do
+      true -> ["Event: Should Contact Host"]
+      _ -> []
+    end
+
+    tags = type_tag ++ sharing_tag ++ contact_tag
 
     whitelisted =
       "esm-whitelist"
