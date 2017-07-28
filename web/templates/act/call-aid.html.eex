@@ -28,14 +28,14 @@
   <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
 
   <label>First Name</label> <br/>
-  <input type="text" name="first_name" style="padding: 10px; font-size: larger;" />
+  <input type="text" name="first_name" style="padding: 10px; font-size: larger;" /> <br/>
   <label>Last Name</label> <br/>
-  <input type="text" name="last_name" style="padding: 10px; font-size: larger;" />
+  <input type="text" name="last_name" style="padding: 10px; font-size: larger;" /> <br/>
 
   <label>Phone Number</label> <br/>
-  <input type="tel" name="phone" style="padding: 10px; font-size: larger;" />
+  <input type="tel" name="phone" style="padding: 10px; font-size: larger;" /> <br/>
   <label>Email</label> <br/>
-  <input type="email" name="email" style="padding: 10px; font-size: larger;" />
+  <input type="email" name="email" style="padding: 10px; font-size: larger;" /> <br/>
   <input
     type="submit"
     value="Mark as Volunteer" class="primary-button"
