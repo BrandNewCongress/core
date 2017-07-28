@@ -26,13 +26,20 @@ defmodule Core.EventsController do
     render conn, "rsvp.html", [event: event] ++ GlobalOpts.get(conn, params)
   end
 
-  def rsvp(conn, params = %{"slug" => slug, "first_name" => first_name, "last_name" => last_name, "email" => email, "phone" => phone}) do
+  def rsvp(conn, params = %{"slug" => slug,
+    "first_name" => first_name, "last_name" => last_name,
+    "email" => email, "phone" => phone, "address1" => address1,
+    "zip" => zip, "city" => city, "state" => state}) do
+
     event =
       :event_cache
       |> Stash.get(slug)
       |> Osdi.Event.add_date_line()
 
-    Nb.Events.Rsvps.create(event.id, %{"first_name" => first_name, "last_name" => last_name, "email" => email, "phone" => phone})
+    Nb.Events.Rsvps.create(event.id,
+      %{"first_name" => first_name, "last_name" => last_name, "email" => email,
+        "phone" => phone, "primary_address" => %{"address1" => address1, "zip" => zip,
+        "city" => city, "state" => state}})
 
     render conn, "rsvp.html", [event: event, person: true] ++ GlobalOpts.get(conn, params)
   end
