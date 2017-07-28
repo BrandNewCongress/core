@@ -73,12 +73,13 @@ const siteMap = [
       },
       {
         label: 'Any special skills?',
-        path: 'https://brandnewcongress.org/volunteer',
+        path: 'https://brandnewcongress.org/special-skills',
         matches: () => false,
         children: []
       }
     ]
   },
+
   {
     label: 'Plan',
     path: '/plan',
