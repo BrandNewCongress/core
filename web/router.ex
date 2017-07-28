@@ -36,6 +36,7 @@ defmodule Core.Router do
     get "/act/call/:candidate", ActController, :get_candidate_call
     get "/act/:candidate", ActController, :legacy_redirect
     get "/call-aid/:candidate", ActController, :call_aid
+    post "/call-aid/:candidate", ActController, :easy_volunteer
 
     get "/events", EventsController, :get
     get "/events/:slug", EventsController, :get_one
