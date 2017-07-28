@@ -23,7 +23,7 @@ defmodule Transformers.Nb.Event do
           longitude: event.venue.address.lng
         },
         time_zone: event.time_zone,
-        public: event.tags |> Enum.member?("Event: Hide Address")}
+        public: not (event.tags |> Enum.member?("Event: Hide Address"))}
       |> Map.merge(location)
     else
       %{public: not (event.tags |> Enum.member?("Event: Hide Address"))}
