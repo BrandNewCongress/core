@@ -23,7 +23,7 @@ defmodule Core.EventsController do
         event -> Osdi.Event.add_date_line(event)
       end
 
-    render conn, "rsvp.html", [event: event] ++ GlobalOpts.get(conn, params)
+    render conn, "rsvp.html", [event: event, title: event.title] ++ GlobalOpts.get(conn, params)
   end
 
   def rsvp(conn, params = %{"slug" => slug,
@@ -41,7 +41,7 @@ defmodule Core.EventsController do
         "phone" => phone, "primary_address" => %{"address1" => address1, "zip" => zip,
         "city" => city, "state" => state}})
 
-    render conn, "rsvp.html", [event: event, person: true] ++ GlobalOpts.get(conn, params)
+    render conn, "rsvp.html", [event: event, person: true, title: event.title] ++ GlobalOpts.get(conn, params)
   end
 
   defp get_district(""), do: nil
