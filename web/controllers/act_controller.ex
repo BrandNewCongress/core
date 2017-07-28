@@ -91,7 +91,7 @@ defmodule Core.ActController do
       [events: events, no_header: true, no_footer: true, slug: candidate] ++ GlobalOpts.get(conn, params)
   end
 
-  def easy_volunteer(conn, params = %{"candidate" => candidate, "phone" => phone}) do
+  def easy_volunteer(conn, params = %{"candidate" => candidate, "phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name}) do
     %{"title" => title, "metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(candidate)
 
     events =
@@ -102,11 +102,11 @@ defmodule Core.ActController do
       |> Enum.take(6)
       |> Enum.map(&Osdi.Event.add_date_line/1)
 
-    %{"id" => id} = Nb.People.push(%{"phone" => phone})
+    %{"id" => id} = Nb.People.push(%{"phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name})
     Nb.People.add_tags(id, ["Action: Joined as Volunteer: #{title}"])
 
     render conn, "call-aid.html",
-      [events: events, no_header: true, no_footer: true, slug: candidate, person: true] ++ GlobalOpts.get(conn, params)
+      [events: events, no_header: true, no_footer: true, slug: candidate, person: id] ++ GlobalOpts.get(conn, params)
   end
 
   def legacy_redirect(conn, _params = %{"candidate" => candidate, "selected" => _selected}) do
