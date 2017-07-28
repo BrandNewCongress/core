@@ -63,9 +63,20 @@ defmodule Jotform.SubmitEvent do
 
     tags = type_tag ++ sharing_tag
 
+    whitelisted =
+      "esm-whitelist"
+      |> Cosmic.get()
+      |> Kernel.get_in(["metadata", "emails"])
+      |> String.split(";")
+      |> Enum.map(&String.trim/1)
+      |> MapSet.new()
+      |> MapSet.member?(email)
+
+    status = if whitelisted, do: "published", else: "unlisted"
+
     event = %{
       name: event_name,
-      status: "unlisted",
+      status: status,
       author_id: host_id,
       time_zone: time_zone,
       intro: description,
@@ -114,8 +125,14 @@ And you can invite others to join you at the event with this link:
 
     Logger.info "Creating event on calendar #{calendar_id}"
     %{"id" => event_id, "slug" => event_slug} = Nb.Events.create(event)
+    Logger.info "Created event #{event_id}"
 
-    Core.Mailer.on_event_create(event_id, event_slug, event)
+    if not whitelisted do
+      Logger.info "Submitter was not whitelisted – sending email"
+      Core.Mailer.on_event_create(event_id, event_slug, event)
+    else
+      Logger.info "Submitter #{email} was whitelisted. Not sending email"
+    end
 
     %{"ok" => "There you go!"}
   end
