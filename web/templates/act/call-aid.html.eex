@@ -9,11 +9,9 @@
 <%= for ev <- @events do %>
   <div class="event">
     <div class="box">
-      <a class="primary-button" target="_blank" href="/events/<%= ev.name %>"> RSVP </a>
-    </div>
-    <div class="box">
       <p><strong> <%= ev.title %> </strong> <br/>
        <%= ev.date_line %> </p>
+      <a class="little-button" href="/events/<%= ev.name %>" style="display: block;"> RSVP </a>
     </div>
     <div class="box">
       <p><strong> <%= ev.location.venue %> </strong> <br/>
@@ -50,10 +48,18 @@
 
 .box > a {
   text-decoration: none;
+  width: 20%;
 }
 
 form {
   margin: 50px;
+}
+
+.little-button {
+  background-color: var(--bnc-purple);
+  color: white;
+  padding: 5px;
+  text-align: center;
 }
 
 </style>
