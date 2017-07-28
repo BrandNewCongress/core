@@ -11,7 +11,7 @@
     <div class="box">
       <p><strong> <%= ev.title %> </strong> <br/>
        <%= ev.date_line %> </p>
-      <a class="little-button" href="/events/<%= ev.name %>" style="display: block;"> RSVP </a>
+      <a class="little-button" href="/events/<%= ev.name %>" style="display: block;" target="_blank"> RSVP </a>
     </div>
     <div class="box">
       <p><strong> <%= ev.location.venue %> </strong> <br/>
@@ -20,19 +20,27 @@
     </div>
   </div>
 <% end %>
-<%= if assigns[:person] == nil do %>
-  <form method="post" action="/call-aid/<%= @slug %>">
-    <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
-    <label>Phone Number</label> <br/>
-    <input type="tel" name="phone" style="padding: 10px; font-size: larger;" />
-    <input
-      type="submit"
-      value="Mark as Volunteer" class="primary-button"
-      style="padding: 5px; width: 225px;"/>
-  </form>
-<% else %>
-  <form> <p> <strong> Done! </strong> <p> </form>
+
+<%= if assigns[:person] != nil do %>
+  <form> <p> <strong> Done: <%= assigns[:person] %> </strong> <p> </form>
 <% end %>
+<form method="post" action="/call-aid/<%= @slug %>">
+  <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
+
+  <label>First Name</label> <br/>
+  <input type="text" name="first_name" style="padding: 10px; font-size: larger;" />
+  <label>Last Name</label> <br/>
+  <input type="text" name="last_name" style="padding: 10px; font-size: larger;" />
+
+  <label>Phone Number</label> <br/>
+  <input type="tel" name="phone" style="padding: 10px; font-size: larger;" />
+  <label>Email</label> <br/>
+  <input type="email" name="email" style="padding: 10px; font-size: larger;" />
+  <input
+    type="submit"
+    value="Mark as Volunteer" class="primary-button"
+    style="padding: 5px; width: 225px;"/>
+</form>
 
 <style>
 
