@@ -57,6 +57,17 @@ defmodule Jotform.SubmitEvent do
     host_id = Task.await(ensure_host)
     %{time_zone: time_zone} = time_zone_info
 
+    whitelisted =
+        "esm-whitelist"
+        |> Cosmic.get()
+        |> Kernel.get_in(["metadata", "emails"])
+        |> String.split(";")
+        |> Enum.map(&String.trim/1)
+        |> MapSet.new()
+        |> MapSet.member?(email)
+
+    status = if whitelisted or auto_whitelist, do: "published", else: "unlisted"
+
     # Calc tags
     type_tag = ["Event Type: #{event_type}"]
 
@@ -65,27 +76,14 @@ defmodule Jotform.SubmitEvent do
       false -> ["Event: Hide Address"]
     end
 
-    contact_tag = case should_contact do
-      true -> ["Event: Should Contact Host"]
-      _ -> []
-    end
-
-    tags = type_tag ++ sharing_tag ++ contact_tag
-
-    whitelisted =
-      if auto_whitelist do
-        true
+    contact_tag =
+      if should_contact and not whitelisted do
+        ["Event: Should Contact Host"]
       else
-        "esm-whitelist"
-        |> Cosmic.get()
-        |> Kernel.get_in(["metadata", "emails"])
-        |> String.split(";")
-        |> Enum.map(&String.trim/1)
-        |> MapSet.new()
-        |> MapSet.member?(email)
+        []
       end
 
-    status = if whitelisted, do: "published", else: "unlisted"
+    tags = type_tag ++ sharing_tag ++ contact_tag
 
     event = %{
       name: event_name,
