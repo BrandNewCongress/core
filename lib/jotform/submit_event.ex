@@ -43,12 +43,7 @@ defmodule Jotform.SubmitEvent do
       {lat, lng} = Maps.geocode(venue_zip)
 
       # Use geocode for calendar_id
-      calendar_id = Task.async(fn ->
-        case District.closest_candidate({lat, lng}) do
-          %{"metadata" => %{"calendar_id" => result}} -> result
-          _ -> 9
-        end
-      end)
+      calendar_id = Task.async(fn -> get_calendar({lat, lng}) end)
 
       # Use geocode for time zone
       time_zone_info = Task.async(fn ->
@@ -176,5 +171,12 @@ And you can invite others to join you at the event with this link:
   defp easy_int(str) do
     {int, _} = Integer.parse(str)
     int
+  end
+
+  defp get_calendar({lat, lng}) do
+    case District.closest_candidate({lat, lng}) do
+      %{"metadata" => %{"calendar_id" => result}} -> result
+      _ -> 9
+    end
   end
 end
