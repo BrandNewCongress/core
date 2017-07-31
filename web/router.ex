@@ -59,7 +59,6 @@ defmodule Core.Router do
 
     get "/update/cosmic", UpdateController, :cosmic
     post "/update/cosmic", UpdateController, :cosmic
-    post "/tf-submit/submit-event", TypeformController, :submit_event
     post "/jotform/host-event", JotformController, :submit_event
   end
 
