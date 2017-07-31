@@ -19,11 +19,15 @@ defmodule Jotform.SubmitEvent do
     should_hide = hide_address == "Yes"
     should_contact = should_contact == "Yes"
 
-    ["Street name: " <> venue_street_name,
-     "House number: " <> venue_house_number,
-     "City: " <> venue_city,
-     "State: " <> venue_state,
-     "Postal code: " <> venue_zip] = String.split venue_address, "\r\n"
+    [venue_street_name, venue_house_number, venue_city, venue_state, venue_zip] =
+      case String.split venue_address, "\r\n" do
+        ["Street name: " <> venue_street_name, "House number: " <> venue_house_number,
+         "City: " <> venue_city, "State: " <> venue_state, "Postal code: " <> venue_zip]
+           -> [venue_street_name, venue_house_number, venue_city, venue_state, venue_zip]
+
+        ["City: " <> venue_city, "State: " <> venue_state]
+          -> ["", "", venue_city, venue_state, ""]
+      end
 
     venue_address = venue_house_number <> " " <> venue_street_name
 
