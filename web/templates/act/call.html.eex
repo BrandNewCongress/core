@@ -40,7 +40,7 @@
           <h3> Calling hours </h3>
             <p>
               We make calls from 5PM - 9PM on weekdays and 10AM - 9PM on
-              weekends,
+              weekends in the candidates' local time zone,
               so check back anytime you want to make calls.
               <br />
               However, your login information will change each day, so you'll
@@ -89,7 +89,8 @@
       <%= if @candidate !== nil and length(@callable_candidates) > 0 do %>
 
         <p>
-          Since we only make calls from 5PM - 9PM on weekdays and 10AM - 9PM on weekends,
+          Since we only make calls from 5PM - 9PM on weekdays and 10AM - 9PM on weekends
+          in the candidates' local time zone,
           we're not calling voters in <%= @candidate["title"] %>'s district right now.
         <p>
 
@@ -108,7 +109,8 @@
 
         <p>
           At the moment, we're making calls from 5PM - 9PM on weekdays and
-          10AM - 9PM on Saturday and 12 noon to 9PM on Sunday.
+          10AM - 9PM on Saturday and 12 noon to 9PM on Sunday in the candidates'
+          local time zone.
         </p>
 
         <p>
