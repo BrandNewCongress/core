@@ -22,7 +22,7 @@ defmodule Osdi.Event do
     %DateTime{month: month, day: day} = dt
 
     month = ["January", "February", "March", "April", "May", "June", "July",
-             "August", "September", "October", "November", "December"] |> Enum.at(month)
+             "August", "September", "October", "November", "December"] |> Enum.at(month - 1)
 
     "#{month}, #{day} "
   end
