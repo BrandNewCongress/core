@@ -1,5 +1,6 @@
 <script>
-  window.showHiddenContent = function (ev) {
+
+  function showHiddenContent (ev) {
     var el = document.querySelector('#vol-event');
     if (el.style.display == 'hidden') {
       el.style.display = 'block';
@@ -7,7 +8,14 @@
       el.style.display = 'none';
     }
   }
+
+  var button = document.querySelector('#show-events');
+  if (button) {
+    button.onlick = showHiddenContent();
+  }
+
 </script>
+
 <div style="padding: 40px;">
   <%= raw(@content) %>
 </div>

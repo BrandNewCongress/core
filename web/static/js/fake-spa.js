@@ -48,13 +48,15 @@ function bind() {
       return !a.href.startsWith('#')
     })
     .forEach(function(a) {
-      if (a.getAttribute('target') !== '_blank') {
+      if (a.getAttribute('target') !== '_blank' && !a.getAttribute('href').startsWith('#')) {
         a.onclick = function(ev) {
           ev.preventDefault()
+
           navigateTo(
             a.getAttribute('href'),
             a.getAttribute('data-skip-history')
           )
+
           return false
         }
       }
