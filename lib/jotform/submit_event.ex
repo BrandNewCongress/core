@@ -5,6 +5,21 @@ defmodule Jotform.SubmitEvent do
   Takes a typeform post body from a webhook, creates the event in NB, and sends an email
   """
   def on_event_submit(params = %{"rawRequest" => raw}) do
+    %{"event_id" => "1501545776392_72075869084164_hMgrNX4",
+      "q10_description" => "A chance for local supporters to meet each other and learn more about how to help with the campaign.  Bring a laptop if you can.",
+      "q13_venue_name" => "TBA",
+      "q14_should_hide" => "Yes",
+      "q15_whatsThe" => "City: Louisville\r\nState: KY",
+      "q16_event_name" => "Louisville BNC Orientation",
+      "q17_should_contact" => "Yes",
+      "q3_name" => %{"first" => "Jon", "last" => "Stein"},
+      "q4_area_phone" => %{"area" => "502", "phone" => "403-5013"},
+      "q5_email" => "oneday2one@icloud.com",
+      "q6_event_type" => "Organizing meeting",
+      "q7_event_date" => "08/18/2017",
+      "q8_start_time" => %{"ampm" => "PM", "hourSelect" => "3", "minuteSelect" => "00"},
+      "q9_end_time" => %{"ampm" => "PM", "hourSelect" => "5", "minuteSelect" => "00"}, "slug" => "submit/72075869084164/"}
+
     %{"q3_name" => %{"first" => first_name, "last" => last_name},
       "q4_area_phone" => %{"area" => area, "phone" => phone_rest},
       "q5_email" => email, "q6_event_type" => event_type, "q7_event_date" => event_date,
@@ -40,7 +55,8 @@ defmodule Jotform.SubmitEvent do
 
     {calendar_id, time_zone_info} = Task.await(Task.async(fn ->
       # First, geocode
-      {lat, lng} = Maps.geocode(venue_zip)
+      to_geocode = "#{venue_house_number} #{venue_street_name}, #{venue_city}, #{venue_state}"
+      {lat, lng} = Maps.geocode(to_geocode)
 
       # Use geocode for calendar_id
       calendar_id = Task.async(fn -> get_calendar({lat, lng}) end)
