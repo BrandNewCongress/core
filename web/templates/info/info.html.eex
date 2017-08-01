@@ -5,7 +5,7 @@
 <script>
 
   function showHiddenContent (ev) {
-    var el = document.querySelector('#vol-event');
+    var el = document.querySelector('#vol-events');
     if (el.style.display == 'hidden') {
       el.style.display = 'block';
     } else {
