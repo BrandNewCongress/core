@@ -5,6 +5,7 @@
 <script>
 
   function showHiddenContent (ev) {
+
     var el = document.querySelector('#vol-events');
     if (el.style.display == 'hidden') {
       el.style.display = 'block';
@@ -16,7 +17,7 @@
   var button = document.querySelector('#show-events');
 
   if (button) {
-    button.onlick = showHiddenContent;
+    button.addEventListener('click', showHiddenContent);
   }
 
 </script>
