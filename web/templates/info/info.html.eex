@@ -14,9 +14,9 @@
   }
 
   var button = document.querySelector('#show-events');
-  debugger
+
   if (button) {
-    button.onlick = showHiddenContent();
+    button.onlick = showHiddenContent;
   }
 
 </script>
