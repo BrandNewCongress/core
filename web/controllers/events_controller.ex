@@ -1,5 +1,6 @@
 defmodule Core.EventsController do
   use Core.Web, :controller
+  require Logger
 
   def get(conn, params) do
     district = get_district(params["district"] || conn.cookies["district"])
@@ -23,11 +24,8 @@ defmodule Core.EventsController do
         event -> Osdi.Event.add_date_line(event)
       end
 
-    %{"metadata" => %{"preview" => %{"imgix_url" => banner}}} =
-      event.type
-      |> slugize()
-      |> Cosmic.get()
-
+    banner = get_banner(event.type)
+    
     render conn, "rsvp.html", [event: event, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
 
@@ -41,10 +39,7 @@ defmodule Core.EventsController do
       |> Stash.get(slug)
       |> Osdi.Event.add_date_line()
 
-    %{"metadata" => %{"preview" => %{"imgix_url" => banner}}} =
-      event.type
-      |> slugize()
-      |> Cosmic.get()
+    banner = get_banner(event.type)
 
     Nb.Events.Rsvps.create(event.id,
       %{"first_name" => first_name, "last_name" => last_name, "email" => email,
@@ -72,7 +67,20 @@ defmodule Core.EventsController do
     coordinates
   end
 
+  defp get_banner(nil) do
+    nil
+  end
+
+  defp get_banner(event_type) do
+    event_type
+    |> slugize()
+    |> Cosmic.get()
+    |> Kernel.get_in(["metadata", "preview", "imgix_url"])
+  end
+
   defp slugize(event_type) do
+    IO.inspect event_type
+
     "Event Type: " <> event_type
     |> String.downcase()
     |> String.replace(" ", "-")
