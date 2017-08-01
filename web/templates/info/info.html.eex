@@ -1,3 +1,7 @@
+<div style="padding: 40px;">
+  <%= raw(@content) %>
+</div>
+
 <script>
 
   function showHiddenContent (ev) {
@@ -16,7 +20,3 @@
   }
 
 </script>
-
-<div style="padding: 40px;">
-  <%= raw(@content) %>
-</div>
