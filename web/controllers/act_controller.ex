@@ -79,6 +79,7 @@ defmodule Core.ActController do
   def call_aid(conn, params = %{"candidate" => candidate}) do
     %{"metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(candidate)
 
+    # TODO - only a month away
     events =
       :event_cache
       |> Stash.get("calendar-#{calendar_id}")
