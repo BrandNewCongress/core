@@ -33,7 +33,7 @@
     }
   }
 
-  var buttons = Array.from(document.querySelectorAll('#show-events'));
+  var buttons = Array.from(document.querySelectorAll('.show-events'));
 
   buttons.forEach(function (button) {
     button.addEventListener('click', showHiddenContent);
