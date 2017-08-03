@@ -1,0 +1,4 @@
+<div>
+  <% url = @pledges |> Enum.at(1) |> Kernel.get_in([:youtube_url]) %>
+  <%= render "youtube-embed.html", [width: 460, height: 280, url: url]%>
+</div>

@@ -7,6 +7,7 @@ defmodule Core.StandupController do
       "standup-pledges"
       |> Cosmic.get_type()
       |> Enum.map(&extract_attrs/1)
+      |> Enum.sort(&(&1.priority <= &2.priority))
 
     {:ok, pledges_json} =
       pledges
@@ -19,13 +20,14 @@ defmodule Core.StandupController do
   defp extract_attrs(
     %{"content" => content, "metadata" =>
       %{"name" => name, "district" => district, "position" => position,
-        "embed_code" => embed_code, "twitter" => twitter,
+        "youtube_url" => youtube_url, "twitter" => twitter,
         "facebook" => facebook, "instagram" => instagram,
-        "state" => state, "headshot" => %{"imgix_url" => headshot}}}) do
+        "priority" => priority, "state" => state,
+        "headshot" => %{"imgix_url" => headshot}}}) do
 
     %{name: name, district: district, position: position,
-      embed_code: embed_code, content: content, twitter: twitter,
+      youtube_url: youtube_url, content: content, twitter: twitter,
       facebook: facebook, instagram: instagram, headshot: headshot,
-      state: state}
+      state: state, priority: priority}
   end
 end

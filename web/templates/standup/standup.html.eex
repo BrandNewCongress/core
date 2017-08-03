@@ -26,20 +26,8 @@
       </div>
 
       <div class="hero-video">
-        <video
-          width="540"
-          class="video-container"
-          poster="http://content.bitsontherun.com/thumbs/bkaovAYt-320.jpg"
-          autoPlay=""
-          muted=""
-          controls="controls"
-        >
-          <source src="http://content.bitsontherun.com/videos/bkaovAYt-52qL9xLP.mp4" />
-          <source src="http://content.bitsontherun.com/videos/bkaovAYt-27m5HpIu.webm" />
-          <p class="warning">
-            Your browser does not support HTML5 video.
-          </p>
-        </video>
+        <% url = @pledges |> List.first() |> Kernel.get_in([:youtube_url]) %>
+        <%= render "youtube-embed.html", [width: 560, height: 320, url: url]%>
       </div>
       <div class="hero-section">
         <div class="secondary-title">
@@ -53,62 +41,70 @@
     </div>
   </div>
 
+<!--
   <div class="section">
     <div class="title section-header">Why Stand Up?</div>
     <div class="two-column">
 
       <div id="column-1">
         <%= render "elevated-div.html",
-          [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 90,
-           width: 460, height: 285, no_hover: true,
+          [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 40,
+           width: 250, height: 285, no_hover: true,
            template: "box1.html"] %>
 
         <div class="circle-container">
           <%= render "elevated-div.html",
-            [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 90,
-             width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+            [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 40,
+             width: 102, height: 102, no_hover: true, extra_styles: "border-radius: 50%;",
              template: "cr1.html"] %>
 
           <%= render "elevated-div.html",
-            [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 90,
-             width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+            [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 40,
+             width: 102, height: 102, no_hover: true, extra_styles: "border-radius: 50%;",
              template: "cr2.html"] %>
        </div>
 
        <%= render "elevated-div.html",
-            [uniq: "tweet", color: "", shadow_color: "#f4f4f4", padding: 90,
-             width: 600, height: 285, no_hover: true,
-             template: "cr2.html"] %>
+            [uniq: "tweet", color: "", shadow_color: "#f4f4f4", padding: 40,
+             width: 400, height: 600, no_hover: true,
+             template: "tweet-stream.html"] %>
      </div>
 
 
-        <div>
-          <%= render "elevated-div.html",
-            [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 90,
-             width: 460, height: 285, no_hover: true,
-             template: "video.html"] %>
+      <div id="column-2">
+        <h3> Watch the video: </h3>
 
-          <%= render "elevated-div.html",
-            [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 90,
-             width: 460, height: 285, no_hover: true,
-             template: "box1.html"] %>
+        <%= render "elevated-div.html",
+          [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 40,
+           width: 460, height: 285, no_hover: true, pledges: @pledges,
+           template: "video.html"] %>
 
-           <div class="circle-container">
-            <%= render "elevated-div.html",
-              [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 90,
-               width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
-               template: "cr1.html"] %>
+        <%= render "elevated-div.html",
+          [uniq: "pressure", color: "", shadow_color: "#f4f4f4", padding: 40,
+           width: 460, height: 285, no_hover: true,
+           template: "box2.html"] %>
 
-            <%= render "elevated-div.html",
-              [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 90,
-               width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
-               template: "cr2.html"] %>
-           </div>
+        <%= render "elevated-div.html",
+          [uniq: "watch-more-button", color: "#145762", shadow_color: "#302D32",
+           padding: 40, height: 100, width: 250, no_hover: false,
+           template: "more-videos.html"]%>
+
+         <div class="circle-container">
+           <%= render "elevated-div.html",
+             [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 40,
+              width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+              template: "cr1.html"] %>
+
+           <%= render "elevated-div.html",
+             [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 40,
+              width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+              template: "cr2.html"] %>
          </div>
+       </div>
 
     </div>
   </div>
-
+ -->
   <div >
   </div>
 
@@ -116,13 +112,14 @@
 		<!-- <div id="standup-app"></div> -->
   </div>
 
-  <div>
-		<!-- <%= for p <- @pledges do %>
+  <div class="title section-header">Watch the Pledges</div>
+  <div style="width: 810px; margin-left: auto; margin-right: auto;">
+		<%= for p <- @pledges |> Enum.slice(2, length(@pledges) + 1) do %>
       <div class="pledge-container">
         <div
           class="pledge-video-container"
         >
-					<%= raw(p.embed_code) %>
+          <%= render "youtube-embed.html", [width: 560, height: 320, url: p.youtube_url] %>
 				</div>
         <div class="pledge-info-container">
           <div class="pledge-info-box">
@@ -157,8 +154,9 @@
 					</div>
         </div>
       </div>
-		<% end %> -->
+		<% end %>
   </div>
+
 </div>
 
 <script>
@@ -166,16 +164,37 @@
 </script>
 
 <link href="https://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet">
-<script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script>
+<!-- <script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script> -->
 
 <style>
+
+.elevated {
+  text-align: left;
+  /*margin: 5px;*/
+}
+
+h1, h2, h3 {
+  color: #145762;
+}
 
 .circle-container {
   display: flex;
 }
 
+.caps {
+  text-transform: uppercase;
+}
+
 .two-column {
   display: flex;
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+
+#column-1, #column-2 {
+  width: 490px;
 }
 
 .button {
@@ -235,6 +254,7 @@
 }
 
 .hero-video {
+  width: 560px;
 	display: inline-block;
 	vertical-align: middle;
 }
@@ -312,19 +332,22 @@
 
 .pledge-container {
 	display: flex;
-	justify-content: center;
+	justify-content: space-around;
 	width: 100%;
+  margin-bottom: 100px;
 }
 
 .pledge-video-container {
-	width: 75%;
+	width: 560px;
 }
 
 .pledge-info-container {
-	width: 25%;
+	width: 220px;
 }
 
-.pledge-info-box {
+.pledge-info-box > .standing-up {
+  padding: 10px;
+  color: white;
 }
 
 .standing-up {
@@ -333,7 +356,14 @@
 
 .pledger-info {
 	text-align: left;
-	padding: 50px;
+  padding-left: 20px;
+}
+
+.pledger-info > .name {
+  color: #145762;
+}
+
+.pledger-info {
 }
 
 .pledger-share {

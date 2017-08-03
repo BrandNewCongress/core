@@ -6,7 +6,7 @@
 <% extra_styles = assigns[:extra_styles] || "" %>
 <% shadow_color = assigns[:shadow_color] || "black" %>
 
-<div class="<%= bxs_class %>">
+<div class="elevated <%= bxs_class %>">
   <%= for idx <- 1..padding do %>
     <div class="<%= bx_class %>" style="<%= "box-shadow: -#{idx}px #{idx}px 0px #{shadow_color}; #{extra_styles}" %>">
       <%= if assigns[:template] != nil do %>
