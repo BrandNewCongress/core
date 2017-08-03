@@ -109,7 +109,7 @@
   </div>
 
   <div>
-		<!-- <div id="standup-app"></div> -->
+		<div id="standup-app"></div>
   </div>
 
   <div class="title section-header">Watch the Pledges</div>
@@ -147,9 +147,7 @@
             </div>
           </div>
 
-          <div
-            class="pledge-text"
-          >
+          <div class="pledge-text">
 						<%= raw(p.content) %>
 					</div>
         </div>
@@ -164,9 +162,35 @@
 </script>
 
 <link href="https://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet">
-<!-- <script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script> -->
+<script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script>
 
 <style>
+
+.bubble-modal {
+  position: absolute;
+  transform: scale(1.5) translate(-25%, -100%);
+}
+
+.tooltip {
+  width: 100%;
+}
+
+.tooltip-item {
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-top: 20px solid #f00;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#standup-app {
+  width: 955px;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .elevated {
   text-align: left;
@@ -371,7 +395,10 @@ h1, h2, h3 {
 }
 
 .bubble {
-	border: 4px solid blue;
+	border: 4px solid #145762;
+  margin-top: -2px;
+  margin-right: -2px;
+  box-shadow: -4px 4px 0px #302D33;
 }
 
 .bubble img {

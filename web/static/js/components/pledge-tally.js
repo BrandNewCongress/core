@@ -3,7 +3,14 @@ import store from '../lib/standup-store'
 
 export default class PledgeTally extends Component {
   state = {
-    congress: {}
+    congress: {},
+    hovering: {
+      idxs: {
+        col: undefined,
+        row: undefined
+      },
+      district: undefined
+    }
   }
 
   componentDidMount() {
@@ -13,8 +20,19 @@ export default class PledgeTally extends Component {
       .catch(console.error)
   }
 
+  bubbleHover = ({ idxs, district }) => ev =>
+    this.setState({ hovering: { idxs, district } })
+
+  resetHover = ev =>
+    this.setState({
+      hovering: {
+        idxs: { col: undefined, row: undefined },
+        district: undefined
+      }
+    })
+
   render() {
-    const { congress } = this.state
+    const { congress, hovering } = this.state
 
     return (
       <div
@@ -28,7 +46,7 @@ export default class PledgeTally extends Component {
             <div
               key={state}
               style={{
-                width: '15px',
+                width: '13px',
                 fontSize: '8px',
                 marginLeft: '2px',
                 marginRight: '2px',
@@ -50,18 +68,56 @@ export default class PledgeTally extends Component {
                     backgroundImage: `url("${pledge.headshot}")`
                   }}
                   className={`bubble ${pledge.position}`}
-                />
+                  onMouseEnter={this.bubbleHover({
+                    idxs: { col, row },
+                    dstrict: pledge.district
+                  })}
+                  onMouseLeave={this.resetHover}
+                >
+                  {col == hovering.idxs.col &&
+                    row == hovering.idxs.row &&
+                    <div className="bubble-modal signer">
+                      <div className="pledge-info-box">
+                        <div className="standing-up">Standing Up</div>
+
+                        <div className="pledger-info">
+                          <div className="name">
+                            {pledge.name}
+                          </div>
+                          <div className="position">
+                            {`${pledge.position} ${pledge.district}`}
+                          </div>
+                        </div>
+
+                        <div className="pledger-share">
+                          <a href={pledge.twitter} target="_blank">
+                            Twitter
+                          </a>
+                          <a href={pledge.facebook} target="_blank">
+                            Facebook
+                          </a>
+                          <a href={pledge.instagram} target="_blank">
+                            Instagram
+                          </a>
+                        </div>
+                      </div>
+
+                      <div className="tooltip">
+                        <div className="tooltip-item" />
+                      </div>
+                    </div>}
+                </div>
               )}
             </div>
           )}
         </div>
 
         <div style={{ display: 'flex', marginTop: '35px' }}>
-          {Object.keys(congress).sort().map(state =>
+          {Object.keys(congress).sort().map((state, idx) =>
             <div
               key={state}
               style={{
-                width: '15px',
+                width: '13px',
                 height: '50px',
                 fontSize: '8px',
                 marginLeft: '2px',
@@ -70,8 +126,9 @@ export default class PledgeTally extends Component {
             >
               <div
                 style={{
-                  transform: 'rotate(270deg) translate(20px, -41px)',
-                  width: '100px'
+                  transform: 'rotate(270deg) translate(20px, -47px)',
+                  width: '110px',
+                  textAlign: 'left'
                 }}
               >
                 {state}
@@ -97,6 +154,7 @@ export default class PledgeTally extends Component {
           {Object.keys(congress).sort().map(state =>
             <div
               key={state}
+              id={state}
               style={{
                 display: 'flex',
                 flexDirection: 'column'
@@ -110,7 +168,7 @@ export default class PledgeTally extends Component {
                     backgroundImage: `url(${rep.img})`,
                     backgroundSize: 'cover',
                     height: '15px',
-                    width: '15px',
+                    width: '13px',
                     marginTop: '1px',
                     marginBottom: '1px',
                     marginLeft: '2px',
@@ -143,5 +201,5 @@ export default class PledgeTally extends Component {
     }
   }
 
-  calcOffset = (col, row) => (col % 2 == 0 ? 50 : 100) + (row * 25)
+  calcOffset = (col, row) => (col % 2 == 0 ? 50 : 100) + row * 21
 }
