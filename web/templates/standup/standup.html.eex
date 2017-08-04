@@ -5,7 +5,19 @@
     </div>
     <div class="contact-bar">
       <div class="social-icons">
-        <img height="20" src="/images/temp-social.png" />
+
+        <div class="pledger-share">
+          <a href="twitter.com" target="_blank">
+            <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
+          </a>
+          <a href="facebook.com" target="_blank">
+            <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
+          </a>
+          <a href="instagram.com" target="_blank">
+            <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
+          </a>
+        </div>
+
       </div>
       <div class="contact-link">Contact Us</div>
     </div>
@@ -136,13 +148,13 @@
 
             <div class="pledger-share">
               <a href="<%= p.twitter %>" target="_blank">
-                Twitter
+                <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
               </a>
               <a href="<%= p.facebook %>" target="_blank">
-                Facebook
+                <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
               </a>
               <a href="<%= p.instagram %>" target="_blank">
-                Instagram
+                <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
               </a>
             </div>
           </div>
@@ -391,7 +403,20 @@ h1, h2, h3 {
 }
 
 .pledger-share {
+  display: flex;
+  justify-content: space-around;
+}
 
+.pledger-share > a {
+  height: 20px;
+  width: 20px;
+}
+
+.pledger-share img {
+  height: 100%;
+  width: 100%;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .bubble {
