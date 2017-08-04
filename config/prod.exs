@@ -14,14 +14,14 @@ use Mix.Config
 config :core, Core.Endpoint,
   http: [port: {:system, "PORT"}],
   server: true,
-  url: [scheme: "https", host: "#{System.get_env("APP_NAME")}.herokuapp.com", port: 443],
+  url: [scheme: "https", host: "${APP_NAME}.gigalixirapp.com", port: 443],
   check_origin: ["https://now.brandnewcongress.org", "https://now.justicedemocrats.com"],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/manifest.json",
-  secret_key_base: System.get_env("SECRET_KEY_BASE")
+  secret_key_base: "${SECRET_KEY_BASE}"
 
 # Nationbuilder API Key
-config :core, [nb_slug: System.get_env("NB_SLUG"), nb_token: System.get_env("NB_TOKEN")]
+config :core, [nb_slug: "${NB_SLUG}", nb_token: "${NB_TOKEN}"]
 
 # Do not print debug messages in production
 config :logger, level: :info
@@ -29,19 +29,19 @@ config :logger, level: :info
 # Use Mailgun
 config :core, Core.Mailer,
   adapter: Swoosh.Adapters.Mailgun,
-  api_key: System.get_env("MAILGUN_KEY"),
-  domain: System.get_env("MAILGUN_DOMAIN")
+  api_key: "${MAILGUN_KEY}",
+  domain: "${MAILGUN_DOMAIN}"
 
 config :core, Core.Vox,
   adapter: Swoosh.Adapters.Mailgun,
-  api_key: System.get_env("MAILGUN_KEY"),
-  domain: System.get_env("MAILGUN_DOMAIN")
+  api_key: "${MAILGUN_KEY}",
+  domain: "${MAILGUN_DOMAIN}"
 
 # Update secret
-config :core, [update_secret: System.get_env("UPDATE_SECRET")]
+config :core, [update_secret: "${UPDATE_SECRET}"]
 
 # Redis url
-config :core, [redis_url: System.get_env("REDIS_URL")]
+config :core, [redis_url: "${REDIS_URL}"]
 
 # ## SSL Support
 #
