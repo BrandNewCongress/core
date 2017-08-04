@@ -1,24 +1,22 @@
+<link href="https://fonts.googleapis.com/css?family=Oleo+Script|Roboto" rel="stylesheet">
 <div class="body">
   <div class="header">
     <div class="logo-container">
       <img class="logo" src="/images/temp-logo.png" />
     </div>
     <div class="contact-bar">
-      <div class="social-icons">
-
-        <div class="pledger-share">
-          <a href="twitter.com" target="_blank">
-            <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
-          </a>
-          <a href="facebook.com" target="_blank">
-            <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
-          </a>
-          <a href="instagram.com" target="_blank">
-            <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
-          </a>
-        </div>
-
+      <div class="top-share">
+        <a href="twitter.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
+        </a>
+        <a href="facebook.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
+        </a>
+        <a href="instagram.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
+        </a>
       </div>
+
       <div class="contact-link">Contact Us</div>
     </div>
   </div>
@@ -138,11 +136,13 @@
             <div class="standing-up">Standing Up</div>
 
             <div class="pledger-info">
-              <div class="name">
-                <%= p.name %>
-              </div>
-              <div class="position">
-                <%= "#{p.position} #{p.district}" %>
+              <div class="name-position-container">
+                <div class="name">
+                  <%= p.name %>
+                </div>
+                <div class="position">
+                  <%= "#{p.position} #{p.district}" %>
+                </div>
               </div>
             </div>
 
@@ -173,14 +173,15 @@
 	window.pledges = <%= raw(@pledges_json) %>
 </script>
 
-<link href="https://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet">
 <script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script>
 
 <style>
 
 .bubble-modal {
   position: absolute;
-  transform: scale(1.5) translate(-25%, -100%);
+  width: 240px;
+  transform: translate(-45%, -110%);
+  z-index: 10;
 }
 
 .tooltip {
@@ -190,16 +191,15 @@
 .tooltip-item {
   width: 0;
   height: 0;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 20px solid #f00;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 20px solid #EAEAEA;
   margin-left: auto;
   margin-right: auto;
 }
 
 #standup-app {
   width: 955px;
-  overflow: hidden;
   margin-left: auto;
   margin-right: auto;
 }
@@ -260,6 +260,7 @@ h1, h2, h3 {
 	padding-top: 50px;
 	padding-bottom: 50px;
 	color: rgb(215, 215, 215);
+  font-family: 'Oleo Script', cursive;
 }
 
 .counter {
@@ -312,8 +313,7 @@ h1, h2, h3 {
 .contact-link {
 	text-transform: uppercase;
 	border-left: solid 1px rgb(119, 114, 126);
-	padding-left: 16px;
-	display: inline-block;
+  padding-left: 5px;
 }
 
 .header {
@@ -339,6 +339,8 @@ h1, h2, h3 {
 	position: absolute;
 	right: 60px;
 	top: 30px;
+  display: flex;
+  align-items: center;
 }
 
 @media (max-width: 1200px) {
@@ -387,24 +389,40 @@ h1, h2, h3 {
 }
 
 .standing-up {
+  font-size: 14px;
 	background-color: #145762;
+  font-family: 'Oleo Script', cursive;
 }
 
 .pledger-info {
-	text-align: left;
-  padding-left: 20px;
+	text-align: center;
+  font-size: 15px;
+  line-height: 16px;
 }
 
-.pledger-info > .name {
+.pledger-info .name {
+  font-weight: bold;
   color: #145762;
 }
 
+.pledger-info > .name-position-container {
+  text-align: left;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
 .pledger-info {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
 }
 
 .pledger-share {
   display: flex;
   justify-content: space-around;
+  background-color: #eaeaea;
+  padding: 5px;
 }
 
 .pledger-share > a {
@@ -417,6 +435,24 @@ h1, h2, h3 {
   width: 100%;
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.top-share {
+  display: flex;
+  justify-content: space-around;
+  height: 30px;
+  width: 100px;
+  align-items: center;
+}
+
+.top-share a {
+  height: 20px;
+  width: 20px;
+}
+
+.top-share img {
+  height: 100%;
+  width: 100%;
 }
 
 .bubble {

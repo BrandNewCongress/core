@@ -13,6 +13,8 @@ export default class PledgeTally extends Component {
     }
   }
 
+  mouseOver = false
+
   componentDidMount() {
     store.reps
       .get()
@@ -20,16 +22,27 @@ export default class PledgeTally extends Component {
       .catch(console.error)
   }
 
-  bubbleHover = ({ idxs, district }) => ev =>
+  bubbleHover = ({ idxs, district }) => ev => {
     this.setState({ hovering: { idxs, district } })
+    this.mouseOver = true
+  }
 
-  resetHover = ev =>
-    this.setState({
-      hovering: {
-        idxs: { col: undefined, row: undefined },
-        district: undefined
-      }
-    })
+  resetHover = ev => {
+    this.mouseOver = false
+
+    setTimeout(
+      () =>
+        this.mouseOver
+          ? null
+          : this.setState({
+              hovering: {
+                idxs: { col: undefined, row: undefined },
+                district: undefined
+              }
+            }),
+      500
+    )
+  }
 
   render() {
     const { congress, hovering } = this.state
@@ -41,6 +54,15 @@ export default class PledgeTally extends Component {
           flexDirection: 'column'
         }}
       >
+        <div className="title section-header" style={{ paddingBottom: 0 }}>
+          Pledge Tally
+        </div>
+        <div
+          className="section-header"
+          style={{ paddingBottom: 50, paddingTop: 0 }}
+        >
+          Click to see a signer's name and contact information
+        </div>
         <div style={{ display: 'flex', height: '300px' }}>
           {this.pledgesByState().map((state, col) =>
             <div
@@ -81,23 +103,34 @@ export default class PledgeTally extends Component {
                         <div className="standing-up">Standing Up</div>
 
                         <div className="pledger-info">
-                          <div className="name">
-                            {pledge.name}
-                          </div>
-                          <div className="position">
-                            {`${pledge.position} ${pledge.district}`}
+                          <img
+                            src={`/images/m4a-candidate-in.png`}
+                            style={{
+                              marginTop: 5,
+                              marginBottom: 5,
+                              width: 170,
+                              height: 42
+                            }}
+                          />
+                          <div className="name-position-container">
+                            <div className="name">
+                              {pledge.name}
+                            </div>
+                            <div className="position">
+                              {`${pledge.position} ${pledge.district}`}
+                            </div>
                           </div>
                         </div>
 
                         <div className="pledger-share">
                           <a href={pledge.twitter} target="_blank">
-                            Twitter
+                            <img src="/images/m4a-twitter.png" />
                           </a>
                           <a href={pledge.facebook} target="_blank">
-                            Facebook
+                            <img src="/images/m4a-facebook.png" />
                           </a>
                           <a href={pledge.instagram} target="_blank">
-                            Instagram
+                            <img src="/images/m4a-instagram.png" />
                           </a>
                         </div>
                       </div>
