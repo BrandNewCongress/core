@@ -8,7 +8,7 @@ defmodule Core do
 
     # Fill initial cache
     Cosmic.fetch_all()
-    Core.Jobs.EventCache.fetch_or_load()
+    # Core.Jobs.EventCache.fetch_or_load()
 
     # Define workers and child supervisors to be supervised
     children = [
