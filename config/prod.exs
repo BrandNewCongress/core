@@ -14,7 +14,7 @@ use Mix.Config
 config :core, Core.Endpoint,
   http: [port: {:system, "PORT"}],
   server: true,
-  url: [scheme: "https", host: "${APP_NAME}.gigalixirapp.com", port: 443],
+  url: [scheme: "https", host: "bar.gigalixirapp.com", port: 443],
   check_origin: ["https://now.brandnewcongress.org", "https://now.justicedemocrats.com"],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/manifest.json",
