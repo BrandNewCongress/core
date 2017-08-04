@@ -31,6 +31,12 @@ end
 # will be used by default
 
 release :core do
-  set version: current_version(:core)
+  set applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
+                     :phoenix_ecto, :postgrex, :httpotion, :swoosh, :timex, :quantum,
+                     :browser, :csv, :flow, :geo, :html_sanitize_ex, :redix, :remodel,
+                     :stash, :topo]]
 end
 
+release :core do
+  set version: current_version(:core)
+end
