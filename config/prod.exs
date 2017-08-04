@@ -13,6 +13,7 @@ use Mix.Config
 # which you typically run after static files are built.
 config :core, Core.Endpoint,
   http: [port: {:system, "PORT"}],
+  server: true,
   url: [scheme: "https", host: "#{System.get_env("APP_NAME")}.herokuapp.com", port: 443],
   check_origin: ["https://now.brandnewcongress.org", "https://now.justicedemocrats.com"],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
