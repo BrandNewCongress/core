@@ -86,32 +86,14 @@ const siteMap = [
       window.location.href.match('/platform'),
     children: [
       {
-        label: 'Our Economy',
-        path: '/platform#economy',
-        matches: () => false,
-        children: []
-      },
-      {
-        label: 'Healthcare for All',
+        label: 'Fix the Healthcare Mess',
         path: '/platform#healthcare',
         matches: () => false,
         children: []
       },
       {
-        label: 'Mass Incarceration',
-        path: '/platform#incarceration',
-        matches: () => false,
-        children: []
-      },
-      {
-        label: 'Fight for Families',
-        path: '/platform#families',
-        matches: () => false,
-        children: []
-      },
-      {
-        label: 'Corruption',
-        path: '/platform#corruption',
+        label: 'Rebuild Our Economy',
+        path: '/platform#economy',
         matches: () => false,
         children: []
       }
