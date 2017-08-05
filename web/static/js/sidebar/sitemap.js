@@ -83,7 +83,7 @@ const siteMap = [
     label: 'Platform',
     path: '/platform',
     matches: () =>
-      window.location.href.startsWith('/platform'),
+      window.location.href.match('/platform'),
     children: [
       {
         label: 'Our Economy',
