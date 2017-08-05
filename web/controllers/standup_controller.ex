@@ -9,12 +9,14 @@ defmodule Core.StandupController do
       |> Enum.map(&extract_attrs/1)
       |> Enum.sort(&(&1.priority <= &2.priority))
 
+    %{"metadata" => %{"count" => count}} = Cosmic.get("standup-text")
+
     {:ok, pledges_json} =
       pledges
       |> Poison.encode()
 
     render conn, "standup.html",
-      [pledges: pledges, pledges_json: pledges_json] ++ GlobalOpts.get(conn, params)
+      [pledges: pledges, pledges_json: pledges_json, count: count] ++ GlobalOpts.get(conn, params)
   end
 
   defp extract_attrs(

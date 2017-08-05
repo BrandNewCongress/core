@@ -1,16 +1,17 @@
 <link href="https://fonts.googleapis.com/css?family=Oleo+Script|Roboto" rel="stylesheet">
+
 <div class="body">
   <div class="header">
     <div class="logo-container">
-      <img class="logo" src="/images/temp-logo.png" />
+      <img class="logo" src="<%= static_path(@conn, "/images/temp-logo.png") %>" />
     </div>
     <div class="contact-bar">
       <div class="top-share">
-        <a href="twitter.com" target="_blank">
-          <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
-        </a>
         <a href="facebook.com" target="_blank">
           <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
+        </a>
+        <a href="twitter.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
         </a>
         <a href="instagram.com" target="_blank">
           <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
@@ -23,15 +24,15 @@
 
   <div class="hero">
     <div class="title section-header">Why Medicare For All?</div>
-    <div class="hero-body">
+    <div class="hero-body" style="padding-bottom: 100px;">
       <div class="hero-section">
         <div class="hero-section-inner">
           <img height="65" src="/images/temp-join.png" />
-          <div class="title counter">[43,000]</div>
+          <div class="title counter"><%= @count %></div>
           <div class="counter-description">
-            [Have Told Their Representative]
+            Have Told Their Representative
           </div>
-          <div class="secondary-title">[#StandUp4Medicare]</div>
+          <%= render "elevated-div.html", [uniq: "pld", color: "#295661", content: "#StandUp4Medicare", padding: 5, width: 250, height: 50] %>
         </div>
       </div>
 
@@ -41,12 +42,12 @@
       </div>
       <div class="hero-section">
         <div class="secondary-title">
-          [Running for Congress Or Serving a District?]
+          Running for Congress Or Serving a District?
         </div>
         <div class="button">
           <%= render "elevated-div.html", [uniq: "pld", color: "#295661", content: "Pledge", padding: 5, width: 100, height: 50] %>
         </div>
-        <div>[Take the Pledge and Stand With 73% of Americans]</div>
+        <div>Take the Pledge and Stand With 73% of Americans</div>
       </div>
     </div>
   </div>
@@ -223,6 +224,7 @@ h1, h2, h3 {
 
 .two-column {
   display: flex;
+  justify-content: space-between;
   width: 1000px;
   margin-left: auto;
   margin-right: auto;
@@ -251,7 +253,7 @@ h1, h2, h3 {
 }
 
 .title {
-	font-family: cursive;
+  font-family: 'Oleo Script', cursive;
 	font-size: 3.5em;
 	font-weight: bolder;
 }
@@ -313,7 +315,7 @@ h1, h2, h3 {
 .contact-link {
 	text-transform: uppercase;
 	border-left: solid 1px rgb(119, 114, 126);
-  padding-left: 5px;
+  padding-left: 20px;
 }
 
 .header {
@@ -433,21 +435,19 @@ h1, h2, h3 {
 .pledger-share img {
   height: 100%;
   width: 100%;
-  margin-left: 5px;
-  margin-right: 5px;
 }
 
 .top-share {
   display: flex;
   justify-content: space-around;
   height: 30px;
-  width: 100px;
+  width: 150px;
   align-items: center;
 }
 
 .top-share a {
-  height: 20px;
-  width: 20px;
+  height: 22px;
+  width: 22px;
 }
 
 .top-share img {
