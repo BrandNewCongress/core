@@ -6,17 +6,17 @@
   <% end %>
 
   <div class="page-body">
-    <div id="platform">
+    <div id="platform" class="platform">
       <%= if @brand == "bnc" do %>
-        <p class="bodyLarge blueText">
+        <div class="platform-intro blueText">
           We, the American people, have everything we need to reverse our economic decline and achieve prosperity for all our citizens; we have 320 million amazing people, vast natural resources, the best universities in the world, and an economy abundant with capital and innovation.
 
           The only thing standing in our way is the corrupt and complacent political establishment. Once we elect a Brand New Congress, we know that America can finally do what is necessary to bring about true liberty and justice for all: reinvest in American industry, repair our crumbling infrastructure, rekindle our struggling schools, build an all-renewable energy system, eliminate burdensome regulations, rebuild our broken healthcare system, reform our unjust criminal justice system and restore the promise of democracy.
-        </p>
+        </div>
       <% else %>
-        <p class="bodyLarge blueText">
+        <div class="platform-intro blueText">
           It’s time to rebuild the Democratic party from scratch and make it represent the American people.
-        </p>
+        </div>
       <% end %>
 
       <%= for area <- @areas do %>
@@ -25,7 +25,7 @@
             <%= area.title %>
           </div>
 
-          <div class="platform-item-introduction">
+          <div class="platform-item-introduction blueText">
             <%= area.introduction %>
           </div>
 
@@ -84,4 +84,47 @@
 .page-body {
   width: 100%;
 }
+
+.blueText {
+    color: #598089;
+}
+
+.platform-intro {
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 50px;
+}
+
+.platform-item {
+  margin-bottom: 25px;
+}
+
+.platform-item-title {
+    margin: 0 0 25px;
+    padding-bottom: 20px;
+    font-size: 35px;
+    font-weight: normal;
+    letter-spacing: .02em;
+    border-bottom: 2px solid black;
+}
+
+.platform-item-introduction {
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 40px;
+}
+
+.plank-title {
+  margin: 0 0 25px;
+  font-size: 25px;
+  font-weight: normal;
+}
+
+.plank-body {
+  margin: 0 0 25px;
+  font-size: 20px;
+  font-weight: normal;
+}
+
+
 </style>
