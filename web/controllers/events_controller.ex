@@ -25,7 +25,7 @@ defmodule Core.EventsController do
       end
 
     banner = get_banner(event.type)
-    
+
     render conn, "rsvp.html", [event: event, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
 
@@ -79,7 +79,6 @@ defmodule Core.EventsController do
   end
 
   defp slugize(event_type) do
-    IO.inspect event_type
 
     "Event Type: " <> event_type
     |> String.downcase()
