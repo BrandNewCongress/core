@@ -3,7 +3,7 @@ defmodule Transformers.Nb.Event do
 
   attributes [:id, :name, :title, :description, :summary, :browser_url, :type,
               :location, :featured_image_url, :start_date, :end_date, :calendar,
-              :host]
+              :host, :time_zone]
 
   def name(event), do: event.slug
   def description(event), do: event.intro
