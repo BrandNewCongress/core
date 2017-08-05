@@ -1,17 +1,22 @@
-<div class="nav-body-container" style="padding: 30px;">
+<%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Platform"] %>
+
+<div class="nav-body-container">
   <%= if (not @mobile) do %>
     <%= render Core.LayoutView, "left-nav.html", assigns %>
   <% end %>
 
   <div class="page-body">
-    <%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Platform"] %>
     <div id="platform">
       <%= if @brand == "bnc" do %>
-        We, the American people, have everything we need to reverse our economic decline and achieve prosperity for all our citizens; we have 320 million amazing people, vast natural resources, the best universities in the world, and an economy abundant with capital and innovation.
+        <p class="bodyLarge blueText">
+          We, the American people, have everything we need to reverse our economic decline and achieve prosperity for all our citizens; we have 320 million amazing people, vast natural resources, the best universities in the world, and an economy abundant with capital and innovation.
 
-        The only thing standing in our way is the corrupt and complacent political establishment. Once we elect a Brand New Congress, we know that America can finally do what is necessary to bring about true liberty and justice for all: reinvest in American industry, repair our crumbling infrastructure, rekindle our struggling schools, build an all-renewable energy system, eliminate burdensome regulations, rebuild our broken healthcare system, reform our unjust criminal justice system and restore the promise of democracy.
+          The only thing standing in our way is the corrupt and complacent political establishment. Once we elect a Brand New Congress, we know that America can finally do what is necessary to bring about true liberty and justice for all: reinvest in American industry, repair our crumbling infrastructure, rekindle our struggling schools, build an all-renewable energy system, eliminate burdensome regulations, rebuild our broken healthcare system, reform our unjust criminal justice system and restore the promise of democracy.
+        </p>
       <% else %>
-        It’s time to rebuild the Democratic party from scratch and make it represent the American people.
+        <p class="bodyLarge blueText">
+          It’s time to rebuild the Democratic party from scratch and make it represent the American people.
+        </p>
       <% end %>
 
       <%= for area <- @areas do %>
@@ -42,3 +47,41 @@
     </div>
   </div>
 </div>
+
+<style>
+
+.page-body {
+  margin: 20px;
+}
+
+.page-body > .link-container > a {
+  width: 200px;
+  padding: 10px;
+  text-transform: none;
+  text-decoration: none;
+  text-align: center;
+}
+
+.option-group-header {
+  font-size: larger;
+  border-bottom: 1px solid black;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.option-container {
+  display: flex;
+  flex-wrap: wrap;
+  <%= if @mobile do %>
+    justify-content: space-around;
+  <% end %>
+}
+
+.container {
+  padding: 30px;
+}
+
+.page-body {
+  width: 100%;
+}
+</style>

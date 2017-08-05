@@ -21,7 +21,7 @@
       |> Enum.filter(&(by_brand(&1, brand)))
       |> Enum.map(&normalize_area/1)
 
-    render conn, "platform.html", [areas: areas] ++ opts
+    render conn, "platform.html", [title: "Platform", areas: areas] ++ opts
   end
 
   def candidates(conn, params) do
