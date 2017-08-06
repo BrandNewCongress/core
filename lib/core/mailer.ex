@@ -15,10 +15,10 @@ defmodule Core.Mailer do
     |> deliver()
   end
 
-  def typeform_failure_alert(body) do
+  def typeform_failure_alert(body, e) do
     Logger.info "Sending email to Ben because of failure on Typeform webhook"
 
-    {:ok, stringified} = Poison.encode(body)
+    {:ok, stringified} = Poison.encode(%{body: body, error: e}, pretty: true)
 
     new()
     |> to({"Ben Packer", "ben@brandnewcongress.org"})

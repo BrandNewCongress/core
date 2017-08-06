@@ -7,8 +7,8 @@ defmodule Core.JotformController do
       response = Jotform.SubmitEvent.on_event_submit(params)
       json conn, response
     rescue
-      _e ->
-        Core.Mailer.typeform_failure_alert(params)
+      e ->
+        Core.Mailer.typeform_failure_alert(params, e)
         json conn, %{"ok" => "But error"}
     end
   end
