@@ -1,4 +1,4 @@
-<span style=\"color: #acacac; \">
-  <h3> 11th </h3>
+<div class="box-circle-container" >
+  <h3 class="box-circle-header"> 11th </h3>
   <p> America's health outcomes worldwide ranking. </p>
-</span>
+</div>

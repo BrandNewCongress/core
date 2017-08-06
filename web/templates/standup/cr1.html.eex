@@ -1,4 +1,4 @@
-<span style="color: #acacac;">
-  <h3> 73% </h3>
+<div class="box-circle-container" >
+  <h3 class="box-circle-header"> 73% </h3>
   <p> Of Americans support Medicare for All. </p>
-</span>
+</div>

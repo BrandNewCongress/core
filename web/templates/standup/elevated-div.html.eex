@@ -9,10 +9,12 @@
 <div class="elevated <%= bxs_class %>">
   <%= for idx <- 1..padding do %>
     <div class="<%= bx_class %>" style="<%= "box-shadow: -#{idx}px #{idx}px 0px #{shadow_color}; #{extra_styles}" %>">
-      <%= if assigns[:template] != nil do %>
-        <%= render @template, assigns %>
-      <% else %>
-        <%= raw(@content) %>
+      <%= if idx == padding  do %>
+        <%= if assigns[:template] != nil do %>
+          <%= render @template, assigns %>
+        <% else %>
+          <%= raw(@content) %>
+        <% end %>
       <% end %>
     </div>
   <% end %>

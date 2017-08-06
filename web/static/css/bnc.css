@@ -23,7 +23,7 @@
 
 .bnc h2, .bnc h3 {
   letter-spacing: .01em;
-  font-family: 'Roboto Condensed', sans-serif !important;
+  font-family: 'Roboto Condensed', sans-serif;
 }
 
 .bnc p, .bnc label {

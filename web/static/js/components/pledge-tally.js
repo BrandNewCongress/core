@@ -9,7 +9,7 @@ export default class PledgeTally extends Component {
         col: undefined,
         row: undefined
       },
-      district: 'NY-15'
+      district: undefined
     }
   }
 
@@ -59,9 +59,9 @@ export default class PledgeTally extends Component {
         </div>
         <div
           className="section-header"
-          style={{ paddingBottom: 50, paddingTop: 0 }}
+          style={{ paddingBottom: 50, paddingTop: 0, fontSize: '20px' }}
         >
-          Click to see a signer's name and contact information
+          Hover to see a pledger's name and contact information
         </div>
         <div style={{ display: 'flex', height: '300px' }}>
           {this.pledgesByState().map((state, col) =>
@@ -69,13 +69,12 @@ export default class PledgeTally extends Component {
               key={state}
               style={{
                 width: '13px',
-                fontSize: '8px',
                 marginLeft: '2px',
                 marginRight: '2px',
                 position: 'relative'
               }}
             >
-              {state[1].map((pledge, row) =>
+              {state[1].map((pledge, row) => [
                 <div
                   key={pledge.name}
                   style={{
@@ -99,8 +98,33 @@ export default class PledgeTally extends Component {
                   {col == hovering.idxs.col &&
                     row == hovering.idxs.row &&
                     this.renderPledgerModal(pledge)}
-                </div>
-              )}
+                </div>,
+
+                <div
+                  key="line"
+                  data-col={col}
+                  style={{
+                    height: 38,
+                    borderRight: '1px solid grey',
+                    marginLeft: '10px',
+                    position: 'absolute',
+                    bottom: `${this.calcOffset(col, row) - 50}px`
+                  }}
+                />,
+
+                col % 2 != 0
+                  ? <div
+                      key="line-2"
+                      style={{
+                        height: 50,
+                        borderRight: '1px solid grey',
+                        marginLeft: '10px',
+                        position: 'absolute',
+                        bottom: `${this.calcOffset(col, row) - 100}px`
+                      }}
+                    />
+                  : undefined
+              ])}
             </div>
           )}
         </div>
@@ -165,7 +189,8 @@ export default class PledgeTally extends Component {
                     marginTop: '1px',
                     marginBottom: '1px',
                     marginLeft: '2px',
-                    marginRight: '2px'
+                    marginRight: '2px',
+                    zIndex: this.incumbentOfPledger(rep) ? '10000' : '-10'
                   }}
                 >
                   {this.incumbentOfPledger(rep) && this.renderEvilModal(rep)}
@@ -183,7 +208,6 @@ export default class PledgeTally extends Component {
       .toString()
       .padStart(2, '0')}`
     const result = friendlyDistrict == this.state.hovering.district
-    console.log(result)
     return result
   }
 
@@ -205,7 +229,7 @@ export default class PledgeTally extends Component {
     }
   }
 
-  calcOffset = (col, row) => (col % 2 == 0 ? 50 : 100) + row * 21
+  calcOffset = (col, row) => (col % 2 == 0 ? 50 : 100) + row * 30
 
   renderPledgerModal = pledge =>
     <div className="bubble-modal signer">
@@ -235,9 +259,17 @@ export default class PledgeTally extends Component {
         <a
           href={`https://youtube.com/watch?v=${pledge.youtube_id}`}
           target="_blank"
-          style={{ display: 'block' }}
+          style={{
+            display: 'block',
+            backgroundColor: 'rgb(39, 86, 97)',
+            padding: 8,
+            textDecoration: 'none',
+            color: 'white',
+            fontFamily: 'Oleo Script, cursive',
+            fontSize: '15px'
+          }}
         >
-          Watch The Pledge
+          Watch Their Pledge
         </a>
 
         <div className="pledger-share">
@@ -261,11 +293,11 @@ export default class PledgeTally extends Component {
   renderEvilModal = rep =>
     <div className="bubble-modal incumbent">
       <div className="pledge-info-box">
-        <div className="standing-up">Standing Up</div>
+        <div className="standing-up">Not Standing Up</div>
 
         <div className="pledger-info">
           <img
-            src={`/images/m4a-candidate-in.png`}
+            src={`/images/m4a-incumbent-in.png`}
             style={{
               marginTop: 5,
               marginBottom: 5,
@@ -278,7 +310,11 @@ export default class PledgeTally extends Component {
               {rep.name}
             </div>
             <div className="position">
-              {`${rep.position} ${rep.state}-${rep.district.toString().padStart(2, '0')}`}
+              {rep.district
+                ? `Congressperson for ${rep.state}-${rep.district
+                    .toString()
+                    .padStart(2, '0')}`
+                : `Senator for ${rep.state}`}
             </div>
           </div>
         </div>

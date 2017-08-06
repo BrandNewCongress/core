@@ -1,4 +1,4 @@
-<span style=\"color: #acacac; \">
-  <h3> 1st </h3>
+<div class="box-circle-container" >
+  <h3 class="box-circle-header"> 1st </h3>
   <p> America's ranking in health care spending worldwide. </p>
-</span>
+</div>

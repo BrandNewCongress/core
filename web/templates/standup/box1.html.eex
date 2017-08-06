@@ -1,5 +1,5 @@
-<div style="color: #acacac; padding: 20px;">
-  <h3> WE BELIEVE IT IS TIME </h3>
+<div class="box-container" >
+  <h3 class="box-header"> WE BELIEVE IT IS TIME </h3>
   <p>
     <span class="caps">
       We believe it is time for Congress to stand up for Medicare for All.

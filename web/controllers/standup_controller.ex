@@ -9,11 +9,13 @@ defmodule Core.StandupController do
       |> Enum.map(&extract_attrs/1)
       |> Enum.sort(&(&1.priority <= &2.priority))
 
-    %{"metadata" => %{"count" => count}} = Cosmic.get("standup-text")
-
     {:ok, pledges_json} =
       pledges
       |> Poison.encode()
+
+    %{"metadata" => %{"count" => count}} = Cosmic.get("standup-text")
+
+    count = add_comma(count)
 
     render conn, "standup.html",
       [pledges: pledges, pledges_json: pledges_json, count: count] ++ GlobalOpts.get(conn, params)
@@ -31,5 +33,16 @@ defmodule Core.StandupController do
       youtube_id: youtube_id, content: content, twitter: twitter,
       facebook: facebook, instagram: instagram, headshot: headshot,
       state: state, priority: priority}
+  end
+
+  defp add_comma(integer) when is_binary(integer) do
+    integer
+    |> Integer.parse()
+    |> (fn {count, _} -> count end).()
+    |> Number.Delimit.number_to_delimited(precision: 0)
+  end
+
+  defp add_comma(integer) when is_integer(integer) do
+    Number.Delimit.number_to_delimited(integer, precision: 0)
   end
 end

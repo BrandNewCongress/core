@@ -1,5 +1,5 @@
-<span style="color: #acacac;">
-  <h3> Because of Your Pressure </h3>
+<div class="box-container" >
+  <h3 class="box-header"> WE BELIEVE IT IS TIME </h3>
   <p>
     <span class="caps">
       Because of your pressure,
@@ -11,4 +11,4 @@
     cuts. These congresspeople are silently backing Medicare for All just as a
     weak political move to cover their bases.
   </p>
-</span>
+</div>

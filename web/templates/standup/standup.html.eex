@@ -30,9 +30,11 @@
           <img height="65" src="/images/temp-join.png" />
           <div class="title counter"><%= @count %></div>
           <div class="counter-description">
-            Have Told Their Representative
+            People Have Spoken
           </div>
-          <%= render "elevated-div.html", [uniq: "pld", color: "#295661", content: "#StandUp4Medicare", padding: 5, width: 250, height: 50] %>
+          <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
+            <%= render "elevated-div.html", [uniq: "up", color: "#295661", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
+          </a>
         </div>
       </div>
 
@@ -40,14 +42,14 @@
         <% youtube_id = @pledges |> List.first() |> Kernel.get_in([:youtube_id]) %>
         <%= render "youtube-embed.html", [width: 560, height: 320, youtube_id: youtube_id]%>
       </div>
-      <div class="hero-section">
+      <div class="hero-section" style="padding-top: 25px; padding-bottom: 25px;">
         <div class="secondary-title">
           Running for Congress Or Serving a District?
         </div>
-        <div class="button">
-          <%= render "elevated-div.html", [uniq: "pld", color: "#295661", content: "Pledge", padding: 5, width: 100, height: 50] %>
+        <div class="button" style="margin-top: 15px; margin-bottom: 15px;">
+          <%= render "elevated-div.html", [uniq: "pld", color: "#295661", content: "Pledge", padding: 15, width: 100, height: 45] %>
         </div>
-        <div>Take the Pledge and Stand With 73% of Americans</div>
+        <div style="font-size: 18px; font-family: Roboto;">Take the Pledge and Stand With 73% of Americans</div>
       </div>
     </div>
   </div>
@@ -66,28 +68,33 @@
         <div class="circle-container">
           <%= render "elevated-div.html",
             [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 40,
-             width: 102, height: 102, no_hover: true, extra_styles: "border-radius: 50%;",
-             template: "cr1.html"] %>
+             width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+             shadow_color: "#e1e0e3", template: "cr1.html"] %>
 
           <%= render "elevated-div.html",
             [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 40,
-             width: 102, height: 102, no_hover: true, extra_styles: "border-radius: 50%;",
-             template: "cr2.html"] %>
+             width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+             shadow_color: "#e1e0e3", template: "cr2.html"] %>
        </div>
 
+        <h3 style="font-family: Roboto;	font-size: 32px; font-style: italic; font-weight: 900; line-height: 30px;">
+          #StandUp4Medicare
+        </h3>
        <%= render "elevated-div.html",
             [uniq: "tweet", color: "", shadow_color: "#f4f4f4", padding: 40,
-             width: 400, height: 600, no_hover: true,
+             width: 450, height: 600, no_hover: true, shadow_color: "#d7d7d7",
              template: "tweet-stream.html"] %>
      </div>
 
 
       <div id="column-2">
-        <h3> Watch the video: </h3>
+        <h3 style="font-family: Roboto;	font-size: 32px; font-style: italic; font-weight: 900; line-height: 30px;">
+          Watch the Video:
+        </h3>
 
         <%= render "elevated-div.html",
           [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 40,
-           width: 460, height: 285, no_hover: true, pledges: @pledges,
+           width: 460, height: 285, no_hover: true, pledges: @pledges, shadow_color: "#d7d7d7",
            template: "video.html"] %>
 
         <%= render "elevated-div.html",
@@ -95,21 +102,22 @@
            width: 460, height: 285, no_hover: true,
            template: "box2.html"] %>
 
+        <div class="button">
         <%= render "elevated-div.html",
           [uniq: "watch-more-button", color: "#145762", shadow_color: "#302D32",
-           padding: 40, height: 100, width: 250, no_hover: false,
-           template: "more-videos.html"]%>
+           padding: 10, height: 45, width: 250, template: "more-videos.html"]%>
+        </div>
 
          <div class="circle-container">
            <%= render "elevated-div.html",
-             [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 40,
+             [uniq: "cr3", color: "", shadow_color: "#f4f4f4", padding: 40,
               width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
-              template: "cr1.html"] %>
+             shadow_color: "#e1e0e3", template: "cr3.html"] %>
 
            <%= render "elevated-div.html",
-             [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 40,
+             [uniq: "cr4", color: "", shadow_color: "#f4f4f4", padding: 40,
               width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
-              template: "cr2.html"] %>
+             shadow_color: "#e1e0e3", template: "cr4.html"] %>
          </div>
        </div>
 
@@ -119,7 +127,7 @@
   <div id="#cta">
   </div>
 
-  <div id="pledge-tally">
+  <div id="pledge-tally" style="height: 1100px; overflow: hidden;">
 		<div id="standup-app"></div>
   </div>
 
@@ -213,7 +221,7 @@
 
 .elevated {
   text-align: left;
-  /*margin: 5px;*/
+  margin: 10px;
 }
 
 h1, h2, h3 {
@@ -238,8 +246,11 @@ h1, h2, h3 {
 }
 
 #column-1, #column-2 {
-  width: 490px;
+  width: 100%;
 }
+
+#column-1 > .elevated { margin: 10px; }
+#column-2 > .elevated { margin: 10px; }
 
 .button {
   display: flex;
@@ -273,13 +284,29 @@ h1, h2, h3 {
 
 .counter {
 	color: rgb(39, 86, 97);
+  font-size: 58px;
+}
+
+.counter-description {
+  color: rgb(39, 86, 97);
+  font-size: 24px;
+  font-family: Roboto;
+  font-weight: bold;
+  font-style: italic;
 }
 
 .secondary-title {
-	font-size: 1.15em;
-	font-weight: 600;
 	font-style: italic;
 	color: rgb(39, 86, 97);
+  font-size: 24px;
+  font-weight: bold;
+  font-family: Roboto;
+  text-align: center;
+}
+
+.up-bx {
+  font-family: Roboto;
+  font-size: 16px;
 }
 
 .hero-section {
@@ -287,10 +314,11 @@ h1, h2, h3 {
 	border-top: solid 7px rgb(37, 80, 90);
 	border-bottom: solid 7px rgb(37, 80, 90);
 	vertical-align: middle;
-	width: 200px;
-	height: 200px;
+	width: 225px;
 	margin-right: 2em;
 	margin-left: 2em;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .hero-section-inner {
@@ -351,20 +379,6 @@ h1, h2, h3 {
   align-items: center;
 }
 
-@media (max-width: 1200px) {
-	.logo-container {
-		height: 90%;
-	}
-	.contact-bar {
-		position: relative;
-		top: 0px;
-		right: 0px;
-		margin-top: 20px;
-		width: 50%;
-		margin: auto;
-	}
-}
-
 @media (max-width: 480px) {
 	.header {
 		height: 200px;
@@ -394,6 +408,7 @@ h1, h2, h3 {
 .pledge-info-box > .standing-up {
   padding: 10px;
   color: white;
+  font-size: 19px;
 }
 
 .standing-up {
@@ -404,8 +419,9 @@ h1, h2, h3 {
 
 .pledger-info {
 	text-align: center;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 16px;
+  padding: 10px;
 }
 
 .pledger-info .name {
@@ -430,7 +446,14 @@ h1, h2, h3 {
   display: flex;
   justify-content: space-around;
   background-color: #eaeaea;
-  padding: 5px;
+  padding: 10px;
+}
+
+.pledger-text {
+  color: #9B9B9B;
+  font-family: Roboto;
+  font-size: 12px;
+  line-height: 19px;
 }
 
 .pledger-share > a {
@@ -471,6 +494,33 @@ h1, h2, h3 {
 .bubble img {
 	height: 100%;
 	width: 100%;
+}
+
+.box-container {
+  color: #acacac;
+  padding: 20px;
+}
+
+.box-header {
+  font-size: 32px;
+}
+
+.box-circle-container {
+  color: #acacac;
+  padding: 20px;
+}
+
+.bnc h3.box-circle-header {
+  font-family: 'Oleo Script', cursive;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 61px;
+  margin: 0;
+}
+
+.box-circle-container p {
+  font-size: 14px;
+  margin: 0;
 }
 
 </style>
