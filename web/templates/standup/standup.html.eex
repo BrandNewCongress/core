@@ -184,7 +184,11 @@
   position: absolute;
   width: 240px;
   transform: translate(-45%, -110%);
-  z-index: 10;
+  z-index: 10000;
+}
+
+.bubble-modal.incumbent {
+  transform: translate(-47.5%, -98%);
 }
 
 .tooltip {

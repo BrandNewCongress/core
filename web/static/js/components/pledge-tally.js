@@ -9,7 +9,7 @@ export default class PledgeTally extends Component {
         col: undefined,
         row: undefined
       },
-      district: undefined
+      district: 'NY-15'
     }
   }
 
@@ -92,7 +92,7 @@ export default class PledgeTally extends Component {
                   className={`bubble ${pledge.position}`}
                   onMouseEnter={this.bubbleHover({
                     idxs: { col, row },
-                    dstrict: pledge.district
+                    district: pledge.district
                   })}
                   onMouseLeave={this.resetHover}
                 >
@@ -167,13 +167,24 @@ export default class PledgeTally extends Component {
                     marginLeft: '2px',
                     marginRight: '2px'
                   }}
-                />
+                >
+                  {this.incumbentOfPledger(rep) && this.renderEvilModal(rep)}
+                </div>
               )}
             </div>
           )}
         </div>
       </div>
     )
+  }
+
+  incumbentOfPledger = rep => {
+    const friendlyDistrict = `${rep.state}-${rep.district
+      .toString()
+      .padStart(2, '0')}`
+    const result = friendlyDistrict == this.state.hovering.district
+    console.log(result)
+    return result
   }
 
   pledgesByState = () => {
@@ -248,7 +259,7 @@ export default class PledgeTally extends Component {
     </div>
 
   renderEvilModal = rep =>
-    <div className="bubble-modal signer">
+    <div className="bubble-modal incumbent">
       <div className="pledge-info-box">
         <div className="standing-up">Standing Up</div>
 
@@ -267,7 +278,7 @@ export default class PledgeTally extends Component {
               {rep.name}
             </div>
             <div className="position">
-              {`${rep.position} ${pledge.district}`}
+              {`${rep.position} ${rep.state}-${rep.district.toString().padStart(2, '0')}`}
             </div>
           </div>
         </div>
