@@ -1,7 +1,7 @@
 <link href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700|Roboto" rel="stylesheet">
 
 <div class="body">
-  <div class="header">
+  <div class="header" id="top">
     <div class="logo-container">
       <img class="logo" src="<%= static_path(@conn, "/images/temp-logo.png") %>" />
     </div>
@@ -37,8 +37,8 @@
       </div>
 
       <div class="hero-video">
-        <% url = @pledges |> List.first() |> Kernel.get_in([:youtube_url]) %>
-        <%= render "youtube-embed.html", [width: 560, height: 320, url: url]%>
+        <% youtube_id = @pledges |> List.first() |> Kernel.get_in([:youtube_id]) %>
+        <%= render "youtube-embed.html", [width: 560, height: 320, youtube_id: youtube_id]%>
       </div>
       <div class="hero-section">
         <div class="secondary-title">
@@ -53,7 +53,7 @@
   </div>
 
 
-  <div class="section">
+  <div class="section" id="why-stand-up" >
     <div class="title section-header">Why Stand Up?</div>
     <div class="two-column">
 
@@ -116,21 +116,23 @@
     </div>
   </div>
 
-  <div >
+  <div id="#cta">
   </div>
 
-  <div>
+  <div id="pledge-tally">
 		<div id="standup-app"></div>
   </div>
 
-  <div class="title section-header">Watch the Pledges</div>
+  <div class="title section-header" id="video-pledges" >
+    Watch the Pledges
+  </div>
   <div style="width: 810px; margin-left: auto; margin-right: auto;">
 		<%= for p <- @pledges |> Enum.slice(2, length(@pledges) + 1) do %>
       <div class="pledge-container">
         <div
           class="pledge-video-container"
         >
-          <%= render "youtube-embed.html", [width: 560, height: 320, url: p.youtube_url] %>
+          <%= render "youtube-embed.html", [width: 560, height: 320, youtube_id: p.youtube_id] %>
 				</div>
         <div class="pledge-info-container">
           <div class="pledge-info-box">

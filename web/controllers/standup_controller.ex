@@ -22,13 +22,13 @@ defmodule Core.StandupController do
   defp extract_attrs(
     %{"content" => content, "metadata" =>
       %{"name" => name, "district" => district, "position" => position,
-        "youtube_url" => youtube_url, "twitter" => twitter,
+        "youtube_id" => youtube_id, "twitter" => twitter,
         "facebook" => facebook, "instagram" => instagram,
         "priority" => priority, "state" => state,
         "headshot" => %{"imgix_url" => headshot}}}) do
 
     %{name: name, district: district, position: position,
-      youtube_url: youtube_url, content: content, twitter: twitter,
+      youtube_id: youtube_id, content: content, twitter: twitter,
       facebook: facebook, instagram: instagram, headshot: headshot,
       state: state, priority: priority}
   end

@@ -221,6 +221,14 @@ export default class PledgeTally extends Component {
           </div>
         </div>
 
+        <a
+          href={`https://youtube.com/watch?v=${pledge.youtube_id}`}
+          target="_blank"
+          style={{ display: 'block' }}
+        >
+          Watch The Pledge
+        </a>
+
         <div className="pledger-share">
           <a href={pledge.twitter} target="_blank">
             <img src="/images/m4a-twitter.png" />
