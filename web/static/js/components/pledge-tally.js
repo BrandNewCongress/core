@@ -98,47 +98,7 @@ export default class PledgeTally extends Component {
                 >
                   {col == hovering.idxs.col &&
                     row == hovering.idxs.row &&
-                    <div className="bubble-modal signer">
-                      <div className="pledge-info-box">
-                        <div className="standing-up">Standing Up</div>
-
-                        <div className="pledger-info">
-                          <img
-                            src={`/images/m4a-candidate-in.png`}
-                            style={{
-                              marginTop: 5,
-                              marginBottom: 5,
-                              width: 170,
-                              height: 42
-                            }}
-                          />
-                          <div className="name-position-container">
-                            <div className="name">
-                              {pledge.name}
-                            </div>
-                            <div className="position">
-                              {`${pledge.position} ${pledge.district}`}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="pledger-share">
-                          <a href={pledge.twitter} target="_blank">
-                            <img src="/images/m4a-twitter.png" />
-                          </a>
-                          <a href={pledge.facebook} target="_blank">
-                            <img src="/images/m4a-facebook.png" />
-                          </a>
-                          <a href={pledge.instagram} target="_blank">
-                            <img src="/images/m4a-instagram.png" />
-                          </a>
-                        </div>
-                      </div>
-
-                      <div className="tooltip">
-                        <div className="tooltip-item" />
-                      </div>
-                    </div>}
+                    this.renderPledgerModal(pledge)}
                 </div>
               )}
             </div>
@@ -235,4 +195,78 @@ export default class PledgeTally extends Component {
   }
 
   calcOffset = (col, row) => (col % 2 == 0 ? 50 : 100) + row * 21
+
+  renderPledgerModal = pledge =>
+    <div className="bubble-modal signer">
+      <div className="pledge-info-box">
+        <div className="standing-up">Standing Up</div>
+
+        <div className="pledger-info">
+          <img
+            src={`/images/m4a-candidate-in.png`}
+            style={{
+              marginTop: 5,
+              marginBottom: 5,
+              width: 170,
+              height: 42
+            }}
+          />
+          <div className="name-position-container">
+            <div className="name">
+              {pledge.name}
+            </div>
+            <div className="position">
+              {`${pledge.position} ${pledge.district}`}
+            </div>
+          </div>
+        </div>
+
+        <div className="pledger-share">
+          <a href={pledge.twitter} target="_blank">
+            <img src="/images/m4a-twitter.png" />
+          </a>
+          <a href={pledge.facebook} target="_blank">
+            <img src="/images/m4a-facebook.png" />
+          </a>
+          <a href={pledge.instagram} target="_blank">
+            <img src="/images/m4a-instagram.png" />
+          </a>
+        </div>
+      </div>
+
+      <div className="tooltip">
+        <div className="tooltip-item" />
+      </div>
+    </div>
+
+  renderEvilModal = rep =>
+    <div className="bubble-modal signer">
+      <div className="pledge-info-box">
+        <div className="standing-up">Standing Up</div>
+
+        <div className="pledger-info">
+          <img
+            src={`/images/m4a-candidate-in.png`}
+            style={{
+              marginTop: 5,
+              marginBottom: 5,
+              width: 170,
+              height: 42
+            }}
+          />
+          <div className="name-position-container">
+            <div className="name">
+              {rep.name}
+            </div>
+            <div className="position">
+              {`${rep.position} ${pledge.district}`}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="tooltip">
+        <div className="tooltip-item" />
+      </div>
+    </div>
 }

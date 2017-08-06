@@ -1,4 +1,4 @@
-<link href="https://fonts.googleapis.com/css?family=Oleo+Script|Roboto" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700|Roboto" rel="stylesheet">
 
 <div class="body">
   <div class="header">
@@ -255,7 +255,7 @@ h1, h2, h3 {
 .title {
   font-family: 'Oleo Script', cursive;
 	font-size: 3.5em;
-	font-weight: bolder;
+	font-weight: 700;
 }
 
 .section-header {
