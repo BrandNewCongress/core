@@ -19,6 +19,13 @@
         </div>
       <% end %>
 
+      <div class="platformDivider"><br></div>
+
+      <%= if @brand == "bnc" do %>
+        <h4 class="platform-header">Our Brand New Congress will</h4>
+        <br><br>
+      <% end %>
+
       <%= for area <- @areas do %>
         <div class="platform-item">
           <div class="platform-item-title">
@@ -93,19 +100,36 @@
   font-weight: bold;
   font-size: 24px;
   margin-bottom: 50px;
+  font-family: 'Roboto Slab', serif;
+}
+
+.platformDivider {
+  margin: 70px 0;
+  height: 17px;
+  background: #222;
+}
+
+.platform-header {
+  text-transform: uppercase;
+  font-family: 'Montserrat', sans-serif;
+  margin-bottom: 0;
+  font-size: 11px;
 }
 
 .platform-item {
-  margin-bottom: 25px;
+  margin-bottom: 40px;
+  padding-bottom: 40px;
+  border-bottom: 1px dashed black;
 }
 
 .platform-item-title {
-    margin: 0 0 25px;
-    padding-bottom: 20px;
+    margin: 0 0 40px;
+    padding-bottom: 40px;
     font-size: 35px;
     font-weight: normal;
     letter-spacing: .02em;
-    border-bottom: 2px solid black;
+    border-bottom: 3px dashed black;
+    text-transform: uppercase;
 }
 
 .platform-item-introduction {
@@ -115,15 +139,24 @@
 }
 
 .plank-title {
-  margin: 0 0 25px;
-  font-size: 25px;
-  font-weight: normal;
+  margin: 46px 0 16px;
+  padding: 0 0 0 40px;
+  background: url(<%= static_path(@conn, "/images/star-salmon.png")%>) no-repeat;
+  background-size: 20px;
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 17px;
+  text-transform: uppercase;
 }
 
 .plank-body {
   margin: 0 0 25px;
-  font-size: 20px;
   font-weight: normal;
+  padding: 0 0 0 40px;
+  font-family: 'Roboto Slab', serif;
+  font-size: 15px;
+  color: #3E3E3E;
+  line-height: 1.4;
 }
 
 
