@@ -22,7 +22,7 @@ defmodule Core.Router do
     # get "/candidates", PageController, :candidates
     # get "/candidates/:candidate", PageController, :candidate
     get "/", StandupController, :get
-    
+
     # get "/petition/:petition", PetitionController, :get
     # post "/petition/:petition", PetitionController, :post
     #

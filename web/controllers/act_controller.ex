@@ -76,6 +76,20 @@ defmodule Core.ActController do
        draft: draft] ++ GlobalOpts.get(conn, params)
   end
 
+  def call_aid(conn, params = %{"candidate" => candidate}) do
+    %{"metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(candidate)
+
+    events =
+      :event_cache
+      |> Stash.get("calendar-#{calendar_id}")
+      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
+      |> Enum.sort(&date_compare/2)
+      |> Enum.take(6)
+      |> Enum.map(&Osdi.Event.add_date_line/1)
+
+    render conn, "call-aid.html", [events: events, no_header: true, no_footer: true] ++ GlobalOpts.get(conn, params)
+  end
+
   def legacy_redirect(conn, _params = %{"candidate" => candidate, "selected" => _selected}) do
     %{"metadata" => %{"district" => district}} = Cosmic.get(candidate)
     conn
@@ -154,4 +168,14 @@ defmodule Core.ActController do
   defp is_callable(_else) do
     false
   end
+
+  defp date_compare(%{start_date: d1}, %{start_date: d2}) do
+    {:ok, a, _} = DateTime.from_iso8601(d1)
+    {:ok, b, _} = DateTime.from_iso8601(d2)
+    case DateTime.compare(a, b) do
+      :gt -> false
+      _ -> true
+    end
+  end
+
 end
