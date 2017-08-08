@@ -2,7 +2,13 @@ defmodule Nb.Events.Rsvps do
   import Nb.Api
 
   def create(event, person) do
-    %{"id" => id} = Nb.People.push(person)
+    %{"id" => id} =
+      person
+      |> Map.take(["email", "first_name", "last_name", "phone"])
+      |> Nb.People.push()
+
+    %{"primary_address" => address} = person
+    Nb.People.update(id, %{"primary_address" => address})
 
     rsvp = %{person_id: id, guests_count: 1, volunteer: false, private: false, canceled: false}
 

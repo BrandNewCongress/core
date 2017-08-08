@@ -66,6 +66,30 @@
           </div>
         </div>
         <div class="form-row">
+          <div class="form-el" style="margin-left: -8px; width: 277px;">
+            <label> Address </label><br/>
+            <input name="address1" type="text" placeholder="1600 Pennsylvania Avenue" style="width: 100%;"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-el" style="margin-left: -8px; width: 277px;">
+            <label> Zip Code </label><br/>
+            <input name="zip" type="text" placeholder="20500" style="width: 100%;"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-el" style="margin-left: -8px; width: 277px;">
+            <label> City </label><br/>
+            <input name="city" type="text" placeholder="Washginton" style="width: 100%;"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-el" style="margin-left: -8px; width: 277px;">
+            <label> State </label><br/>
+            <input name="state" type="text" placeholder="DC" style="width: 100%;"/>
+          </div>
+        </div>
+        <div class="form-row">
           <input type="submit" value="I'm coming!" class="primary-button" style="width: 200px; padding: 10px;">
         </div>
       </form>
