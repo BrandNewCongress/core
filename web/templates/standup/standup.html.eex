@@ -27,7 +27,7 @@
     <div class="hero-body" style="padding-bottom: 100px;">
       <div class="hero-section">
         <div class="hero-section-inner">
-          <img height="65" src="/images/temp-join.png" />
+          <img height="65" src="<%= static_path(@conn, "/images/m4a-join.png") %>" />
           <div class="title counter"><%= @count %></div>
           <div class="counter-description">
             People Have Spoken
@@ -62,7 +62,7 @@
       <div id="column-1">
         <%= render "elevated-div.html",
           [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 40,
-           width: 250, height: 285, no_hover: true,
+           width: 450, height: 285, no_hover: true,
            template: "box1.html"] %>
 
         <div class="circle-container">
@@ -93,8 +93,8 @@
         </h3>
 
         <%= render "elevated-div.html",
-          [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 40,
-           width: 460, height: 285, no_hover: true, pledges: @pledges, shadow_color: "#d7d7d7",
+          [uniq: "vid-2", color: "", shadow_color: "#f4f4f4", padding: 40,
+           width: 460, height: 280, no_hover: true, pledges: @pledges, shadow_color: "#d7d7d7",
            template: "video.html"] %>
 
         <%= render "elevated-div.html",
@@ -188,6 +188,10 @@
 
 <style>
 
+.vid-2-bx > div {
+  height: 280px;
+}
+
 .bubble-modal {
   position: absolute;
   width: 240px;
@@ -238,19 +242,22 @@ h1, h2, h3 {
 
 .two-column {
   display: flex;
-  justify-content: space-between;
-  width: 1000px;
+  justify-content: center;
+  width: auto;
   margin-left: auto;
   margin-right: auto;
   overflow: hidden;
 }
 
 #column-1, #column-2 {
-  width: 100%;
+  width: 500px;
 }
 
-#column-1 > .elevated { margin: 10px; }
-#column-2 > .elevated { margin: 10px; }
+#column-1 { margin-right: 20px; }
+#column-2 { margin-left: 20px; }
+
+#column-1 > .elevated { margin-top: 10px; }
+#column-2 > .elevated { margin-top: 20px; }
 
 .button {
   display: flex;
