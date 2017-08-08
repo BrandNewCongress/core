@@ -7,21 +7,24 @@
 
   <div class="page-body">
     <div id="platform" class="platform">
-      <%= if @brand == "bnc" do %>
+      <%= if @brand == "jd" do %>
+        <div class="platform-intro blueText">
+          It’s time to rebuild the Democratic party from scratch and make it represent the American people.
+        </div>
+      <% else %>
         <div class="platform-intro blueText">
           We, the American people, have everything we need to reverse our economic decline and achieve prosperity for all our citizens; we have 320 million amazing people, vast natural resources, the best universities in the world, and an economy abundant with capital and innovation.
 
           The only thing standing in our way is the corrupt and complacent political establishment. Once we elect a Brand New Congress, we know that America can finally do what is necessary to bring about true liberty and justice for all: reinvest in American industry, repair our crumbling infrastructure, rekindle our struggling schools, build an all-renewable energy system, eliminate burdensome regulations, rebuild our broken healthcare system, reform our unjust criminal justice system and restore the promise of democracy.
         </div>
-      <% else %>
-        <div class="platform-intro blueText">
-          It’s time to rebuild the Democratic party from scratch and make it represent the American people.
-        </div>
       <% end %>
 
       <div class="platformDivider"><br></div>
 
-      <%= if @brand == "bnc" do %>
+      <%= if @brand == "jd" do %>
+        <h4 class="platform-header">The Justice Democrats will:</h4>
+        <br><br>
+      <% else %>
         <h4 class="platform-header">Our Brand New Congress will</h4>
         <br><br>
       <% end %>
@@ -141,12 +144,15 @@
 .plank-title {
   margin: 46px 0 16px;
   padding: 0 0 0 40px;
-  background: url(<%= static_path(@conn, "/images/star-salmon.png")%>) no-repeat;
-  background-size: 20px;
   font-weight: bold;
   font-family: 'Montserrat', sans-serif;
   font-size: 17px;
   text-transform: uppercase;
+}
+
+.bnc .plank-title {
+  background: url(<%= static_path(@conn, "/images/star-salmon.png")%>) no-repeat;
+  background-size: 20px;
 }
 
 .plank-body {
