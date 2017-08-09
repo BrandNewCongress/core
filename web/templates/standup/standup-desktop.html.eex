@@ -1,0 +1,665 @@
+<link href="https://fonts.googleapis.com/css?family=Oleo+Script:400,700|Roboto" rel="stylesheet">
+
+<div class="body">
+  <div class="header" id="top">
+    <div class="logo-container">
+      <img class="logo" src="<%= static_path(@conn, "/images/temp-logo.png") %>" />
+    </div>
+    <div class="contact-bar">
+      <div class="top-share">
+        <a href="facebook.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
+        </a>
+        <a href="twitter.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
+        </a>
+        <a href="instagram.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
+        </a>
+      </div>
+
+      <a target="_blank" class="contact-link" href="mailto:us@standup4medicare.com"> Contact Us</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <div class="title section-header">Why Medicare For All?</div>
+    <div class="hero-body" style="padding-bottom: 100px;">
+      <div class="hero-section">
+        <div class="hero-section-inner">
+          <img height="65" src="<%= static_path(@conn, "/images/m4a-join.png") %>" />
+          <div class="title counter"><%= @count %></div>
+          <div class="counter-description">
+            People Have Spoken
+          </div>
+          <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
+            <%= render "elevated-div.html", [uniq: "up", color: "#295661", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-video">
+        <%= render "youtube-embed.html", [width: 560, height: 320, youtube_id: "1STqDQBOlD8"]%>
+      </div>
+      <div class="hero-section" style="padding-top: 25px; padding-bottom: 25px;">
+        <div class="secondary-title">
+          Running for Congress Or Serving a District?
+        </div>
+        <a target="_blank" href="https://form.jotform.us/72198762117159" class="button" style="margin-top: 15px; margin-bottom: 15px;">
+          <%= render "elevated-div.html", [uniq: "pld-1", color: "#295661", content: "Pledge", padding: 15, width: 100, height: 45] %>
+        </a>
+        <div style="font-size: 18px; font-family: Roboto;">Take the Pledge and Stand With 73% of Americans</div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="section" id="why-stand-up" >
+    <div class="title section-header">Why Stand Up?</div>
+    <div class="two-column">
+
+      <div id="column-1">
+        <%= render "elevated-div.html",
+          [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 40,
+           width: 450, height: 285, no_hover: true,
+           template: "box1.html"] %>
+
+        <div class="circle-container">
+          <%= render "elevated-div.html",
+            [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 40,
+             width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+             shadow_color: "#e1e0e3", template: "cr1.html"] %>
+
+          <%= render "elevated-div.html",
+            [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 40,
+             width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+             shadow_color: "#e1e0e3", template: "cr2.html"] %>
+       </div>
+
+        <h3 style="font-family: Roboto;	font-size: 32px; font-style: italic; font-weight: 900; line-height: 30px;">
+          #StandUp4Medicare
+        </h3>
+       <%= render "elevated-div.html",
+            [uniq: "tweet", color: "", shadow_color: "#f4f4f4", padding: 40,
+             width: 450, height: 600, no_hover: true, shadow_color: "#d7d7d7",
+             template: "tweet-stream.html"] %>
+     </div>
+
+
+      <div id="column-2">
+        <h3 style="font-family: Roboto;	font-size: 32px; font-style: italic; font-weight: 900; line-height: 30px;">
+          Watch the Video:
+        </h3>
+
+        <%= render "elevated-div.html",
+          [uniq: "vid-2", color: "", shadow_color: "#f4f4f4", padding: 40,
+           width: 460, height: 280, no_hover: true, pledges: @pledges, shadow_color: "#d7d7d7",
+           template: "video.html"] %>
+
+        <%= render "elevated-div.html",
+          [uniq: "pressure", color: "", shadow_color: "#f4f4f4", padding: 40,
+           width: 460, height: 285, no_hover: true,
+           template: "box2.html"] %>
+
+        <div class="button">
+        <%= render "elevated-div.html",
+          [uniq: "watch-more-button", color: "#145762", shadow_color: "#302D32",
+           padding: 10, height: 45, width: 250, template: "more-videos.html"]%>
+        </div>
+
+         <div class="circle-container">
+           <%= render "elevated-div.html",
+             [uniq: "cr3", color: "", shadow_color: "#f4f4f4", padding: 40,
+              width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+             shadow_color: "#e1e0e3", template: "cr3.html"] %>
+
+           <%= render "elevated-div.html",
+             [uniq: "cr4", color: "", shadow_color: "#f4f4f4", padding: 40,
+              width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
+             shadow_color: "#e1e0e3", template: "cr4.html"] %>
+         </div>
+       </div>
+
+    </div>
+  </div>
+
+  <div id="#cta">
+  </div>
+
+  <div id="pledge-tally" style="height: 1100px; overflow: hidden;">
+		<div id="standup-app"></div>
+  </div>
+
+  <div style="width: 100%; display: flex; align-items: center; flex-direction: column; margin-left: auto; margin-right: auto; background-color: #f4f4f4;">
+    <div class="title section-header" id="video-pledges" >
+      Watch the Pledges
+    </div>
+
+		<%= for p <- @pledges |> Enum.slice(0, length(@pledges) + 1) do %>
+      <div class="pledge-container">
+        <div
+          class="pledge-video-container"
+        >
+          <%= render "youtube-embed.html", [width: 560, height: 320, youtube_id: p.youtube_id] %>
+				</div>
+        <div class="pledge-info-container">
+          <div class="pledge-info-box">
+            <div class="standing-up">Standing Up</div>
+
+            <div class="pledger-info">
+              <div class="name-position-container">
+                <div class="name">
+                  <%= p.name %>
+                </div>
+                <div class="position">
+                  <%= "#{p.position} #{p.district}" %>
+                </div>
+              </div>
+            </div>
+
+            <div class="pledger-share">
+              <a href="<%= p.twitter %>" target="_blank">
+                <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
+              </a>
+              <a href="<%= p.facebook %>" target="_blank">
+                <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
+              </a>
+              <a href="<%= p.instagram %>" target="_blank">
+                <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
+              </a>
+            </div>
+          </div>
+
+          <div class="pledge-text" style="text-align: left; padding: 5px;">
+						<%= raw(p.content) %>
+					</div>
+        </div>
+      </div>
+		<% end %>
+  </div>
+
+  <div class="footer" id="top">
+    <div class="site-map">
+      <a href="#top"> Top </a>
+      <a href="#why-stand-up"> Why Stand Up </a>
+      <a href="#cta"> How You Can Help </a>
+      <a href="#pledge-tally"> Pledge Tally </a>
+      <a href="#video-pledges"> Video Pledges </a>
+    </div>
+
+    <div class="bottom-logo-container">
+      <img class="logo" src="<%= static_path(@conn, "/images/temp-logo.png") %>" />
+      <div class="paid-for" href="https://justicedemocrats.com" target="_blank">
+        Paid for by Justice Democrats
+      </div>
+    </div>
+
+    <div class="right-buttons">
+      <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
+        <%= render "elevated-div.html", [uniq: "up", color: "#295661", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
+      </a>
+
+      <a target="_blank" href="https://form.jotform.us/72198762117159" class="button" style="margin-top: 15px; margin-bottom: 15px;">
+        <%= render "elevated-div.html", [uniq: "pld-2", color: "#295661", content: "Make the Pledge", padding: 15, width: 150, height: 30] %>
+      </a>
+
+      <div class="icon-buttons">
+        <a href="mailto:us@standup4medicare.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-mail.png") %>" />
+        </a>
+        <a href="facebook.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
+        </a>
+        <a href="twitter.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
+        </a>
+        <a href="instagram.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+	window.pledges = <%= raw(@pledges_json) %>
+</script>
+
+<script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script>
+
+<style>
+
+body {
+  margin: 0;
+}
+
+.body h1, .body p, .body h2, .body h3 {
+  font-family: Roboto;
+}
+
+.bottom-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom-logo-container > img {
+  width: 350px;
+}
+
+.footer {
+  display: flex;
+  background-color: #E1E1E3;
+}
+
+.paid-for {
+  border: 1px solid #444444;
+  padding: 10px 30px 10px 30px;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.site-map {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 20%;
+}
+
+.site-map > a:first-child {
+  padding-top: 20px;
+  margin-top: -20px;
+  border-top: 1px solid #444444;
+}
+
+.site-map > a {
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+  margin-left: 30px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.bottom-logo-container {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
+.right-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+}
+
+.icon-buttons > a {
+  height: 20px;
+  width: 20px;
+}
+
+.icon-buttons > a > img {
+  width: 100%;
+  height: 100%;
+}
+
+.icon-buttons {
+  display: flex;
+  width: 140px;
+  justify-content: space-between;
+  margin-left: -35px;
+}
+
+.vid-2-bx > div {
+  height: 280px;
+}
+
+.bubble-modal {
+  position: absolute;
+  width: 240px;
+  transform: translate(-45%, -110%);
+  z-index: 10000;
+}
+
+.bubble-modal.incumbent {
+  transform: translate(-47.5%, -98%);
+}
+
+.tooltip {
+  width: 100%;
+}
+
+.tooltip-item {
+  width: 0;
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 20px solid #EAEAEA;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+#standup-app {
+  width: 955px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.elevated {
+  text-align: left;
+  margin: 10px;
+}
+
+h1, h2, h3 {
+  color: #145762;
+}
+
+.circle-container {
+  display: flex;
+}
+
+.caps {
+  text-transform: uppercase;
+}
+
+.two-column {
+  display: flex;
+  justify-content: center;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+
+#column-1, #column-2 {
+  width: 500px;
+}
+
+#column-1 { margin-right: 20px; }
+#column-2 { margin-left: 20px; }
+
+#column-1 > .elevated { margin-top: 10px; }
+#column-2 > .elevated { margin-top: 20px; }
+
+.button {
+  display: flex;
+  justify-content: center;
+}
+
+.body {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: rgb(119, 114, 126);
+	margin: auto;
+	text-align: center;
+	font-size: 0.85em;
+}
+
+.hero {
+	background-color: rgb(244, 244, 244);
+}
+
+.title {
+  font-family: 'Oleo Script', cursive;
+	font-size: 3.5em;
+	font-weight: 700;
+}
+
+.section-header {
+	padding-top: 50px;
+	padding-bottom: 50px;
+	color: rgb(215, 215, 215);
+  font-family: 'Oleo Script', cursive;
+}
+
+.counter {
+	color: rgb(39, 86, 97);
+  font-size: 58px;
+}
+
+.counter-description {
+  color: rgb(39, 86, 97);
+  font-size: 24px;
+  font-family: Roboto;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.secondary-title {
+	font-style: italic;
+	color: rgb(39, 86, 97);
+  font-size: 24px;
+  font-weight: bold;
+  font-family: Roboto;
+  text-align: center;
+}
+
+.up-bx {
+  font-family: Roboto;
+  font-size: 16px;
+}
+
+.hero-section {
+	display: inline-block;
+	border-top: solid 7px rgb(37, 80, 90);
+	border-bottom: solid 7px rgb(37, 80, 90);
+	vertical-align: middle;
+	width: 225px;
+	margin-right: 2em;
+	margin-left: 2em;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+.hero-section-inner {
+	display: inner-block;
+	vertical-align: middle;
+}
+
+.hero-video {
+  width: 560px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.logo-container {
+	height: 100%;
+}
+
+.logo {
+	max-width:100%;
+	max-height:100%;
+}
+
+.social-icons {
+	padding-right: 16px;
+	display: inline-block;
+}
+
+.contact-link {
+	text-transform: uppercase;
+  color: inherit;
+	border-left: solid 1px rgb(119, 114, 126);
+  padding-left: 20px;
+  display: block;
+  text-decoration: none;
+}
+
+.header {
+	height: 330px;
+	background-color: rgb(225, 224, 227);
+	text-align: center;
+}
+
+.video-container {
+  position: relative;
+}
+
+.video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.contact-bar {
+	height: 22px;
+	position: absolute;
+	right: 60px;
+	top: 30px;
+  display: flex;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+	.header {
+		height: 200px;
+	}
+}
+
+.grayscale {
+	filter: grayscale(1);
+	-webkit-filter: grayscale(1);
+}
+
+.pledge-container {
+	display: flex;
+	justify-content: space-around;
+	width: 820px;
+  margin-bottom: 100px;
+}
+
+.pledge-video-container {
+	width: 560px;
+}
+
+.pledge-info-container {
+	width: 220px;
+}
+
+.pledge-info-box > .standing-up {
+  padding: 10px;
+  color: white;
+  font-size: 19px;
+}
+
+
+
+.standing-up {
+  font-size: 14px;
+	background-color: #145762;
+  font-family: 'Oleo Script', cursive;
+}
+
+.pledger-info {
+	text-align: center;
+  font-size: 14px;
+  line-height: 16px;
+  padding: 10px;
+}
+
+.pledger-info .name {
+  font-weight: bold;
+  color: #145762;
+}
+
+.pledger-info > .name-position-container {
+  text-align: left;
+  margin-top: 7px;
+  margin-bottom: 7px;
+}
+
+.pledger-info {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background-color: white;
+}
+
+.pledger-share {
+  display: flex;
+  justify-content: space-around;
+  background-color: #eaeaea;
+  padding: 10px;
+}
+
+.pledger-text {
+  color: #9B9B9B;
+  font-family: Roboto;
+  font-size: 12px;
+  line-height: 19px;
+}
+
+.pledger-share > a {
+  height: 20px;
+  width: 20px;
+}
+
+.pledger-share img {
+  height: 100%;
+  width: 100%;
+}
+
+.top-share {
+  display: flex;
+  justify-content: space-around;
+  height: 30px;
+  width: 150px;
+  align-items: center;
+}
+
+.top-share a {
+  height: 22px;
+  width: 22px;
+}
+
+.top-share img {
+  height: 100%;
+  width: 100%;
+}
+
+.bubble {
+	border: 4px solid #145762;
+  margin-top: -2px;
+  margin-right: -2px;
+  box-shadow: -4px 4px 0px #302D33;
+}
+
+.bubble img {
+	height: 100%;
+	width: 100%;
+}
+
+.box-container {
+  color: #acacac;
+  padding: 20px;
+}
+
+.box-header {
+  font-size: 32px;
+}
+
+.box-circle-container {
+  color: #acacac;
+  padding: 20px;
+}
+
+.bnc h3.box-circle-header {
+  font-family: 'Oleo Script', cursive;
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 61px;
+  margin: 0;
+}
+
+.box-circle-container p {
+  font-size: 14px;
+  margin: 0;
+}
+
+</style>
