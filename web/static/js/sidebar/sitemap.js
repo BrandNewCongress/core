@@ -67,13 +67,16 @@ const siteMap = [
       },
       {
         label: 'Tell Us About Your District',
-        path: 'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com',
+        path:
+          'https://docs.google.com/forms/d/e/1FAIpQLSe8CfK0gUULEVpYFm9Eb4iyGOL-_iDl395qB0z4hny7ek4iNw/viewform?refcode=www.google.com',
         matches: () => false,
         children: []
       },
       {
         label: 'Any special skills?',
-        path: 'https://brandnewcongress.org/special-skills',
+        path: window.location.origin.includes('justicedemocrats')
+          ? 'https://justicedemocrats.org/special-skills'
+          : 'https://brandnewcongress.org/special-skills',
         matches: () => false,
         children: []
       }
@@ -86,12 +89,16 @@ const siteMap = [
     children: [
       {
         label: 'Plan',
-        path: '/plan',
+        path: window.location.origin.includes('justicedemocrats')
+          ? 'https://justicedemocrats.org/plan'
+          : 'https://brandnewcongress.org/plan',
         children: []
       },
       {
         label: 'Platform',
-        path: '/platform',
+        path: window.location.origin.includes('justicedemocrats')
+          ? 'https://justicedemocrats.org/platform'
+          : 'https://brandnewcongress.org/platform',
         children: []
       }
     ],

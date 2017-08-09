@@ -42,7 +42,12 @@
           </div>
           <span class="disclaimer">
             By signing this petition, I consent to receiving emails from
-            <a href="<%=homepage(@brand)%>"><%=copyright(@brand)%></a>.
+            <%= if @slug == "jd-stop-war" do %>
+              <a target="_blank" href="<%=homepage(@brand)%>"><%=copyright(@brand)%></a> and
+              <a target="_blank" href="http://www.rokhanna.com/">Rho Khanaa</a>.
+            <% else %>
+              <a target="_blank" href="<%=homepage(@brand)%>"><%=copyright(@brand)%></a>.
+            <% end %>
           </span>
         </div>
       </form>
