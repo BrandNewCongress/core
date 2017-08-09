@@ -82,32 +82,22 @@ const siteMap = [
   {
     label: 'Platform',
     path: '/platform',
-    matches: () => window.location.href.match('/platform'),
+    matches: () =>
+      window.location.href.match('/platform'),
     children: [
       {
-        label: 'Our Economy',
-        path: '/platform#economy',
-        children: []
-      },
-      {
-        label: 'Healthcare for All',
+        label: 'Fix the Healthcare Mess',
         path: '/platform#healthcare',
+        matches: () => false,
         children: []
       },
       {
-        label: 'Mass Incarceration',
-        path: '/platform#incarceration'
-      },
-      {
-        label: 'Fight for Families',
-        path: '/platform#families'
-      },
-      {
-        label: 'Corruption',
-        path: '/platform'
+        label: 'Rebuild Our Economy',
+        path: '/platform#economy',
+        matches: () => false,
+        children: []
       }
-    ],
-    matches: () => window.location.href.match('/plan')
+    ]
   }
 ]
 
