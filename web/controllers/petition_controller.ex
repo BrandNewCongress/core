@@ -39,9 +39,9 @@ defmodule Core.PetitionController do
   # Extract and render petition
   defp do_render_petition(conn, params, %{
     "slug" => slug,
-    "title" => title,
     "content" => content,
     "metadata" => %{
+      "title" => title,
       "sign_button_text" => sign_button_text,
       "post_sign_text" => post_sign_text,
       "background_image" => %{
@@ -60,9 +60,9 @@ defmodule Core.PetitionController do
     global_opts = GlobalOpts.get(conn, params)
 
     %{"slug" => slug,
-      "title" => title,
       "content" => content,
       "metadata" => %{
+        "title" => title,
         "sign_button_text" => sign_button_text,
         "post_sign_text" => post_sign_text,
         "tweet_template" => tweet_template,
