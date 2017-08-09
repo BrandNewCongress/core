@@ -17,8 +17,15 @@ defmodule Core.StandupController do
 
     count = add_comma(count)
 
-    render conn, "standup.html",
-      [pledges: pledges, pledges_json: pledges_json, count: count] ++ GlobalOpts.get(conn, params)
+    mobile = GlobalOpts.get(conn, params) |> Keyword.get(:mobile)
+
+    if mobile do
+      render conn, "standup-mobile.html",
+        [pledges: pledges, pledges_json: pledges_json, count: count] ++ GlobalOpts.get(conn, params)
+    else
+      render conn, "standup-desktop.html",
+        [pledges: pledges, pledges_json: pledges_json, count: count] ++ GlobalOpts.get(conn, params)
+    end
   end
 
   defp extract_attrs(

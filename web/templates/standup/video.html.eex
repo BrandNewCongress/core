@@ -1,4 +1,4 @@
 <div>
-  <% youtube_id = @pledges |> Enum.at(1) |> Kernel.get_in([:youtube_id]) %>
-  <%= render "youtube-embed.html", [width: 460, height: 280, youtube_id: youtube_id]%>
+  <% youtube_id = @pledges |> Enum.at(0) |> Kernel.get_in([:youtube_id]) %>
+  <%= render "youtube-embed.html", [width: 460, height: 280, youtube_id: "QxFNXAJwAjw"]%>
 </div>

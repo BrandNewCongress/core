@@ -43,12 +43,12 @@
   justify-content: center;
 }
 
-.<%= bxs_class %>:not(:hover) > .<%= bx_class %> {
+.<%= bxs_class %>:not(:active) > .<%= bx_class %> {
   margin: 0px 0px 0px 0px !important;
 }
 
 <%= if assigns[:no_hover] == nil do %>
-  .<%= bxs_class %>:hover > .<%= bx_class %> {
+  .<%= bxs_class %>:active > .<%= bx_class %> {
     margin-left: -<%= padding %>px;
     margin-top: <%= padding %>px;
     box-shadow: none !important;

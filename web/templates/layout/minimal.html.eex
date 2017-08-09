@@ -3,25 +3,22 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta property="og:description" content="All of congress should stand with the American people in guaranteeing healthcare for all.">
+    <meta property="og:image" content="images/temp-logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="<%= homepage(@brand) %>">
+    <meta name="description" content="All of congress should stand with the American people in guaranteeing healthcare for all.">
+    <meta name="author" content="<%= StandUp4Medicare %>">
 
     <title>
       <%= assigns[:title] %>
     </title>
 
     <!-- Conditional font includes -->
-    <%= if @brand == "jd" do %>
-      <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One|Anonymous+Pro|Roboto" rel="stylesheet">
-    <% else %>
-      <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed|Roboto+Slab+" rel="stylesheet">
-    <% end %>
-
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link href="https://fonts.googleapis.com/css?family=Alfa+Slab+One|Anonymous+Pro|Roboto" rel="stylesheet">
+    <!-- <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>"> -->
   </head>
 
-  <body class="<%= @brand %>">
+  <body>
     <div class="container">
       <main role="main">
         <%= render @view_module, @view_template, assigns %>
@@ -29,6 +26,6 @@
     </div>
 
     <!-- Load main app -->
-    <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
+    <!-- <script src="<%= static_path(@conn, "/js/app.js") %>"></script> -->
   </body>
 </html>
