@@ -101,9 +101,15 @@ defmodule Core.PetitionController do
       "jd" -> "Justice Democrats"
       "bnc" -> "Brand New Congress"
     end
-    tag = "Action: Signed Petition: #{source}: #{title}"
 
-    Nb.People.add_tags(id, tag)
+    tags = ["Action: Signed Petition: #{source}: #{title}"] ++
+      if Map.has_key?(params, "ref") do
+        ["Action: Signed Petition: #{source}: #{title}: #{params["ref"]}"]
+      else
+        []
+      end
+
+    Nb.People.add_tags(id, tags)
 
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
