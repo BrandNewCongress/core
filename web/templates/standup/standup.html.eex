@@ -131,10 +131,11 @@
 		<div id="standup-app"></div>
   </div>
 
-  <div class="title section-header" id="video-pledges" >
-    Watch the Pledges
-  </div>
-  <div style="width: 810px; margin-left: auto; margin-right: auto;">
+  <div style="width: 100%; display: flex; align-items: center; flex-direction: column; margin-left: auto; margin-right: auto; background-color: #f4f4f4;">
+    <div class="title section-header" id="video-pledges" >
+      Watch the Pledges
+    </div>
+
 		<%= for p <- @pledges |> Enum.slice(2, length(@pledges) + 1) do %>
       <div class="pledge-container">
         <div
@@ -170,7 +171,7 @@
             </div>
           </div>
 
-          <div class="pledge-text">
+          <div class="pledge-text" style="text-align: left; padding: 5px;">
 						<%= raw(p.content) %>
 					</div>
         </div>
@@ -178,6 +179,47 @@
 		<% end %>
   </div>
 
+  <div class="footer" id="top">
+    <div class="site-map">
+      <a href="#top"> Top </a>
+      <a href="#why-stand-up"> Why Stand Up </a>
+      <a href="#cta"> How You Can Help </a>
+      <a href="#pledge-tally"> Pledge Tally </a>
+      <a href="#video-pledges"> Video Pledges </a>
+    </div>
+
+    <div class="bottom-logo-container">
+      <img class="logo" src="<%= static_path(@conn, "/images/temp-logo.png") %>" />
+      <div class="paid-for" href="https://justicedemocrats.com" target="_blank">
+        Paid for by Justice Democrats
+      </div>
+    </div>
+
+    <div class="right-buttons">
+      <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
+        <%= render "elevated-div.html", [uniq: "up", color: "#295661", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
+      </a>
+
+      <div class="button" style="margin-top: 15px; margin-bottom: 15px;">
+        <%= render "elevated-div.html", [uniq: "pld", color: "#295661", content: "Make the Pledge", padding: 15, width: 150, height: 30] %>
+      </div>
+
+      <div class="icon-buttons">
+        <a href="mailto:shannon@justicedemocrats.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
+        </a>
+        <a href="facebook.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
+        </a>
+        <a href="twitter.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
+        </a>
+        <a href="instagram.com" target="_blank">
+          <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -187,6 +229,84 @@
 <script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script>
 
 <style>
+
+.bottom-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottom-logo-container > img {
+  width: 350px;
+}
+
+.footer {
+  display: flex;
+  background-color: #E1E1E3;
+}
+
+.paid-for {
+  border: 1px solid #444444;
+  padding: 10px 30px 10px 30px;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.site-map {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 20%;
+}
+
+.site-map > a:first-child {
+  padding-top: 20px;
+  margin-top: -20px;
+  border-top: 1px solid #444444;
+}
+
+.site-map > a {
+  text-decoration: none;
+  color: inherit;
+  text-align: left;
+  margin-left: 30px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.bottom-logo-container {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+}
+
+.right-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 20%;
+}
+
+.icon-buttons > a {
+  height: 20px;
+  width: 20px;
+}
+
+.icon-buttons > a > img {
+  width: 100%;
+  height: 100%;
+}
+
+.icon-buttons {
+  display: flex;
+  width: 140px;
+  justify-content: space-between;
+  margin-left: -35px;
+}
 
 .vid-2-bx > div {
   height: 280px;
