@@ -3,7 +3,7 @@
 <div class="body">
   <div class="header" id="top">
     <div class="logo-container">
-      <img class="logo" src="<%= static_path(@conn, "/images/temp-logo.png") %>" />
+      <img class="logo" src="<%= static_path(@conn, "/images/m4a-logo.png") %>" />
     </div>
     <div class="contact-bar">
       <div class="top-share">
@@ -33,20 +33,20 @@
             People Have Spoken
           </div>
           <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
-            <%= render "elevated-div.html", [uniq: "up", color: "#295661", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
+            <%= render "elevated-div.html", [uniq: "up", color: "#cd1041", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
           </a>
         </div>
       </div>
 
       <div class="hero-video">
-        <%= render "youtube-embed.html", [width: 560, height: 320, youtube_id: "1STqDQBOlD8"]%>
+        <%= render "youtube-embed.html", [width: 560, height: 320, youtube_id: @primary_video_id] %>
       </div>
       <div class="hero-section" style="padding-top: 25px; padding-bottom: 25px;">
         <div class="secondary-title">
           Running for Congress Or Serving a District?
         </div>
         <a target="_blank" href="https://form.jotform.us/72198762117159" class="button" style="margin-top: 15px; margin-bottom: 15px;">
-          <%= render "elevated-div.html", [uniq: "pld-1", color: "#295661", content: "Pledge", padding: 15, width: 100, height: 45] %>
+          <%= render "elevated-div.html", [uniq: "pld-1", color: "#cd1041", content: "Pledge", padding: 15, width: 100, height: 45] %>
         </a>
         <div style="font-size: 18px; font-family: Roboto;">Take the Pledge and Stand With 73% of Americans</div>
       </div>
@@ -93,8 +93,8 @@
 
         <%= render "elevated-div.html",
           [uniq: "vid-2", color: "", shadow_color: "#f4f4f4", padding: 40,
-           width: 460, height: 280, no_hover: true, pledges: @pledges, shadow_color: "#d7d7d7",
-           template: "video.html"] %>
+           width: 460, height: 280, no_hover: true, secondary_video_id: @secondary_video_id,
+           shadow_color: "#d7d7d7", template: "video.html"] %>
 
         <%= render "elevated-div.html",
           [uniq: "pressure", color: "", shadow_color: "#f4f4f4", padding: 40,
@@ -103,7 +103,7 @@
 
         <div class="button">
         <%= render "elevated-div.html",
-          [uniq: "watch-more-button", color: "#145762", shadow_color: "#302D32",
+          [uniq: "watch-more-button", color: "#cd1041", shadow_color: "#302D32",
            padding: 10, height: 45, width: 250, template: "more-videos.html"]%>
         </div>
 
@@ -188,7 +188,7 @@
     </div>
 
     <div class="bottom-logo-container">
-      <img class="logo" src="<%= static_path(@conn, "/images/temp-logo.png") %>" />
+      <img class="logo" src="<%= static_path(@conn, "/images/m4a-logo.png") %>" />
       <div class="paid-for" href="https://justicedemocrats.com" target="_blank">
         Paid for by Justice Democrats
       </div>
@@ -196,11 +196,11 @@
 
     <div class="right-buttons">
       <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
-        <%= render "elevated-div.html", [uniq: "up", color: "#295661", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
+        <%= render "elevated-div.html", [uniq: "up", color: "#cd1041", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
       </a>
 
       <a target="_blank" href="https://form.jotform.us/72198762117159" class="button" style="margin-top: 15px; margin-bottom: 15px;">
-        <%= render "elevated-div.html", [uniq: "pld-2", color: "#295661", content: "Make the Pledge", padding: 15, width: 150, height: 30] %>
+        <%= render "elevated-div.html", [uniq: "pld-2", color: "#cd1041", content: "Make the Pledge", padding: 15, width: 150, height: 30] %>
       </a>
 
       <div class="icon-buttons">
@@ -356,7 +356,7 @@ body {
 }
 
 h1, h2, h3 {
-  color: #145762;
+  color: #cd1041;
 }
 
 .circle-container {
@@ -417,12 +417,12 @@ h1, h2, h3 {
 }
 
 .counter {
-	color: rgb(39, 86, 97);
+	color: #cd1041;
   font-size: 58px;
 }
 
 .counter-description {
-  color: rgb(39, 86, 97);
+  color: #cd1041;
   font-size: 24px;
   font-family: Roboto;
   font-weight: bold;
@@ -431,7 +431,7 @@ h1, h2, h3 {
 
 .secondary-title {
 	font-style: italic;
-	color: rgb(39, 86, 97);
+	color: #cd1041;
   font-size: 24px;
   font-weight: bold;
   font-family: Roboto;
@@ -445,8 +445,8 @@ h1, h2, h3 {
 
 .hero-section {
 	display: inline-block;
-	border-top: solid 7px rgb(37, 80, 90);
-	border-bottom: solid 7px rgb(37, 80, 90);
+	border-top: solid 7px #cd1041;
+	border-bottom: solid 7px #cd1041;
 	vertical-align: middle;
 	width: 225px;
 	margin-right: 2em;
@@ -552,7 +552,7 @@ h1, h2, h3 {
 
 .standing-up {
   font-size: 14px;
-	background-color: #145762;
+	background-color: #cd1041;
   font-family: 'Oleo Script', cursive;
 }
 
@@ -565,7 +565,7 @@ h1, h2, h3 {
 
 .pledger-info .name {
   font-weight: bold;
-  color: #145762;
+  color: #cd1041;
 }
 
 .pledger-info > .name-position-container {
@@ -624,7 +624,7 @@ h1, h2, h3 {
 }
 
 .bubble {
-	border: 4px solid #145762;
+	border: 4px solid #cd1041;
   margin-top: -2px;
   margin-right: -2px;
   box-shadow: -4px 4px 0px #302D33;

@@ -13,19 +13,20 @@ defmodule Core.StandupController do
       pledges
       |> Poison.encode()
 
-    %{"metadata" => %{"count" => count}} = Cosmic.get("standup-text")
+    %{"metadata" =>
+      %{"count" => count, "primary_video_id" => primary_video_id,
+        "secondary_video_id" => secondary_video_id}} = Cosmic.get("standup-text")
 
-    count = add_comma(count)
+    template =
+      if conn |> GlobalOpts.get(params) |> Keyword.get(:mobile) do
+        "standup-mobile.html"
+      else
+         "standup-desktop.html"
+      end
 
-    mobile = GlobalOpts.get(conn, params) |> Keyword.get(:mobile)
-
-    if mobile do
-      render conn, "standup-mobile.html",
-        [pledges: pledges, pledges_json: pledges_json, count: count] ++ GlobalOpts.get(conn, params)
-    else
-      render conn, "standup-desktop.html",
-        [pledges: pledges, pledges_json: pledges_json, count: count] ++ GlobalOpts.get(conn, params)
-    end
+    render conn, template,
+      [count: add_comma(count), pledges: pledges, pledges_json: pledges_json,
+       primary_video_id: primary_video_id, secondary_video_id: secondary_video_id]
   end
 
   defp extract_attrs(

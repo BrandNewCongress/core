@@ -9,7 +9,8 @@ export default class PledgeTally extends Component {
         col: undefined,
         row: undefined
       },
-      district: undefined
+      district: undefined,
+      incumbent: undefined
     }
   }
 
@@ -22,8 +23,8 @@ export default class PledgeTally extends Component {
       .catch(console.error)
   }
 
-  bubbleHover = ({ idxs, district }) => ev => {
-    this.setState({ hovering: { idxs, district } })
+  bubbleHover = ({ idxs, district, incumbent }) => ev => {
+    this.setState({ hovering: { idxs, district, incumbent } })
     this.mouseOver = true
   }
 
@@ -37,7 +38,8 @@ export default class PledgeTally extends Component {
           : this.setState({
               hovering: {
                 idxs: { col: undefined, row: undefined },
-                district: undefined
+                district: undefined,
+                incumbent: undefined
               }
             }),
       500
@@ -91,7 +93,8 @@ export default class PledgeTally extends Component {
                   className={`bubble ${pledge.position}`}
                   onMouseEnter={this.bubbleHover({
                     idxs: { col, row },
-                    district: pledge.district
+                    district: pledge.district,
+                    incumbent: pledge.position == 'Incumbent'
                   })}
                   onMouseLeave={this.resetHover}
                 >
@@ -203,13 +206,11 @@ export default class PledgeTally extends Component {
     )
   }
 
-  incumbentOfPledger = rep => {
-    const friendlyDistrict = `${rep.state}-${rep.district
-      .toString()
-      .padStart(2, '0')}`
-    const result = friendlyDistrict == this.state.hovering.district
-    return result
-  }
+  incumbentOfPledger = rep =>
+    this.state.hovering && this.state.hovering.incumbent !== true
+      ? `${rep.state}-${rep.district.toString().padStart(2, '0')}` ==
+        this.state.hovering.district
+      : false
 
   pledgesByState = () => {
     const byState = Object.assign({}, this.state.congress)
@@ -238,7 +239,11 @@ export default class PledgeTally extends Component {
 
         <div className="pledger-info">
           <img
-            src={`/images/m4a-candidate-in.png`}
+            src={
+              pledge.position == 'candidate'
+                ? '/images/m4a-candidate-in.png'
+                : '/images/m4a-incumbent-in.png'
+            }
             style={{
               marginTop: 5,
               marginBottom: 5,
@@ -246,6 +251,7 @@ export default class PledgeTally extends Component {
               height: 42
             }}
           />
+
           <div className="name-position-container">
             <div className="name">
               {pledge.name}
@@ -261,7 +267,7 @@ export default class PledgeTally extends Component {
           target="_blank"
           style={{
             display: 'block',
-            backgroundColor: 'rgb(39, 86, 97)',
+            backgroundColor: '#cd1041',
             padding: 8,
             textDecoration: 'none',
             color: 'white',
@@ -297,7 +303,7 @@ export default class PledgeTally extends Component {
 
         <div className="pledger-info">
           <img
-            src={`/images/m4a-incumbent-in.png`}
+            src="/images/m4a-incumbent-in.png"
             style={{
               marginTop: 5,
               marginBottom: 5,
