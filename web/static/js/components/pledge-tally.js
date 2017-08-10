@@ -24,6 +24,7 @@ export default class PledgeTally extends Component {
   }
 
   bubbleHover = ({ idxs, district, incumbent }) => ev => {
+    ev.stopPropagation()
     this.setState({ hovering: { idxs, district, incumbent } })
     this.mouseOver = true
   }
@@ -31,19 +32,13 @@ export default class PledgeTally extends Component {
   resetHover = ev => {
     this.mouseOver = false
 
-    setTimeout(
-      () =>
-        this.mouseOver
-          ? null
-          : this.setState({
-              hovering: {
-                idxs: { col: undefined, row: undefined },
-                district: undefined,
-                incumbent: undefined
-              }
-            }),
-      500
-    )
+    this.setState({
+      hovering: {
+        idxs: { col: undefined, row: undefined },
+        district: undefined,
+        incumbent: undefined
+      }
+    })
   }
 
   render() {
@@ -55,6 +50,7 @@ export default class PledgeTally extends Component {
           display: 'flex',
           flexDirection: 'column'
         }}
+        onClick={this.resetHover}
       >
         <div className="title section-header" style={{ paddingBottom: 0 }}>
           Pledge Tally
@@ -63,9 +59,9 @@ export default class PledgeTally extends Component {
           className="section-header"
           style={{ paddingBottom: 50, paddingTop: 0, fontSize: '20px' }}
         >
-          Hover to see a pledger's name and contact information
+          Click to see a pledger's name and contact information
         </div>
-        <div style={{ display: 'flex', height: '300px' }}>
+        <div style={{ display: 'flex', height: '220px' }}>
           {this.pledgesByState().map((state, col) =>
             <div
               key={state}
@@ -91,12 +87,11 @@ export default class PledgeTally extends Component {
                     backgroundImage: `url("${pledge.headshot}")`
                   }}
                   className={`bubble ${pledge.position}`}
-                  onMouseEnter={this.bubbleHover({
+                  onClick={this.bubbleHover({
                     idxs: { col, row },
                     district: pledge.district,
                     incumbent: pledge.position == 'Incumbent'
                   })}
-                  onMouseLeave={this.resetHover}
                 >
                   {col == hovering.idxs.col &&
                     row == hovering.idxs.row &&
@@ -266,7 +261,9 @@ export default class PledgeTally extends Component {
           href={`https://youtube.com/watch?v=${pledge.youtube_id}`}
           target="_blank"
           style={{
-            display: 'block',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             backgroundColor: '#cd1041',
             padding: 8,
             textDecoration: 'none',
@@ -275,6 +272,17 @@ export default class PledgeTally extends Component {
             fontSize: '15px'
           }}
         >
+          <svg
+            fill="#ffffff"
+            height="24"
+            viewBox="0 0 24 24"
+            width="24"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ marginRight: 10 }}
+          >
+            <path d="M0 0h24v24H0z" fill="none" />
+            <path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" />
+          </svg>
           Watch Their Pledge
         </a>
 

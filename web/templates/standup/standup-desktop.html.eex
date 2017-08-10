@@ -46,7 +46,9 @@
           Running for Congress Or Serving a District?
         </div>
         <a target="_blank" href="https://form.jotform.us/72198762117159" class="button" style="margin-top: 15px; margin-bottom: 15px;">
-          <%= render "elevated-div.html", [uniq: "pld-1", color: "#cd1041", content: "Pledge", padding: 15, width: 100, height: 45] %>
+          <%= render "elevated-div.html",
+            [uniq: "pld-1", color: "#cd1041", content: "Pledge", padding: 15,
+             width: 100, height: 45, extra_styles: "font-family: Roboto; font-weight: bold;"] %>
         </a>
         <div style="font-size: 18px; font-family: Roboto;">Take the Pledge and Stand With 73% of Americans</div>
       </div>
@@ -195,12 +197,17 @@
     </div>
 
     <div class="right-buttons">
-      <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
-        <%= render "elevated-div.html", [uniq: "up", color: "#cd1041", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
+      <a target="_blank" class="button" style="margin-top: 10px;"
+        href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats%20should%20be%20standing%20up%20for%20medicare%20for%20all%20in%202018&via=justicedemocrats">
+        <%= render "elevated-div.html",
+          [uniq: "up", color: "#cd1041", content: "#StandUp4Medicare", padding: 15,
+           width: 150, height: 30, extra_styles: "font-family: Roboto; font-weight: bold;"] %>
       </a>
 
       <a target="_blank" href="https://form.jotform.us/72198762117159" class="button" style="margin-top: 15px; margin-bottom: 15px;">
-        <%= render "elevated-div.html", [uniq: "pld-2", color: "#cd1041", content: "Make the Pledge", padding: 15, width: 150, height: 30] %>
+        <%= render "elevated-div.html",
+          [uniq: "pld-2", color: "#cd1041", content: "Make the Pledge", padding: 15,
+           width: 150, height: 30, extra_styles: "font-family: Roboto; font-weight: bold;"] %>
       </a>
 
       <div class="icon-buttons">
@@ -251,6 +258,7 @@ body {
 .footer {
   display: flex;
   background-color: #E1E1E3;
+  color: #3c3a3c;
 }
 
 .paid-for {
@@ -266,6 +274,7 @@ body {
   flex-direction: column;
   justify-content: center;
   width: 20%;
+  color: #3c3a3c;
 }
 
 .site-map > a:first-child {
@@ -276,12 +285,12 @@ body {
 
 .site-map > a {
   text-decoration: none;
-  color: inherit;
   text-align: left;
   margin-left: 30px;
   margin-top: 5px;
   margin-bottom: 5px;
   text-transform: uppercase;
+  color: #3c3a3c;
 }
 
 .bottom-logo-container {
@@ -412,7 +421,7 @@ h1, h2, h3 {
 .section-header {
 	padding-top: 50px;
 	padding-bottom: 50px;
-	color: rgb(215, 215, 215);
+	color: rgb(175, 175, 175);
   font-family: 'Oleo Script', cursive;
 }
 
@@ -440,6 +449,7 @@ h1, h2, h3 {
 
 .up-bx {
   font-family: Roboto;
+  font-weight: bold;
   font-size: 16px;
 }
 
@@ -642,14 +652,15 @@ h1, h2, h3 {
 
 .box-header {
   font-size: 32px;
+  color: #3c3a3c;
 }
 
 .box-circle-container {
   color: #acacac;
-  padding: 20px;
+  padding: 30px;
 }
 
-.bnc h3.box-circle-header {
+.body .box-circle-container h3 {
   font-family: 'Oleo Script', cursive;
   font-size: 30px;
   font-weight: bold;
