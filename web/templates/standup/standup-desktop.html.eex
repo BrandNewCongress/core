@@ -64,18 +64,20 @@
         <%= render "elevated-div.html",
           [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 40,
            width: 450, height: 285, no_hover: true,
-           template: "box1.html"] %>
+           template: "box1.html", box_1_header: @box_1_header, box_1_text: @box_1_text] %>
 
         <div class="circle-container">
           <%= render "elevated-div.html",
             [uniq: "cr1", color: "", shadow_color: "#f4f4f4", padding: 40,
              width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
-             shadow_color: "#e1e0e3", template: "cr1.html"] %>
+             shadow_color: "#e1e0e3", template: "cr1.html",
+             circle_1_header: @circle_1_header, circle_1_text: @circle_1_text] %>
 
           <%= render "elevated-div.html",
             [uniq: "cr2", color: "", shadow_color: "#f4f4f4", padding: 40,
              width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
-             shadow_color: "#e1e0e3", template: "cr2.html"] %>
+             shadow_color: "#e1e0e3", template: "cr2.html",
+             circle_2_header: @circle_2_header, circle_2_text: @circle_2_text] %>
        </div>
 
         <h3 style="font-family: Roboto;	font-size: 32px; font-style: italic; font-weight: 900; line-height: 30px;">
@@ -101,7 +103,7 @@
         <%= render "elevated-div.html",
           [uniq: "pressure", color: "", shadow_color: "#f4f4f4", padding: 40,
            width: 460, height: 285, no_hover: true,
-           template: "box2.html"] %>
+           template: "box2.html", box_2_header: @box_2_header, box_2_text: @box_2_text] %>
 
         <div class="button">
         <%= render "elevated-div.html",
@@ -113,12 +115,14 @@
            <%= render "elevated-div.html",
              [uniq: "cr3", color: "", shadow_color: "#f4f4f4", padding: 40,
               width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
-             shadow_color: "#e1e0e3", template: "cr3.html"] %>
+              shadow_color: "#e1e0e3", template: "cr3.html",
+              circle_3_header: @circle_3_header, circle_3_text: @circle_3_text] %>
 
            <%= render "elevated-div.html",
              [uniq: "cr4", color: "", shadow_color: "#f4f4f4", padding: 40,
               width: 202, height: 202, no_hover: true, extra_styles: "border-radius: 50%;",
-             shadow_color: "#e1e0e3", template: "cr4.html"] %>
+              shadow_color: "#e1e0e3", template: "cr4.html",
+              circle_4_header: @circle_4_header, circle_4_text: @circle_4_text] %>
          </div>
        </div>
 

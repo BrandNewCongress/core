@@ -1,11 +1,6 @@
 <div class="box-container" >
-  <h3 class="box-header"> WE BELIEVE IT IS TIME </h3>
+  <h3 class="box-header"> <%= @box_1_header %> </h3>
   <p>
-    <span class="caps">
-      We believe it is time for Congress to stand up for Medicare for All.
-    </span>
-    We're calling on sitting members of Congress and anyone running for
-    Congress to go on video pledging to stand up for Medicare for All in any
-    public appearances and statements addressing our country's healthcare crisis.
+    <%= @box_1_text %>
   </p>
 </div>

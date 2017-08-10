@@ -15,7 +15,13 @@ defmodule Core.StandupController do
 
     %{"metadata" =>
       %{"count" => count, "primary_video_id" => primary_video_id,
-        "secondary_video_id" => secondary_video_id}} = Cosmic.get("standup-text")
+        "secondary_video_id" => secondary_video_id,
+        "box_1_header" => box_1_header, "box_1_text" => box_1_text,
+        "box_2_header" => box_2_header, "box_2_text" => box_2_text,
+        "circle_1_header" => circle_1_header, "circle_1_text" => circle_1_text,
+        "circle_2_header" => circle_2_header, "circle_2_text" => circle_2_text,
+        "circle_3_header" => circle_3_header, "circle_3_text" => circle_3_text,
+        "circle_4_header" => circle_4_header, "circle_4_text" => circle_4_text}} = Cosmic.get("standup-text")
 
     template =
       if conn |> GlobalOpts.get(params) |> Keyword.get(:mobile) do
@@ -24,10 +30,18 @@ defmodule Core.StandupController do
          "standup-desktop.html"
       end
 
-    render conn, template,
+    assigns =
       [count: add_comma(count), pledges: pledges, pledges_json: pledges_json,
        primary_video_id: primary_video_id, secondary_video_id: secondary_video_id,
+       box_1_header: box_1_header, box_1_text: box_1_text,
+       box_2_header: box_2_header, box_2_text: box_2_text,
+       circle_1_header: circle_1_header, circle_1_text: circle_1_text,
+       circle_2_header: circle_2_header, circle_2_text: circle_2_text,
+       circle_3_header: circle_3_header, circle_3_text: circle_3_text,
+       circle_4_header: circle_4_header, circle_4_text: circle_4_text,
        title: "Medicare for All"]
+
+    render conn, template, assigns
   end
 
   defp extract_attrs(

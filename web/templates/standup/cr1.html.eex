@@ -1,4 +1,4 @@
 <div class="box-circle-container" >
-  <h3 class="box-circle-header"> 73% </h3>
-  <p> Of Americans support Medicare for All. </p>
+  <h3 class="box-circle-header"> <%= @circle_1_header %> </h3>
+  <p> <%= @circle_1_text %> </p>
 </div>

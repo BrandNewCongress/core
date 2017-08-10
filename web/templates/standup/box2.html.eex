@@ -1,14 +1,6 @@
 <div class="box-container" >
-  <h3 class="box-header"> BECAUSE OF YOUR PRESSURE </h3>
+  <h3 class="box-header"> <%= @box_2_header %> </h3>
   <p>
-    <span class="caps">
-      Because of your pressure,
-    </span>
-    43 members of Congress decided to co-sponsor Conyers' house bill for
-    Medicare for All. But as the health care debate rages, many of these same
-    co-sponsors have publicly been advocating for half-measures like increasing
-    subsidies for insurance companies or simply playing defense against Medicaid
-    cuts. These congresspeople are silently backing Medicare for All just as a
-    weak political move to cover their bases.
+    <%= @box_2_text %>
   </p>
 </div>

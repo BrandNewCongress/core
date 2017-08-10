@@ -1,4 +1,4 @@
 <div class="box-circle-container" >
-  <h3 class="box-circle-header"> 11th </h3>
-  <p> America's health outcomes worldwide ranking. </p>
+  <h3 class="box-circle-header"> <%= @circle_3_header %> </h3>
+  <p> <%= @circle_3_text %> </p>
 </div>

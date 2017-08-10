@@ -1,4 +1,4 @@
 <div class="box-circle-container" >
-  <h3 class="box-circle-header"> 3.2 Trillion </h3>
-  <p> The amount of money Americans would save in the Medicare for All system. </p>
+  <h3 class="box-circle-header"> <%= @circle_2_header %> </h3>
+  <p> <%= @circle_2_text %> </p>
 </div>
