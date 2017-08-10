@@ -126,6 +126,18 @@
   </div>
 
   <div id="#cta">
+    <div class="title section-header">Here's How You Can Help</div>
+
+    <div class="cta-content">
+      We've compiled a resource kit that we'll keep updated as our campaign progresses –
+      whether your a congressperson, a member of the press, have an online following,
+      or just a motivated citizen, this resource guide has everything you need
+      to make transform your energy into concrete actions towards Medicare for All.
+
+      <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
+        <%= render "elevated-div.html", [uniq: "resource-kit", color: "#cd1041", content: "See the Resource Kit", padding: 15, width: 250, height: 30] %>
+      </a>
+    </div>
   </div>
 
   <div id="pledge-tally" style="height: 1100px; overflow: hidden;">
@@ -235,6 +247,24 @@
 <script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script>
 
 <style>
+
+#cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cta-content {
+  width: 600px;
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.resource-kit-bx {
+  font-family: Roboto;
+  font-weight: bold;
+}
 
 body {
   margin: 0;
