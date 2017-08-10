@@ -5,13 +5,13 @@
 </div>
 
 <div class="hero-video">
-  <%= render "youtube-embed.html", [width: 350, height: 320, youtube_id: @primary_video_id] ++ assigns %>
+  <%= render "youtube-embed.html", [width: 350, height: 320, youtube_id: @primary_video_id] %>
 </div>
 
 <div class="hero-section-inner">
   <img height="65" src="<%= static_path(@conn, "/images/m4a-join.png") %>" />
   <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
-    <%= render "elevated-div.html", [uniq: "up", color: "#cd1041", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] ++ assigns %>
+    <%= render "elevated-div.html", [uniq: "up", color: "#cd1041", content: "#StandUp4Medicare", padding: 15, width: 150, height: 30] %>
   </a>
 </div>
 
@@ -38,22 +38,22 @@
   <a target="_blank" href="https://form.jotform.us/72198762117159" class="button" style="margin-top: 15px; margin-bottom: 15px;">
     <%= render "elevated-div.html",
       [uniq: "pld-1", color: "#cd1041", content: "Pledge", padding: 15,
-       width: 100, height: 45, extra_styles: "font-family: Roboto; font-weight: bold;"] ++ assigns %>
+       width: 100, height: 45, extra_styles: "font-family: Roboto; font-weight: bold;"] %>
   </a>
   <div style="font-size: 18px; font-family: Roboto;">Take the Pledge and Stand With 73% of Americans</div>
 </div>
 
 <div class="title section-header">Why Stand Up?</div>
 
-<%= render "elevated-div.html",
-  [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 40,
-   width: 300, height: 390, no_hover: true,
-   template: "box1.html"] ++ assigns %>
+  <%= render "elevated-div.html",
+    [uniq: "time", color: "", shadow_color: "#f4f4f4", padding: 40,
+     width: 300, height: 380, no_hover: true,
+     template: "box1.html", box_1_header: @box_1_header, box_1_text: @box_1_text] %>
 
 <h3 style="font-family: Roboto;	font-size: 32px; font-style: italic; font-weight: 900; line-height: 30px;">
   Watch the Video:
 </h3>
-<%= render "video.html", [secondary_video_id: @secondary_video_id] ++ assigns %>
+<%= render "video.html", [secondary_video_id: @secondary_video_id] %>
 
 <%= render "elevated-div.html",
   [uniq: "watch-more-button", color: "#cd1041", shadow_color: "#302D32",
@@ -61,8 +61,8 @@
 
 <%= render "elevated-div.html",
   [uniq: "pressure", color: "", shadow_color: "#f4f4f4", padding: 40,
-   width: 300, height: 530, no_hover: true,
-   template: "box2.html"] ++ assigns %>
+   width: 320, height: 490, no_hover: true,
+   template: "box2.html", box_2_header: @box_2_header, box_2_text: @box_2_text] %>
 
 <div id="#cta">
   <div class="title section-header">Here's How You Can Help</div>
@@ -74,7 +74,7 @@
     to make transform your energy into concrete actions towards Medicare for All.
 
     <a target="_blank" class="button" style="margin-top: 10px;" href="https://docs.google.com/document/d/1Jk35RVlNUyD7ZO7wsHE_GEbm0uLI4nMYnfLTGLKrJYY/edit">
-      <%= render "elevated-div.html", [uniq: "resource-kit", color: "#cd1041", content: "See the Resource Kit", padding: 15, width: 250, height: 30] ++ assigns %>
+      <%= render "elevated-div.html", [uniq: "resource-kit", color: "#cd1041", content: "See the Resource Kit", padding: 15, width: 250, height: 30] %>
     </a>
   </div>
 </div>
@@ -89,7 +89,7 @@
       <div
         class="pledge-video-container"
       >
-        <%= render "youtube-embed.html", [width: 320, height: 260, youtube_id: p.youtube_id] ++ assigns %>
+        <%= render "youtube-embed.html", [width: 320, height: 260, youtube_id: p.youtube_id] %>
 			</div>
       <div class="pledge-info-container">
         <div class="pledge-info-box">
@@ -134,13 +134,13 @@
       href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats%20should%20be%20standing%20up%20for%20medicare%20for%20all%20in%202018&via=justicedemocrats">
       <%= render "elevated-div.html",
         [uniq: "up", color: "#cd1041", content: "#StandUp4Medicare", padding: 15,
-         width: 300, height: 30, extra_styles: "font-family: Roboto; font-weight: bold;"] ++ assigns %>
+         width: 300, height: 30, extra_styles: "font-family: Roboto; font-weight: bold;"] %>
     </a>
 
     <a target="_blank" href="https://form.jotform.us/72198762117159" class="button" style="margin-top: 15px; margin-bottom: 15px;">
       <%= render "elevated-div.html",
         [uniq: "pld-2", color: "#cd1041", content: "Make the Pledge", padding: 15,
-         width: 300, height: 30, extra_styles: "font-family: Roboto; font-weight: bold;"] ++ assigns %>
+         width: 300, height: 30, extra_styles: "font-family: Roboto; font-weight: bold;"] %>
     </a>
   </div>
 
