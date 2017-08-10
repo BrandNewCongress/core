@@ -26,7 +26,8 @@ defmodule Core.StandupController do
 
     render conn, template,
       [count: add_comma(count), pledges: pledges, pledges_json: pledges_json,
-       primary_video_id: primary_video_id, secondary_video_id: secondary_video_id]
+       primary_video_id: primary_video_id, secondary_video_id: secondary_video_id,
+       title: "Medicare for All"]
   end
 
   defp extract_attrs(
