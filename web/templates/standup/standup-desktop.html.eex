@@ -134,7 +134,7 @@
       or just a motivated citizen, this resource guide has everything you need
       to make transform your energy into concrete actions towards Medicare for All.
 
-      <a target="_blank" class="button" style="margin-top: 10px;" href="https://twitter.com/intent/tweet?url=https://standup4medicare.com&text=Democrats should be standing up for medicare for all in 2018&via=justicedemocrats">
+      <a target="_blank" class="button" style="margin-top: 10px;" href="https://docs.google.com/document/d/1Jk35RVlNUyD7ZO7wsHE_GEbm0uLI4nMYnfLTGLKrJYY/edit">
         <%= render "elevated-div.html", [uniq: "resource-kit", color: "#cd1041", content: "See the Resource Kit", padding: 15, width: 250, height: 30] %>
       </a>
     </div>

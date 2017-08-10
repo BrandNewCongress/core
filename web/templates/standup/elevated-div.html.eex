@@ -35,7 +35,6 @@
   height: <%= height %>px;
   position: absolute;
   transition: all .2s ease-out;
-	font-family: cursive;
   font-size: larger;
   color: white;
   display: flex;
