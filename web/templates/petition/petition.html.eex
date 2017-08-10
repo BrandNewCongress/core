@@ -44,7 +44,7 @@
             By signing this petition, I consent to receiving emails from
             <%= if @slug == "jd-stop-war" do %>
               <a target="_blank" href="<%=homepage(@brand)%>"><%=copyright(@brand)%></a> and
-              <a target="_blank" href="http://www.rokhanna.com/">Ro Khanaa</a>.
+              <a target="_blank" href="http://www.rokhanna.com/">Ro Khanna</a>.
             <% else %>
               <a target="_blank" href="<%=homepage(@brand)%>"><%=copyright(@brand)%></a>.
             <% end %>
