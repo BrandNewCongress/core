@@ -240,7 +240,7 @@ export default class PledgeTally extends Component {
         <div className="pledger-info">
           <img
             src={
-              pledge.position == 'candidate'
+              pledge.position == 'Candidate'
                 ? '/images/m4a-candidate-in.png'
                 : '/images/m4a-incumbent-in.png'
             }
