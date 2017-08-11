@@ -1,9 +1,9 @@
-<% signup_link = "https://brandnewcongress.org?ref=#{@code}" %>
+<% signup_link = "https://brandnewcongress.org/#homeJoin?ref=#{@code}" %>
 
 <div class="two-column">
   <div class="right-column">
     <h3>
-      You've successfully claimed your recuirter code: <%= @code %>
+      You've successfully claimed your recruiter code: <%= @code %>
     </h3>
     <div class="external-content-wrapper">
       <p>
