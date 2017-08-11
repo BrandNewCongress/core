@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="All of congress should stand with the American people in guaranteeing healthcare for all.">
     <meta name="author" content="<%= StandUp4Medicare %>">
+    <meta name="google-site-verification" content="dxrJer5YjhYvsP8FhXpI7Ze3XTLwTTCAbi_7mVAdvqQ" />
 
     <title>
       <%= assigns[:title] %>
