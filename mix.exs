@@ -53,7 +53,8 @@ defmodule Core.Mixfile do
      {:topo, "~> 0.1.0"},
      {:remodel, "~> 0.0.4"},
      {:flow, "~> 0.11"},
-     {:distillery, "~> 1.0.0"}]
+     {:distillery, "~> 1.0.0"},
+     {:number, "~> 0.5.2"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
