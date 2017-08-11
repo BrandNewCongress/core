@@ -1,8 +1,8 @@
 <div class="two-column">
   <div class="right-column">
     <h3>
-      Thanks for deciding to participate in Brand New Congress's August
-      signup contest.
+      Thanks for deciding to participate in Brand New Congress's Supporter Signup
+      contest August 15th through September 15th!
     </h3>
     <div class="external-content-wrapper">
       <p>
@@ -37,7 +37,7 @@
           <input class="text" name="phone" maxlength="10" required="required" />
         </div>
         <div style="text-align: center; width: calc(100% + 2em);">
-          <input class="petition-submit" type="submit" value="Start Making Calls">
+          <input class="petition-submit" type="submit" value="Start Signing Up Supporters">
         </div>
       </div>
     </form>
