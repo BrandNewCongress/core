@@ -40,7 +40,7 @@
       [uniq: "pld-1", color: "#cd1041", content: "Pledge", padding: 15,
        width: 100, height: 45, extra_styles: "font-family: Roboto; font-weight: bold;"] %>
   </a>
-  <div style="font-size: 18px; font-family: Roboto;">Take the Pledge and Stand With 73% of Americans</div>
+  <div style="font-size: 18px; font-family: Roboto;">Take the Pledge and Stand With 2/3 of Americans</div>
 </div>
 
 <div class="title section-header">Why Stand Up?</div>
