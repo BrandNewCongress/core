@@ -45,4 +45,9 @@ defmodule Core.VoxController do
   def get_logins(conn, %{"secret" => @secret}) do
     text conn, Core.Vox.logins_for_day
   end
+
+  def get_report(conn, params = %{"secret" => @secret}) do
+    render conn, "vox-report.html",
+      [layout: {Core.LayoutView, "empty.html"}] ++ GlobalOpts.get(conn, params)
+  end
 end

@@ -1,0 +1,3 @@
+<div id="vox-report-app"></div>
+<script defer="defer" src="<%= static_path(@conn, "/js/vox-report.js") %>"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/2.12.0/antd.css" />

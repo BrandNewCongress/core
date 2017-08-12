@@ -44,6 +44,7 @@ defmodule Core.Router do
 
     get "/call", VoxController, :get
     get "/call/logins", VoxController, :get_logins
+    get "/call/report", VoxController, :get_report
     post "/call", VoxController, :post
 
     get "/leaderboard", LeaderboardController, :get
