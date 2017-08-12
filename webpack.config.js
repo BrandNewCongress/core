@@ -17,7 +17,8 @@ const config = {
       './web/static/css/jd.css',
       './web/static/css/footer.css',
       './web/static/css/header.css',
-      './web/static/css/tab-menu.css'
+      './web/static/css/tab-menu.css',
+      './node_modules/share-this/dist/share-this.css'
     ]
   },
 
