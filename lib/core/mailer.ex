@@ -75,7 +75,7 @@ Phone: #{contact.phone}
 Other
 Event ID: #{id}
 Campaign: #{candidate}
-URL: http://go.brandnewcongress.org/#{slug}
+URL: http://now.brandnewcongress.org/events/#{slug}
 
 Should Contact Host: #{Enum.member?(tags, "Event: Should Contact Host")}
 #{event_type}
