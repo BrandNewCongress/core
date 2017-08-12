@@ -7,13 +7,13 @@
     </div>
     <div class="contact-bar">
       <div class="top-share">
-        <a href="facebook.com" target="_blank">
+        <a href="https://facebook.com/justicedemocrats" target="_blank">
           <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
         </a>
-        <a href="twitter.com" target="_blank">
+        <a href="https://twitter.com/justicedems" target="_blank">
           <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
         </a>
-        <a href="instagram.com" target="_blank">
+        <a href="https://instagram.com/justicedemocrats" target="_blank">
           <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
         </a>
       </div>
@@ -230,13 +230,13 @@
         <a href="mailto:us@standup4medicare.com" target="_blank">
           <img src="<%= static_path(@conn, "/images/m4a-mail.png") %>" />
         </a>
-        <a href="facebook.com" target="_blank">
+        <a href="https://facebook.com/justicedemocrats" target="_blank">
           <img src="<%= static_path(@conn, "/images/m4a-facebook.png") %>" />
         </a>
-        <a href="twitter.com" target="_blank">
+        <a href="https://twitter.com/justicedems" target="_blank">
           <img src="<%= static_path(@conn, "/images/m4a-twitter.png") %>" />
         </a>
-        <a href="instagram.com" target="_blank">
+        <a href="https://instagram.com/justicedemocrats" target="_blank">
           <img src="<%= static_path(@conn, "/images/m4a-instagram.png") %>" />
         </a>
       </div>
