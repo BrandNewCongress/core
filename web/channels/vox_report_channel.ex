@@ -20,10 +20,7 @@ defmodule Core.VoxReportChannel do
   end
 
   defp is_vox_tag(%{"name" => "Vox Alias: BNC" <> _}), do: true
-  defp is_vox_tag(tag) do
-    # IO.puts tag
-    false
-  end
+  defp is_vox_tag(_tag), do: false
 
   defp get_person_of_tag(%{"name" => tag}) do
     person =

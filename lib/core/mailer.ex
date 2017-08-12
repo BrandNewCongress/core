@@ -15,6 +15,19 @@ defmodule Core.Mailer do
     |> deliver()
   end
 
+  def on_vox_login_claimed(%{"username" => username, "date" => date,
+    "first_name" => first_name, "last_name" => last_name, "email" => email,
+    "phone" => phone}) do
+
+    new()
+    |> to({"Sam Briggs", "sam@brandnewcongress.org"})
+    |> to({"Ben Packer", "ben@brandnewcongress.org"})
+    |> from({"Robot", "robot@brandnewcongress.org"})
+    |> subject("New Vox Login Claimed!")
+    |> text_body("Username: #{username}\nDate: #{date}\nFirst name: #{first_name}\nLast name: #{last_name}\nEmail: #{email}\nPhone: #{phone}")
+    |> deliver()
+  end
+
   def typeform_failure_alert(body, e) do
     Logger.info "Sending email to Ben because of failure on Typeform webhook"
 

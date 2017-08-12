@@ -37,6 +37,13 @@ defmodule Core.VoxController do
 
     %{"content" => call_page} = Cosmic.get("call-page")
 
+    Task.async(fn ->
+      Core.Mailer.on_vox_login_claimed(%{"username" => username, "date" => date,
+        "first_name" => first_name, "last_name" => last_name, "email" => email,
+        "phone" => phone
+      })
+    end)
+
     render conn, "vox-submitted.html",
       [username: username, password: password, title: "Call",
        call_page: call_page] ++ GlobalOpts.get(conn, params)
