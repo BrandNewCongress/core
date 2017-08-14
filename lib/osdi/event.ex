@@ -11,9 +11,9 @@ defmodule Osdi.Event do
 
   def add_date_line(event) do
     date_line =
-      humanize_date(event.start_date, event.time_zone) <> "from " <>
-      humanize_time(event.start_date, event.time_zone) <> " - " <>
-      humanize_time(event.end_date, event.time_zone)
+      humanize_date(event.start_date, event.location.time_zone) <> "from " <>
+      humanize_time(event.start_date, event.location.time_zone) <> " - " <>
+      humanize_time(event.end_date, event.location.time_zone)
 
     Map.put(event, :date_line, date_line)
   end
@@ -45,13 +45,7 @@ defmodule Osdi.Event do
       %DateTime{month: month, day: day, year: year, utc_offset: 0,
                 hour: hour, minute: minute, second: 0, time_zone: "",
                 zone_abbr: "", std_offset: 0},
-      time_zone |> official_from_nb() |> Timex.Timezone.get(Timex.now())
+      time_zone |> Timex.Timezone.get(Timex.now())
     )
   end
-
-  defp official_from_nb("Pacific Time (US & Canada)"), do: "America/Los_Angeles"
-  defp official_from_nb("Mountain Time (US & Canada)"), do: "America/Phoenix"
-  defp official_from_nb("Central Time (US & Canada)"), do: "America/Chicago"
-  defp official_from_nb("Eastern Time (US & Canada)"), do: "America/New_York"
-
 end

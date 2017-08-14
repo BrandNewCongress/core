@@ -3,7 +3,7 @@ defmodule Transformers.Nb.Event do
 
   attributes [:id, :name, :title, :description, :summary, :browser_url, :type,
               :location, :featured_image_url, :start_date, :end_date, :calendar,
-              :host, :time_zone]
+              :host]
 
   def name(event), do: event.slug
   def description(event), do: event.intro
@@ -22,7 +22,7 @@ defmodule Transformers.Nb.Event do
           latitude: event.venue.address.lat,
           longitude: event.venue.address.lng
         },
-        time_zone: event.time_zone,
+        time_zone: get_time_zone(event),
         public: not (event.tags |> Enum.member?("Event: Hide Address"))}
       |> Map.merge(location)
     else
@@ -50,5 +50,14 @@ defmodule Transformers.Nb.Event do
     %{name: event.contact.name, phone: event.contact.phone,
       email: event.contact.email,
       public: not (event.tags |> Enum.member?("Event: Hide Host"))}
+  end
+
+  defp get_time_zone(event) do
+    event.tags
+    |> Enum.filter(fn tag -> tag =~ "Event Time Zone:" end)
+    |> List.first()
+    |> String.split(":")
+    |> List.last()
+    |> String.trim()
   end
 end

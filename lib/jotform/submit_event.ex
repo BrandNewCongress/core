@@ -13,12 +13,38 @@ defmodule Jotform.SubmitEvent do
       "q14_should_hide" => hide_address, "q15_address" => venue_address,
       "q16_event_name" => event_name, "q17_should_contact" => should_contact} = Poison.decode!(raw)
 
+    ## ------------ Determine whitelist status
     auto_whitelist = Map.has_key?(params, "whitelist")
+    whitelisted =
+      "esm-whitelist"
+      |> Cosmic.get()
+      |> Kernel.get_in(["metadata", "emails"])
+      |> String.split(";")
+      |> Enum.map(&String.trim/1)
+      |> MapSet.new()
+      |> MapSet.member?(email)
 
+    status = if auto_whitelist do
+      "published"
+    else
+      whitelisted =
+        "esm-whitelist"
+        |> Cosmic.get()
+        |> Kernel.get_in(["metadata", "emails"])
+        |> String.split(";")
+        |> Enum.map(&String.trim/1)
+        |> MapSet.new()
+        |> MapSet.member?(email)
+
+      if whitelisted, do: "published", else: "unlisted"
+    end
+
+    ## ------------ Proper phone number
     phone = area <> phone_rest
     should_hide = hide_address == "Yes"
     should_contact = should_contact == "Yes"
 
+    ## ------------ Extract and format the address
     [venue_street_name, venue_house_number, venue_city, venue_state, venue_zip] =
       case String.split venue_address, "\r\n" do
         ["Street name: " <> venue_street_name, "House number: " <> venue_house_number,
@@ -31,6 +57,7 @@ defmodule Jotform.SubmitEvent do
 
     venue_address = venue_house_number <> " " <> venue_street_name
 
+    ## ------------ Create and or find person
     ensure_host = Task.async(fn ->
       %{"id" => id} = Nb.People.push(
         %{email: email, phone: phone_rest,
@@ -38,6 +65,7 @@ defmodule Jotform.SubmitEvent do
       id
     end)
 
+    ## ------------ Determine calendar id and time zone, geocoding only once
     {calendar_id, time_zone_info} = Task.await(Task.async(fn ->
       # First, geocode
       to_geocode = "#{venue_house_number} #{venue_street_name}, #{venue_city}, #{venue_state}"
@@ -55,35 +83,22 @@ defmodule Jotform.SubmitEvent do
     end))
 
     host_id = Task.await(ensure_host)
-    %{time_zone: time_zone} = time_zone_info
+    %{time_zone: time_zone, time_zone_id: time_zone_id} = time_zone_info
 
-    whitelisted =
-        "esm-whitelist"
-        |> Cosmic.get()
-        |> Kernel.get_in(["metadata", "emails"])
-        |> String.split(";")
-        |> Enum.map(&String.trim/1)
-        |> MapSet.new()
-        |> MapSet.member?(email)
-
-    status = if whitelisted or auto_whitelist, do: "published", else: "unlisted"
-
-    # Calc tags
-    type_tag = ["Event Type: #{event_type}"]
+    ## ------------ Determine event tags
+    type_and_time = ["Event Type: #{event_type}", "Event Time Zone: #{time_zone_id}"]
 
     sharing_tag = case should_hide do
       true -> []
       false -> ["Event: Hide Address"]
     end
 
-    contact_tag =
-      if should_contact and not whitelisted do
-        ["Event: Should Contact Host"]
-      else
-        []
-      end
+    contact_tag = case (should_contact and status != "published") do
+      true -> ["Event: Should Contact Host"]
+      false -> []
+    end
 
-    tags = type_tag ++ sharing_tag ++ contact_tag
+    tags = type_and_time ++ sharing_tag ++ contact_tag
 
     event = %{
       name: event_name,

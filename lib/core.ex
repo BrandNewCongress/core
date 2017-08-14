@@ -24,7 +24,6 @@ defmodule Core do
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     result = Supervisor.start_link(children, opts)
 
-
     Cosmic.fetch_all()
     Core.Jobs.EventCache.fetch_or_load()
 
