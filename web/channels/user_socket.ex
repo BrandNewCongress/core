@@ -6,6 +6,7 @@ defmodule Core.UserSocket do
   channel "entry", Core.EntryChannel
   channel "standup", Core.StandupChannel
   channel "vox-report", Core.VoxReportChannel
+  channel "leaderboard-report", Core.LeaderboardReportChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

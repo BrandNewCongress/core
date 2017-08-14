@@ -1,5 +1,6 @@
 defmodule Core.LeaderboardController do
   use Core.Web, :controller
+  @secret Application.get_env(:core, :update_secret)
 
   def get(conn, params) do
     render conn, "get-ref-code.html", [title: "Ref Code"] ++ GlobalOpts.get(conn, params)
@@ -35,5 +36,10 @@ defmodule Core.LeaderboardController do
 
     render conn, "got-ref-code.html",
       [code: code, title: "Recruiter Code", first_name: first_name] ++ GlobalOpts.get(conn, params)
+  end
+
+  def get_report(conn, params = %{"secret" => @secret}) do
+    render conn, "leaderboard-report.html",
+      [layout: {Core.LayoutView, "empty.html"}] ++ GlobalOpts.get(conn, params)
   end
 end

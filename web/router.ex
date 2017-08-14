@@ -48,6 +48,7 @@ defmodule Core.Router do
     post "/call", VoxController, :post
 
     get "/leaderboard", LeaderboardController, :get
+    get "/leaderboard/report", LeaderboardController, :get_report
     post "/leaderboard", LeaderboardController, :post
 
     get "/unsubscribe", SubscriptionController, :unsubscribe_get
