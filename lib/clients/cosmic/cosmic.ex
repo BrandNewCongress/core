@@ -1,7 +1,7 @@
 defmodule Cosmic do
   require Logger
 
-  def fetch_all() do
+  def fetch_all do
     try do
       %{body: {:ok, %{
         "bucket" => %{
@@ -26,9 +26,10 @@ defmodule Cosmic do
         end)
 
       Stash.persist(:cosmic_cache, "./cosmic_cache")
+      Logger.info "Fetched cosmic data on #{Timex.now() |> DateTime.to_iso8601()}"
     rescue
       _e in MatchError ->
-        Logger.error("Could not fetch cosmic data - using latest cached version")
+        Logger.error "Could not fetch cosmic data - using latest cached version"
         Stash.load(:cosmic_cache, "./cosmic_cache")
     end
   end
@@ -56,6 +57,6 @@ defmodule Cosmic do
   def update() do
     Stash.clear(:cosmic_cache)
     fetch_all()
-    Logger.info "Cleared cosmic cache and updated it"
+    Logger.info "Cleared cosmic cache and updated it on #{Timex.now() |> DateTime.to_iso8601()}"
   end
 end
