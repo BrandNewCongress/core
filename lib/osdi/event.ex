@@ -39,7 +39,7 @@ defmodule Osdi.Event do
   end
 
   defp get_zoned_dt(iso_string, time_zone) do
-    {:ok, %{month: month, day: day, year: year, minute: minute, hour: hour}, offset} = DateTime.from_iso8601(iso_string)
+    {:ok, %{month: month, day: day, year: year, minute: minute, hour: hour}, _offset} = DateTime.from_iso8601(iso_string)
 
     Timex.Timezone.convert(
       %DateTime{month: month, day: day, year: year, utc_offset: 0,
