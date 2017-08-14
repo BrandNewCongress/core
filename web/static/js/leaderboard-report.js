@@ -6,7 +6,7 @@ import FileSaver from 'file-saver'
 import socket from './socket'
 import 'phoenix_html'
 
-class VoxReport extends Component {
+class LeaderboardReport extends Component {
   state = {
     channel: null,
     status: 'idle', // idle -> loading -> done
@@ -62,7 +62,7 @@ class VoxReport extends Component {
     return (
       <Modal
         visible={true}
-        title="Download Vox Report"
+        title="Download the Leaderboard"
         footer={[
           <Button
             key="main"
@@ -95,4 +95,4 @@ class VoxReport extends Component {
     }[this.state.status])
 }
 
-render(<VoxReport />, document.getElementById('leaderboard-report-app'))
+render(<LeaderboardReport />, document.getElementById('leaderboard-report-app'))
