@@ -79,7 +79,6 @@ defmodule Core.EventsController do
   end
 
   defp slugize(event_type) do
-
     "Event Type: " <> event_type
     |> String.downcase()
     |> String.replace(" ", "-")

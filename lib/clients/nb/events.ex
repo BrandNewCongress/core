@@ -8,6 +8,13 @@ defmodule Nb.Events do
     end
   end
 
+  def update(id, event) do
+    case put "sites/brandnewcongress/pages/events/#{id}", [body: %{"event" => event}] do
+      %{body: %{"event" => event}} -> event
+      some_error -> some_error
+    end
+  end
+
   def stream_all() do
     "sites/brandnewcongress/pages/events"
     |> stream([query: %{starting: "#{"America/New_York" |> Timex.now() |> Timex.to_date}"}])
