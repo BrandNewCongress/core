@@ -108,11 +108,6 @@
   <div style="text-align: center;">
     <a href="http://www.brandnewcongress.org"><img style="width:235px;" src="http://d3n8a8pro7vhmx.cloudfront.net/themes/58cc40709bde691988000000/attachments/original/1489848564/BNC_box.png?1489848564" alt="Brand New Congress"></a>
   </div>
-
-  <br/> <br/>
-  <div style="text-align: center;">
-    <a href="<%= @website %>"><img style="width:235px;" src="<%= @logo %>" alt="<%= @district %>"></a>
-  </div>
 </div>
 <br/>
 
@@ -133,7 +128,7 @@
         <br/>
         <b>WHAT:</b> <%= @event.title %></b>
         <br/>
-        <b>WHEN:</b> <%= @event.date_lie %>
+        <b>WHEN:</b> <%= @event.date_line %>
         <br/>
         <b>WHERE:</b>
           <%= @event.location.venue %> <br/>
@@ -146,7 +141,7 @@
         Invite a friend to join you and double your impact!
         <br/>
         <br/>
-        <a href="<%= @event.browser_url %>"> <%= @event.browser_url %> </a>
+        <a href="https://now.brandnewcongress.org/<%= @event.browser_url %>"> https://now.brandnewcongress.org/<%= @event.browser_url %> </a>
         <br/>
         <br/>
         Together we can bring a better future,
@@ -166,9 +161,6 @@
         <a style="display: table; margin: 0 auto; background: #7932AC; color: #FFF; font-family: 'Roboto Slab', sans-serif; font-size: 11px; font-weight: bold;text-transform: uppercase; letter-spacing: 1px; text-decoration: none; line-height: 2;" href="https://brandnewcongress.org/donate">&nbsp;&nbsp;&nbsp;Donate&nbsp;&nbsp;&nbsp;</a>
       </div>
       <br>
-      <!-- <p style="font-size: 9px; text-transform: uppercase; letter-spacing: .08em; color: #555;">
-        To stop receiving emails, <a href="https://now.brandnewcongress.org/unsubscribe/<%= @slug %>?email=<%= @email %>">click here</a>.
-      </p> -->
     </div>
     <br /><br /><br />
   </font>

@@ -46,9 +46,9 @@ defmodule Core.EventsController do
 
     Nb.Events.Rsvps.create(event.id, ~m{first_name, last_name, email, phone, primary_address})
 
-    Task.async(fn ->
+    # Task.async(fn ->
       Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email})
-    end)
+    # end)
 
     render conn, "rsvp.html", [event: event, person: true, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end

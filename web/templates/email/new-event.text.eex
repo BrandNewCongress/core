@@ -48,4 +48,5 @@ URL: http://go.brandnewcongress.org/<%= @slug %>
 
 Should Contact Host: <%= Enum.member?(tags, "Event: Should Contact Host") %>
 <%= event_type %>
+
 Status: <%= status %>

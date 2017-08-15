@@ -126,6 +126,7 @@ defmodule Jotform.SubmitEvent do
     }
 
     Logger.info "Creating event on calendar #{calendar_id}"
+    IO.inspect event
     %{"id" => event_id, "slug" => event_slug} = Nb.Events.create(event)
     Logger.info "Created event #{event_id}"
     Core.EventMailer.on_create(event_id, event_slug, event)
@@ -167,7 +168,8 @@ defmodule Jotform.SubmitEvent do
 
   defp get_calendar({lat, lng}) do
     case District.closest_candidate({lat, lng}) do
-      %{"metadata" => %{"calendar_id" => result}} -> result
+      %{"metadata" => %{"calendar_id" => result}} ->
+        if result == "", do: 9, else: result
       _ -> 9
     end
   end

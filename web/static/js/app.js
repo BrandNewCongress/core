@@ -23,5 +23,5 @@ import 'phoenix_html'
 import fakeSpa from './fake-spa'
 import littleAnalytics from './little-analytics'
 
-fakeSpa.bind()
+// fakeSpa.bind()
 littleAnalytics.bind()
