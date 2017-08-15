@@ -124,17 +124,27 @@ defmodule Jotform.SubmitEvent do
         broadcaster_id: 21,
         subject: "RSVP Confirmation: #{event_name}",
         body: "{{ recipient.first_name_or_friend }} --
+<br/>
+<br/>
+<br/>
+
 Thank you for your RSVP.
+
+<br/>
+<br/>
+<br/>
 
 {% include \"mailing_event\" %}
 
-If you need to update or cancel your RSVP, use this link:
-
-{{ edit_url }}
+<br/>
+<br/>
+<br/>
 
 And you can invite others to join you at the event with this link:
 
-{{ page_url }}"
+<br/>
+
+https://now.brandnewcongress.org/events/{{ page.slug }}"
       },
       tags: tags,
       calendar_id: calendar_id
