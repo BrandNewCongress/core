@@ -22,6 +22,18 @@ import modernizr from './modernizr'
 import 'phoenix_html'
 import fakeSpa from './fake-spa'
 import littleAnalytics from './little-analytics'
+import shareThis from "share-this";
+import * as emailSharer from "share-this/dist/sharers/email";
+import * as facebookSharer from "share-this/dist/sharers/facebook";
+import * as twitterSharer from "share-this/dist/sharers/twitter";
+import * as redditSharer from "share-this/dist/sharers/reddit";
 
 fakeSpa.bind()
 littleAnalytics.bind()
+
+const selectionShare = shareThis({
+    selector: "p",
+    sharers: [ emailSharer, facebookSharer, twitterSharer, redditSharer ]
+});
+
+selectionShare.init();

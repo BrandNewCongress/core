@@ -9,7 +9,6 @@ const config = {
     'nav.desktop': './web/static/js/nav.desktop.js',
     'nav.mobile': './web/static/js/nav.mobile.js',
     'vox-report': './web/static/js/vox-report.js',
-    'leaderboard-report': './web/static/js/leaderboard-report.js',
     standup: './web/static/js/standup.js',
     app: './web/static/js/app.js',
     css: [
@@ -18,7 +17,8 @@ const config = {
       './web/static/css/jd.css',
       './web/static/css/footer.css',
       './web/static/css/header.css',
-      './web/static/css/tab-menu.css'
+      './web/static/css/tab-menu.css',
+      './node_modules/share-this/dist/share-this.css'
     ]
   },
 
