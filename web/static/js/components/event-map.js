@@ -126,7 +126,7 @@ export default class EventMap extends Component {
         backgroundColor: 'black',
         color: 'white',
         left: '50%',
-        transform: 'translate(-50%, 150%) scale(1.3)',
+        transform: 'translate(-50%, 50%) scale(1.3)',
         padding: '40px',
         fontFamily: 'Roboto Slab, sans-serif'
       }}
@@ -153,11 +153,54 @@ export default class EventMap extends Component {
           paddingTop: '5px',
           margin: '0px',
           paddingBottom: '5px',
-          marginTop: '10px'
+          marginTop: '10px',
+          height: '100%'
         }}
         onClick={() => window.navigateTo('/form/submit-event')}
       >
         Host One Now
       </a>
+
+      <div className="other-options-container" style={{ marginTop: 10 }}>
+        Or, help from home:
+        <div
+          className="other-options-container"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}
+        >
+          <a
+            className="secondary-button"
+            onClick={() => window.navigateTo('/act/call')}
+            style={{
+              width: '48%',
+              height: '100%',
+              paddingTop: '5px',
+              margin: '0px',
+              paddingBottom: '5px',
+              marginTop: '10px',
+              textAlign: 'center'
+            }}
+          >
+            Call Voters
+          </a>
+          <a
+            className="secondary-button"
+            onClick={() => window.navigateTo('/form/teams')}
+            style={{
+              width: '48%',
+              height: '100%',
+              paddingTop: '5px',
+              margin: '0px',
+              paddingBottom: '5px',
+              marginTop: '10px',
+              textAlign: 'center'
+            }}
+          >
+            Join a National Team
+          </a>
+        </div>
+      </div>
     </div>
 }

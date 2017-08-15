@@ -1,0 +1,173 @@
+<%= if @mobile do %>
+  <div style="padding: 50px;">
+<% else %>
+  <div style="padding: 100px;">
+<% end %>
+  <%= if @event != nil do %>
+    <div class="header">
+      <h2> <%= @event.title %> </h2>
+    </div>
+    <div class="description">
+      <%= raw(scrub(@event.description)) %>
+    </div>
+
+    <div class="bar"></div>
+
+    <div class="info-container">
+      <div class="when">
+        <h3> When </h3>
+        <p> <%= @event.date_line %> </p>
+      </div>
+      <div class="where">
+        <h3> Where </h3>
+        <%= if @event.location.public do %>
+          <p> <%= @event.location.address_lines |> List.first() %> </p>
+          <p> <%= @event.location.locality %> <%= @event.location.region %> </p>
+        <% else %>
+          <p> The address is hidden to protect the privacy of the host. You will find out when you RSVP! </p>
+        <% end %>
+      </div>
+      <div class="contact">
+        <h3> Contact </h3>
+        <%= if @event.host.public do %>
+          <p> <%= @event.host.name %> </p>
+          <p> <a href="mailto:<%= @event.host.email %>"> <%= @event.host.email %> </a> </p>
+          <p> <%= @event.host.phone %> </p>
+        <% else %>
+          <p> The host's contact information is hidden to protect their privacy. You will find out when you RSVP! </p>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="bar"></div>
+
+    <div class="rsvp">
+      <%= if assigns[:person] == nil do %>
+        <h3> RSVP: Who is coming? </h3>
+        <form method="post" action="/events/<%= @event.name %>">
+          <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
+          <div class="form-row">
+            <div class="form-el">
+              <label> First Name </label> <br/>
+              <input name="first_name" type="text" />
+            </div>
+            <div class="form-el">
+              <label> Last Name </label><br/>
+              <input name="last_name" type="text" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-el">
+              <label> Email </label><br/>
+              <input name="email" type="email" />
+            </div>
+            <div class="form-el">
+              <label> Phone </label><br/>
+              <input name="phone" type="tel" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-el" style="margin-left: -8px; width: 277px;">
+              <label> Address </label><br/>
+              <input name="address1" type="text" placeholder="1600 Pennsylvania Avenue" style="width: 100%;"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-el" style="margin-left: -8px; width: 277px;">
+              <label> Zip Code </label><br/>
+              <input name="zip" type="text" placeholder="20500" style="width: 100%;"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-el" style="margin-left: -8px; width: 277px;">
+              <label> City </label><br/>
+              <input name="city" type="text" placeholder="Washington" style="width: 100%;"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-el" style="margin-left: -8px; width: 277px;">
+              <label> State </label><br/>
+              <input name="state" type="text" placeholder="DC" style="width: 100%;"/>
+            </div>
+          </div>
+          <div class="form-row">
+            <input type="submit" value="I'm coming!" class="primary-button" style="width: 200px; padding: 10px;">
+          </div>
+        </form>
+        <div class="bar"></div>
+        <div style="display: flex; justify-content: center; width: 100%;">
+          <a target="_blank" href="https://events.brandnewcongress.org/" class="primary-button" style="width: 200px; padding: 10px; text-decoration: none;"><p>More Events</p></a>
+        </div>
+
+      <% else %>
+
+        <h3> Thanks for rsvping! </h3>
+        <p> We'll be in touch soon with details and reminders. </p>
+        <p> In the meantime, share the event and try to get some of your friends to come! </p>
+        <div class="share-buttons">
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <div style="text-align: center; font-size: larger; display: flex; justify-content: center; flex-direction: column; align-items: center;">
+      <p>
+        Hm, it seems as if you've either stumbled upon an event that doesn't exist
+        or is in the past.
+
+        Go back to our events map to find an event in the future <a target="_blank" href="https://events.brandnewcongress.org/">here</a>.
+      </p>
+
+      <a target="_blank" href="https://events.brandnewcongress.org/" class="primary-button" style="width: 200px; padding: 10px; text-decoration: none;"><p>More Events</p></a>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.info-container {
+  text-align: center;
+  display: flex;
+  <%= if @mobile do %>
+    flex-wrap: wrap;
+  <% else %>
+    padding-left: 100px;
+    padding-right: 100px;
+  <% end %>
+}
+
+.info-container > div {
+  <%= if not @mobile do %>
+    width: 33%;
+  <% end %>
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.info-container > div > h3 {
+  text-transform: uppercase;
+}
+
+.rsvp {
+  text-align: center;
+}
+
+.form-row {
+  display: flex;
+  justify-content: center;
+}
+
+.form-el {
+  margin: 5px;
+  text-align: left;
+}
+
+.form-el > input {
+  padding: 5px;
+}
+
+.bar {
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border-bottom: 1px black dashed;
+}
+
+</style>

@@ -48,7 +48,9 @@ defmodule Core.EntryChannel do
         "Action: Attended Event: #{campaign_name}"
       ])
 
-      Nb.Events.Rsvps.create(%{
+      slug = 124
+
+      Nb.Events.Rsvps.create(slug, %{
         person_id: nb_id
       })
     else

@@ -1,3 +1,42 @@
 <div style="padding: 40px;">
   <%= raw(@content) %>
 </div>
+
+<script>
+
+  function show (el) {
+    el.style.display = 'block';
+  }
+
+  function hide (el) {
+    el.style.display = 'none';
+  }
+
+  function toggle (el) {
+    if (el.style.display == 'none') {
+      el.style.display = 'block';
+    } else {
+      el.style.display = 'none';
+    }
+  }
+
+  function showHiddenContent (ev) {
+    var el = document.querySelector('#vol-events');
+    var action = el.getAttribute('data-action');
+
+    if (action == 'show') {
+      show(el)
+    } else if (action == 'hide') {
+      hide(el)
+    } else {
+      toggle(el)
+    }
+  }
+
+  var buttons = Array.from(document.querySelectorAll('.show-events'));
+
+  buttons.forEach(function (button) {
+    button.addEventListener('click', showHiddenContent);
+  })
+
+</script>

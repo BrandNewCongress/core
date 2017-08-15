@@ -13,6 +13,7 @@ class TopNav extends Component {
   hideOpts = idx => ev => this.setState({ hover: null })
   visit = entry => ev => {
     ev.stopPropagation()
+    ev.preventDefault()
     window.navigateTo(hrefOfEntry(entry))
   }
 
@@ -61,6 +62,7 @@ class SideNav extends Component {
 
   visit = entry => ev => {
     ev.stopPropagation()
+    ev.preventDefault()
     window.navigateTo(hrefOfEntry(entry))
   }
 
@@ -79,7 +81,6 @@ class SideNav extends Component {
               className={`side-nav-item ${entry.matches() ? 'selected' : ''}`}
               href={hrefOfEntry(entry)}
               onClick={this.visit(entry)}
-              target=""
               key={entry.label}
             >
               {window.opts.brand == 'bnc' &&

@@ -6,10 +6,6 @@ defmodule Core do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    # Fill initial cache
-    Cosmic.fetch_all()
-    Core.Jobs.EventCache.fetch_or_load()
-
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
@@ -18,14 +14,20 @@ defmodule Core do
 
       # Start the endpoint when the application starts
       supervisor(Core.Endpoint, []),
+      worker(Redix, [Application.get_env(:core, :redis_url), [name: :redix]])
+
+      # One offs
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Core.Supervisor]
-    Supervisor.start_link(children, opts)
+    result = Supervisor.start_link(children, opts)
 
-    {:ok, _conn} = Redix.start_link(Application.get_env(:core, :redis_url), name: :redix)
+    Cosmic.fetch_all()
+    Core.Jobs.EventCache.fetch_or_load()
+
+    result
   end
 
   # Tell Phoenix to update the endpoint configuration

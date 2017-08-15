@@ -48,10 +48,14 @@ defmodule Core.Mixfile do
      {:timex, "~> 3.0"},
      {:quantum, "~> 1.9.2"},
      {:redix, ">= 0.0.0"},
-     {:html_sanitize_ex, "~> 1.0.0"},
+     {:html_sanitize_ex, "~> 1.3.0-rc3"},
      {:geo, "~> 1.5"},
      {:topo, "~> 0.1.0"},
-     {:remodel, "~> 0.0.4"}]
+     {:remodel, "~> 0.0.4"},
+     {:flow, "~> 0.11"},
+     {:distillery, "~> 1.0.0"},
+     {:number, "~> 0.5.2"},
+     {:shorter_maps, "~> 2.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
@@ -63,6 +67,7 @@ defmodule Core.Mixfile do
   defp aliases do
     ["ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
      "ecto.reset": ["ecto.drop", "ecto.setup"],
-     "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
+    #  "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
+     "test": ["test"]]
   end
 end

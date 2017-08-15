@@ -48,9 +48,7 @@ defmodule Core.FormController do
   defp get_brands(jd_share_html, bnc_share_html) do
     [jd_share_html, bnc_share_html]
     |> Enum.zip(["jd", "bnc"])
-    |> Enum.filter_map(
-      fn {str, _brand} -> str != "" end,
-      fn {_str, brand} -> brand end
-    )
+    |> Enum.filter(fn {str, _brand} -> str != "" end)
+    |> Enum.map(fn {_str, brand} -> brand end)
   end
 end

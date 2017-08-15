@@ -2,11 +2,10 @@ defmodule Core.Jobs.EventCache do
   require Logger
 
   def update do
-    Logger.info "Updating event cache"
-
     # Fetch all events
     all_events =
       Nb.Events.stream_all()
+      |> Enum.filter(&published_only/1)
       |> Enum.map(&Osdi.Event.from_nb/1)
 
     # Cache each by slug
@@ -24,6 +23,7 @@ defmodule Core.Jobs.EventCache do
     |> Enum.each(fn calendar -> calendar |> events_for_calendar(all_events) |> cache_calendar(calendar) end)
 
     Stash.persist(:event_cache, "event_cache")
+    Logger.info "Updated event cache on #{Timex.now() |> DateTime.to_iso8601()}"
 
     all_events
   end
@@ -54,4 +54,7 @@ defmodule Core.Jobs.EventCache do
       %{name: slug} -> slug
     end)
   end
+
+  defp published_only(%{"status" => "published"}), do: true
+  defp published_only(%{"status" => _something_else}), do: false
 end

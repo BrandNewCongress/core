@@ -17,6 +17,7 @@
     <% end %>
 
     <%= if @mobile do %>
+
       <div class="act-option-group">
         <div class="option-group-header"> Events </div>
         <div class="option-container">
@@ -34,6 +35,7 @@
           <% end %>
         </div>
       </div>
+
     <% else %>
 
       <br/>

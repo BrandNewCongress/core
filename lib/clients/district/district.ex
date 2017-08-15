@@ -1,27 +1,18 @@
 defmodule District do
-  {:ok, districts} =
-    "./lib/clients/district/geojsons"
-    |> File.ls()
-
-  geojsons =
-    districts
-    |> Enum.map(fn district ->
-      {:ok, file} = "./lib/clients/district/geojsons/#{district}" |> File.read()
-      {:ok, %{"geometry" => geometry}} = file |> Poison.decode()
-
-      geometry
-      |> Geo.JSON.decode()
-     end)
-
-  @geojsons districts
-    |> Enum.map(fn str -> str |> String.split(".") |> List.first() end)
-    |> Enum.zip(geojsons) |> Enum.into(%{})
+  import District.GeoJson
 
   @mile_limit 10
   @miles_per_degree 69
 
-  def get_gjs, do: @geojsons
-  def get_polygon_of(district), do: @geojsons[district]
+  def get_gjs, do: geojsons()
+  def get_polygon_of(district), do: geojsons()[district]
+  def list, do: Map.keys(geojsons())
+
+  def extract_int_form(string) do
+    [state, district] = String.split(string, "-")
+    {result, _} = Integer.parse(district)
+    {state, result}
+  end
 
   def is_short_form(string) do
     case Regex.run(~r/[A-Za-z][A-Za-z][-]?[0-9]+/, string) do
@@ -30,44 +21,73 @@ defmodule District do
     end
   end
 
+  @spec normalize(binary) :: binary
+  @doc ~S"""
+  Turns a variety of district formats into NY-14
+  (capital letter, capital letter, dash, zero padded number)
+
+  ## Examples
+      iex> District.normalize("ny-14")
+      "NY-14"
+
+      iex> District.normalize("ny14")
+      "NY-14"
+
+      iex> District.normalize("ny 14")
+      "NY-14"
+
+      iex> District.normalize("ny 7")
+      "NY-07"
+
+      iex> District.normalize("sd-al")
+      "SD-00"
+
+      iex> District.normalize("sd 0")
+      "SD-00"
+  """
   def normalize(string) do
-    cond do
-      String.contains?(string, "-") ->
-        [state, cd] = String.split(string, "-")
-        state = String.upcase(state)
-        cd = case String.length(cd) do
-          1 -> "0" <> cd
-          2 -> cd
-        end
-        "#{state}-#{cd}"
+    processed =
+      string
+      |> String.upcase()
+      |> String.replace("AL", "00")
 
-      String.length(string) === 3 ->
-        state = string |> String.slice(0..1) |> String.upcase()
-        cd = "0" <> String.slice(string, 2..2)
-        "#{state}-#{cd}"
-
-      String.length(string) === 4 ->
-        state = string |> String.slice(0..1) |> String.upcase()
-        cd = String.slice(string, 2..3)
-        "#{state}-#{cd}"
+    case Regex.named_captures(~r/(?<state>[A-Z]{2,})[ -]?(?<district>([0-9]{1,2}))/, processed) do
+      %{"district" => district, "state" => state} ->
+        "#{state}-#{district |> String.pad_leading(2, "0")}"
+      nil ->
+        nil
     end
   end
 
+  @spec from_point({number, number}) :: binary
+  @doc ~S"""
+  Transforms a latitude longitude pair into a string of its containing US
+  congressional district
+
+  nil if not in the US.
+
+  ## Examples
+      iex> District.from_point({43.7022454, -72.293365})
+      "NH-02"
+
+      iex> District.from_point({41.1478865, -73.8534775})
+      "NY-17"
+  """
   def from_point({lat, lng}) do
-    @geojsons
-    |> Enum.filter_map(
-        fn {_district, polygon} -> Topo.contains?(polygon, {lng, lat}) end,
-        fn {district, _polygon} -> district end
-      )
+    geojsons()
+    |> Enum.filter(fn {_district, polygon} -> Topo.contains?(polygon, {lng, lat}) end)
+    |> Enum.map(fn {district, _polygon} -> district end)
     |> List.first()
   end
 
+  @spec from_address(binary) :: binary
   def from_address(string) do
     string
     |> Maps.geocode()
     |> from_point()
   end
 
+  @spec from_unknown(binary) :: {binary, {number, number}}
   def from_unknown(string) do
     district = if is_short_form(string) do
       normalize(string)
@@ -75,7 +95,7 @@ defmodule District do
       from_address(string)
     end
 
-    geoj = @geojsons |> Map.take([district])
+    geoj = geojsons() |> Map.take([district])
     coordinates = if geoj |> Map.keys() |> length() > 0 do
       geoj |> centroid()
     else
@@ -101,12 +121,11 @@ defmodule District do
       candidates
       |> Enum.map(fn %{"metadata" => %{"district" => district}} -> district end)
 
-    candidate_geos = Map.take(@geojsons, candidate_districts)
+    candidate_geos = Map.take(geojsons(), candidate_districts)
 
     {closest_name, closest_dist} =
       candidate_geos
-      |> Enum.map(&centroid/1)
-      |> Enum.map(fn {key, centroid} -> {key, naive_distance({x, y}, centroid)} end)
+      |> Enum.map(fn {key, polygon = %Geo.MultiPolygon{}} -> {key, naive_geo_distance({x, y}, polygon)} end)
       |> Enum.map(fn {key, dist} -> {key, dist * @miles_per_degree} end)
       |> Enum.sort(fn ({_l1, d1}, {_l2, d2}) -> d2 >= d1 end)
       |> List.first()
@@ -129,8 +148,8 @@ defmodule District do
   def centroid(map = %{}) do
     key = map |> Map.keys() |> List.first()
     val = map[key]
-    {_key, dist} = centroid({key, val})
-    dist
+    {_key, cent} = centroid({key, val})
+    cent
   end
 
   def centroid({key, %Geo.MultiPolygon{coordinates: coordinates}}) do
@@ -144,9 +163,35 @@ defmodule District do
   end
 
   def centroid(district_string) when is_binary(district_string) do
-    @geojsons
+    geojsons()
     |> Map.take([district_string])
     |> centroid()
+  end
+
+  @spec naive_geo_distance({number, number}, %{}) :: number
+  @doc ~S"""
+  Returns the distance between a point and the closest border point of a MulitPolyGon
+
+  ## Examples
+      iex> District.naive_geo_distance({43.7022454, -72.293365}, District.get_gjs()["NH-01"])
+      1.8164815802997447
+  """
+  def naive_geo_distance({x, y}, %Geo.MultiPolygon{coordinates: coordinates}) do
+    list =
+      coordinates
+      |> List.first()
+      |> List.first()
+
+    {_, _, closest_dist} = Enum.reduce list, {0, 0, 1_000_000_000}, fn ({this_y, this_x}, {min_x, min_y, min_dist}) ->
+      this_dist = naive_distance({this_x, this_y}, {x, y})
+      if this_dist <= min_dist do
+        {this_x, this_y, this_dist}
+      else
+        {min_x, min_y, min_dist}
+      end
+    end
+
+    closest_dist
   end
 
   def naive_distance({x1, y1}, {x2, y2}) do

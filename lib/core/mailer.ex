@@ -15,10 +15,23 @@ defmodule Core.Mailer do
     |> deliver()
   end
 
-  def typeform_failure_alert(body) do
+  def on_vox_login_claimed(%{"username" => username, "date" => date,
+    "first_name" => first_name, "last_name" => last_name, "email" => email,
+    "phone" => phone}) do
+
+    new()
+    |> to({"Sam Briggs", "sam@brandnewcongress.org"})
+    |> to({"Ben Packer", "ben@brandnewcongress.org"})
+    |> from({"Robot", "robot@brandnewcongress.org"})
+    |> subject("New Vox Login Claimed!")
+    |> text_body("Username: #{username}\nDate: #{date}\nFirst name: #{first_name}\nLast name: #{last_name}\nEmail: #{email}\nPhone: #{phone}")
+    |> deliver()
+  end
+
+  def typeform_failure_alert(body, e) do
     Logger.info "Sending email to Ben because of failure on Typeform webhook"
 
-    {:ok, stringified} = Poison.encode(body)
+    {:ok, stringified} = Poison.encode(%{body: body, error: e}, pretty: true)
 
     new()
     |> to({"Ben Packer", "ben@brandnewcongress.org"})
@@ -38,7 +51,8 @@ defmodule Core.Mailer do
       end_time: end_time,
       venue: venue,
       time_zone: time_zone,
-      tags: tags
+      tags: tags,
+      status: status
     } = event
 
     event_type = Enum.find tags, "Unknown", fn
@@ -74,10 +88,11 @@ Phone: #{contact.phone}
 Other
 Event ID: #{id}
 Campaign: #{candidate}
-URL: http://go.brandnewcongress.org/#{slug}
+URL: http://now.brandnewcongress.org/events/#{slug}
 
 Should Contact Host: #{Enum.member?(tags, "Event: Should Contact Host")}
 #{event_type}
+Status: #{status}
 "
   end
 end

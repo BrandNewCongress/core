@@ -8,6 +8,9 @@ const config = {
     events: './web/static/js/events.js',
     'nav.desktop': './web/static/js/nav.desktop.js',
     'nav.mobile': './web/static/js/nav.mobile.js',
+    'vox-report': './web/static/js/vox-report.js',
+    'leaderboard-report': './web/static/js/leaderboard-report.js',
+    standup: './web/static/js/standup.js',
     app: './web/static/js/app.js',
     css: [
       './web/static/css/app.css',

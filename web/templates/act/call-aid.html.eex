@@ -1,0 +1,73 @@
+<div class="event">
+  <div class="box" style="border-bottom: 1px solid black;">
+    <p><strong> Name and Time </strong> <br/>
+  </div>
+  <div class="box" style="border-bottom: 1px solid black;">
+    <p><strong> Location </strong> <br/>
+  </div>
+</div>
+<%= for ev <- @events do %>
+  <div class="event">
+    <div class="box">
+      <p><strong> <%= ev.title %> </strong> <br/>
+       <%= ev.date_line %> </p>
+      <a class="little-button" href="/events/<%= ev.name %>" style="display: block;" target="_blank"> RSVP </a>
+    </div>
+    <div class="box">
+      <p><strong> <%= ev.location.venue %> </strong> <br/>
+      <%= ev.location.address_lines |> List.first() %> <br/>
+      <%= ev.location.locality %> <%= ev.location.region %> </p>
+    </div>
+  </div>
+<% end %>
+
+<%= if assigns[:person] != nil do %>
+  <form> <p> <strong> Done: <%= assigns[:person] %> </strong> <p> </form>
+<% end %>
+<form method="post" action="/call-aid/<%= @slug %>">
+  <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
+
+  <label>First Name</label> <br/>
+  <input type="text" name="first_name" style="padding: 10px; font-size: larger;" /> <br/>
+  <label>Last Name</label> <br/>
+  <input type="text" name="last_name" style="padding: 10px; font-size: larger;" /> <br/>
+
+  <label>Phone Number</label> <br/>
+  <input type="tel" name="phone" style="padding: 10px; font-size: larger;" /> <br/>
+  <label>Email</label> <br/>
+  <input type="email" name="email" style="padding: 10px; font-size: larger;" /> <br/>
+  <input
+    type="submit"
+    value="Mark as Volunteer" class="primary-button"
+    style="padding: 5px; width: 225px;"/>
+</form>
+
+<style>
+
+.event {
+  display: flex;
+}
+
+.box {
+  width: 50%;
+  margin: 10px;
+  font-size: smaller;
+}
+
+.box > a {
+  text-decoration: none;
+  width: 20%;
+}
+
+form {
+  margin: 50px;
+}
+
+.little-button {
+  background-color: var(--bnc-purple);
+  color: white;
+  padding: 5px;
+  text-align: center;
+}
+
+</style>

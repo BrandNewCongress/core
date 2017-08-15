@@ -1,11 +1,16 @@
+<% description = assigns[:description] || "Brand New Congress is recruiting incredible people to run for Congress in 2018 in a unified campaign behind a single plan to fix our government and our country." %>
+<% banner = assigns[:banner] || "https://cosmicjs.com/uploads/057895e0-591a-11e7-a947-e12ac523dacd-BNC%20logo.PNG" %>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <meta name="description" content="<%= description %>">
     <meta name="author" content="<%= homepage(@brand) %>">
+    <meta property="og:description" content="<%= description %>">
+    <meta property="og:image" content="<%= banner %>">
 
     <title>
       <%= if @brand == "jd" do %>Justice Democrats<% else %>Brand New Congress<% end %>
@@ -23,9 +28,11 @@
   </head>
 
   <body class="<%= @brand %>">
-    <%= render Core.LayoutView, "header.html",
-          [conn: @conn, mobile: @mobile, header_text: assigns[:header_text],
-           brand: @brand] %>
+    <%= if assigns[:no_header] != true do %>
+      <%= render Core.LayoutView, "header.html",
+            [conn: @conn, mobile: @mobile, header_text: assigns[:header_text],
+             brand: @brand] %>
+    <% end %>
 
     <div class="container">
       <main role="main">

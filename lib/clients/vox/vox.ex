@@ -57,9 +57,7 @@ defmodule Core.Vox do
   end
 
   def next_login() do
-    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
-
-    {:ok, raw} = Redix.command(:redix, ["GET", date])
+    {:ok, raw} = Redix.command(:redix, ["GET", "logins"])
     logins = decode_logins(raw)
 
     {:ok, claimed} = Redix.command(:redix, ["INCR", "claimed"])
@@ -69,17 +67,14 @@ defmodule Core.Vox do
   end
 
   def password_for(username) do
-    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
+    {:ok, raw} = Redix.command(:redix, ["GET", "logins"])
 
-    {:ok, raw} = Redix.command(:redix, ["GET", date])
     logins = decode_logins(raw)
 
     [password] =
       logins
-      |> Enum.filter_map(
-          fn [un | _] -> un == username end,
-          fn [_ | [pwd | _]] -> pwd end
-        )
+      |> Enum.filter(fn [un | _] -> un == username end)
+      |> Enum.map(fn [_ | [pwd | _]] -> pwd end)
 
     password
   end

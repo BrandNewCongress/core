@@ -1,5 +1,6 @@
 defmodule Core.ActController do
   use Core.Web, :controller
+  require Logger
 
   def get(conn, params) do
     district = extract_district(conn, params)
@@ -75,6 +76,40 @@ defmodule Core.ActController do
        draft: draft] ++ GlobalOpts.get(conn, params)
   end
 
+  def call_aid(conn, params = %{"candidate" => candidate}) do
+    %{"metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(candidate)
+
+    # TODO - only a month away
+    events =
+      :event_cache
+      |> Stash.get("calendar-#{calendar_id}")
+      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
+      |> Enum.sort(&date_compare/2)
+      |> Enum.take(6)
+      |> Enum.map(&Osdi.Event.add_date_line/1)
+
+    render conn, "call-aid.html",
+      [events: events, no_header: true, no_footer: true, slug: candidate] ++ GlobalOpts.get(conn, params)
+  end
+
+  def easy_volunteer(conn, params = %{"candidate" => candidate, "phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name}) do
+    %{"title" => title, "metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(candidate)
+
+    events =
+      :event_cache
+      |> Stash.get("calendar-#{calendar_id}")
+      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
+      |> Enum.sort(&date_compare/2)
+      |> Enum.take(6)
+      |> Enum.map(&Osdi.Event.add_date_line/1)
+
+    %{"id" => id} = Nb.People.push(%{"phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name})
+    Nb.People.add_tags(id, ["Action: Joined as Volunteer: #{title}"])
+
+    render conn, "call-aid.html",
+      [events: events, no_header: true, no_footer: true, slug: candidate, person: id] ++ GlobalOpts.get(conn, params)
+  end
+
   def legacy_redirect(conn, _params = %{"candidate" => candidate, "selected" => _selected}) do
     %{"metadata" => %{"district" => district}} = Cosmic.get(candidate)
     conn
@@ -120,19 +155,12 @@ defmodule Core.ActController do
     district
   end
 
-  defp on_hours?(%{"metadata" => %{"time_zone" => time_zone}}) do
-    now = time_zone |> Timex.now()
-    local_hours = now.hour
-    weekday = Timex.weekday(now)
-
-    case weekday do
-      n when n in [5, 6] -> local_hours >= 10 and local_hours < 21
-      _n -> local_hours >= 17 and local_hours < 21
-    end
+  defp on_hours?(candidate) when is_map(candidate) do
+    is_callable(candidate)
   end
 
   defp on_hours?(_else) do
-    false
+    length(callable_candidates()) > 0
   end
 
   defp callable_candidates do
@@ -142,18 +170,32 @@ defmodule Core.ActController do
     |> Enum.map(fn %{"slug" => slug, "title" => name} -> %{slug: slug, name: name} end)
   end
 
-  defp is_callable(%{"metadata" => %{"callable" => "Callable", "time_zone" => time_zone}}) do
+  defp is_callable(%{"slug" => _slug, "metadata" => %{"callable" => "Callable", "time_zone" => time_zone}}) do
     now = time_zone |> Timex.now()
     local_hours = now.hour
     weekday = Timex.weekday(now)
 
     case weekday do
-      n when n in [5, 6] -> local_hours >= 10 and local_hours < 21
-      _n -> local_hours >= 17 and local_hours < 21
+      n when n in [6, 7] ->
+        # IO.puts "It's #{local_hours} for #{slug} in #{time_zone} on a weekend"
+        local_hours >= 10 and local_hours < 21
+      _n ->
+        # IO.puts "It's #{local_hours} for #{slug} in #{time_zone} on a weekday"
+        local_hours >= 17 and local_hours < 21
     end
   end
 
   defp is_callable(_else) do
     false
   end
+
+  defp date_compare(%{start_date: d1}, %{start_date: d2}) do
+    {:ok, a, _} = DateTime.from_iso8601(d1)
+    {:ok, b, _} = DateTime.from_iso8601(d2)
+    case DateTime.compare(a, b) do
+      :gt -> false
+      _ -> true
+    end
+  end
+
 end

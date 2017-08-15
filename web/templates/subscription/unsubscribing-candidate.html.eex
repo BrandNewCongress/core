@@ -1,6 +1,6 @@
 <%= form_tag("/unsubscribe/#{@slug}", method: :post) %>
   Hi <input type="email" readonly name="email" style="min-width: 200px" value="<%=@email%>" />,
-  <input type="hidden" name="_csrf_token" value="<%= csrf_token(@conn) %>" />
+  <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
   <br/>
   <br/>
   Are you sure you want to unsubscribe from <%= @candidate %>?

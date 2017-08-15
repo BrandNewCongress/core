@@ -15,7 +15,7 @@ var vdomCache = parser(nodeCache)
 
 var hist = createHistory()
 
-function postFetch(text, path, {skipHistory, cookies}) {
+function postFetch(text, path, { skipHistory, cookies }) {
   const newVTree = parser(text)
   const patches = diff(vdomCache, newVTree)
 
@@ -34,7 +34,7 @@ function navigateTo(path, skipHistory) {
   } else {
     superagent.get(path).query({ empty: true }).end(function(err, res) {
       if (window.checkNavChange) window.checkNavChange()
-      postFetch(res.text, path, {skipHistory, cookies: undefined})
+      postFetch(res.text, path, { skipHistory, cookies: undefined })
     })
   }
 }
@@ -48,10 +48,17 @@ function bind() {
       return !a.href.startsWith('#')
     })
     .forEach(function(a) {
-      a.onclick = function(ev) {
-        ev.preventDefault()
-        navigateTo(a.getAttribute('href'), a.getAttribute('data-skip-history'))
-        return false
+      if (a.getAttribute('target') !== '_blank' && !a.getAttribute('href').startsWith('#')) {
+        a.onclick = function(ev) {
+          ev.preventDefault()
+
+          navigateTo(
+            a.getAttribute('href'),
+            a.getAttribute('data-skip-history')
+          )
+
+          return false
+        }
       }
     })
 

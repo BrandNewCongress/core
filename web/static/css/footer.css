@@ -3,7 +3,8 @@ footer {
   padding: 5%;
   color: #6D6D6D;
   text-align: center;
-  font-family: 'Roboto Slab', sans-serif
+  font-family: 'Roboto Slab', sans-serif;
+  z-index: -10;
 }
 
 footer img {

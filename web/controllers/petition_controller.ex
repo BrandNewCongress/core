@@ -39,30 +39,52 @@ defmodule Core.PetitionController do
   # Extract and render petition
   defp do_render_petition(conn, params, %{
     "slug" => slug,
-    "title" => title,
     "content" => content,
-    "metadata" => %{
+    "metadata" => metadata = %{
+      "title" => title,
       "sign_button_text" => sign_button_text,
       "post_sign_text" => post_sign_text,
       "background_image" => %{
         "imgix_url" => background_image
-      },
+      }
     }
   }) do
+
+    count =
+      if Map.has_key?(metadata, "count") && metadata["count"] != "" do
+        metadata["count"] |> format_count()
+      end
+
+    target =
+      if count do
+        (((count * 2) / 25_000) |> round()) * 25_000
+      end
+
+    progress =
+      if count do
+        count / target * 100
+      end
 
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
        post_sign_text: post_sign_text, background_image: background_image,
-       no_footer: true, signed: false] ++ GlobalOpts.get(conn, params)
+       no_footer: true, signed: false, count: pretty_num(count), target: pretty_num(target),
+       progress: pretty_num(progress)] ++ GlobalOpts.get(conn, params)
   end
+
+  defp format_count(""), do: nil
+  defp format_count(count) when is_integer(count), do: count
+  defp format_count(count) when is_binary(count), do: count |> Integer.parse() |> Tuple.to_list() |> List.first()
+  defp pretty_num(nil), do: nil
+  defp pretty_num(n), do: n |> Number.Delimit.number_to_delimited(precision: 0)
 
   def post(conn, params = %{"petition" => petition, "name" => name, "email" => email, "zip" => zip}) do
     global_opts = GlobalOpts.get(conn, params)
 
     %{"slug" => slug,
-      "title" => title,
       "content" => content,
       "metadata" => %{
+        "title" => title,
         "sign_button_text" => sign_button_text,
         "post_sign_text" => post_sign_text,
         "tweet_template" => tweet_template,
@@ -101,9 +123,15 @@ defmodule Core.PetitionController do
       "jd" -> "Justice Democrats"
       "bnc" -> "Brand New Congress"
     end
-    tag = "Action: Signed Petition: #{source}: #{title}"
 
-    Nb.People.add_tags(id, tag)
+    tags = ["Action: Signed Petition: #{source}: #{title}"] ++
+      if Map.has_key?(params, "ref") do
+        ["Action: Signed Petition: #{source}: #{title}: #{params["ref"]}"]
+      else
+        []
+      end
+
+    Nb.People.add_tags(id, tags)
 
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,

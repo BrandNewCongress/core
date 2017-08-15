@@ -35,10 +35,26 @@ defmodule Core.VoxController do
       "Vox Alias: #{username}: #{date}"
     ])
 
-    render conn, "vox-submitted.html", [username: username, password: password, title: "Call"] ++ GlobalOpts.get(conn, params)
+    %{"content" => call_page} = Cosmic.get("call-page")
+
+    Task.async(fn ->
+      Core.Mailer.on_vox_login_claimed(%{"username" => username, "date" => date,
+        "first_name" => first_name, "last_name" => last_name, "email" => email,
+        "phone" => phone
+      })
+    end)
+
+    render conn, "vox-submitted.html",
+      [username: username, password: password, title: "Call",
+       call_page: call_page] ++ GlobalOpts.get(conn, params)
   end
 
   def get_logins(conn, %{"secret" => @secret}) do
     text conn, Core.Vox.logins_for_day
+  end
+
+  def get_report(conn, params = %{"secret" => @secret}) do
+    render conn, "vox-report.html",
+      [layout: {Core.LayoutView, "empty.html"}] ++ GlobalOpts.get(conn, params)
   end
 end
