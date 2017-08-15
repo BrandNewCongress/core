@@ -125,8 +125,7 @@ defmodule District do
 
     {closest_name, closest_dist} =
       candidate_geos
-      |> Enum.map(&centroid/1)
-      |> Enum.map(fn {key, centroid} -> {key, naive_distance({x, y}, centroid)} end)
+      |> Enum.map(fn {key, polygon = %Geo.MultiPolygon{}} -> {key, naive_geo_distance({x, y}, polygon)} end)
       |> Enum.map(fn {key, dist} -> {key, dist * @miles_per_degree} end)
       |> Enum.sort(fn ({_l1, d1}, {_l2, d2}) -> d2 >= d1 end)
       |> List.first()
@@ -149,8 +148,8 @@ defmodule District do
   def centroid(map = %{}) do
     key = map |> Map.keys() |> List.first()
     val = map[key]
-    {_key, dist} = centroid({key, val})
-    dist
+    {_key, cent} = centroid({key, val})
+    cent
   end
 
   def centroid({key, %Geo.MultiPolygon{coordinates: coordinates}}) do
@@ -167,6 +166,32 @@ defmodule District do
     geojsons()
     |> Map.take([district_string])
     |> centroid()
+  end
+
+  @spec naive_geo_distance({number, number}, %{}) :: number
+  @doc ~S"""
+  Returns the distance between a point and the closest border point of a MulitPolyGon
+
+  ## Examples
+      iex> District.naive_geo_distance({43.7022454, -72.293365}, District.get_gjs()["NH-01"])
+      1.8164815802997447
+  """
+  def naive_geo_distance({x, y}, %Geo.MultiPolygon{coordinates: coordinates}) do
+    list =
+      coordinates
+      |> List.first()
+      |> List.first()
+
+    {_, _, closest_dist} = Enum.reduce list, {0, 0, 1_000_000_000}, fn ({this_y, this_x}, {min_x, min_y, min_dist}) ->
+      this_dist = naive_distance({this_x, this_y}, {x, y})
+      if this_dist <= min_dist do
+        {this_x, this_y, this_dist}
+      else
+        {min_x, min_y, min_dist}
+      end
+    end
+
+    closest_dist
   end
 
   def naive_distance({x1, y1}, {x2, y2}) do
