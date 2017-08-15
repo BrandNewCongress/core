@@ -1,5 +1,6 @@
 defmodule Maps do
   use HTTPotion.Base
+  import ShorterMaps
 
   @key Application.get_env(:core, :goog_key)
   @default_params %{
@@ -42,10 +43,10 @@ defmodule Maps do
       {40.758895, -73.985131}
   """
   def geocode(address) do
-    %{body: %{"results" => [%{"geometry" => %{"location" => location}} | _]}}
-      = Maps.get("geocode/json", [query: %{"address" => address}])
+    %{body: %{"results" => [%{"geometry" => ~m{location}} | _]}}
+      = Maps.get("geocode/json", [query: ~m{address}])
 
-    %{"lat" => lat, "lng" => lng} = location
+    ~m{lat, lng} = location
     {lat, lng}
   end
 
@@ -92,17 +93,14 @@ defmodule Maps do
         utc_offset: -36000, zone_abbr: "HST"}
   """
   def time_zone_of({x, y}) do
-    %{body: %{
-      "dstOffset" => dst_offset, "rawOffset" => raw_offset,
-      "timeZoneId" => time_zone_id, "timeZoneName" => time_zone_name
-    }}
+    %{body: %{"dstOffset" => dst_offset, "rawOffset" => raw_offset,
+      "timeZoneId" => time_zone_id, "timeZoneName" => time_zone}}
       = Maps.get(
           "timezone/json",
-          [query: %{"location" => "#{x},#{y}",
-                    "timestamp" => DateTime.utc_now() |> DateTime.to_unix()}])
+          [query: %{"location" => "#{x},#{y}", "timestamp" => DateTime.utc_now() |> DateTime.to_unix()}])
 
-    %{utc_offset: raw_offset + dst_offset, time_zone_id: time_zone_id,
-      time_zone: time_zone_name, zone_abbr: abbreviate_zone(time_zone_name)}
+    ~M{utc_offset: raw_offset + dst_offset, time_zone_id,
+       time_zone, zone_abbr: abbreviate_zone(time_zone)}
   end
 
   def time_zone_of(address_string) do

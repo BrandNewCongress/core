@@ -54,7 +54,8 @@ defmodule Core.Mixfile do
      {:remodel, "~> 0.0.4"},
      {:flow, "~> 0.11"},
      {:distillery, "~> 1.0.0"},
-     {:number, "~> 0.5.2"}]
+     {:number, "~> 0.5.2"},
+     {:shorter_maps, "~> 2.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
