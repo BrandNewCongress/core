@@ -33,7 +33,7 @@ defmodule Osdi.Event do
 
     {hour, am_pm} = if hour >= 12, do: {hour - 12, "PM"}, else: {hour, "AM"}
     hour = if hour == 0, do: 12, else: hour
-    minute = if minute == 0, do: "", else: ": #{minute}"
+    minute = if minute == 0, do: "", else: ":#{minute}"
 
     "#{hour}#{minute} " <> am_pm
   end

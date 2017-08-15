@@ -15,15 +15,6 @@ defmodule Jotform.SubmitEvent do
 
     ## ------------ Determine whitelist status
     auto_whitelist = Map.has_key?(params, "whitelist")
-    whitelisted =
-      "esm-whitelist"
-      |> Cosmic.get()
-      |> Kernel.get_in(["metadata", "emails"])
-      |> String.split(";")
-      |> Enum.map(&String.trim/1)
-      |> MapSet.new()
-      |> MapSet.member?(email)
-
     status = if auto_whitelist do
       "published"
     else
