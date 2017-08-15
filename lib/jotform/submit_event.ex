@@ -120,32 +120,7 @@ defmodule Jotform.SubmitEvent do
           zip: venue_zip
         }
       },
-      autoresponse: %{
-        broadcaster_id: 21,
-        subject: "RSVP Confirmation: #{event_name}",
-        body: "{{ recipient.first_name_or_friend }} --
-<br/>
-<br/>
-<br/>
-
-Thank you for your RSVP.
-
-<br/>
-<br/>
-<br/>
-
-{% include \"mailing_event\" %}
-
-<br/>
-<br/>
-<br/>
-
-And you can invite others to join you at the event with this link:
-
-<br/>
-
-https://now.brandnewcongress.org/events/{{ page.slug }}"
-      },
+      autoresponse: nil,
       tags: tags,
       calendar_id: calendar_id
     }
@@ -153,7 +128,7 @@ https://now.brandnewcongress.org/events/{{ page.slug }}"
     Logger.info "Creating event on calendar #{calendar_id}"
     %{"id" => event_id, "slug" => event_slug} = Nb.Events.create(event)
     Logger.info "Created event #{event_id}"
-    Core.Mailer.on_event_create(event_id, event_slug, event)
+    Core.EventMailer.on_create(event_id, event_slug, event)
 
     %{"ok" => "There you go!"}
   end

@@ -1,0 +1,27 @@
+<%= @first_name %> --
+
+
+Thank you for your RSVP to <%= @event.title %>.
+
+
+Here are your event details:
+
+WHAT: <%= @event.title %>
+
+WHEN: <%= @event.date_line %>
+
+WHERE:
+<%= @event.location.venue %>
+<%= @event.location.address_lines |> List.first() %>, <%= @event.location.locality %> <%= @event.location.region %>
+
+
+DESCRIPTION: <%= @event.description %>
+
+
+Invite a friend to join you and double your impact!
+
+<a href="<%= @event.browser_url %>"> <%= @event.browser_url %> </a>
+
+
+Together we can bring a better future,
+<%= @candidate %> Events Team

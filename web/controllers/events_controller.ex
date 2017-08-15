@@ -1,6 +1,7 @@
 defmodule Core.EventsController do
   use Core.Web, :controller
   require Logger
+  import ShorterMaps
 
   def get(conn, params) do
     district = get_district(params["district"] || conn.cookies["district"])
@@ -46,7 +47,7 @@ defmodule Core.EventsController do
     Nb.Events.Rsvps.create(event.id, ~m{first_name, last_name, email, phone, primary_address})
 
     Task.async(fn ->
-      Core.Mailer.on_rsvp(event, ~m{first_name, last_name, email})
+      Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email})
     end)
 
     render conn, "rsvp.html", [event: event, person: true, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
