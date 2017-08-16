@@ -24,7 +24,7 @@ defmodule Core.Jobs.EventCache do
     |> MapSet.new()
     |> Enum.each(fn calendar -> calendar |> events_for_calendar(all_events) |> cache_calendar(calendar) end)
 
-    IO.insppect all_slugs
+    IO.inspect all_slugs
 
     Stash.persist(:event_cache, "event_cache")
     Logger.info "Updated event cache on #{Timex.now() |> DateTime.to_iso8601()}"
