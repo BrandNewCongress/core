@@ -32,8 +32,8 @@ config :core, goog_key: System.get_env("GOOG_KEY")
 # Quantum config
 config :core, Core.Scheduler,
   jobs: [
-    # Every 15 minutes
-    {"*/15 * * * *", Core.Jobs.EventCache, :update},
+    # Every 1 minutes
+    {"*/10 * * * *", {Core.Jobs.EventCache, :update, []}},
   ]
 
 # Import environment specific config. This must remain at the bottom

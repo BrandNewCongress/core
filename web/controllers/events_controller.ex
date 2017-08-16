@@ -44,11 +44,11 @@ defmodule Core.EventsController do
 
     primary_address = %{"address1" => address1, "zip" => zip, "city" => city, "state" => state}
 
-    Nb.Events.Rsvps.create(event.id, ~m{first_name, last_name, email, phone, primary_address})
-
-    # Task.async(fn ->
+    Task.async(fn ->
       Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email})
-    # end)
+    end)
+
+    Nb.Events.Rsvps.create(event.id, ~m{first_name, last_name, email, phone, primary_address})
 
     render conn, "rsvp.html", [event: event, person: true, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end

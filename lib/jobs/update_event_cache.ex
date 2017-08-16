@@ -2,6 +2,8 @@ defmodule Core.Jobs.EventCache do
   require Logger
 
   def update do
+    Logger.info "Updating event cache"
+
     # Fetch all events
     all_events =
       Nb.Events.stream_all()

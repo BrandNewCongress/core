@@ -38,7 +38,7 @@ defmodule Core.EventMailer do
 
     new()
     |> to({"#{first_name} #{last_name}", email})
-    |> from({event.host.name, event.host.email})
+    |> from({event.host.name, "events@brandnewcongress.org"})
     |> subject("RSVP Confirmation: #{event.title}")
     |> render_body(:"rsvp-email", params)
     |> Core.Mailer.deliver()

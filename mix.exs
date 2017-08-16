@@ -46,7 +46,7 @@ defmodule Core.Mixfile do
      {:hackney, "~> 1.6.0"},
      {:phoenix_swoosh, "~> 0.2"},
      {:timex, "~> 3.0"},
-     {:quantum, "~> 1.9.2"},
+     {:quantum, "~> 2.0.0"},
      {:redix, ">= 0.0.0"},
      {:html_sanitize_ex, "~> 1.3.0-rc3"},
      {:geo, "~> 1.5"},

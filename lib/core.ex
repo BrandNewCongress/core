@@ -6,6 +6,9 @@ defmodule Core do
   def start(_type, _args) do
     import Supervisor.Spec
 
+    Cosmic.fetch_all()
+    Core.Jobs.EventCache.fetch_or_load()
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
@@ -14,7 +17,8 @@ defmodule Core do
 
       # Start the endpoint when the application starts
       supervisor(Core.Endpoint, []),
-      worker(Redix, [Application.get_env(:core, :redis_url), [name: :redix]])
+      worker(Redix, [Application.get_env(:core, :redis_url), [name: :redix]]),
+      worker(Core.Scheduler, [])
 
       # One offs
     ]
@@ -23,9 +27,6 @@ defmodule Core do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     result = Supervisor.start_link(children, opts)
-
-    Cosmic.fetch_all()
-    Core.Jobs.EventCache.fetch_or_load()
 
     result
   end
