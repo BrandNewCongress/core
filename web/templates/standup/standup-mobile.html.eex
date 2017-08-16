@@ -127,6 +127,18 @@
 	<% end %>
 </div>
 
+<div id="cosponsors">
+  <div class="title section-header" id="video-pledges" >
+    Our Cosponsors
+  </div>
+  <div style="display: flex; justify-content: center; flex-wrap: wrap; align-items: center; padding-bottom: 20px;">
+    <%= for org <- @cosponsors do %>
+      <a class="cosponsor-logo" href="<%= org.url %>" target="_blank">
+        <img src="<%= org.logo %>" />
+      </a>
+    <% end %>
+  </div>
+</div>
 
 <div class="footer" id="top">
   <div class="bottom-buttons">
@@ -161,6 +173,15 @@
 <!-- <script defer="defer" src="<%= static_path(@conn, "/js/standup.js") %>"></script> -->
 
 <style>
+
+.cosponsor-logo {
+  max-width: 200px;
+  display: block;
+}
+
+.cosponsor-logo > img {
+  width: 100%;
+}
 
 .pressure-bxs {
   margin-top: 30px !important;

@@ -13,6 +13,11 @@ defmodule Core.StandupController do
       pledges
       |> Poison.encode()
 
+    cosponsors =
+      "standup-endorsements"
+      |> Cosmic.get_type()
+      |> Enum.map(&extract_endorsement_attrs/1)
+
     %{"metadata" =>
       %{"count" => count, "primary_video_id" => primary_video_id,
         "secondary_video_id" => secondary_video_id,
@@ -39,7 +44,7 @@ defmodule Core.StandupController do
        circle_2_header: circle_2_header, circle_2_text: circle_2_text,
        circle_3_header: circle_3_header, circle_3_text: circle_3_text,
        circle_4_header: circle_4_header, circle_4_text: circle_4_text,
-       title: "Medicare for All"]
+       cosponsors: cosponsors, title: "Medicare for All"]
 
     render conn, template, assigns
   end
@@ -67,5 +72,9 @@ defmodule Core.StandupController do
 
   defp add_comma(integer) when is_integer(integer) do
     Number.Delimit.number_to_delimited(integer, precision: 0)
+  end
+
+  defp extract_endorsement_attrs(%{"metadata" => %{"name" => name, "url" => url, "logo" => %{"imgix_url" => logo}}}) do
+    %{name: name, url: url, logo: logo}
   end
 end
