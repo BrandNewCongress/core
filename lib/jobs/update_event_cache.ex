@@ -9,6 +9,7 @@ defmodule Core.Jobs.EventCache do
       Nb.Events.stream_all()
       |> Enum.filter(&published_only/1)
       |> Enum.map(&Osdi.Event.from_nb/1)
+      |> Enum.filter(&not_nil/1)
 
     # Cache each by slug
     all_events |> Enum.each(&cache_by_name/1)
@@ -58,4 +59,6 @@ defmodule Core.Jobs.EventCache do
 
   defp published_only(%{"status" => "published"}), do: true
   defp published_only(%{"status" => _something_else}), do: false
+  defp not_nil(%{}), do: true
+  defp not_nil(nil), do: false
 end
