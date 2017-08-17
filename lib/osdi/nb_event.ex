@@ -34,6 +34,7 @@ defmodule Transformers.Nb.Event do
   end
 
   def type(event) do
+    IO.inspect event
     IO.inspect event.tags
 
     type_tag =
@@ -55,6 +56,7 @@ defmodule Transformers.Nb.Event do
   end
 
   defp get_time_zone(event) do
+    IO.inspect event
     IO.inspect event.tags
 
     event.tags
