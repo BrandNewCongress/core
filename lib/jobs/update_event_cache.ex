@@ -38,9 +38,7 @@ defmodule Core.Jobs.EventCache do
     try do
       update()
     rescue
-      e ->
-        IO.inspect e
-        load_cached()
+      _e -> load_cached()
     end
   end
 

@@ -57,7 +57,7 @@ defmodule Core.PetitionController do
 
     target =
       if count do
-        (((count * 2) / 25_000) |> round()) * 25_000
+        round((count * 2) / 25_000) * 25_000
       end
 
     progress =

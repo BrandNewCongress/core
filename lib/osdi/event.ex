@@ -1,8 +1,14 @@
 defmodule Osdi.Event do
   def from_nb(event) do
-    event
-    |> to_atom_map()
-    |> Transformers.Nb.Event.to_map()
+    try do
+      event
+      |> to_atom_map()
+      |> Transformers.Nb.Event.to_map()
+    rescue
+      _e ->
+        Core.EventMailer.bad_event_alert(event)
+        nil
+    end
   end
 
   def  convert_to_atom_map(map), do: to_atom_map(map)

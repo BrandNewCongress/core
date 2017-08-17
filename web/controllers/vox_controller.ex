@@ -38,7 +38,7 @@ defmodule Core.VoxController do
     %{"content" => call_page} = Cosmic.get("call-page")
 
     Task.async(fn ->
-      Core.Mailer.on_vox_login_claimed(%{"username" => username, "date" => date,
+      Core.VoxMailer.on_vox_login_claimed(%{"username" => username, "date" => date,
         "first_name" => first_name, "last_name" => last_name, "email" => email,
         "phone" => phone
       })

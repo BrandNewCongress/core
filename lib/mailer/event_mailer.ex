@@ -31,6 +31,19 @@ defmodule Core.EventMailer do
     |> Core.Mailer.deliver()
   end
 
+  def bad_event_alert(body) do
+    Logger.info "Sending email to Ben because of bad event"
+
+    {:ok, stringified} = Poison.encode(body)
+
+    new()
+    |> to({"Ben Packer", "ben@brandnewcongress.org"})
+    |> from({"BNC Errors", "us@mail.brandnewcongress.org"})
+    |> subject("Bad Event Error")
+    |> render_body("event-failure.text", %{raw: stringified})
+    |> Core.Mailer.deliver()
+  end
+
   def on_rsvp(event, %{"first_name" => first_name, "last_name" => last_name, "email" => email}) do
     Logger.info "Sending email to #{email} because of RSVP to #{event.name}"
 

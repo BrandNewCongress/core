@@ -7,14 +7,16 @@ defmodule Core.VoxReportChannel do
   end
 
   def handle_in("download", _message, socket) do
-    "tags"
-    |> Nb.Api.stream()
-    |> Stream.filter(&is_vox_tag/1)
-    |> Stream.map(&get_person_of_tag/1)
-    |> Stream.map(&(push_person(socket, &1)))
-    |> Enum.to_list()
+    l =
+      "tags"
+      |> Nb.Api.stream()
+      |> Stream.filter(&is_vox_tag/1)
+      |> Stream.map(&get_person_of_tag/1)
+      |> Stream.map(&(push_person(socket, &1)))
+      |> Enum.to_list()
+      |> length()
 
-    push socket, "done", %{}
+    push socket, "done", %{"length" => l}
 
     {:noreply, socket}
   end
@@ -36,7 +38,10 @@ defmodule Core.VoxReportChannel do
       %{"first_name" => first, "last_name" => last, "email" => email,
         "phone" => phone}}) do
 
-    [_, username, date] = String.split(tag, ":") |> Enum.map(&String.trim/1)
+    [_, username, date] =
+      tag
+      |> String.split(":")
+      |> Enum.map(&String.trim/1)
 
     push socket, "row", %{"row" => "#{tag}, #{username}, #{date}, #{first}, #{last}, #{email}, #{phone}"}
   end

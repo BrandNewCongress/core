@@ -7,7 +7,7 @@ defmodule Core.LeaderboardReportChannel do
   end
 
   def handle_in("download", _message, socket) do
-    tags =
+    l =
       "tags"
       |> Nb.Api.stream()
       |> Stream.filter(&is_ref_tag/1)
@@ -16,7 +16,7 @@ defmodule Core.LeaderboardReportChannel do
       |> Stream.map(&(push_row(socket, &1)))
       |> Enum.to_list()
 
-    push socket, "done", %{}
+    push socket, "done", %{"length" => l}
 
     {:noreply, socket}
   end

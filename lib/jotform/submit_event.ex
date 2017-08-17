@@ -126,7 +126,6 @@ defmodule Jotform.SubmitEvent do
     }
 
     Logger.info "Creating event on calendar #{calendar_id}"
-    IO.inspect event
     %{"id" => event_id, "slug" => event_slug} = Nb.Events.create(event)
     Logger.info "Created event #{event_id}"
     Core.EventMailer.on_create(event_id, event_slug, event)

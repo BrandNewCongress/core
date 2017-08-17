@@ -30,11 +30,11 @@ config :phoenix, :template_engines,
 config :core, goog_key: System.get_env("GOOG_KEY")
 
 # Quantum config
-# config :core, Core.Scheduler,
-  # jobs: [
-    # Every 1 minutes
-    # {"*/10 * * * *", {Core.Jobs.EventCache, :update, []}},
-  # ]
+config :core, Core.Scheduler,
+  jobs: [
+    # Every 10 minutes
+    {"*/10 * * * *", {Core.Jobs.EventCache, :update, []}},
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
