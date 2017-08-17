@@ -38,8 +38,9 @@ defmodule Core.Jobs.EventCache do
     try do
       update()
     rescue
-      _e in KeyError -> load_cached()
-      _e in FunctionClauseError -> load_cached()
+      e ->
+        IO.inspect e
+        load_cached()
     end
   end
 
