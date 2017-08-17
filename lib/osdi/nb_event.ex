@@ -34,6 +34,8 @@ defmodule Transformers.Nb.Event do
   end
 
   def type(event) do
+    IO.inspect event.tags
+
     type_tag =
       event.tags
       |> Enum.filter(fn tag -> tag =~ "Event Type:" end)
@@ -53,6 +55,8 @@ defmodule Transformers.Nb.Event do
   end
 
   defp get_time_zone(event) do
+    IO.inspect event.tags
+
     event.tags
     |> Enum.filter(fn tag -> tag =~ "Event Time Zone:" end)
     |> List.first()
