@@ -40,10 +40,15 @@ defmodule Jotform.SubmitEvent do
       case String.split venue_address, "\r\n" do
         ["Street name: " <> venue_street_name, "House number: " <> venue_house_number,
          "City: " <> venue_city, "State: " <> venue_state, "Postal code: " <> venue_zip]
-           -> [venue_street_name, venue_house_number, venue_city, venue_state, venue_zip]
+          -> [venue_street_name, venue_house_number, venue_city, venue_state, venue_zip]
+
+        ["Street name: " <> venue_street_name, "City: " <> venue_city,
+         "State: " <> venue_state, "Postal code: " <> venue_zip]
+          -> [venue_street_name, "", venue_city, venue_state, venue_zip]
 
         ["City: " <> venue_city, "State: " <> venue_state]
           -> ["", "", venue_city, venue_state, ""]
+
       end
 
     venue_address = venue_house_number <> " " <> venue_street_name
