@@ -50,13 +50,13 @@ defmodule Core.LeaderboardReportChannel do
       e -> 0
     end
 
-    {count, person}
+    {count, ref, person}
   end
 
-  defp push_row(socket, {count,
+  defp push_row(socket, {count, ref,
       %{"first_name" => first, "last_name" => last, "email" => email,
         "phone" => phone}}) do
 
-    push socket, "row", %{"count" => count, "row" => "#{count}, #{first}, #{last}, #{email}, #{phone}"}
+    push socket, "row", %{"count" => count, "row" => "#{ref}, #{count}, #{first}, #{last}, #{email}, #{phone}"}
   end
 end
