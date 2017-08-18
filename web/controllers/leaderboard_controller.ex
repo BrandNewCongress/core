@@ -42,4 +42,10 @@ defmodule Core.LeaderboardController do
     render conn, "leaderboard-report.html",
       [layout: {Core.LayoutView, "empty.html"}] ++ GlobalOpts.get(conn, params)
   end
+
+  # def get_report(conn, params) do
+  #   IO.inspect params
+  #   render conn, "leaderboard-report.html",
+  #     [layout: {Core.LayoutView, "empty.html"}] ++ GlobalOpts.get(conn, params)
+  # end
 end

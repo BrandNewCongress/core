@@ -41,11 +41,14 @@ defmodule Core.LeaderboardReportChannel do
       |> List.last()
       |> String.trim()
 
-    count =
+    count = try do
       "Action: Joined Website: Brand New Congress: #{ref}"
       |> Nb.Tags.stream_people()
       |> Enum.to_list()
       |> length()
+    rescue
+      e -> 0
+    end
 
     {count, person}
   end
