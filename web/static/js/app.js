@@ -22,7 +22,7 @@ import modernizr from './modernizr'
 import 'phoenix_html'
 import fakeSpa from './fake-spa'
 import littleAnalytics from './little-analytics'
-import '../../node-modules/shoelace-css/dist/shoelace.js'
+import 'shoelace-css/dist/shoelace.js'
 
 // fakeSpa.bind()
 littleAnalytics.bind()

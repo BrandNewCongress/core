@@ -1,5 +1,5 @@
 /*This file is for your main application css.*/
-@import '~node-modules/shoelace-css/dist/shoelace.css';
+@import '~shoelace.css'
 
 body {
   margin: 0;
