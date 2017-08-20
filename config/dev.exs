@@ -15,6 +15,7 @@ config :core, Core.Endpoint,
 
 # Nationbuilder API Key
 config :core, [nb_slug: System.get_env("NB_SLUG"), nb_token: System.get_env("NB_TOKEN")]
+config :core, [livevox_token: System.get_env("LIVEVOX_TOKEN")]
 
 # Use Mailgun
 config :core, Core.Mailer,
