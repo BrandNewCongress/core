@@ -8,11 +8,7 @@ defmodule Core.LeaderboardReportChannel do
 
   def handle_in("download", _message, socket) do
     l =
-      "tags"
-      |> Nb.Api.stream()
-      |> Stream.filter(&is_ref_tag/1)
-      |> Stream.map(&get_person_of_tag/1)
-      |> Stream.map(&get_signed_up_count/1)
+      Core.LeaderboardHelpers.report_stream()
       |> Stream.map(&(push_row(socket, &1)))
       |> Enum.to_list()
 
