@@ -49,6 +49,7 @@ defmodule Core.Router do
 
     get "/leaderboard", LeaderboardController, :get
     get "/leaderboard/report", LeaderboardController, :get_report
+    get "/leaderboard/email", LeaderboardController, :send_email
     post "/leaderboard", LeaderboardController, :post
 
     get "/unsubscribe", SubscriptionController, :unsubscribe_get
