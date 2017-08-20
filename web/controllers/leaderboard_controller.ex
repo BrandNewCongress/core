@@ -44,7 +44,7 @@ defmodule Core.LeaderboardController do
   end
 
   def send_email(conn, params = %{"secret" => @secret}) do
-    Core.Jobs.MailLeaderboard.send()
+    Task.async(fn -> Core.Jobs.MailLeaderboard.send() end)
     json conn, %{"ok" => "ok"}
   end
 end
