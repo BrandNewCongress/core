@@ -33,9 +33,9 @@ config :core, goog_key: System.get_env("GOOG_KEY")
 config :core, Core.Scheduler,
   jobs: [
     # Every 10 minutes
-    {"*/10 * * * *", {Core.Jobs.EventCache, :update, []}},
+    {"*/10 * * * *", {Core.Jobs.EventCache, :update, []}}
     # Every 6 hours
-    {"* */6 * * *", {Core.Jobs.MailLeaderboard , :send, []}},
+    # {"* */6 * * *", {Core.Jobs.MailLeaderboard , :send, []}},
   ]
 
 # Import environment specific config. This must remain at the bottom
