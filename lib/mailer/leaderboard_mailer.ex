@@ -9,7 +9,7 @@ defmodule Core.LeaderboardMailer do
     Logger.info "Sending regular leaderboard email to Sam"
 
     new()
-    |> to({"Sam Briggs", "sam@brandnewcongress.org"})
+    # |> to({"Sam Briggs", "sam@brandnewcongress.org"})
     |> to({"Ben Packer", "ben@brandnewcongress.org"})
     |> from({"Robot", "robot@brandnewcongress.org"})
     |> subject("Leaderboard Update!")

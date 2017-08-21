@@ -35,7 +35,7 @@ config :core, Core.Scheduler,
     # Every 10 minutes
     {"*/10 * * * *", {Core.Jobs.EventCache, :update, []}}
     # Every 6 hours
-    # {"* */6 * * *", {Core.Jobs.MailLeaderboard , :send, []}},
+    {"0 11,23 * * *", {Core.Jobs.MailLeaderboard , :send, []}},
   ]
 
 # Import environment specific config. This must remain at the bottom
