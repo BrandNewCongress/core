@@ -33,7 +33,7 @@ config :core, goog_key: System.get_env("GOOG_KEY")
 config :core, Core.Scheduler,
   jobs: [
     # Every 10 minutes
-    {"*/10 * * * *", {Core.Jobs.EventCache, :update, []}}
+    {"*/10 * * * *", {Core.Jobs.EventCache, :update, []}},
     # Every 6 hours
     {"0 11,23 * * *", {Core.Jobs.MailLeaderboard , :send, []}},
   ]
