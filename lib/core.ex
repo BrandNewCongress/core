@@ -18,7 +18,8 @@ defmodule Core do
       # Start the endpoint when the application starts
       supervisor(Core.Endpoint, []),
       worker(Redix, [Application.get_env(:core, :redis_url), [name: :redix]]),
-      worker(Core.Scheduler, [])
+      worker(Core.Scheduler, []),
+      worker(LiveVox.SessionAgent, [])
 
       # One offs
     ]
