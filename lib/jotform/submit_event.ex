@@ -36,20 +36,17 @@ defmodule Jotform.SubmitEvent do
     should_contact = should_contact == "Yes"
 
     ## ------------ Extract and format the address
+    split_address = String.split venue_address, "\r\n"
     [venue_street_name, venue_house_number, venue_city, venue_state, venue_zip] =
-      case String.split venue_address, "\r\n" do
-        ["Street name: " <> venue_street_name, "House number: " <> venue_house_number,
-         "City: " <> venue_city, "State: " <> venue_state, "Postal code: " <> venue_zip]
-          -> [venue_street_name, venue_house_number, venue_city, venue_state, venue_zip]
-
-        ["Street name: " <> venue_street_name, "City: " <> venue_city,
-         "State: " <> venue_state, "Postal code: " <> venue_zip]
-          -> [venue_street_name, "", venue_city, venue_state, venue_zip]
-
-        ["City: " <> venue_city, "State: " <> venue_state]
-          -> ["", "", venue_city, venue_state, ""]
-
-      end
+      ["Street name: ", "House number: ", "City: ", "State: ", "Postal code: "]
+      |> Enum.map(fn fragment ->
+        addr_part = Enum.find(split_address, fn addr_part -> String.contains?(addr_part, fragment) end)
+        if addr_part do
+          addr_part |> String.split(":") |> List.last() |> String.trim()
+        else
+          ""
+        end
+      end)
 
     venue_address = venue_house_number <> " " <> venue_street_name
 
@@ -100,7 +97,7 @@ defmodule Jotform.SubmitEvent do
       name: event_name,
       status: status,
       author_id: host_id,
-      time_zone: time_zone,
+      time_zone: "Eastern Time (US & Canada)",
       intro: description,
       start_time: to_iso(start_time, event_date, time_zone_info),
       end_time: to_iso(end_time, event_date, time_zone_info),
