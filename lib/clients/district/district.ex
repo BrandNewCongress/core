@@ -121,21 +121,28 @@ defmodule District do
       candidates
       |> Enum.map(fn %{"metadata" => %{"district" => district}} -> district end)
 
-    candidate_geos = Map.take(geojsons(), candidate_districts)
+    district = District.from_point({x, y})
 
-    {closest_name, closest_dist} =
-      candidate_geos
-      |> Enum.map(fn {key, polygon = %Geo.MultiPolygon{}} -> {key, naive_geo_distance({x, y}, polygon)} end)
-      |> Enum.map(fn {key, dist} -> {key, dist * @miles_per_degree} end)
-      |> Enum.sort(fn ({_l1, d1}, {_l2, d2}) -> d2 >= d1 end)
-      |> List.first()
-
-    if closest_dist < @mile_limit do
+    if Enum.member?(candidate_districts, district) do
       candidates
-      |> Enum.filter(fn %{"metadata" => %{"district" => district}} -> district == closest_name end)
+      |> Enum.filter(fn %{"metadata" => %{"district" => d}} -> d == district end)
       |> List.first()
     else
-      nil
+      candidate_geos = Map.take(geojsons(), candidate_districts)
+      {closest_name, closest_dist} =
+        candidate_geos
+        |> Enum.map(fn {key, polygon = %Geo.MultiPolygon{}} -> {key, naive_geo_distance({x, y}, polygon)} end)
+        |> Enum.map(fn {key, dist} -> {key, dist * @miles_per_degree} end)
+        |> Enum.sort(fn ({_l1, d1}, {_l2, d2}) -> d2 >= d1 end)
+        |> List.first()
+
+      if closest_dist < @mile_limit do
+        candidates
+        |> Enum.filter(fn %{"metadata" => %{"district" => district}} -> district == closest_name end)
+        |> List.first()
+      else
+        nil
+      end
     end
   end
 
