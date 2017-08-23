@@ -3,23 +3,21 @@ defmodule LiveVox.Api do
   {:ok, login_agent} = Agent.start_link(fn -> nil end)
   @login_agent login_agent
 
-  defp login do
-    post ""
-    Agent.update(login_agent, )
+  def login do
+    post "session/v5.0/login", body: %{clientName: "BrandNewCampaign", userName: "sambriggs", password: "livevox1"}
   end
 
   @livevox_token Application.get_env(:core, :livevox_token)
 
   @default_headers [
     "LV-Access": @livevox_token,
-    "LV-Session": @livevox_session,
     "Accept": "application/json",
     "Content-Type": "application/json"
   ]
 
   # --------------- Process request ---------------
   defp process_url(url) do
-    "https://api.livevox.com/" <> url
+    IO.inspect "https://api.livevox.com/" <> url
   end
 
   defp process_request_headers(hdrs) do
