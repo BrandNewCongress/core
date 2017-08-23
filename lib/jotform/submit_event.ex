@@ -86,7 +86,7 @@ defmodule Jotform.SubmitEvent do
       false -> ["Event: Hide Address"]
     end
 
-    contact_tag = case (should_contact and status != "published") do
+    contact_tag = case should_contact do
       true -> ["Event: Should Contact Host"]
       false -> []
     end
