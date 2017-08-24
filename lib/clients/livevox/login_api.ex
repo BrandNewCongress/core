@@ -1,4 +1,4 @@
-defmodule LiveVox.Api do
+defmodule LiveVox.Login.Api do
   @livevox_token Application.get_env(:core, :livevox_token)
   @client_name Application.get_env(:core, :livevox_client)
   @username Application.get_env(:core, :livevox_username)
@@ -18,7 +18,7 @@ defmodule LiveVox.Api do
   end
 
   defp process_request_headers(hdrs) do
-    Enum.into(hdrs, @default_headers ++ ["LV-Session": get_session_id()])
+    Enum.into(hdrs, @default_headers)
   end
 
   defp process_request_body(body) when is_map(body) do
@@ -39,16 +39,9 @@ defmodule LiveVox.Api do
     end
   end
 
-  def get_session_id do
-    case LiveVox.SessionAgent.get_token() do
-      nil -> new_session_id()
-      sid -> sid
-    end
+  def login do
+    IO.inspect body: %{clientName: @client_name, userName: @username, password: @password}
+    post "session/v5.0/login", body: %{clientName: @client_name, userName: @username, password: @password}
   end
 
-  def new_session_id do
-    %{body: %{"sessionId" => sid}} = LiveVox.Login.Api.login()
-    LiveVox.SessionAgent.set_token(sid)
-    sid
-  end
 end
