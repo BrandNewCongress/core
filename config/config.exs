@@ -30,13 +30,15 @@ config :phoenix, :template_engines,
 config :core, goog_key: System.get_env("GOOG_KEY")
 
 # Quantum config
-config :core, Core.Scheduler,
-  jobs: [
-    # Every 10 minutes
-    {"*/10 * * * *", {Core.Jobs.EventCache, :update, []}},
-    # Every 6 hours
-    {"0 11,23 * * *", {Core.Jobs.MailLeaderboard , :send, []}},
-  ]
+jobs =
+  [{"*/10 * * * *", {Core.Jobs.EventCache, :update, []}}] ++
+  if System.get_env("APP_NAME") == "bnc-core" do
+    [{"@daily", {Core.Jobs.MailLeaderboard , :send, []}}]
+  else
+    []
+  end
+
+config :core, Core.Scheduler, jobs: jobs
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
