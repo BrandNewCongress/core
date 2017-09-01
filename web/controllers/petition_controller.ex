@@ -65,11 +65,13 @@ defmodule Core.PetitionController do
         count / target * 100
       end
 
+    og_description = HtmlSanitizeEx.strip_tags(content)
+
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
        post_sign_text: post_sign_text, background_image: background_image,
        no_footer: true, signed: false, count: pretty_num(count), target: pretty_num(target),
-       progress: pretty_num(progress)] ++ GlobalOpts.get(conn, params)
+       progress: pretty_num(progress), banner: background_image, description: og_description] ++ GlobalOpts.get(conn, params)
   end
 
   defp format_count(""), do: nil
