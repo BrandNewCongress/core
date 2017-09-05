@@ -14,7 +14,6 @@ defmodule Core.Vox do
       {:ok, logins} -> logins
     end
 
-    # create_and_return_logins(date)
     logins
   end
 
@@ -24,8 +23,8 @@ defmodule Core.Vox do
   end
 
   defp create_and_return_logins(date) do
-    logins =
-      1..8000
+    bnc_logins =
+      1..1000
       |> Enum.map(fn n -> [
             "BNCVolunteer#{n}",
             random_password(),
@@ -46,28 +45,52 @@ defmodule Core.Vox do
       |> Enum.map(fn l -> Enum.join(l, ",") end)
       |> Enum.join("\n")
 
-    Redix.command(:redix, ["SET", date, logins])
-    Redix.command(:redix, ["SET", "claimed", -1])
+    jd_logins =
+      1..3000
+      |> Enum.map(fn n -> [
+            "JdVolunteer#{n}",
+            random_password(),
+            "JD",
+            "Vol#{n}",
+            1234,
+            30,
+            1,
+            0,
+            "Callers",
+            "",
+            1_008_479,
+            1_008_489,
+            1_008_488,
+            1_007_839
+          ]
+        end)
+      |> Enum.map(fn l -> Enum.join(l, ",") end)
+      |> Enum.join("\n")
 
-    logins
+    Redix.command(:redix, ["SET", "bnc-logins", bnc_logins])
+    Redix.command(:redix, ["SET", "jd-logins", jd_logins])
+    Redix.command(:redix, ["SET", "bnc-claimed", -1])
+    Redix.command(:redix, ["SET", "jd-claimed", -1])
+
+    bnc_logins <> "\n" <> jd_logins
   end
 
   defp random_password do
     "#{@words |> Enum.take_random(1) |> Enum.join("_")}#{1..6 |> Enum.map(fn _n -> Enum.random(1..9) end) |> Enum.join("")}"
   end
 
-  def next_login() do
-    {:ok, raw} = Redix.command(:redix, ["GET", "logins"])
+  def next_login(brand) do
+    {:ok, raw} = Redix.command(:redix, ["GET", "#{brand}-logins"])
     logins = decode_logins(raw)
 
-    {:ok, claimed} = Redix.command(:redix, ["INCR", "claimed"])
+    {:ok, claimed} = Redix.command(:redix, ["INCR", "#{brand}-claimed"])
 
     [email | [password | _]] = Enum.at(logins, claimed, nil)
     [email, password]
   end
 
-  def password_for(username) do
-    {:ok, raw} = Redix.command(:redix, ["GET", "logins"])
+  def password_for(username, brand) do
+    {:ok, raw} = Redix.command(:redix, ["GET", "#{brand}-logins"])
 
     logins = decode_logins(raw)
 
@@ -84,28 +107,4 @@ defmodule Core.Vox do
     |> String.split("\n")
     |> Enum.map(fn line -> String.split(line, (",")) end)
   end
-
-  # def next_login(email, phone) do
-  #   short_email = String.slice(email, 0..2)
-  #   short_phone = String.slice(phone, 0..2)
-  #   [username, password] = ["#{short_email}#{short_phone}", "brandnew2018"]
-  #
-  #   new()
-  #   |> to({"Sam Briggs", "sam@brandnewcongress.org"})
-  #   |> from({"Ben's Program", "us@mail.brandnewcongress.org"})
-  #   |> subject("New Login Request!")
-  #   |> text_body(text(username, password, email, phone))
-  #   |> deliver
-  #
-  #   [username, password]
-  # end
-
-#   defp text(username, password, email, phone) do
-#     "
-# Username: #{username}
-# Password: #{password}
-# Email: #{email}
-# Phone: #{phone}
-#     "
-#   end
 end

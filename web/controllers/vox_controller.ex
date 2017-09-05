@@ -20,19 +20,19 @@ defmodule Core.VoxController do
 
     current_username =
       tags
-      |> Enum.filter(fn t -> String.contains?(t, date) end)
+      |> Enum.filter(fn t -> String.contains?(t, "Vox Alias: #{copyright(brand)}") and String.contains?(t, date) end)
       |> Enum.map(fn t -> String.split(t, ":") end)
-      |> Enum.map(fn [_vox_part, result, _date_part] -> String.trim(result) end)
+      |> Enum.map(fn [_vox_part, _brand_part, result, _date_part] -> String.trim(result) end)
       |> List.first()
 
     [username, password] = case current_username do
-      nil -> Core.Vox.next_login()
-      un -> [un, Core.Vox.password_for(un)]
+      nil -> Core.Vox.next_login(brand)
+      un -> [un, Core.Vox.password_for(un, brand)]
     end
 
     Nb.People.add_tags(id, [
       "Action: Made Calls: #{copyright(brand)}",
-      "Vox Alias: #{username}: #{date}"
+      "Vox Alias: #{copyright(brand)}: #{username}: #{date}"
     ])
 
     %{"content" => call_page, "metadata" => metadata} = Cosmic.get("call-page")
