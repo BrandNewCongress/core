@@ -56,8 +56,15 @@
           <h3> Questions? </h3>
             <p>
               Please email
-              <a href="mailto:dialer@brandnewcongress.org" target="-blank">
-                dialer@brandnewcongress.org
+              <% email =
+                case @brand do
+                  "jd" -> "dailer@justicedemocrats.com"
+                  "bnc" -> "dailer@brandnewcongress.org"
+                end
+              %>
+
+              <a href="mailto:<%= email %>" target="-blank">
+                <%= email %>
               </a>.
               We'll get back to you as soon as we can.
             </p>
