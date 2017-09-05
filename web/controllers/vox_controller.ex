@@ -35,18 +35,26 @@ defmodule Core.VoxController do
       "Vox Alias: #{username}: #{date}"
     ])
 
-    %{"content" => call_page} = Cosmic.get("call-page")
+    %{"content" => call_page, "metadata" => metadata} = Cosmic.get("call-page")
+
+    content_key = "#{Keyword.get(global_opts, :brand)}_content"
+    chosen_content =
+      if metadata[content_key] && metadata[content_key] != "" do
+        metadata[content_key]
+      else
+        call_page
+      end
 
     Task.async(fn ->
       Core.VoxMailer.on_vox_login_claimed(%{"username" => username, "date" => date,
         "first_name" => first_name, "last_name" => last_name, "email" => email,
-        "phone" => phone
+        "phone" => phone, "source" => Keyword.get(global_opts, :brand)
       })
     end)
 
     render conn, "vox-submitted.html",
       [username: username, password: password, title: "Call",
-       call_page: call_page] ++ GlobalOpts.get(conn, params)
+       call_page: chosen_content] ++ global_opts
   end
 
   def get_logins(conn, %{"secret" => @secret}) do

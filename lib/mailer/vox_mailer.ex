@@ -7,7 +7,7 @@ defmodule Core.VoxMailer do
 
   def on_vox_login_claimed(%{"username" => username, "date" => date,
       "first_name" => first_name, "last_name" => last_name, "email" => email,
-      "phone" => phone
+      "phone" => phone, "source" => source
     }) do
 
     Logger.info "Sending email to Sam because of Vox claim #{username}"
@@ -24,6 +24,7 @@ First name: #{first_name}
 Last name: #{last_name}
 Email: #{email}
 Phone: #{phone}
+Source: #{source}
 "})
     |> Core.Mailer.deliver()
   end
