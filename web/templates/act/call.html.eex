@@ -1,9 +1,9 @@
 <%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Call Voters"] %>
 <% csl =
-  if String.contains?(@calling_script_link, "https://") do
-    @calling_script_link
-  else
-    core_deployment(@brand) <> @calling_script_link
+  cond do
+    @calling_script_link != nil and String.contains?(@calling_script_link, "https://") -> @calling_script_link
+    @calling_script_link -> core_deployment(@brand) <> @calling_script_link
+    true -> nil
   end
 %>
 
