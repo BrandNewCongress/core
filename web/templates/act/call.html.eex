@@ -1,4 +1,11 @@
 <%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Call Voters"] %>
+<% csl =
+  if String.contains?(@calling_script_link, "https://") do
+    @calling_script_link
+  else
+    core_deployment(@brand) <> @calling_script_link
+  end
+%>
 
 <div class="nav-body-container">
   <%= if (not @mobile) do %>
@@ -21,12 +28,12 @@
           </a>
 
           <label> Second, </label>
-          <a target="_blank" class="primary-button" href="<%= @calling_script_link %>">
+          <a target="_blank" class="primary-button" href="<%= csl %>">
             Read the calling script
           </a>
 
           <label> Third, </label>
-          <a target="_blank" class="primary-button" href="https://now.brandnewcongress.org/call">
+          <a target="_blank" class="primary-button" href="<%= core_deployment(@brand) <> "/call" %>">
             Claim your login
           </a>
 
