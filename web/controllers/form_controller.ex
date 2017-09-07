@@ -29,6 +29,8 @@ defmodule Core.FormController do
       "bnc" -> bnc_share_html
     end
 
+    IO.puts share_html
+
     if Enum.member?(brands, brand) do
       render conn, "form.html",
         [share_html: share_html, title: title, slug: slug, no_footer: true] ++ global_opts

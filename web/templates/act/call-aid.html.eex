@@ -64,7 +64,7 @@ form {
 }
 
 .little-button {
-  background-color: var(--bnc-purple);
+  background-color: var(--color-primary);
   color: white;
   padding: 5px;
   text-align: center;
