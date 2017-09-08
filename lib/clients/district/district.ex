@@ -51,12 +51,17 @@ defmodule District do
       |> String.upcase()
       |> String.replace("AL", "00")
 
-    case Regex.named_captures(~r/(?<state>[A-Z]{2,})[ -]?(?<district>([0-9]{1,2}))/, processed) do
-      %{"district" => district, "state" => state} ->
-        "#{state}-#{district |> String.pad_leading(2, "0")}"
-      nil ->
-        nil
-    end
+    normalized =
+      case Regex.named_captures(~r/(?<state>[A-Z]{2,})[ -]?(?<district>([0-9]{1,2}))/, processed) do
+        %{"district" => district, "state" => state} ->
+          "#{state}-#{district |> String.pad_leading(2, "0")}"
+        nil ->
+          nil
+      end
+
+    if normalized != nil && Map.has_key?(geojsons(), normalized),
+      do: normalized,
+      else: nil
   end
 
   @spec from_point({number, number}) :: binary
