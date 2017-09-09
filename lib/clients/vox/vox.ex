@@ -22,7 +22,7 @@ defmodule Core.Vox do
     Redix.command(:redix, ["DEL", date])
   end
 
-  defp create_and_return_logins(date) do
+  defp create_and_return_logins(_date) do
     bnc_logins =
       1..1000
       |> Enum.map(fn n -> [

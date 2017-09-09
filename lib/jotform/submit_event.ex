@@ -1,4 +1,5 @@
 defmodule Jotform.SubmitEvent do
+  alias Osdi.{Repo, Person, Event}
   require Logger
 
   @doc"""
@@ -16,7 +17,7 @@ defmodule Jotform.SubmitEvent do
     ## ------------ Determine whitelist status
     auto_whitelist = Map.has_key?(params, "whitelist")
     status = if auto_whitelist do
-      "published"
+      "confirmed"
     else
       whitelisted =
         "esm-whitelist"
@@ -27,7 +28,7 @@ defmodule Jotform.SubmitEvent do
         |> MapSet.new()
         |> MapSet.member?(email)
 
-      if whitelisted, do: "published", else: "unlisted"
+      if whitelisted, do: "confirmed", else: "tentative"
     end
 
     ## ------------ Proper phone number
@@ -51,36 +52,31 @@ defmodule Jotform.SubmitEvent do
     venue_address = venue_house_number <> " " <> venue_street_name
 
     ## ------------ Create and or find person
-    ensure_host = Task.async(fn ->
-      %{"id" => id} = Nb.People.push(
-        %{email: email, phone: phone_rest,
-          first_name: first_name, last_name: last_name})
-      id
-    end)
+    organizer_task = Task.async fn ->
+      create_organizer(%{email: email, phone: phone, first_name: first_name, last_name: last_name})
+    end
 
     ## ------------ Determine calendar id and time zone, geocoding only once
-    {calendar_id, time_zone_info} = Task.await(Task.async(fn ->
+    {calendars, time_zone_info, {latitude, longitude}} = Task.await(Task.async(fn ->
       # First, geocode
       to_geocode = "#{venue_house_number} #{venue_street_name}, #{venue_city}, #{venue_state}"
       {lat, lng} = Maps.geocode(to_geocode)
 
       # Use geocode for calendar_id
-      calendar_id = Task.async(fn -> get_calendar({lat, lng}) end)
+      calendars = Task.async(fn -> get_calendars({lat, lng}) end)
 
       # Use geocode for time zone
       time_zone_info = Task.async(fn ->
         Maps.time_zone_of({lat, lng})
       end)
 
-      {Task.await(calendar_id), Task.await(time_zone_info)}
+      {Task.await(calendars), Task.await(time_zone_info), {lat, lng}}
     end))
 
-    host_id = Task.await(ensure_host)
-    %{time_zone: time_zone, time_zone_id: time_zone_id} = time_zone_info
+    organizer = Task.await(organizer_task)
+    %{time_zone_id: time_zone_id} = time_zone_info
 
     ## ------------ Determine event tags
-    type_and_time = ["Event Type: #{event_type}", "Event Time Zone: #{time_zone_id}"]
-
     sharing_tag = case should_hide do
       true -> []
       false -> ["Event: Hide Address"]
@@ -91,51 +87,51 @@ defmodule Jotform.SubmitEvent do
       false -> []
     end
 
-    tags = type_and_time ++ sharing_tag ++ contact_tag
+    tags = sharing_tag ++ contact_tag ++ (Enum.map calendars, &("Calendar: #{&1}"))
 
+    # Create the thing!
     event = %{
-      name: event_name,
+      title: event_name,
       status: status,
-      author_id: host_id,
-      time_zone: "Eastern Time (US & Canada)",
-      intro: description,
-      start_time: to_iso(start_time, event_date, time_zone_info),
-      end_time: to_iso(end_time, event_date, time_zone_info),
-      contact: %{
+      creator: organizer,
+      organizer: organizer,
+      time_zone: time_zone_id,
+      type: event_type,
+      description: description,
+      start_date: construct_dt(start_time, event_date, time_zone_info),
+      end_date: construct_dt(end_time, event_date, time_zone_info),
+      host: %{
         name: first_name <> " " <> last_name,
-        phone: phone,
-        email: email
+        phone_number: phone,
+        email_address: email
       },
-      rsvp_form: %{
-        phone: "optional",
-        address: "optional",
-        accept_rsvps: true,
-        gather_volunteers: true,
-        allow_guests: true
+      location: %{
+        venue: venue_name,
+        address_lines: [venue_address],
+        locality: venue_city,
+        region: venue_state,
+        postal_code: venue_zip,
+        location: %Geo.Point{coordinates: {latitude, longitude}, srid: nil},
       },
-      venue: %{
-        name: venue_name,
-        address: %{
-          address1: venue_address,
-          city: venue_city,
-          state: venue_state,
-          zip: venue_zip
-        }
-      },
-      autoresponse: nil,
       tags: tags,
-      calendar_id: calendar_id
     }
 
-    Logger.info "Creating event on calendar #{calendar_id}"
-    %{"id" => event_id, "slug" => event_slug} = Nb.Events.create(event)
-    Logger.info "Created event #{event_id}"
-    Core.EventMailer.on_create(event_id, event_slug, event)
+    Logger.info "Creating event on calendars #{Enum.join calendars, ", "}"
 
-    %{"ok" => "There you go!"}
+    created = %{id: event_id, name: name} =
+      %Event{}
+      |> Event.changeset(event)
+      |> Repo.insert!()
+
+    Logger.info "Created event #{event_id}: #{name}"
+
+    %{success: %{event: created |> Map.take(~w(
+      name title description summary browser_url type
+      featured_image_url start_date end_date status host
+    )a)}}
   end
 
-  def to_iso(time, date, time_zone_info) do
+  def construct_dt(time, date, time_zone_info) do
     %{utc_offset: utc_offset, time_zone: time_zone,
       zone_abbr: zone_abbr} = time_zone_info
 
@@ -143,14 +139,12 @@ defmodule Jotform.SubmitEvent do
 
     [month, day, year] = String.split(date, "/")
 
-    dt = %DateTime{
+    %DateTime{
       year: easy_int(year), month: easy_int(month), day: easy_int(day),
       time_zone: time_zone, hour: easy_int(hours),
       minute: easy_int(minutes), second: 0, std_offset: 0,
       utc_offset: utc_offset, zone_abbr: zone_abbr
     }
-
-    DateTime.to_iso8601(dt)
   end
 
   defp military_time(%{"hourSelect" => hours, "minuteSelect" => minutes, "ampm" => "AM"}) do
@@ -168,11 +162,15 @@ defmodule Jotform.SubmitEvent do
     int
   end
 
-  defp get_calendar({lat, lng}) do
+  defp get_calendars({lat, lng}) do
     case District.closest_candidate({lat, lng}) do
-      %{"metadata" => %{"calendar_id" => result}} ->
-        if result == "", do: 9, else: result
-      _ -> 9
+      %{"title" => title} -> [title]
+      _ -> ["Brand New Congress", "Justice Democrats"]
     end
+  end
+
+  defp create_organizer(%{email: email, phone: phone, first_name: first_name, last_name: last_name}) do
+    Nb.People.push(%{email: email, phone: phone, first_name: first_name, last_name: last_name})
+    Person.push(%{email_address: email, phone_number: phone, given_name: first_name, family_name: last_name})
   end
 end

@@ -18,8 +18,9 @@ defmodule Core.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Core, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :httpotion, :phoenix_swoosh, :timex, :quantum]]
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
+                    :gettext, :phoenix_ecto, :postgrex, :httpotion,
+                    :phoenix_swoosh, :timex, :quantum, :osdi]]
   end
 
   # Specifies which paths to compile per environment.
@@ -55,7 +56,9 @@ defmodule Core.Mixfile do
      {:flow, "~> 0.11"},
      {:distillery, "~> 1.0.0"},
      {:number, "~> 0.5.2"},
-     {:shorter_maps, "~> 2.0"}]
+     {:shorter_maps, "~> 2.0"},
+     {:osdi, git: "https://github.com/BrandNewCongress/osdi_ex.git"},
+     {:poison, "~> 3.0", override: true}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

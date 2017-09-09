@@ -27,6 +27,14 @@ config :core, Core.Vox,
   api_key: System.get_env("MAILGUN_KEY"),
   domain: System.get_env("MAILGUN_DOMAIN")
 
+config :osdi, Osdi.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "osdi_repo",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  types: GeoExample.PostgresTypes
+
 # Update secret
 config :core, [update_secret: System.get_env("UPDATE_SECRET")]
 

@@ -35,7 +35,7 @@ defmodule Core.LeaderboardHelpers do
       |> Enum.to_list()
       |> length()
     rescue
-      e -> 0
+      _e -> 0
     end
 
     {count, ref, person}

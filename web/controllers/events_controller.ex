@@ -22,7 +22,7 @@ defmodule Core.EventsController do
     event =
       case event do
         nil -> nil
-        event -> Osdi.Event.add_date_line(event)
+        event -> EventHelp.add_date_line(event)
       end
 
     banner = get_banner(event.type)
@@ -38,7 +38,7 @@ defmodule Core.EventsController do
     event =
       :event_cache
       |> Stash.get(slug)
-      |> Osdi.Event.add_date_line()
+      |> EventHelp.add_date_line()
 
     banner = get_banner(event.type)
 

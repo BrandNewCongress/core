@@ -17,38 +17,6 @@ defmodule Core.LeaderboardReportChannel do
     {:noreply, socket}
   end
 
-  defp is_ref_tag(%{"name" => "Recruiter Code:" <> _}), do: true
-  defp is_ref_tag(_tag), do: false
-
-  defp get_person_of_tag(%{"name" => tag}) do
-    person =
-      tag
-      |> Nb.Tags.stream_people()
-      |> Enum.take(1)
-      |> List.first()
-
-    {tag, person}
-  end
-
-  defp get_signed_up_count({tag, person}) do
-    ref =
-      tag
-      |> String.split(":")
-      |> List.last()
-      |> String.trim()
-
-    count = try do
-      "Action: Joined Website: Brand New Congress: #{ref}"
-      |> Nb.Tags.stream_people()
-      |> Enum.to_list()
-      |> length()
-    rescue
-      e -> 0
-    end
-
-    {count, ref, person}
-  end
-
   defp push_row(socket, {count, ref,
       %{"first_name" => first, "last_name" => last, "email" => email,
         "phone" => phone}}) do

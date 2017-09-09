@@ -86,7 +86,7 @@ defmodule Core.ActController do
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
       |> Enum.sort(&date_compare/2)
       |> Enum.take(6)
-      |> Enum.map(&Osdi.Event.add_date_line/1)
+      |> Enum.map(&EventHelp.add_date_line/1)
 
     render conn, "call-aid.html",
       [events: events, no_header: true, no_footer: true, slug: candidate] ++ GlobalOpts.get(conn, params)
@@ -101,7 +101,7 @@ defmodule Core.ActController do
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
       |> Enum.sort(&date_compare/2)
       |> Enum.take(6)
-      |> Enum.map(&Osdi.Event.add_date_line/1)
+      |> Enum.map(&EventHelp.add_date_line/1)
 
     %{"id" => id} = Nb.People.push(%{"phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name})
     Nb.People.add_tags(id, ["Action: Joined as Volunteer: #{title}"])
