@@ -49,17 +49,18 @@ defmodule Core.EventMailer do
 
     candidate =
       event.tags
-      |> IO.inspect
       |> Enum.map(&(&1.name))
       |> Enum.filter(&(String.contains?(&1, "Calendar: ")))
-      |> Enum.map(&( &1 |> String.split(":") |> List.last() ))
+      |> Enum.map(&(&1 |> String.split(":") |> List.last() |> String.trim()))
       |> Enum.filter(&(not Enum.member?(["Brand New Congress", "Justice Democrats"], &1)))
       |> List.first()
 
-    candiate = case candidate do
+    candidate = case candidate do
       nil -> "Justice Democrats"
       cand -> cand
     end
+
+    IO.inspect candidate
 
     params = ~M{first_name, last_name, email, candidate, event}
 

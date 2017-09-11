@@ -2,7 +2,7 @@ defmodule Core.EventsController do
   use Core.Web, :controller
   require Logger
   import ShorterMaps
-  alias Osdi.{Attendance}
+  alias Osdi.{Attendance, Address}
 
   def get(conn, params) do
     district = get_district(params["district"] || conn.cookies["district"])
@@ -41,7 +41,7 @@ defmodule Core.EventsController do
 
     Attendance.push(event.id, %{
       given_name: first_name, family_name: last_name, email_address: email,
-      phone_number: phone, postal_address: %{
+      phone_number: phone, postal_address: %Address{
         address_lines: [address], locality: city, region: state, postal_code: zip
       }})
 

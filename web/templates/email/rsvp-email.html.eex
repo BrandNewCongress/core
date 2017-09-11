@@ -145,7 +145,7 @@
         <br/>
         <br/>
         Together we can bring a better future,
-        <b/r> <%= @candidate %> Events Team
+        <br/> <%= @candidate %> Events Team
       </p>
     </div>
 
