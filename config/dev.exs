@@ -33,6 +33,7 @@ config :osdi, Osdi.Repo,
   username: System.get_env("RDS_DB_USER") || "postgres",
   password: System.get_env("RDS_DB_PASSWORD") || "postgres",
   hostname: System.get_env("RDS_DB_HOSTNAME") || "localhost",
+  port: "5432",
   types: GeoExample.PostgresTypes
 
 # Update secret
