@@ -11,7 +11,7 @@ export default class EventMarker extends Component {
       start_date,
       end_date,
       name,
-      location: { venue, region, location: [ longitude, latitude ], locality },
+      location: { venue, region, location: [ latitude, longitude ], locality },
       featured_image_url,
       description,
       browser_url,
@@ -31,6 +31,10 @@ export default class EventMarker extends Component {
 
     const start = moment(new Date(start_date), offset)
     const end = moment(new Date(end_date), offset)
+
+    console.log(this.props.event)
+
+    console.log([parseFloat(latitude), parseFloat(longitude)])
 
     return (
       <CircleMarker

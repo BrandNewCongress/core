@@ -36,6 +36,7 @@ defmodule Core.EventsChannel do
   end
 
   defp push_event(event, socket) do
+    IO.puts "Pushing event #{event.id}"
     push socket, "event", %{"event" => event}
   end
 
