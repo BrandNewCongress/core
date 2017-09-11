@@ -7,4 +7,5 @@ config :osdi, Osdi.Repo,
   password: System.get_env("RDS_DB_PASSWORD"),
   hostname: System.get_env("RDS_DB_HOST"),
   port: "5432",
+  ssl: true,
   types: GeoExample.PostgresTypes

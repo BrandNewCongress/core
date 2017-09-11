@@ -9,6 +9,8 @@ defmodule Core do
     Cosmic.fetch_all()
     Core.Jobs.EventCache.fetch_or_load()
 
+    IO.inspect Application.get_all_env(:osdi)
+
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
