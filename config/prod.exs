@@ -52,7 +52,6 @@ config :osdi, Osdi.Repo,
   port: "5432",
   types: GeoExample.PostgresTypes
 
-
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key
@@ -92,4 +91,4 @@ config :osdi, Osdi.Repo,
 
 # Finally import the config/prod.secret.exs
 # which should be versioned separately.
-import_config "prod.secret.exs"
+# import_config "prod.secret.exs"
