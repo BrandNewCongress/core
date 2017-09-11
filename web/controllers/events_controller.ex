@@ -2,6 +2,7 @@ defmodule Core.EventsController do
   use Core.Web, :controller
   require Logger
   import ShorterMaps
+  alias Osdi.{Attendance}
 
   def get(conn, params) do
     district = get_district(params["district"] || conn.cookies["district"])
@@ -14,15 +15,11 @@ defmodule Core.EventsController do
       [district: district, coordinates: coordinates, title: "Events"] ++ GlobalOpts.get(conn, params)
   end
 
-  def get_one(conn, params = %{"slug" => slug}) do
+  def get_one(conn, params = %{"name" => event_name}) do
     event =
-      :event_cache
-      |> Stash.get(slug)
-
-    event =
-      case event do
+      case Stash.get :event_cache, event_name do
         nil -> nil
-        event -> EventHelp.add_date_line(event)
+        event -> event
       end
 
     banner = get_banner(event.type)
@@ -30,25 +27,23 @@ defmodule Core.EventsController do
     render conn, "rsvp.html", [event: event, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
 
-  def rsvp(conn, params = %{"slug" => slug,
+  def rsvp(conn, params = %{"name" => event_name,
     "first_name" => first_name, "last_name" => last_name,
-    "email" => email, "phone" => phone, "address1" => address1,
+    "email" => email, "phone" => phone, "address" => address,
     "zip" => zip, "city" => city, "state" => state}) do
 
-    event =
-      :event_cache
-      |> Stash.get(slug)
-      |> EventHelp.add_date_line()
-
+    event = Stash.get :event_cache, event_name
     banner = get_banner(event.type)
-
-    primary_address = %{"address1" => address1, "zip" => zip, "city" => city, "state" => state}
 
     Task.async(fn ->
       Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email})
     end)
 
-    Nb.Events.Rsvps.create(event.id, ~m{first_name, last_name, email, phone, primary_address})
+    Attendance.push(event.id, %{
+      given_name: first_name, family_name: last_name, email_address: email,
+      phone_number: phone, postal_address: %{
+        address_lines: [address], locality: city, region: state, postal_code: zip
+      }})
 
     render conn, "rsvp.html", [event: event, person: true, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end

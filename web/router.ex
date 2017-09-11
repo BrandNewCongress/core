@@ -39,8 +39,8 @@ defmodule Core.Router do
     post "/call-aid/:candidate", ActController, :easy_volunteer
 
     get "/events", EventsController, :get
-    get "/events/:slug", EventsController, :get_one
-    post "/events/:slug", EventsController, :rsvp
+    get "/events/:name", EventsController, :get_one
+    post "/events/:name", EventsController, :rsvp
 
     get "/call", VoxController, :get
     get "/call/logins", VoxController, :get_logins

@@ -31,4 +31,6 @@ defmodule EventHelp do
     dt
     |> Timex.Timezone.convert(time_zone |> Timex.Timezone.get(Timex.now()))
   end
+
+  def set_browser_url(ev = %{name: name}), do: Map.put(ev, :browser_url, "/events/#{name}")
 end

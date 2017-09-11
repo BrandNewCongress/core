@@ -5,7 +5,7 @@ defmodule Core.Jobs.EventCache do
 
   @attrs ~w(
     id start_date end_date featured_image_url location summary title name
-    type status description host type logation tags
+    type status description host type location tags
   )a
 
   def update do
@@ -17,6 +17,8 @@ defmodule Core.Jobs.EventCache do
       |> Repo.all()
       |> Repo.preload([:tags, :location])
       |> Enum.map(fn ev -> Map.take(ev, @attrs) end)
+      |> Enum.map(&EventHelp.set_browser_url/1)
+      |> Enum.map(&EventHelp.add_date_line/1)
 
     # Cache each by slug
     all_events |> Enum.each(&cache_by_name/1)

@@ -77,17 +77,12 @@ defmodule Jotform.SubmitEvent do
     %{time_zone_id: time_zone_id} = time_zone_info
 
     ## ------------ Determine event tags
-    sharing_tag = case should_hide do
-      true -> []
-      false -> ["Event: Hide Address"]
-    end
-
     contact_tag = case should_contact do
       true -> ["Event: Should Contact Host"]
       false -> []
     end
 
-    tags = sharing_tag ++ contact_tag ++ (Enum.map calendars, &("Calendar: #{&1}"))
+    tags = contact_tag ++ (Enum.map calendars, &("Calendar: #{&1}"))
 
     # Create the thing!
     event = %{
@@ -95,7 +90,6 @@ defmodule Jotform.SubmitEvent do
       status: status,
       creator: organizer,
       organizer: organizer,
-      time_zone: time_zone_id,
       type: event_type,
       description: description,
       start_date: construct_dt(start_time, event_date, time_zone_info),
@@ -106,6 +100,8 @@ defmodule Jotform.SubmitEvent do
         email_address: email
       },
       location: %{
+        public: not should_hide,
+        time_zone: time_zone_id,
         venue: venue_name,
         address_lines: [venue_address],
         locality: venue_city,

@@ -47,7 +47,21 @@ defmodule Core.EventMailer do
   def on_rsvp(event, %{"first_name" => first_name, "last_name" => last_name, "email" => email}) do
     Logger.info "Sending email to #{email} because of RSVP to #{event.name}"
 
-    params = ~M{first_name, last_name, email, candidate: event.calendar, event}
+    candidate =
+      event.tags
+      |> IO.inspect
+      |> Enum.map(&(&1.name))
+      |> Enum.filter(&(String.contains?(&1, "Calendar: ")))
+      |> Enum.map(&( &1 |> String.split(":") |> List.last() ))
+      |> Enum.filter(&(not Enum.member?(["Brand New Congress", "Justice Democrats"], &1)))
+      |> List.first()
+
+    candiate = case candidate do
+      nil -> "Justice Democrats"
+      cand -> cand
+    end
+
+    params = ~M{first_name, last_name, email, candidate, event}
 
     new()
     |> to({"#{first_name} #{last_name}", email})

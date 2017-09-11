@@ -36,6 +36,7 @@ defmodule Core.EventsChannel do
   end
 
   defp push_event(event, socket) do
+    IO.inspect Map.keys(event)
     push socket, "event", %{"event" => event}
   end
 
