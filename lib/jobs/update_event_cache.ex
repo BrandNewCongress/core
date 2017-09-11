@@ -1,27 +1,32 @@
 defmodule Core.Jobs.EventCache do
   require Logger
+  alias Osdi.{Repo, Event, Tag}
+  import Ecto.Query
+
+  @attrs ~w(
+    id start_date end_date featured_image_url location summary title name
+    type status description host type logation tags
+  )a
 
   def update do
     Logger.info "Updating event cache"
 
     # Fetch all events
     all_events =
-      Nb.Events.stream_all()
-      |> Enum.filter(&published_only/1)
-      |> Enum.map(&Osdi.Event.from_nb/1)
-      |> Enum.filter(&not_nil/1)
+      (from e in Event, where: e.status == "confirmed" and e.end_date > ^NaiveDateTime.utc_now())
+      |> Repo.all()
+      |> Repo.preload([:tags, :location])
+      |> Enum.map(fn ev -> Map.take(ev, @attrs) end)
 
     # Cache each by slug
     all_events |> Enum.each(&cache_by_name/1)
 
     # Cache all slugs as part of all
-    all_slugs = Enum.map all_events, fn %{name: name} -> name end
-    Stash.set(:event_cache, "all_slugs", all_slugs)
+    Stash.set :event_cache, "all_slugs", (Enum.map all_events, fn %{name: name} -> name end)
 
     # Filter each by calendar
-    "candidates"
-    |> Cosmic.get_type()
-    |> Enum.map(fn %{"metadata" => %{"calendar_id" => calendar_id}} -> calendar_id end)
+    (from t in Tag, where: like(t.name, "Calendar: "))
+    |> Repo.all()
     |> MapSet.new()
     |> Enum.each(fn calendar -> calendar |> events_for_calendar(all_events) |> cache_calendar(calendar) end)
 
@@ -48,7 +53,11 @@ defmodule Core.Jobs.EventCache do
   end
 
   defp events_for_calendar(selected_calendar, events) do
-    Enum.filter events, fn %{calendar: calendar} -> selected_calendar == calendar end
+    Enum.filter events, fn %{tags: tags} ->
+      tags
+      |> Enum.map(&(&1.name))
+      |> Enum.member?(selected_calendar)
+    end
   end
 
   defp cache_calendar(events, calendar) do
@@ -56,9 +65,4 @@ defmodule Core.Jobs.EventCache do
       %{name: slug} -> slug
     end)
   end
-
-  defp published_only(%{"status" => "published"}), do: true
-  defp published_only(%{"status" => _something_else}), do: false
-  defp not_nil(%{}), do: true
-  defp not_nil(nil), do: false
 end

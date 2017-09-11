@@ -1,5 +1,5 @@
 defmodule Jotform.SubmitEvent do
-  alias Osdi.{Repo, Person, Event}
+  alias Osdi.{Repo, Person, Event, EmailAddress, PhoneNumber}
   require Logger
 
   @doc"""
@@ -116,18 +116,22 @@ defmodule Jotform.SubmitEvent do
       tags: tags,
     }
 
+    event = Map.put(event, :name, Event.slug_for(event.title, event.start_date))
+
     Logger.info "Creating event on calendars #{Enum.join calendars, ", "}"
 
     created = %{id: event_id, name: name} =
       %Event{}
       |> Event.changeset(event)
       |> Repo.insert!()
+      |> Repo.preload([:tags, :location])
 
     Logger.info "Created event #{event_id}: #{name}"
 
     %{success: %{event: created |> Map.take(~w(
       name title description summary browser_url type
       featured_image_url start_date end_date status host
+      location tags
     )a)}}
   end
 
@@ -171,6 +175,10 @@ defmodule Jotform.SubmitEvent do
 
   defp create_organizer(%{email: email, phone: phone, first_name: first_name, last_name: last_name}) do
     Nb.People.push(%{email: email, phone: phone, first_name: first_name, last_name: last_name})
-    Person.push(%{email_address: email, phone_number: phone, given_name: first_name, family_name: last_name})
+    Person.push(%{
+      email_addresses: [EmailAddress.get_or_insert(%{address: email, primary: true})],
+      phone_numbers: [PhoneNumber.get_or_insert(%{number: phone, primary: true})],
+      postal_addresses: [],
+      given_name: first_name, family_name: last_name})
   end
 end

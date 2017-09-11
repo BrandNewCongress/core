@@ -11,7 +11,7 @@ export default class EventMarker extends Component {
       start_date,
       end_date,
       name,
-      location: { venue, region, location: { longitude, latitude }, locality },
+      location: { venue, region, location: [ longitude, latitude ], locality },
       featured_image_url,
       description,
       browser_url,
