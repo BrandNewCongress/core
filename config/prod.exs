@@ -13,9 +13,10 @@ use Mix.Config
 # which you typically run after static files are built.
 config :core, Core.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [scheme: "https", host: "core.gigalixirapp.com", port: 443],
+  url: [scheme: "https", host: "core.gigalixirapp.com", port: 4000],
   check_origin: ["https://now.brandnewcongress.org", "https://now.justicedemocrats.com"],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
-  cache_static_manifest: "priv/static/manifest.json"
+  cache_static_manifest: "priv/static/manifest.json",
+  server: true
 
 import_config "prod.secret.exs"
