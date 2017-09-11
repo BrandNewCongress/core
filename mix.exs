@@ -54,7 +54,6 @@ defmodule Core.Mixfile do
      {:geo, "~> 1.5"},
      {:topo, "~> 0.1.0"},
      {:remodel, "~> 0.0.4"},
-     {:flow, "~> 0.11"},
      {:distillery, "~> 1.0.0"},
      {:number, "~> 0.5.2"},
      {:shorter_maps, "~> 2.0"},
