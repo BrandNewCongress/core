@@ -124,11 +124,11 @@ defmodule Jotform.SubmitEvent do
 
     Logger.info "Created event #{event_id}: #{name}"
 
-    %{success: %{event: created |> Map.take(~w(
+    %{event: created |> Map.take(~w(
       name title description summary browser_url type
       featured_image_url start_date end_date status host
       location tags
-    )a)}}
+    )a)}
   end
 
   def construct_dt(time, date, time_zone_info) do

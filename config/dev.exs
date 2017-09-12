@@ -29,12 +29,11 @@ config :core, Core.Vox,
 
 config :osdi, Osdi.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: System.get_env("RDS_DB_NAME") || "osdi_repo",
-  username: System.get_env("RDS_DB_USER") || "postgres",
-  password: System.get_env("RDS_DB_PASSWORD") || "postgres",
-  hostname: System.get_env("RDS_DB_HOST") || "localhost",
+  database: "osdi_repo",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
   port: "5432",
-  ssl: true,
   types: GeoExample.PostgresTypes
 
 # Update secret
