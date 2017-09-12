@@ -57,7 +57,7 @@ defmodule Core.PetitionController do
 
     target =
       if count do
-        round((count * 2) / 25_000) * 25_000
+        Enum.max([round((count * 2) / 25_000) * 25_000, 25_000])
       end
 
     progress =
