@@ -36,6 +36,7 @@ defmodule Core.Jobs.EventCache do
     Logger.info "Updated event cache on #{Timex.now() |> DateTime.to_iso8601()}"
 
     all_events
+    "good"
   end
 
   def load_cached do
@@ -54,7 +55,7 @@ defmodule Core.Jobs.EventCache do
     Stash.set(:event_cache, event.name, event)
   end
 
-  defp events_for_calendar(selected_calendar, events) do
+  defp events_for_calendar(%{name: selected_calendar}, events) do
     Enum.filter events, fn %{tags: tags} ->
       tags
       |> Enum.map(&(&1.name))

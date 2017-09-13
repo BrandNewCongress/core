@@ -189,9 +189,7 @@ defmodule Core.ActController do
   end
 
   defp date_compare(%{start_date: d1}, %{start_date: d2}) do
-    {:ok, a, _} = DateTime.from_iso8601(d1)
-    {:ok, b, _} = DateTime.from_iso8601(d2)
-    case DateTime.compare(a, b) do
+    case DateTime.compare(d1, d2) do
       :gt -> false
       _ -> true
     end
