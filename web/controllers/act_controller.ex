@@ -77,12 +77,11 @@ defmodule Core.ActController do
   end
 
   def call_aid(conn, params = %{"candidate" => candidate}) do
-    %{"metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(candidate)
+    %{"title" => title} = Cosmic.get(candidate)
 
-    # TODO - only a month away
     events =
       :event_cache
-      |> Stash.get("calendar-#{calendar_id}")
+      |> Stash.get("Calendar: #{title}")
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
       |> Enum.sort(&date_compare/2)
       |> Enum.take(6)
@@ -97,7 +96,7 @@ defmodule Core.ActController do
 
     events =
       :event_cache
-      |> Stash.get("calendar-#{calendar_id}")
+      |> Stash.get("Calendar: #{title}")
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
       |> Enum.sort(&date_compare/2)
       |> Enum.take(6)

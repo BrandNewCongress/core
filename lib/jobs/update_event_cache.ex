@@ -27,7 +27,7 @@ defmodule Core.Jobs.EventCache do
     Stash.set :event_cache, "all_slugs", (Enum.map all_events, fn %{name: name} -> name end)
 
     # Filter each by calendar
-    (from t in Tag, where: like(t.name, "Calendar: "))
+    (from t in Tag, where: like(t.name, "%Calendar: %"))
     |> Repo.all()
     |> MapSet.new()
     |> Enum.each(fn calendar -> calendar |> events_for_calendar(all_events) |> cache_calendar(calendar) end)
@@ -63,7 +63,7 @@ defmodule Core.Jobs.EventCache do
   end
 
   defp cache_calendar(events, calendar) do
-    Stash.set :event_cache, "calendar-#{calendar}", Enum.map(events, fn
+    Stash.set :event_cache, calendar.name, Enum.map(events, fn
       %{name: slug} -> slug
     end)
   end

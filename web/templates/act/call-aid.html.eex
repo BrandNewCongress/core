@@ -24,6 +24,7 @@
 <%= if assigns[:person] != nil do %>
   <form> <p> <strong> Done: <%= assigns[:person] %> </strong> <p> </form>
 <% end %>
+No events? Can they not attend the events above? Sign them up below to be added to our volunteer list for future events.
 <form method="post" action="/call-aid/<%= @slug %>">
   <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
 
