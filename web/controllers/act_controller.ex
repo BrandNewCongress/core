@@ -84,7 +84,7 @@ defmodule Core.ActController do
       |> Stash.get("Calendar: #{title}")
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
       |> Enum.sort(&date_compare/2)
-      |> Enum.take(6)
+      # |> Enum.take(6)
       |> Enum.map(&EventHelp.add_date_line/1)
 
     render conn, "call-aid.html",
