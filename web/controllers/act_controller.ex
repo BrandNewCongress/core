@@ -92,7 +92,7 @@ defmodule Core.ActController do
   end
 
   def easy_volunteer(conn, params = %{"candidate" => candidate, "phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name}) do
-    %{"title" => title, "metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(candidate)
+    %{"title" => title} = Cosmic.get(candidate)
 
     events =
       :event_cache
