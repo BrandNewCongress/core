@@ -85,6 +85,7 @@ defmodule Core.PetitionController do
 
     %{"slug" => slug,
       "content" => content,
+      "title" => admin_title,
       "metadata" => %{
         "title" => title,
         "sign_button_text" => sign_button_text,
@@ -126,9 +127,9 @@ defmodule Core.PetitionController do
       "bnc" -> "Brand New Congress"
     end
 
-    tags = ["Action: Signed Petition: #{source}: #{title}"] ++
+    tags = ["Action: Signed Petition: #{source}: #{admin_title}"] ++
       if Map.has_key?(params, "ref") do
-        ["Action: Signed Petition: #{source}: #{title}: #{params["ref"]}"]
+        ["Action: Signed Petition: #{source}: #{admin_title}: #{params["ref"]}"]
       else
         []
       end
