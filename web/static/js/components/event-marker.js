@@ -15,26 +15,9 @@ export default class EventMarker extends Component {
       featured_image_url,
       description,
       browser_url,
-      time_zone
+      time_zone,
+      date_line
     } = this.props.event
-
-    const timeZoneMap = {
-      'Eastern Time (US & Canada)': -5,
-      'Central Time (US & Canada)': -6,
-      'Mountain Time (US & Canada)': -7,
-      'Pacific Time (US & Canada)': -8,
-      Alaska: -9,
-      Hawaii: -10
-    }
-
-    const offset = timeZoneMap[time_zone]
-
-    const start = moment(new Date(start_date), offset)
-    const end = moment(new Date(end_date), offset)
-
-    console.log(this.props.event)
-
-    console.log([parseFloat(latitude), parseFloat(longitude)])
 
     return (
       <CircleMarker
@@ -45,12 +28,7 @@ export default class EventMarker extends Component {
           <div className="event-item event">
             <h5 className="time-info">
               <div className="dateblock">
-                <span className="left" style={{ textTransform: 'uppercase' }}>
-                  {start.dayOfWeek}
-                </span>
-                <span className="right">
-                  {`${start.month} ${start.dayOfMonth} ${start.humanTime} – ${end.humanTime}`}
-                </span>
+                {date_line}
               </div>
             </h5>
             <h3>
