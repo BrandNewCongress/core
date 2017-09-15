@@ -113,6 +113,7 @@ defmodule Jotform.SubmitEvent do
     }
 
     event = Map.put(event, :name, Event.slug_for(event.title, event.start_date))
+    event = Map.put(event, :rsvp_url, "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.slug)}")
 
     Logger.info "Creating event on calendars #{Enum.join calendars, ", "}"
 
@@ -122,12 +123,12 @@ defmodule Jotform.SubmitEvent do
       |> Repo.insert!()
       |> Repo.preload([:tags, :location])
 
-    Logger.info "Created event #{event_id}: #{name}"
+    Logger.info "Created event #{event_id}: #{name}: #{insepct(event)}"
 
     %{event: created |> Map.take(~w(
       name title description summary browser_url type
       featured_image_url start_date end_date status host
-      location tags
+      location tags rsvp_url
     )a)}
   end
 

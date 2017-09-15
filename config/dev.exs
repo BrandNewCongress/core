@@ -37,10 +37,18 @@ config :osdi, Osdi.Repo,
   types: GeoExample.PostgresTypes
 
 # Update secret
-config :core, [update_secret: System.get_env("UPDATE_SECRET")]
+config :core,
+  update_secret: System.get_env("UPDATE_SECRET")
 
 # Redis url
-config :core, [redis_url: System.get_env("REDIS_URL")]
+config :core,
+  redis_url: System.get_env("REDIS_URL")
+
+# Cipher
+config :cipher,
+  keyphrase: "testiekeyphraseforcipher",
+  ivphrase: "testieivphraseforcipher",
+  magic_token: "magictoken"
 
 # Watch static and templates for browser reloading.
 config :core, Core.Endpoint,
