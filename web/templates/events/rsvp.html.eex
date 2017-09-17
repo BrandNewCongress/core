@@ -35,9 +35,9 @@
       </div>
       <div class="contact">
         <h3> Contact </h3>
-        <p> <%= @event.host.name %> </p>
-        <p> <a href="mailto:<%= @event.host.email_address %>"> <%= @event.host.email_address %> </a> </p>
-        <p> <%= @event.host.phone_number %> </p>
+        <p> <%= @event.contact.name %> </p>
+        <p> <a href="mailto:<%= @event.contact.email_address %>"> <%= @event.contact.email_address %> </a> </p>
+        <p> <%= @event.contact.phone_number %> </p>
       </div>
     </div>
 
