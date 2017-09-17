@@ -11,7 +11,7 @@ export default class EventMarker extends Component {
       start_date,
       end_date,
       name,
-      location: { venue, region, location: [ latitude, longitude ], locality },
+      location: { venue, region, location: [latitude, longitude], locality },
       featured_image_url,
       description,
       browser_url,
@@ -27,9 +27,7 @@ export default class EventMarker extends Component {
         <Popup style={{ overflow: 'scroll' }}>
           <div className="event-item event">
             <h5 className="time-info">
-              <div className="dateblock">
-                {date_line}
-              </div>
+              <div className="dateblock">{date_line}</div>
             </h5>
             <h3>
               <a target="_blank" href={browser_url} className="event-title">
@@ -37,10 +35,11 @@ export default class EventMarker extends Component {
               </a>
             </h3>
             <span className="label-icon" />
-            <p>
-              {venue}
-            </p>
-            <p dangerouslySetInnerHTML={{ __html: description }} />
+            <p>{venue}</p>
+            <p
+              style={{ whiteSpace: 'pre-wrap' }}
+              dangerouslySetInnerHTML={{ __html: description }}
+            />
             <div>
               <a className="rsvp-link" href={browser_url} target="_blank">
                 DETAILS/RSVP
