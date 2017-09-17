@@ -5,7 +5,7 @@ defmodule Core.Jobs.EventCache do
 
   @attrs ~w(
     id start_date end_date featured_image_url location summary title name
-    type status description host type location tags instructions
+    type status description contact type location tags instructions
   )a
 
   def update do
