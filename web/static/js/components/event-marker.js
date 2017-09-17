@@ -13,7 +13,6 @@ export default class EventMarker extends Component {
       name,
       location: { venue, region, location: [latitude, longitude], locality },
       featured_image_url,
-      description,
       browser_url,
       time_zone,
       date_line
@@ -38,7 +37,7 @@ export default class EventMarker extends Component {
             <p>{venue}</p>
             <p
               style={{ whiteSpace: 'pre-wrap' }}
-              dangerouslySetInnerHTML={{ __html: description }}
+              dangerouslySetInnerHTML={{ __html: summary }}
             />
             <div>
               <a className="rsvp-link" href={browser_url} target="_blank">

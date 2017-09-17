@@ -13,6 +13,12 @@
 
     <div class="bar"></div>
 
+    <div class="instructions" style="white-space: pre-wrap;">
+      <%= raw(scrub(@event.instructions)) %>
+    </div>
+
+    <div class="bar"></div>
+
     <div class="info-container">
       <div class="when">
         <h3> When </h3>

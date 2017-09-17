@@ -12,7 +12,8 @@ defmodule Jotform.SubmitEvent do
       "q8_start_time" => start_time, "q9_end_time" => end_time,
       "q10_description" => description, "q13_venue_name" => venue_name,
       "q14_should_hide" => hide_address, "q15_address" => venue_address,
-      "q16_event_name" => event_name, "q17_should_contact" => should_contact} = Poison.decode!(raw)
+      "q16_event_name" => event_name, "q17_should_contact" => should_contact,
+      "q20_instructions" => instructions} = Poison.decode!(raw)
 
     ## ------------ Determine whitelist status
     auto_whitelist = Map.has_key?(params, "whitelist")
@@ -84,6 +85,8 @@ defmodule Jotform.SubmitEvent do
 
     tags = contact_tag ++ (Enum.map calendars, &("Calendar: #{&1}"))
 
+    summary = String.slice(description, 1..200) <> if String.length(description) > 200, do: "...", else: ""
+
     # Create the thing!
     event = %{
       title: event_name,
@@ -92,9 +95,11 @@ defmodule Jotform.SubmitEvent do
       organizer: organizer,
       type: event_type,
       description: description,
+      summary: summary,
+      instructions: instructions,
       start_date: construct_dt(start_time, event_date, time_zone_info),
       end_date: construct_dt(end_time, event_date, time_zone_info),
-      host: %{
+      contact: %{
         name: first_name <> " " <> last_name,
         phone_number: phone,
         email_address: email
@@ -123,12 +128,12 @@ defmodule Jotform.SubmitEvent do
       |> Repo.insert!()
       |> Repo.preload([:tags, :location])
 
-    Logger.info "Created event #{event_id}: #{name}: #{inspect(event)}"
+    Logger.info "Created event #{event_id}: #{name}: #{inspect(created)}"
 
     %{event: created |> Map.take(~w(
       name title description summary browser_url type
-      featured_image_url start_date end_date status host
-      location tags rsvp_download_url
+      featured_image_url start_date end_date status contact
+      location tags rsvp_download_url instructions
     )a)}
   end
 
