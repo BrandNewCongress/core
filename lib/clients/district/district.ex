@@ -174,6 +174,10 @@ defmodule District do
     {key, {sum_x / length(list), sum_y / length(list)}}
   end
 
+  def centroid({nil, nil}) do
+    {38.805470223177466, -100.23925781250001}
+  end
+
   def centroid(district_string) when is_binary(district_string) do
     geojsons()
     |> Map.take([district_string])
