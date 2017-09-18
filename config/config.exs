@@ -7,7 +7,7 @@ use Mix.Config
 
 # General application configuration
 config :core,
-  ecto_repos: [Core.Repo]
+  ecto_repos: [Osdi.Repo]
 
 # Configures the endpoint
 config :core, Core.Endpoint,
@@ -30,11 +30,11 @@ config :phoenix, :template_engines,
 config :core, goog_key: System.get_env("GOOG_KEY")
 
 # Quantum config
-config :core, Core.Scheduler,
-  jobs: [
-    # Every 15 minutes
-    {"*/15 * * * *", Core.Jobs.EventCache, :update},
-  ]
+jobs =
+  [{"*/2 * * * *", {Core.Jobs.EventCache, :update, []}},
+   {"@daily", {Core.Jobs.MailLeaderboard , :send, []}}]
+
+config :core, Core.Scheduler, jobs: jobs
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

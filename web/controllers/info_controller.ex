@@ -4,12 +4,21 @@ defmodule Core.InfoController do
   def get(conn, params = %{"info" => slug, "draft" => _draft}) do
     global_opts = GlobalOpts.get(conn, params)
 
-    object = %{"title" => title, "content" => content, "metadata" => %{
+    object = %{"title" => title, "content" => content, "metadata" => metadata = %{
       "brands" => brands
     }} = Cosmic.get(slug)
 
+    content_key = "#{Keyword.get(global_opts, :brand)}_content"
+    chosen_content =
+      if metadata[content_key] && metadata[content_key] != "" do
+        metadata[content_key]
+      else
+        content
+      end
+
     if Enum.member? brands, Keyword.get(global_opts, :brand) do
-      render conn, "info.html", [content: content, title: title] ++ global_opts ++ empty_params(object)
+      render conn, "info.html",
+        [content: chosen_content, title: title] ++ global_opts ++ empty_params(object)
     else
       redirect_home(conn, params)
     end
@@ -18,15 +27,25 @@ defmodule Core.InfoController do
   def get(conn, params = %{"info" => slug}) do
     global_opts = GlobalOpts.get(conn, params)
 
-    object = %{"title" => title, "content" => content, "metadata" => %{
+    object = %{"title" => title, "content" => content, "metadata" => metadata = %{
       "visibility" => visibility,
       "brands" => brands
     }} = Cosmic.get(slug)
 
+    content_key = "#{Keyword.get(global_opts, :brand)}_content"
+    chosen_content =
+      if metadata[content_key] && metadata[content_key] != "" do
+        metadata[content_key]
+      else
+        content
+      end
+
     if Enum.member? brands, Keyword.get(global_opts, :brand) do
       case visibility do
-        "Published" -> render conn, "info.html", [content: content, title: title] ++ GlobalOpts.get(conn, params) ++ empty_params(object)
         "Draft" -> redirect_home(conn, params)
+        "Published" ->
+          render conn, "info.html",
+            [content: chosen_content, title: title] ++ global_opts ++ empty_params(object)
       end
     else
       redirect_home(conn, params)

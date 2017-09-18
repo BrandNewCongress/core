@@ -31,8 +31,6 @@ class VoxReport extends Component {
   }
 
   mainButtonClick = () => {
-    console.log('hi')
-
     if (this.state.status == 'idle') {
       this.setState({ status: 'loading' })
       this.startDownload()
@@ -42,7 +40,6 @@ class VoxReport extends Component {
   startDownload = () => {
     this.state.channel.push('download')
     this.state.channel.on('row', ({ row }) => {
-      console.log(row)
       this.blob = this.blob + row + '\n'
       this.setState({
         received: this.state.received + 1

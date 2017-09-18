@@ -30,7 +30,6 @@ defmodule Core.Web do
     quote do
       use Phoenix.Controller
 
-      alias Core.Repo
       import Ecto
       import Ecto.Query
 
@@ -68,7 +67,6 @@ defmodule Core.Web do
     quote do
       use Phoenix.Channel
 
-      alias Core.Repo
       import Ecto
       import Ecto.Query
       import Core.Gettext

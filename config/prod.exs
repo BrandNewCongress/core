@@ -13,72 +13,14 @@ use Mix.Config
 # which you typically run after static files are built.
 config :core, Core.Endpoint,
   http: [port: {:system, "PORT"}],
-  url: [scheme: "https", host: "#{System.get_env("APP_NAME")}.herokuapp.com", port: 443],
-  check_origin: ["https://now.brandnewcongress.org", "https://now.justicedemocrats.com"],
+  url: [scheme: "https", host: "core.gigalixirapp.com", port: 4000],
+  check_origin: [
+    "https://core.gigalixirapp.com",
+    "https://now.brandnewcongress.org",
+    "https://now.justicedemocrats.com"
+  ],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
   cache_static_manifest: "priv/static/manifest.json",
-  secret_key_base: System.get_env("SECRET_KEY_BASE")
+  server: true
 
-# Nationbuilder API Key
-config :core, [nb_slug: System.get_env("NB_SLUG"), nb_token: System.get_env("NB_TOKEN")]
-
-# Do not print debug messages in production
-config :logger, level: :info
-
-# Use Mailgun
-config :core, Core.Mailer,
-  adapter: Swoosh.Adapters.Mailgun,
-  api_key: System.get_env("MAILGUN_KEY"),
-  domain: System.get_env("MAILGUN_DOMAIN")
-
-config :core, Core.Vox,
-  adapter: Swoosh.Adapters.Mailgun,
-  api_key: System.get_env("MAILGUN_KEY"),
-  domain: System.get_env("MAILGUN_DOMAIN")
-
-# Update secret
-config :core, [update_secret: System.get_env("UPDATE_SECRET")]
-
-# Redis url
-config :core, [redis_url: System.get_env("REDIS_URL")]
-
-# ## SSL Support
-#
-# To get SSL working, you will need to add the `https` key
-# to the previous section and set your `:url` port to 443:
-#
-#     config :core, Core.Endpoint,
-#       ...
-#       url: [host: "example.com", port: 443],
-#       https: [port: 443,
-#               keyfile: System.get_env("SOME_APP_SSL_KEY_PATH"),
-#               certfile: System.get_env("SOME_APP_SSL_CERT_PATH")]
-#
-# Where those two env variables return an absolute path to
-# the key and cert in disk or a relative path inside priv,
-# for example "priv/ssl/server.key".
-#
-# We also recommend setting `force_ssl`, ensuring no data is
-# ever sent via http, always redirecting to https:
-#
-#     config :core, Core.Endpoint,
-#       force_ssl: [hsts: true]
-#
-# Check `Plug.SSL` for all available options in `force_ssl`.
-
-# ## Using releases
-#
-# If you are doing OTP releases, you need to instruct Phoenix
-# to start the server for all endpoints:
-#
-#     config :phoenix, :serve_endpoints, true
-#
-# Alternatively, you can configure exactly which server to
-# start per endpoint:
-#
-#     config :core, Core.Endpoint, server: true
-#
-
-# Finally import the config/prod.secret.exs
-# which should be versioned separately.
 import_config "prod.secret.exs"

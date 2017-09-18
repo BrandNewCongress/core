@@ -1,4 +1,4 @@
-<% signup_link = "https://brandnewcongress.org/#homeJoin?ref=#{@code}" %>
+<% signup_link = "https://brandnewcongress.org/?ref=#{@code}#homeJoin" %>
 
 <div class="two-column">
   <div class="right-column">

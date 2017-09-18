@@ -1,5 +1,18 @@
-<% description = assigns[:description] || "Brand New Congress is recruiting incredible people to run for Congress in 2018 in a unified campaign behind a single plan to fix our government and our country." %>
-<% banner = assigns[:banner] || "https://cosmicjs.com/uploads/057895e0-591a-11e7-a947-e12ac523dacd-BNC%20logo.PNG" %>
+<% description =
+  cond do
+    assigns[:description] -> assigns[:description]
+    @brand == "bnc" -> "Brand New Congress is recruiting incredible people to run for Congress in 2018 in a unified campaign behind a single plan to fix our government and our country."
+    @brand == "jd" -> "Justice Democrats: Democrats that represent people, not corporations."
+  end
+%>
+
+<% banner =
+  cond do
+    assigns[:banner] -> assigns[:banner]
+    @brand == "jd" -> "https://cosmicjs.com/uploads/72ea6c30-91ea-11e7-ac16-9bd4a7f0c125-16003310_243595192747895_4767057136317260386_n.png"
+    @brand == "bnc" -> "https://cosmicjs.com/uploads/057895e0-591a-11e7-a947-e12ac523dacd-BNC"
+  end
+%>
 
 <!DOCTYPE html>
 <html lang="en">

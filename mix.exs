@@ -18,8 +18,10 @@ defmodule Core.Mixfile do
   # Type `mix help compile.app` for more information.
   def application do
     [mod: {Core, []},
-     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :httpotion, :phoenix_swoosh, :timex, :quantum]]
+     applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
+                    :gettext, :phoenix_ecto, :postgrex, :httpotion,
+                    :phoenix_swoosh, :timex, :quantum, :osdi, :browser, :csv,
+                    :html_sanitize_ex, :number, :stash, :topo]]
   end
 
   # Specifies which paths to compile per environment.
@@ -46,16 +48,18 @@ defmodule Core.Mixfile do
      {:hackney, "~> 1.6.0"},
      {:phoenix_swoosh, "~> 0.2"},
      {:timex, "~> 3.0"},
-     {:quantum, "~> 1.9.2"},
+     {:quantum, "~> 2.0.0"},
      {:redix, ">= 0.0.0"},
      {:html_sanitize_ex, "~> 1.3.0-rc3"},
      {:geo, "~> 1.5"},
      {:topo, "~> 0.1.0"},
      {:remodel, "~> 0.0.4"},
-     {:flow, "~> 0.11"},
      {:distillery, "~> 1.0.0"},
      {:number, "~> 0.5.2"},
-     {:shorter_maps, "~> 2.0"}]
+     {:shorter_maps, "~> 2.0"},
+     {:osdi, git: "https://github.com/BrandNewCongress/osdi_ex.git"},
+     {:poison, "~> 3.0", override: true},
+     {:cipher, ">= 1.3.3"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

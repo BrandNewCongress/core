@@ -180,6 +180,10 @@ header .donate-link {
   padding: 5px;
 }
 
+.jd .top-level {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
 .top-level.hovering {
   color: white;
   background-color: black;

@@ -20,33 +20,41 @@ defmodule Core.VoxController do
 
     current_username =
       tags
-      |> Enum.filter(fn t -> String.contains?(t, date) end)
+      |> Enum.filter(fn t -> String.contains?(t, "Vox Alias: #{copyright(brand)}") and String.contains?(t, date) end)
       |> Enum.map(fn t -> String.split(t, ":") end)
-      |> Enum.map(fn [_vox_part, result, _date_part] -> String.trim(result) end)
+      |> Enum.map(fn [_vox_part, _brand_part, result, _date_part] -> String.trim(result) end)
       |> List.first()
 
     [username, password] = case current_username do
-      nil -> Core.Vox.next_login()
-      un -> [un, Core.Vox.password_for(un)]
+      nil -> Core.Vox.next_login(brand)
+      un -> [un, Core.Vox.password_for(un, brand)]
     end
 
     Nb.People.add_tags(id, [
       "Action: Made Calls: #{copyright(brand)}",
-      "Vox Alias: #{username}: #{date}"
+      "Vox Alias: #{copyright(brand)}: #{username}: #{date}"
     ])
 
-    %{"content" => call_page} = Cosmic.get("call-page")
+    %{"content" => call_page, "metadata" => metadata} = Cosmic.get("call-page")
+
+    content_key = "#{Keyword.get(global_opts, :brand)}_content"
+    chosen_content =
+      if metadata[content_key] && metadata[content_key] != "" do
+        metadata[content_key]
+      else
+        call_page
+      end
 
     Task.async(fn ->
-      Core.Mailer.on_vox_login_claimed(%{"username" => username, "date" => date,
+      Core.VoxMailer.on_vox_login_claimed(%{"username" => username, "date" => date,
         "first_name" => first_name, "last_name" => last_name, "email" => email,
-        "phone" => phone
+        "phone" => phone, "source" => Keyword.get(global_opts, :brand)
       })
     end)
 
     render conn, "vox-submitted.html",
       [username: username, password: password, title: "Call",
-       call_page: call_page] ++ GlobalOpts.get(conn, params)
+       call_page: chosen_content] ++ global_opts
   end
 
   def get_logins(conn, %{"secret" => @secret}) do

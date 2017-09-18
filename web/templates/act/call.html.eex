@@ -1,4 +1,11 @@
 <%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Call Voters"] %>
+<% csl =
+  cond do
+    @calling_script_link != nil and String.contains?(@calling_script_link, "https://") -> @calling_script_link
+    @calling_script_link -> core_deployment(@brand) <> @calling_script_link
+    true -> nil
+  end
+%>
 
 <div class="nav-body-container">
   <%= if (not @mobile) do %>
@@ -21,12 +28,12 @@
           </a>
 
           <label> Second, </label>
-          <a target="_blank" class="primary-button" href="<%= @calling_script_link %>">
+          <a target="_blank" class="primary-button" href="<%= csl %>">
             Read the calling script
           </a>
 
           <label> Third, </label>
-          <a target="_blank" class="primary-button" href="https://now.brandnewcongress.org/call">
+          <a target="_blank" class="primary-button" href="<%= core_deployment(@brand) <> "/call" %>">
             Claim your login
           </a>
 
@@ -49,8 +56,15 @@
           <h3> Questions? </h3>
             <p>
               Please email
-              <a href="mailto:dialer@brandnewcongress.org" target="-blank">
-                dialer@brandnewcongress.org
+              <% email =
+                case @brand do
+                  "jd" -> "dailer@justicedemocrats.com"
+                  "bnc" -> "dailer@brandnewcongress.org"
+                end
+              %>
+
+              <a href="mailto:<%= email %>" target="-blank">
+                <%= email %>
               </a>.
               We'll get back to you as soon as we can.
             </p>

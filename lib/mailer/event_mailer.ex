@@ -31,14 +31,42 @@ defmodule Core.EventMailer do
     |> Core.Mailer.deliver()
   end
 
+  def bad_event_alert(body) do
+    Logger.info "Sending email to Ben because of bad event"
+
+    {:ok, stringified} = Poison.encode(body)
+
+    new()
+    |> to({"Ben Packer", "ben@brandnewcongress.org"})
+    |> from({"BNC Errors", "us@mail.brandnewcongress.org"})
+    |> subject("Bad Event Error")
+    |> render_body("event-failure.text", %{raw: stringified})
+    |> Core.Mailer.deliver()
+  end
+
   def on_rsvp(event, %{"first_name" => first_name, "last_name" => last_name, "email" => email}) do
     Logger.info "Sending email to #{email} because of RSVP to #{event.name}"
 
-    params = ~M{first_name, last_name, email, candidate: event.calendar, event}
+    candidate =
+      event.tags
+      |> Enum.map(&(&1.name))
+      |> Enum.filter(&(String.contains?(&1, "Calendar: ")))
+      |> Enum.map(&(&1 |> String.split(":") |> List.last() |> String.trim()))
+      |> Enum.filter(&(not Enum.member?(["Brand New Congress", "Justice Democrats"], &1)))
+      |> List.first()
+
+    candidate = case candidate do
+      nil -> "Justice Democrats"
+      cand -> cand
+    end
+
+    IO.inspect candidate
+
+    params = ~M{first_name, last_name, email, candidate, event}
 
     new()
     |> to({"#{first_name} #{last_name}", email})
-    |> from({event.host.name, event.host.email})
+    |> from({event.contact.name, "events@brandnewcongress.org"})
     |> subject("RSVP Confirmation: #{event.title}")
     |> render_body(:"rsvp-email", params)
     |> Core.Mailer.deliver()

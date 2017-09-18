@@ -23,4 +23,5 @@ https://now.brandnewcongress.org/<%= @event.browser_url %>
 
 
 Together we can bring a better future,
+
 <%= @candidate %> Events Team

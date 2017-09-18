@@ -39,8 +39,8 @@ defmodule Core.Router do
     post "/call-aid/:candidate", ActController, :easy_volunteer
 
     get "/events", EventsController, :get
-    get "/events/:slug", EventsController, :get_one
-    post "/events/:slug", EventsController, :rsvp
+    get "/events/:name", EventsController, :get_one
+    post "/events/:name", EventsController, :rsvp
 
     get "/call", VoxController, :get
     get "/call/logins", VoxController, :get_logins
@@ -49,6 +49,7 @@ defmodule Core.Router do
 
     get "/leaderboard", LeaderboardController, :get
     get "/leaderboard/report", LeaderboardController, :get_report
+    get "/leaderboard/email", LeaderboardController, :send_email
     post "/leaderboard", LeaderboardController, :post
 
     get "/unsubscribe", SubscriptionController, :unsubscribe_get
@@ -65,6 +66,8 @@ defmodule Core.Router do
     get "/update/cosmic", UpdateController, :cosmic
     post "/update/cosmic", UpdateController, :cosmic
     post "/jotform/host-event", JotformController, :submit_event
-  end
 
+    get "/events", EventsController, :as_json
+    get "/events/:candidate", EventsController, :as_json
+  end
 end

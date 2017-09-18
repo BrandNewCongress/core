@@ -51,12 +51,17 @@ defmodule District do
       |> String.upcase()
       |> String.replace("AL", "00")
 
-    case Regex.named_captures(~r/(?<state>[A-Z]{2,})[ -]?(?<district>([0-9]{1,2}))/, processed) do
-      %{"district" => district, "state" => state} ->
-        "#{state}-#{district |> String.pad_leading(2, "0")}"
-      nil ->
-        nil
-    end
+    normalized =
+      case Regex.named_captures(~r/(?<state>[A-Z]{2,})[ -]?(?<district>([0-9]{1,2}))/, processed) do
+        %{"district" => district, "state" => state} ->
+          "#{state}-#{district |> String.pad_leading(2, "0")}"
+        nil ->
+          nil
+      end
+
+    if normalized != nil && Map.has_key?(geojsons(), normalized),
+      do: normalized,
+      else: nil
   end
 
   @spec from_point({number, number}) :: binary
@@ -121,21 +126,28 @@ defmodule District do
       candidates
       |> Enum.map(fn %{"metadata" => %{"district" => district}} -> district end)
 
-    candidate_geos = Map.take(geojsons(), candidate_districts)
+    district = District.from_point({x, y})
 
-    {closest_name, closest_dist} =
-      candidate_geos
-      |> Enum.map(fn {key, polygon = %Geo.MultiPolygon{}} -> {key, naive_geo_distance({x, y}, polygon)} end)
-      |> Enum.map(fn {key, dist} -> {key, dist * @miles_per_degree} end)
-      |> Enum.sort(fn ({_l1, d1}, {_l2, d2}) -> d2 >= d1 end)
-      |> List.first()
-
-    if closest_dist < @mile_limit do
+    if Enum.member?(candidate_districts, district) do
       candidates
-      |> Enum.filter(fn %{"metadata" => %{"district" => district}} -> district == closest_name end)
+      |> Enum.filter(fn %{"metadata" => %{"district" => d}} -> d == district end)
       |> List.first()
     else
-      nil
+      candidate_geos = Map.take(geojsons(), candidate_districts)
+      {closest_name, closest_dist} =
+        candidate_geos
+        |> Enum.map(fn {key, polygon = %Geo.MultiPolygon{}} -> {key, naive_geo_distance({x, y}, polygon)} end)
+        |> Enum.map(fn {key, dist} -> {key, dist * @miles_per_degree} end)
+        |> Enum.sort(fn ({_l1, d1}, {_l2, d2}) -> d2 >= d1 end)
+        |> List.first()
+
+      if closest_dist < @mile_limit do
+        candidates
+        |> Enum.filter(fn %{"metadata" => %{"district" => district}} -> district == closest_name end)
+        |> List.first()
+      else
+        nil
+      end
     end
   end
 
@@ -160,6 +172,10 @@ defmodule District do
 
     {sum_x, sum_y} = list |> Enum.reduce(fn ({x, y}, {acc_x, acc_y}) -> {acc_x + x, acc_y + y} end)
     {key, {sum_x / length(list), sum_y / length(list)}}
+  end
+
+  def centroid({nil, nil}) do
+    {38.805470223177466, -100.23925781250001}
   end
 
   def centroid(district_string) when is_binary(district_string) do

@@ -77,31 +77,30 @@ defmodule Core.ActController do
   end
 
   def call_aid(conn, params = %{"candidate" => candidate}) do
-    %{"metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(candidate)
+    %{"title" => title} = Cosmic.get(candidate)
 
-    # TODO - only a month away
     events =
       :event_cache
-      |> Stash.get("calendar-#{calendar_id}")
+      |> Stash.get("Calendar: #{title}")
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
-      |> Enum.sort(&date_compare/2)
-      |> Enum.take(6)
-      |> Enum.map(&Osdi.Event.add_date_line/1)
+      |> Enum.sort(&EventHelp.date_compare/2)
+      # |> Enum.take(6)
+      |> Enum.map(&EventHelp.add_date_line/1)
 
     render conn, "call-aid.html",
       [events: events, no_header: true, no_footer: true, slug: candidate] ++ GlobalOpts.get(conn, params)
   end
 
   def easy_volunteer(conn, params = %{"candidate" => candidate, "phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name}) do
-    %{"title" => title, "metadata" => %{"calendar_id" => calendar_id}} = Cosmic.get(candidate)
+    %{"title" => title} = Cosmic.get(candidate)
 
     events =
       :event_cache
-      |> Stash.get("calendar-#{calendar_id}")
+      |> Stash.get("Calendar: #{title}")
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
-      |> Enum.sort(&date_compare/2)
+      |> Enum.sort(&EventHelp.date_compare/2)
       |> Enum.take(6)
-      |> Enum.map(&Osdi.Event.add_date_line/1)
+      |> Enum.map(&EventHelp.add_date_line/1)
 
     %{"id" => id} = Nb.People.push(%{"phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name})
     Nb.People.add_tags(id, ["Action: Joined as Volunteer: #{title}"])
@@ -188,14 +187,4 @@ defmodule Core.ActController do
   defp is_callable(_else) do
     false
   end
-
-  defp date_compare(%{start_date: d1}, %{start_date: d2}) do
-    {:ok, a, _} = DateTime.from_iso8601(d1)
-    {:ok, b, _} = DateTime.from_iso8601(d2)
-    case DateTime.compare(a, b) do
-      :gt -> false
-      _ -> true
-    end
-  end
-
 end

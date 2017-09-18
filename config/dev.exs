@@ -27,11 +27,28 @@ config :core, Core.Vox,
   api_key: System.get_env("MAILGUN_KEY"),
   domain: System.get_env("MAILGUN_DOMAIN")
 
+config :osdi, Osdi.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "osdi_repo",
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
+  port: "5432",
+  types: GeoExample.PostgresTypes
+
 # Update secret
-config :core, [update_secret: System.get_env("UPDATE_SECRET")]
+config :core,
+  update_secret: System.get_env("UPDATE_SECRET")
 
 # Redis url
-config :core, [redis_url: System.get_env("REDIS_URL")]
+config :core,
+  redis_url: System.get_env("REDIS_URL")
+
+# Cipher
+config :cipher,
+  keyphrase: "testiekeyphraseforcipher",
+  ivphrase: "testieivphraseforcipher",
+  magic_token: "magictoken"
 
 # Watch static and templates for browser reloading.
 config :core, Core.Endpoint,
@@ -50,12 +67,3 @@ config :logger, :console, format: "[$level] $message\n"
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
-
-# Configure your database
-config :core, Core.Repo,
-  adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
-  database: "core_dev",
-  hostname: "localhost",
-  pool_size: 10

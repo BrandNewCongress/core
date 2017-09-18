@@ -42,4 +42,9 @@ defmodule Core.LeaderboardController do
     render conn, "leaderboard-report.html",
       [layout: {Core.LayoutView, "empty.html"}] ++ GlobalOpts.get(conn, params)
   end
+
+  def send_email(conn, _params = %{"secret" => @secret}) do
+    Task.async(fn -> Core.Jobs.MailLeaderboard.send() end)
+    json conn, %{"ok" => "ok"}
+  end
 end

@@ -19,4 +19,7 @@ defmodule Core.BrandHelpers do
 
   def homepage("bnc"), do: "brandnewcongress.org"
   def homepage("jd"), do: "justicedemocrats.com"
+
+  def core_deployment("bnc"), do: "https://now.brandnewcongress.org"
+  def core_deployment("jd"), do: "https://now.justicedemocrats.com"
 end

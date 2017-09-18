@@ -1,4 +1,4 @@
-<div class="nav-body-container" style="height: calc(100vh - 135px); padding: 30px 0px 30px 30px; overflow: visible;">
+<div class="nav-body-container" style="min-height: calc(100vh - 135px); padding: 30px 0px 30px 30px; overflow: visible;">
   <%= if (not @mobile) and (@slug == "submit-event" or @slug == "teams") do %>
     <%= render Core.LayoutView, "left-nav.html", assigns %>
   <% end %>

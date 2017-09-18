@@ -7,11 +7,19 @@
     <div class="header">
       <h2> <%= @event.title %> </h2>
     </div>
-    <div class="description">
+    <div class="description" style="white-space: pre-wrap;">
       <%= raw(scrub(@event.description)) %>
     </div>
 
     <div class="bar"></div>
+
+    <%= if @event.instructions != nil and @event.instructions != "" do %>
+      <div class="instructions" style="white-space: pre-wrap;">
+        <%= raw(scrub(@event.instructions)) %>
+      </div>
+
+      <div class="bar"></div>
+    <% end %>
 
     <div class="info-container">
       <div class="when">
@@ -29,13 +37,9 @@
       </div>
       <div class="contact">
         <h3> Contact </h3>
-        <%= if @event.host.public do %>
-          <p> <%= @event.host.name %> </p>
-          <p> <a href="mailto:<%= @event.host.email %>"> <%= @event.host.email %> </a> </p>
-          <p> <%= @event.host.phone %> </p>
-        <% else %>
-          <p> The host's contact information is hidden to protect their privacy. You will find out when you RSVP! </p>
-        <% end %>
+        <p> <%= @event.contact.name %> </p>
+        <p> <a href="mailto:<%= @event.contact.email_address %>"> <%= @event.contact.email_address %> </a> </p>
+        <p> <%= @event.contact.phone_number %> </p>
       </div>
     </div>
 
@@ -69,7 +73,7 @@
           <div class="form-row">
             <div class="form-el" style="margin-left: -8px; width: 277px;">
               <label> Address </label><br/>
-              <input name="address1" type="text" placeholder="1600 Pennsylvania Avenue" style="width: 100%;"/>
+              <input name="address" type="text" placeholder="1600 Pennsylvania Avenue" style="width: 100%;"/>
             </div>
           </div>
           <div class="form-row">

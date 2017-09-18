@@ -2,6 +2,7 @@ defmodule Core.EventsController do
   use Core.Web, :controller
   require Logger
   import ShorterMaps
+  alias Osdi.{Attendance, Address}
 
   def get(conn, params) do
     district = get_district(params["district"] || conn.cookies["district"])
@@ -14,15 +15,11 @@ defmodule Core.EventsController do
       [district: district, coordinates: coordinates, title: "Events"] ++ GlobalOpts.get(conn, params)
   end
 
-  def get_one(conn, params = %{"slug" => slug}) do
+  def get_one(conn, params = %{"name" => event_name}) do
     event =
-      :event_cache
-      |> Stash.get(slug)
-
-    event =
-      case event do
+      case Stash.get :event_cache, event_name do
         nil -> nil
-        event -> Osdi.Event.add_date_line(event)
+        event -> event
       end
 
     banner = get_banner(event.type)
@@ -30,25 +27,23 @@ defmodule Core.EventsController do
     render conn, "rsvp.html", [event: event, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
 
-  def rsvp(conn, params = %{"slug" => slug,
+  def rsvp(conn, params = %{"name" => event_name,
     "first_name" => first_name, "last_name" => last_name,
-    "email" => email, "phone" => phone, "address1" => address1,
+    "email" => email, "phone" => phone, "address" => address,
     "zip" => zip, "city" => city, "state" => state}) do
 
-    event =
-      :event_cache
-      |> Stash.get(slug)
-      |> Osdi.Event.add_date_line()
-
+    event = Stash.get :event_cache, event_name
     banner = get_banner(event.type)
 
-    primary_address = %{"address1" => address1, "zip" => zip, "city" => city, "state" => state}
-
-    Nb.Events.Rsvps.create(event.id, ~m{first_name, last_name, email, phone, primary_address})
-
-    # Task.async(fn ->
+    Task.async(fn ->
       Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email})
-    # end)
+    end)
+
+    Attendance.push(event.id, %{
+      given_name: first_name, family_name: last_name, email_address: email,
+      phone_number: phone, postal_address: %Address{
+        address_lines: [address], locality: city, region: state, postal_code: zip
+      }})
 
     render conn, "rsvp.html", [event: event, person: true, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
@@ -87,5 +82,32 @@ defmodule Core.EventsController do
     |> String.downcase()
     |> String.replace(" ", "-")
     |> String.replace(":", "")
+  end
+
+  def as_json(conn, params = %{"candidate" => candidate}) do
+    brand = conn |> GlobalOpts.get(params) |> Keyword.get(:brand)
+    %{"title" => title} = Cosmic.get(candidate)
+
+    events =
+      :event_cache
+      |> Stash.get("Calendar: #{title}")
+      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
+      |> Enum.sort(&EventHelp.date_compare/2)
+      |> Enum.map(&EventHelp.add_date_line/1)
+
+    json conn, events
+  end
+
+  def as_json(conn, params) do
+    brand = conn |> GlobalOpts.get(params) |> Keyword.get(:brand)
+
+    events =
+      :event_cache
+      |> Stash.get("all_slugs")
+      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
+      |> Enum.sort(&EventHelp.date_compare/2)
+      |> Enum.map(&EventHelp.add_date_line/1)
+
+    json conn, events
   end
 end
