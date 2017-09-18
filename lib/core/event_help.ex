@@ -33,4 +33,12 @@ defmodule EventHelp do
   end
 
   def set_browser_url(ev = %{name: name}), do: Map.put(ev, :browser_url, "/events/#{name}")
+
+  def date_compare(%{start_date: d1}, %{start_date: d2}) do
+    case DateTime.compare(d1, d2) do
+      :gt -> false
+      _ -> true
+    end
+  end
+
 end

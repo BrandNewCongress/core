@@ -83,4 +83,31 @@ defmodule Core.EventsController do
     |> String.replace(" ", "-")
     |> String.replace(":", "")
   end
+
+  def as_json(conn, params = %{candidate: candidate}) do
+    brand = conn |> GlobalOpts.get(params) |> Keyword.get(:brand)
+    %{"title" => title} = Cosmic.get(candidate)
+
+    events =
+      :event_cache
+      |> Stash.get("Calendar: #{title}")
+      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
+      |> Enum.sort(&EventHelp.date_compare/2)
+      |> Enum.map(&EventHelp.add_date_line/1)
+
+    json conn, events
+  end
+
+  def as_json(conn, params) do
+    brand = conn |> GlobalOpts.get(params) |> Keyword.get(:brand)
+
+    events =
+      :event_cache
+      |> Stash.get("all_slugs")
+      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
+      |> Enum.sort(&EventHelp.date_compare/2)
+      |> Enum.map(&EventHelp.add_date_line/1)
+
+    json conn, events
+  end
 end

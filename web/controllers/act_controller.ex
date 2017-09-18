@@ -83,7 +83,7 @@ defmodule Core.ActController do
       :event_cache
       |> Stash.get("Calendar: #{title}")
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
-      |> Enum.sort(&date_compare/2)
+      |> Enum.sort(&EventHelp.date_compare/2)
       # |> Enum.take(6)
       |> Enum.map(&EventHelp.add_date_line/1)
 
@@ -98,7 +98,7 @@ defmodule Core.ActController do
       :event_cache
       |> Stash.get("Calendar: #{title}")
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
-      |> Enum.sort(&date_compare/2)
+      |> Enum.sort(&EventHelp.date_compare/2)
       |> Enum.take(6)
       |> Enum.map(&EventHelp.add_date_line/1)
 
@@ -187,12 +187,4 @@ defmodule Core.ActController do
   defp is_callable(_else) do
     false
   end
-
-  defp date_compare(%{start_date: d1}, %{start_date: d2}) do
-    case DateTime.compare(d1, d2) do
-      :gt -> false
-      _ -> true
-    end
-  end
-
 end

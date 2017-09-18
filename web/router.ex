@@ -66,6 +66,8 @@ defmodule Core.Router do
     get "/update/cosmic", UpdateController, :cosmic
     post "/update/cosmic", UpdateController, :cosmic
     post "/jotform/host-event", JotformController, :submit_event
-  end
 
+    get "/events", EventsController, :as_json
+    get "/events/:candidate", EventsController, :as_json
+  end
 end
