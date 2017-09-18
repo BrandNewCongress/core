@@ -31,7 +31,7 @@ config :core, goog_key: System.get_env("GOOG_KEY")
 
 # Quantum config
 jobs =
-  [{"*/10 * * * *", {Core.Jobs.EventCache, :update, []}},
+  [{"*/2 * * * *", {Core.Jobs.EventCache, :update, []}},
    {"@daily", {Core.Jobs.MailLeaderboard , :send, []}}]
 
 config :core, Core.Scheduler, jobs: jobs
