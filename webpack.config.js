@@ -60,9 +60,9 @@ const config = {
 
   resolve: {
     alias: {
-      phoenix_html:
-        __dirname + '/deps/phoenix_html/web/static/js/phoenix_html.js',
-      phoenix: __dirname + '/deps/phoenix/web/static/js/phoenix.js'
+      'shoelace.css': path.join(__dirname, 'node_modules/shoelace-css/dist/shoelace.css'),
+      phoenix_html: path.join(__dirname, '/deps/phoenix_html/web/static/js/phoenix_html.js'),
+      phoenix: path.join(__dirname, '/deps/phoenix/web/static/js/phoenix.js')
       // react: 'react-lite',
       // 'react-dom': 'react-lite'
     }
