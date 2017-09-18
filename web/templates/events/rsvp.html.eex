@@ -13,11 +13,13 @@
 
     <div class="bar"></div>
 
-    <div class="instructions" style="white-space: pre-wrap;">
-      <%= raw(scrub(@event.instructions)) %>
-    </div>
+    <%= if @event.instructions != nil and @event.instructions != "" do %>
+      <div class="instructions" style="white-space: pre-wrap;">
+        <%= raw(scrub(@event.instructions)) %>
+      </div>
 
-    <div class="bar"></div>
+      <div class="bar"></div>
+    <% end %>
 
     <div class="info-container">
       <div class="when">
