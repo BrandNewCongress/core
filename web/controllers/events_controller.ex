@@ -84,7 +84,7 @@ defmodule Core.EventsController do
     |> String.replace(":", "")
   end
 
-  def as_json(conn, params = %{candidate: candidate}) do
+  def as_json(conn, params = %{"candidate" => candidate}) do
     brand = conn |> GlobalOpts.get(params) |> Keyword.get(:brand)
     %{"title" => title} = Cosmic.get(candidate)
 
