@@ -123,7 +123,6 @@ defmodule Jotform.SubmitEvent do
     }
 
     event = Map.put(event, :name, Event.slug_for(event.title, event.start_date))
-    event = Map.put(event, :rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}")
 
     Logger.info "Creating event on calendars #{Enum.join calendars, ", "}"
 
@@ -135,10 +134,15 @@ defmodule Jotform.SubmitEvent do
 
     Logger.info "Created event #{event_id}: #{name}: #{inspect(created)}"
 
+    created = Map.put(created, :rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}")
+
+    organizer_edit_hash = Cipher.encrypt("#{created.organizer_id}")
+    created = Map.put(created, :organizer_edit_url, "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}")
+
     %{event: created |> Map.take(~w(
       name title description summary browser_url type
       featured_image_url start_date end_date status contact
-      location tags rsvp_download_url instructions
+      location tags rsvp_download_url instructions organizer_edit_url
     )a)}
   end
 
@@ -181,7 +185,7 @@ defmodule Jotform.SubmitEvent do
   end
 
   defp create_organizer(%{email: email, phone: phone, first_name: first_name, last_name: last_name}) do
-    Nb.People.push(%{email: email, phone: phone, first_name: first_name, last_name: last_name})
+    # Nb.People.push(%{email: email, phone: phone, first_name: first_name, last_name: last_name})
     Person.push(%{
       email_addresses: [EmailAddress.get_or_insert(%{address: email, primary: true})],
       phone_numbers: [PhoneNumber.get_or_insert(%{number: phone, primary: true})],
