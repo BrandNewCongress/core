@@ -90,7 +90,7 @@ defmodule Jotform.SubmitEvent do
 
     tags = contact_tag ++ (Enum.map calendars, &("Calendar: #{&1}"))
 
-    summary = String.slice(description, 1..200) <> if String.length(description) > 200, do: "...", else: ""
+    summary = String.slice(description, 0..199) <> if String.length(description) > 200, do: "...", else: ""
 
     # Create the thing!
     event = %{
