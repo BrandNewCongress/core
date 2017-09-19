@@ -6,14 +6,19 @@ defmodule Jotform.SubmitEvent do
   Takes a typeform post body from a webhook, creates the event in NB, and sends an email
   """
   def on_event_submit(params = %{"rawRequest" => raw}) do
-    %{"q3_name" => %{"first" => first_name, "last" => last_name},
-      "q4_area_phone" => %{"area" => area, "phone" => phone_rest},
-      "q5_email" => email, "q6_event_type" => event_type, "q7_event_date" => event_date,
-      "q8_start_time" => start_time, "q9_end_time" => end_time,
-      "q10_description" => description, "q13_venue_name" => venue_name,
-      "q14_should_hide" => hide_address, "q15_address" => venue_address,
-      "q16_event_name" => event_name, "q17_should_contact" => should_contact,
-      "q20_instructions" => instructions} = Poison.decode!(raw)
+    as_map = Poison.decode!(raw)
+
+    %{name: %{"first" => first_name, "last" => last_name},
+      area_phone: %{"area" => area, "phone" => phone_rest},
+      email: email, event_type: event_type, event_date: event_date,
+      start_time: start_time, end_time: end_time, description: description,
+      venue_name: venue_name, should_hide: hide_address, address: venue_address,
+      event_name: event_name, should_contact: should_contact,
+      instructions: instructions} =
+        ~w(name area_phone email event_type event_date start_time end_time description
+           venue_name should_hide address event_name should_contact instructions)
+        |> Enum.map(fn attr -> {String.to_atom(attr), matching_val(attr, as_map)} end)
+        |> Enum.into(%{})
 
     ## ------------ Determine whitelist status
     auto_whitelist = Map.has_key?(params, "whitelist")
@@ -182,5 +187,20 @@ defmodule Jotform.SubmitEvent do
       phone_numbers: [PhoneNumber.get_or_insert(%{number: phone, primary: true})],
       postal_addresses: [],
       given_name: first_name, family_name: last_name})
+  end
+
+  defp matching_val(attr, map) do
+    key =
+      map
+      |> Map.keys()
+      |> Enum.filter(fn full -> extract_val_portion(full) == attr end)
+      |> List.first()
+
+    Map.get(map, key)
+  end
+
+  defp extract_val_portion(attr) do
+    [_| rest] = String.split attr, "_"
+    Enum.join rest, "_"
   end
 end
