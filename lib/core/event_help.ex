@@ -55,6 +55,6 @@ defmodule EventHelp do
 
   def destructure_tags(event) do
     destructured = Enum.map event.tags, fn %{name: name} -> name end
-    Map.put(event, :tags, destructured) |> IO.inspect
+    Map.put(event, :tags, destructured)
   end
 end
