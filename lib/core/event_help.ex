@@ -41,4 +41,20 @@ defmodule EventHelp do
     end
   end
 
+  def add_candidate_attr(event) do
+    candidate =
+      event.tags
+      |> Enum.filter(&(String.contains?(&1, "Calendar: ")))
+      |> Enum.map(&(&1 |> String.split(":") |> List.last() |> String.trim()))
+      |> Enum.reject(&(&1 == "Brand New Congress" or &1 == "Justice Democrats"))
+      |> List.first()
+
+    candidate = candidate || "Justice Democrats"
+    Map.put(event, :candidate, candidate)
+  end
+
+  def destructure_tags(event) do
+    destructured = Enum.map event.tags, fn %{name: name} -> name end
+    Map.put(event, :tags, destructured) |> IO.inspect
+  end
 end
