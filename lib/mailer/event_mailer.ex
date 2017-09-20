@@ -49,7 +49,6 @@ defmodule Core.EventMailer do
 
     candidate =
       event.tags
-      |> Enum.map(&(&1.name))
       |> Enum.filter(&(String.contains?(&1, "Calendar: ")))
       |> Enum.map(&(&1 |> String.split(":") |> List.last() |> String.trim()))
       |> Enum.filter(&(not Enum.member?(["Brand New Congress", "Justice Democrats"], &1)))
@@ -60,13 +59,11 @@ defmodule Core.EventMailer do
       cand -> cand
     end
 
-    IO.inspect candidate
-
     params = ~M{first_name, last_name, email, candidate, event}
 
     new()
     |> to({"#{first_name} #{last_name}", email})
-    |> from({event.contact.name, "events@brandnewcongress.org"})
+    |> from({event.contact.name || event.contact.email_address, "events@brandnewcongress.org"})
     |> subject("RSVP Confirmation: #{event.title}")
     |> render_body(:"rsvp-email", params)
     |> Core.Mailer.deliver()
