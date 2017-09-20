@@ -86,7 +86,15 @@ defmodule Core.EventsController do
 
   def as_json(conn, params = %{"candidate" => candidate}) do
     brand = conn |> GlobalOpts.get(params) |> Keyword.get(:brand)
-    %{"title" => title} = candidate |> String.downcase() |> Cosmic.get()
+
+    candidate = String.downcase candidate
+    candidate =
+      case candidate do
+        "alexandria-ocasio" -> "alexandria-ocasio-cortez"
+        other -> other
+      end
+
+    %{"title" => title} = Cosmic.get(candidate)
 
     events =
       :event_cache
