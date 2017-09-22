@@ -19,7 +19,7 @@ DESCRIPTION: <%= @event.description %>
 
 
 Invite a friend to join you and double your impact!
-https://now.justicedemocrats.com<%= @event.browser_url %>
+https://now.brandnewcongress.org/<%= @event.browser_url %>
 
 
 Together we can bring a better future,

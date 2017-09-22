@@ -1,119 +1,96 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="en">
-
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="initial-scale=1.0">
-  <!-- So that mobile webkit will display zoomed in -->
-  <meta name="format-detection" content="telephone=no">
-  <!-- disable auto telephone linking in iOS -->
-  <title>Repeal and Replace Congress</title>
-  <style type="text/css">
-    .myButton {
-      -moz-box-shadow: inset 0px 39px 0px -24px #e67a73;
-      -webkit-box-shadow: inset 0px 39px 0px -24px #e67a73;
-      box-shadow: inset 0px 39px 0px -24px #e67a73;
-      background-color: #e4685d;
-      -moz-border-radius: 4px;
-      -webkit-border-radius: 4px;
-      border-radius: 4px;
-      border: 1px solid #ffffff;
-      display: inline-block;
-      cursor: pointer;
-      color: #ffffff;
-      font-family: Arial;
-      font-size: 15px;
-      padding: 10px 26px;
-      text-decoration: none;
-      text-shadow: 0px 1px 0px #b23e35;
-    }
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="initial-scale=1.0"><!-- So that mobile webkit will display zoomed in -->
+    <meta name="format-detection" content="telephone=no"><!-- disable auto telephone linking in iOS -->
+    <title>Bringing Democracy back to Democrats.</title>
+    <style type="text/css">
 
-    .myButton:hover {
-      background-color: #ffffff;
-    }
+.myButton {
+	-moz-box-shadow:inset 0px 39px 0px -24px #e67a73;
+	-webkit-box-shadow:inset 0px 39px 0px -24px #e67a73;
+	box-shadow:inset 0px 39px 0px -24px #e67a73;
+	background-color:#e4685d;
+	-moz-border-radius:4px;
+	-webkit-border-radius:4px;
+	border-radius:4px;
+	border:1px solid #ffffff;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:15px;
+	padding:10px 26px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #b23e35;
+}
+.myButton:hover {
+	background-color:#ffffff;
+}
+.myButton:active {
+	position:relative;
+	top:1px;
+}
 
-    .myButton:active {
-      position: relative;
-      top: 1px;
-    }
+    body, td, font {
+            font-family: Arial, sans-serif;
+            font-size: 15px;
+          padding: 0px 20px 0px 20px;
+        }
 
-    @import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
-    body {
-      -webkit-text-size-adjust: none;
-      -ms-text-size-adjust: none;
-    }
-
-    body,
-    td,
-    font {
-      font-family: 'Roboto Slab', Arial, sans-serif;
-      font-size: 15px;
-      padding: 0px 20px 0px 20px;
-    }
-
-    p {
-      margin-bottom: 1em;
-    }
-
-    td div p {
-      margin: 1em 0em;
-    }
-
-    table {
-      border-spacing: 0;
-      border-collapse: collapse;
-      border-spacing: 0;
-    }
-
-    table td {
-      border-collapse: collapse;
-    }
-
-    img {
-      max-width: 100%;
-    }
-
-    hr {
-      border: none;
-      border-top: 6px solid #999;
-    }
-
-    a,
-    a:link,
-    a:visited,
-    a:active {
-      color: #598089;
-    }
-
-    a:hover {
-      color: #333;
-    }
-
-    #socialTable {
-      padding: 26px 0;
-    }
-
-    @media (max-width: 600px) {
-      #socialTable {
-        padding: 0;
-      }
-    }
-  </style>
+        p {
+            margin-bottom:1em;
+        }
+        td div p {
+            margin: 1em 0em;
+        }
+        table {
+            border-spacing: 0;
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        table td {
+            border-collapse: collapse;
+        }
+        img {
+            max-width:100%;
+        }
+        hr {
+            border: none;
+            border-top: 6px double #5b919f;
+        }
+        a, a:link, a:visited, a:active {
+            color: #598089;
+        }
+        a:hover {
+            color: #ccc;
+        }
+        #socialTable {
+            padding: 26px 0;
+        }
+        @media (max-width: 600px) {
+            #socialTable {
+                padding: 0;
+            }
+        }
+    </style>
 </head>
 
+   <div class="emailheader" style="text-align: center;">
+         <br/> <br/>
+        <div style="text-align: center;">
+            <a href="http://www.justicedemocrats.com"><img style="width:235px;" src="http://d3n8a8pro7vhmx.cloudfront.net/themes/58e68ebe79bffa6254000000/attachments/original/1491507288/JD_bar.png?1491507288"></a>
+        </div>
+      </div>
+       <br/>
 
-<div class="emailheader" style="text-align: center;">
-  <br/> <br/>
-  <div style="text-align: center;">
-    <a href="http://www.brandnewcongress.org"><img style="width:235px;" src="http://d3n8a8pro7vhmx.cloudfront.net/themes/58cc40709bde691988000000/attachments/original/1489848564/BNC_box.png?1489848564" alt="Brand New Congress"></a>
-  </div>
-</div>
-<br/>
 
 
 <body style="margin:0; padding:0 30px;" bgcolor="#ffffff" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-  <font face="Roboto Slab, sans-serif" size=2>
+
+    <div style="font-size: 18px; sans-serif; color: #555;"><p>
 
     <div style="font-size: 18px; font-family: Roboto Slab, sans-serif; color: #555;">
       <p>
@@ -141,7 +118,7 @@
         Invite a friend to join you and double your impact!
         <br/>
         <br/>
-        <a href="https://now.brandnewcongress.org/<%= @event.browser_url %>"> https://now.brandnewcongress.org/<%= @event.browser_url %> </a>
+        <a href="https://now.jusicedemocrats.com<%= @event.browser_url %>"> https://now.justicedemocrats.com<%= @event.browser_url %> </a>
         <br/>
         <br/>
         Together we can bring a better future,
@@ -149,21 +126,53 @@
       </p>
     </div>
 
+
     <br/><br/><br/>
     <hr>
     <div class="emailFooter" style="text-align: center;">
-      <br/><br/>
-      <div style="text-align: center;">
-        <a href="http://www.brandnewcongress.org"><img style="width: 140px;" src="https://brandnewcongress.org/assets/1/0/bundles/sitetheorytemplatecustom/images/BNClogo.png" alt="Brand New Congress"></a>
-      </div>
-      <br/>
-      <div style="text-align: center;">
-        <a style="display: table; margin: 0 auto; background: #7932AC; color: #FFF; font-family: 'Roboto Slab', sans-serif; font-size: 11px; font-weight: bold;text-transform: uppercase; letter-spacing: 1px; text-decoration: none; line-height: 2;" href="https://brandnewcongress.org/donate">&nbsp;&nbsp;&nbsp;Donate&nbsp;&nbsp;&nbsp;</a>
-      </div>
-      <br>
+        <br/><br/>
+        <div style="text-align: center;">
+            <a href="http://www.justicedemocrats.com"><img style="width: 100px;" src="http://d3n8a8pro7vhmx.cloudfront.net/themes/58e68ebe79bffa6254000000/attachments/original/1491507760/JusticeDemocratsAvatar500.png?1491507760" alt=" "></a>
+        </div>
+        <br/>
+        <table id="socialTable" align="center" border="0" width="150px" style="margin: 0 auto; border:0px; color:#555; text-align:center;" cellpadding="4" cellspacing="4">
+            <tr>
+                <td width="36px">
+                    <a href="https://twitter.com/justicedems" target="_blank">
+                        <div style="border: 1px solid #666; border-radius: 50%; width: 36px; height: 36px;">
+                            <img src="https://brandnewcongress.org/assets/1/0/bundles/sitetheorytemplatecustom/images/nationBuilder/twitter.png" style="padding: 10px 10px 0 10px;" width="16px" height="16px" alt="Twitter">
+
+                        </div>
+                    </a>
+                </td>
+                <td width="44px">
+                    <a href="https://www.facebook.com/justicedemocrats/" target="_blank">
+                        <div style="margin: 0 4px; border: 1px solid #666; border-radius: 50%; width: 36px; height: 36px;">
+                            <img src="https://brandnewcongress.org/assets/1/0/bundles/sitetheorytemplatecustom/images/nationBuilder/facebook.png" style="padding: 10px 10px 0 10px;" width="16px" height="16px" alt="Facebook">
+                        </div>
+                    </a>
+                </td>
+                <td width="36px">
+                    <a href="https://www.reddit.com/r/justicedemocrats" target="_blank">
+                        <div style="border: 1px solid #666; border-radius: 50%; width: 36px; height: 36px;">
+                            <img src="https://brandnewcongress.org/assets/1/0/bundles/sitetheorytemplatecustom/images/nationBuilder/reddit.png" style="padding: 10px 10px 0 10px;" width="16px" height="16px" alt="Reddit">
+                        </div>
+                    </a>
+                </td>
+            </tr>
+        </table>
+        <br/>
+        <div style="text-align: center;">
+            <a style="display: table; margin: 0 auto; background: #5b919f; color: #FFF; font-family: Arial', sans-serif; font-size: 11px; font-weight: bold;text-transform: uppercase; letter-spacing: 1px; text-decoration: none; line-height: 2;" href="https://secure.actblue.com/donate/jd-candidates?refcode=em_JD_footer_tandem">&nbsp;&nbsp;&nbsp;Support Justice Democrats&nbsp;&nbsp;&nbsp;</a>
+        </div>
+        <br>
+        <p style="font-size: 9px; text-transform: uppercase; letter-spacing: .08em; color: #555;">
+            ©2017 Justice Democrats. All rights reserved. PAID FOR BY JUSTICE DEMOCRATS,<a href="http://www.justicedemocrats.com">JUSTICEDEMOCRATS.COM</a> NOT AUTHORIZED BY ANY CANDIDATE OR CANDIDATE’S COMMITTEE.
+        </p>
+        <p style="font-size: 9px; text-transform: uppercase; letter-spacing: .08em; color: #555;">
+            To stop receiving emails, <a href="https://now.justicedemocrats.com/unsubscribe/justicedemocrats?email=%%EMAIL%%">click here</a>.
+        </p>
     </div>
     <br /><br /><br />
-  </font>
-</body>
 
-</html>
+</body></html>
