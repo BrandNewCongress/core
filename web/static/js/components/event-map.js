@@ -4,6 +4,8 @@ import EventMarker from './event-marker'
 import GeoSuggest from 'react-geosuggest'
 import socket from '../socket'
 
+const DIST_GROUP_THRESHOLD = .0000001
+
 export default class EventMap extends Component {
   state = {
     events: [],
@@ -86,7 +88,7 @@ export default class EventMap extends Component {
 
     return (
       <div>
-        {showDistrictSelector &&
+        {showDistrictSelector && (
           <div className="district-selector">
             <div className="district-selector-header">
               <h2> Events Near You </h2>
@@ -98,7 +100,8 @@ export default class EventMap extends Component {
                 <a onClick={this.getDistrict}> Go </a>
               </div>
             </div>
-          </div>}
+          </div>
+        )}
 
         <Map
           animate={true}
@@ -111,96 +114,142 @@ export default class EventMap extends Component {
             url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
           />
           {overlay && <GeoJSON data={overlay} className="district-overlay" />}
-          {events.map(e => <EventMarker key={e.name} event={e} />)}
+          {this.groupEvents(events).map(es => (
+            <EventMarker key={es[0].name} events={es} />
+          ))}
         </Map>
       </div>
     )
   }
 
   renderNoEventsModal = () =>
-    this.state.noEvents &&
-    <div
-      style={{
-        position: 'absolute',
-        zIndex: '1000',
-        backgroundColor: 'black',
-        color: 'white',
-        left: '50%',
-        transform: 'translate(-50%, 50%) scale(1.3)',
-        padding: '40px',
-        fontFamily: 'Roboto Slab, sans-serif'
-      }}
-    >
+    this.state.noEvents && (
       <div
-        className="close-modal"
         style={{
           position: 'absolute',
-          marginTop: '-30px',
-          float: 'right',
-          right: '15px',
-          cursor: 'pointer'
+          zIndex: '1000',
+          backgroundColor: 'black',
+          color: 'white',
+          left: '50%',
+          transform: 'translate(-50%, 50%) scale(1.3)',
+          padding: '40px',
+          fontFamily: 'Roboto Slab, sans-serif'
         }}
-        onClick={this.closeModal}
       >
-        X
-      </div>
-      <div className="no-events-text">
-        There's not an event near you yet, but you can be the first.
-      </div>
-      <a
-        className="primary-button"
-        style={{
-          paddingTop: '5px',
-          margin: '0px',
-          paddingBottom: '5px',
-          marginTop: '10px',
-          height: '100%'
-        }}
-        onClick={() => window.navigateTo('/form/submit-event')}
-      >
-        Host One Now
-      </a>
-
-      <div className="other-options-container" style={{ marginTop: 10 }}>
-        Or, help from home:
         <div
-          className="other-options-container"
+          className="close-modal"
           style={{
-            display: 'flex',
-            justifyContent: 'space-between'
+            position: 'absolute',
+            marginTop: '-30px',
+            float: 'right',
+            right: '15px',
+            cursor: 'pointer'
           }}
+          onClick={this.closeModal}
         >
-          <a
-            className="secondary-button"
-            onClick={() => window.navigateTo('/act/call')}
+          X
+        </div>
+        <div className="no-events-text">
+          There's not an event near you yet, but you can be the first.
+        </div>
+        <a
+          className="primary-button"
+          style={{
+            paddingTop: '5px',
+            margin: '0px',
+            paddingBottom: '5px',
+            marginTop: '10px',
+            height: '100%'
+          }}
+          onClick={() => window.navigateTo('/form/submit-event')}
+        >
+          Host One Now
+        </a>
+
+        <div className="other-options-container" style={{ marginTop: 10 }}>
+          Or, help from home:
+          <div
+            className="other-options-container"
             style={{
-              width: '48%',
-              height: '100%',
-              paddingTop: '5px',
-              margin: '0px',
-              paddingBottom: '5px',
-              marginTop: '10px',
-              textAlign: 'center'
+              display: 'flex',
+              justifyContent: 'space-between'
             }}
           >
-            Call Voters
-          </a>
-          <a
-            className="secondary-button"
-            onClick={() => window.navigateTo('/form/teams')}
-            style={{
-              width: '48%',
-              height: '100%',
-              paddingTop: '5px',
-              margin: '0px',
-              paddingBottom: '5px',
-              marginTop: '10px',
-              textAlign: 'center'
-            }}
-          >
-            Join a National Team
-          </a>
+            <a
+              className="secondary-button"
+              onClick={() => window.navigateTo('/act/call')}
+              style={{
+                width: '48%',
+                height: '100%',
+                paddingTop: '5px',
+                margin: '0px',
+                paddingBottom: '5px',
+                marginTop: '10px',
+                textAlign: 'center'
+              }}
+            >
+              Call Voters
+            </a>
+            <a
+              className="secondary-button"
+              onClick={() => window.navigateTo('/form/teams')}
+              style={{
+                width: '48%',
+                height: '100%',
+                paddingTop: '5px',
+                margin: '0px',
+                paddingBottom: '5px',
+                marginTop: '10px',
+                textAlign: 'center'
+              }}
+            >
+              Join a National Team
+            </a>
+          </div>
         </div>
       </div>
-    </div>
+    )
+
+  groupEvents = events =>
+    events.reduce(
+      (acc, event) =>
+        acc.filter(
+          (es, idx) => this.distanceBetween(this.centroid(es), event) < DIST_GROUP_THRESHOLD
+        ).length == 0
+          ? acc.concat([[event]])
+          : acc.map(
+              (es, idx) =>
+                this.distanceBetween(this.centroid(es), event) < DIST_GROUP_THRESHOLD
+                  ? es.concat([event])
+                  : es
+            ),
+      []
+    )
+
+  distanceBetween = (coords, e) => {
+    const result = Math.pow(
+      Math.pow(coords[0] - e.location.location[0], 2) +
+        Math.pow(coords[1] - e.location.location[1], 2),
+      0.5
+    )
+
+    if (e.name == 'calling-unaffiliated-voters-09-29') {
+      console.log(coords)
+      console.log(e)
+      console.log(result)
+    }
+
+    return result
+  }
+
+  centroid = es => {
+    const totals = [0, 0]
+    es.forEach(e => {
+      totals[0] = totals[0] = e.location.location[0]
+      totals[1] = totals[1] = e.location.location[1]
+    })
+
+    const [lat_sum, long_sum] = totals
+    return [lat_sum / es.length, long_sum / es.length]
+  }
 }
