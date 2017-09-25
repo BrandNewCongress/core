@@ -3,6 +3,7 @@ import { render } from 'react-dom'
 import CloseIcon from './sidebar/close-icon'
 import siteMap from './sidebar/sitemap'
 import hrefOfEntry from './lib/href-of-entry'
+import spa from './spa'
 
 class TopNav extends Component {
   state = {
@@ -11,11 +12,6 @@ class TopNav extends Component {
 
   showOpts = idx => ev => this.setState({ hover: idx })
   hideOpts = idx => ev => this.setState({ hover: null })
-  visit = entry => ev => {
-    ev.stopPropagation()
-    ev.preventDefault()
-    window.navigateTo(hrefOfEntry(entry))
-  }
 
   render() {
     const { hover } = this.state
@@ -26,7 +22,7 @@ class TopNav extends Component {
           <div
             key={tl.label}
             className={`top-level ${hover == idx ? 'hovering' : ''}`}
-            onClick={this.visit(tl)}
+            href={tl}
             onMouseEnter={this.showOpts(idx)}
             onMouseLeave={this.hideOpts(idx)}
           >
@@ -39,7 +35,7 @@ class TopNav extends Component {
                   <div
                     key={child.label}
                     className="item"
-                    onClick={this.visit(child)}
+                    href={child}
                   >
                     {child.label}
                   </div>
@@ -60,13 +56,6 @@ class SideNav extends Component {
     selected: ''
   }
 
-  visit = entry => ev => {
-    ev.stopPropagation()
-    ev.preventDefault()
-    window.navigateTo(hrefOfEntry(entry))
-  }
-
-
   render() {
     return (
       <div className="side-nav-container">
@@ -80,7 +69,6 @@ class SideNav extends Component {
             <a
               className={`side-nav-item ${entry.matches() ? 'selected' : ''}`}
               href={hrefOfEntry(entry)}
-              onClick={this.visit(entry)}
               key={entry.label}
             >
               {window.opts.brand == 'bnc' &&
@@ -98,11 +86,14 @@ class SideNav extends Component {
 }
 
 function doRender() {
+  console.log('morphed')
   render(<TopNav {...window.opts} />, document.getElementById('sidebar'))
 
   const target = document.getElementById('side-nav')
   if (target) render(<SideNav {...window.opts} />, target)
+
+  spa.bind.all()
+  spa.bus.on('morphed', doRender)
 }
 
 doRender()
-window.bus.on('page-change', () => doRender())
