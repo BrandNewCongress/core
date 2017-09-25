@@ -22,7 +22,6 @@ import modernizr from './modernizr'
 import 'phoenix_html'
 import spa from './spa'
 import littleAnalytics from './little-analytics'
-import 'shoelace-css/dist/shoelace.js'
 
 spa.bind.all()
 spa.attachHistory()
