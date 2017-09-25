@@ -2,7 +2,9 @@ defmodule Core.EventsController do
   use Core.Web, :controller
   require Logger
   import ShorterMaps
-  alias Osdi.{Attendance, Address}
+  alias Osdi.{Attendance, Address, Event, Repo}
+
+  @secret Application.get_env(:core, :update_secret)
 
   def get(conn, params) do
     district = get_district(params["district"] || conn.cookies["district"])
@@ -86,6 +88,14 @@ defmodule Core.EventsController do
 
   def as_json(conn, params = %{"candidate" => candidate}) do
     brand = conn |> GlobalOpts.get(params) |> Keyword.get(:brand)
+
+    candidate = String.downcase candidate
+    candidate =
+      case candidate do
+        "alexandria-ocasio" -> "alexandria-ocasio-cortez"
+        other -> other
+      end
+
     %{"title" => title} = Cosmic.get(candidate)
 
     events =
@@ -94,6 +104,14 @@ defmodule Core.EventsController do
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
       |> Enum.sort(&EventHelp.date_compare/2)
       |> Enum.map(&EventHelp.add_date_line/1)
+      |> Enum.map(&EventHelp.add_candidate_attr/1)
+
+    events =
+      if params["secret"] == @secret do
+        Enum.map events, &add_secret_attrs/1
+      else
+        events
+      end
 
     json conn, events
   end
@@ -107,7 +125,25 @@ defmodule Core.EventsController do
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
       |> Enum.sort(&EventHelp.date_compare/2)
       |> Enum.map(&EventHelp.add_date_line/1)
+      |> Enum.map(&EventHelp.add_candidate_attr/1)
+
+    events =
+      if params["secret"] == @secret do
+        Enum.map events, &add_secret_attrs/1
+      else
+        events
+      end
 
     json conn, events
+  end
+
+  defp add_secret_attrs(event = %{id: id}) do
+    organizer_id = Repo.one(from e in Event, where: e.id == ^id, select: e.organizer_id)
+    organizer_edit_hash = Cipher.encrypt("#{organizer_id}")
+    organizer_edit_url = "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}"
+
+    event
+    |> Map.put(:rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}")
+    |> Map.put(:organizer_edit_url, organizer_edit_url)
   end
 end

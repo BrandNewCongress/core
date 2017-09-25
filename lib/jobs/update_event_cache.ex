@@ -17,6 +17,7 @@ defmodule Core.Jobs.EventCache do
       |> Repo.all()
       |> Repo.preload([:tags, :location])
       |> Enum.map(fn ev -> Map.take(ev, @attrs) end)
+      |> Enum.map(&EventHelp.destructure_tags/1)
       |> Enum.map(&EventHelp.set_browser_url/1)
       |> Enum.map(&EventHelp.add_date_line/1)
 
@@ -57,9 +58,7 @@ defmodule Core.Jobs.EventCache do
 
   defp events_for_calendar(%{name: selected_calendar}, events) do
     Enum.filter events, fn %{tags: tags} ->
-      tags
-      |> Enum.map(&(&1.name))
-      |> Enum.member?(selected_calendar)
+      Enum.member? tags, selected_calendar
     end
   end
 

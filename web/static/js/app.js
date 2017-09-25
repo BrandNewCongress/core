@@ -20,9 +20,10 @@
 // import socket from './socket'
 import modernizr from './modernizr'
 import 'phoenix_html'
-import fakeSpa from './fake-spa'
+import spa from './spa'
 import littleAnalytics from './little-analytics'
 import 'shoelace-css/dist/shoelace.js'
 
-// fakeSpa.bind()
+spa.bind.all()
+spa.attachHistory()
 littleAnalytics.bind()

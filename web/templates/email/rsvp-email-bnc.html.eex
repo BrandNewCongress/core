@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="initial-scale=1.0">
+  <!-- So that mobile webkit will display zoomed in -->
+  <meta name="format-detection" content="telephone=no">
+  <!-- disable auto telephone linking in iOS -->
+  <title>Repeal and Replace Congress</title>
+  <style type="text/css">
+    .myButton {
+      -moz-box-shadow: inset 0px 39px 0px -24px #e67a73;
+      -webkit-box-shadow: inset 0px 39px 0px -24px #e67a73;
+      box-shadow: inset 0px 39px 0px -24px #e67a73;
+      background-color: #e4685d;
+      -moz-border-radius: 4px;
+      -webkit-border-radius: 4px;
+      border-radius: 4px;
+      border: 1px solid #ffffff;
+      display: inline-block;
+      cursor: pointer;
+      color: #ffffff;
+      font-family: Arial;
+      font-size: 15px;
+      padding: 10px 26px;
+      text-decoration: none;
+      text-shadow: 0px 1px 0px #b23e35;
+    }
+
+    .myButton:hover {
+      background-color: #ffffff;
+    }
+
+    .myButton:active {
+      position: relative;
+      top: 1px;
+    }
+
+    @import url('https://fonts.googleapis.com/css?family=Roboto+Slab');
+    body {
+      -webkit-text-size-adjust: none;
+      -ms-text-size-adjust: none;
+    }
+
+    body,
+    td,
+    font {
+      font-family: 'Roboto Slab', Arial, sans-serif;
+      font-size: 15px;
+      padding: 0px 20px 0px 20px;
+    }
+
+    p {
+      margin-bottom: 1em;
+    }
+
+    td div p {
+      margin: 1em 0em;
+    }
+
+    table {
+      border-spacing: 0;
+      border-collapse: collapse;
+      border-spacing: 0;
+    }
+
+    table td {
+      border-collapse: collapse;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    hr {
+      border: none;
+      border-top: 6px solid #999;
+    }
+
+    a,
+    a:link,
+    a:visited,
+    a:active {
+      color: #598089;
+    }
+
+    a:hover {
+      color: #333;
+    }
+
+    #socialTable {
+      padding: 26px 0;
+    }
+
+    @media (max-width: 600px) {
+      #socialTable {
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+
+
+<div class="emailheader" style="text-align: center;">
+  <br/> <br/>
+  <div style="text-align: center;">
+    <a href="http://www.brandnewcongress.org"><img style="width:235px;" src="http://d3n8a8pro7vhmx.cloudfront.net/themes/58cc40709bde691988000000/attachments/original/1489848564/BNC_box.png?1489848564" alt="Brand New Congress"></a>
+  </div>
+</div>
+<br/>
+
+
+<body style="margin:0; padding:0 30px;" bgcolor="#ffffff" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+  <font face="Roboto Slab, sans-serif" size=2>
+
+    <div style="font-size: 18px; font-family: Roboto Slab, sans-serif; color: #555;">
+      <p>
+        <%= @first_name %> --
+        <br/>
+        <br/>
+        Thank you for your RSVP to <%= @event.title %>.
+        <br/>
+        <br/>
+        Here are your event details:
+        <br/>
+        <br/>
+        <b>WHAT:</b> <%= @event.title %></b>
+        <br/>
+        <b>WHEN:</b> <%= @event.date_line %>
+        <br/>
+        <b>WHERE:</b>
+          <%= @event.location.venue %> <br/>
+          <%= @event.location.address_lines |> List.first() %>, <%= @event.location.locality %> <%= @event.location.region %>
+        <br/>
+        <br/>
+        <b>DESCRIPTION: </b> <%= @event.description %>
+        <br/>
+        <br/>
+        Invite a friend to join you and double your impact!
+        <br/>
+        <br/>
+        <a href="https://now.brandnewcongress.org/<%= @event.browser_url %>"> https://now.brandnewcongress.org/<%= @event.browser_url %> </a>
+        <br/>
+        <br/>
+        Together we can bring a better future,
+        <br/> <%= @candidate %> Events Team
+      </p>
+    </div>
+
+    <br/><br/><br/>
+    <hr>
+    <div class="emailFooter" style="text-align: center;">
+      <br/><br/>
+      <div style="text-align: center;">
+        <a href="http://www.brandnewcongress.org"><img style="width: 140px;" src="https://brandnewcongress.org/assets/1/0/bundles/sitetheorytemplatecustom/images/BNClogo.png" alt="Brand New Congress"></a>
+      </div>
+      <br/>
+      <div style="text-align: center;">
+        <a style="display: table; margin: 0 auto; background: #7932AC; color: #FFF; font-family: 'Roboto Slab', sans-serif; font-size: 11px; font-weight: bold;text-transform: uppercase; letter-spacing: 1px; text-decoration: none; line-height: 2;" href="https://brandnewcongress.org/donate">&nbsp;&nbsp;&nbsp;Donate&nbsp;&nbsp;&nbsp;</a>
+      </div>
+      <br>
+    </div>
+    <br /><br /><br />
+  </font>
+</body>
+
+</html>

@@ -51,6 +51,9 @@ defmodule Core.ActController do
   end
 
   defp render_call(conn, params, district) do
+    global_opts = GlobalOpts.get(conn, params)
+    brand = Keyword.get(global_opts, :brand)
+
     %{candidate: candidate, closest_candidate: closest_candidate}
       = candidate_options(district)
 
@@ -60,7 +63,7 @@ defmodule Core.ActController do
       true -> ""
     end
 
-    callable_maps = callable_candidates()
+    callable_maps = callable_candidates(brand)
     callable_slugs = Enum.map(callable_maps, fn %{slug: slug} -> slug end)
 
     draft = Map.has_key?(params, "draft")
@@ -73,7 +76,7 @@ defmodule Core.ActController do
        callable_candidates: callable_maps, callable_slugs: callable_slugs,
        event_action_options: event_action_options(conn, params),
        home_action_options: home_action_options(conn, params),
-       draft: draft] ++ GlobalOpts.get(conn, params)
+       draft: draft] ++ global_opts
   end
 
   def call_aid(conn, params = %{"candidate" => candidate}) do
@@ -162,9 +165,10 @@ defmodule Core.ActController do
     length(callable_candidates()) > 0
   end
 
-  defp callable_candidates do
+  defp callable_candidates(brand \\ "bnc") do
     "candidates"
     |> Cosmic.get_type()
+    |> Enum.filter(fn %{"metadata" => %{"brands" => bs}} -> Enum.member?(bs, brand) end)
     |> Enum.filter(&(is_callable(&1)))
     |> Enum.map(fn %{"slug" => slug, "title" => name} -> %{slug: slug, name: name} end)
   end

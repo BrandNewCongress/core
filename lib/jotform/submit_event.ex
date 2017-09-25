@@ -6,14 +6,19 @@ defmodule Jotform.SubmitEvent do
   Takes a typeform post body from a webhook, creates the event in NB, and sends an email
   """
   def on_event_submit(params = %{"rawRequest" => raw}) do
-    %{"q3_name" => %{"first" => first_name, "last" => last_name},
-      "q4_area_phone" => %{"area" => area, "phone" => phone_rest},
-      "q5_email" => email, "q6_event_type" => event_type, "q7_event_date" => event_date,
-      "q8_start_time" => start_time, "q9_end_time" => end_time,
-      "q10_description" => description, "q13_venue_name" => venue_name,
-      "q14_should_hide" => hide_address, "q15_address" => venue_address,
-      "q16_event_name" => event_name, "q17_should_contact" => should_contact,
-      "q20_instructions" => instructions} = Poison.decode!(raw)
+    as_map = Poison.decode!(raw)
+
+    %{name: %{"first" => first_name, "last" => last_name},
+      area_phone: %{"area" => area, "phone" => phone_rest},
+      email: email, event_type: event_type, event_date: event_date,
+      start_time: start_time, end_time: end_time, description: description,
+      venue_name: venue_name, should_hide: hide_address, address: venue_address,
+      event_name: event_name, should_contact: should_contact,
+      instructions: instructions} =
+        ~w(name area_phone email event_type event_date start_time end_time description
+           venue_name should_hide address event_name should_contact instructions)
+        |> Enum.map(fn attr -> {String.to_atom(attr), matching_val(attr, as_map)} end)
+        |> Enum.into(%{})
 
     ## ------------ Determine whitelist status
     auto_whitelist = Map.has_key?(params, "whitelist")
@@ -85,7 +90,7 @@ defmodule Jotform.SubmitEvent do
 
     tags = contact_tag ++ (Enum.map calendars, &("Calendar: #{&1}"))
 
-    summary = String.slice(description, 1..200) <> if String.length(description) > 200, do: "...", else: ""
+    summary = String.slice(description, 0..199) <> if String.length(description) > 200, do: "...", else: ""
 
     # Create the thing!
     event = %{
@@ -118,7 +123,6 @@ defmodule Jotform.SubmitEvent do
     }
 
     event = Map.put(event, :name, Event.slug_for(event.title, event.start_date))
-    event = Map.put(event, :rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}")
 
     Logger.info "Creating event on calendars #{Enum.join calendars, ", "}"
 
@@ -130,10 +134,15 @@ defmodule Jotform.SubmitEvent do
 
     Logger.info "Created event #{event_id}: #{name}: #{inspect(created)}"
 
+    created = Map.put(created, :rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}")
+
+    organizer_edit_hash = Cipher.encrypt("#{created.organizer_id}")
+    created = Map.put(created, :organizer_edit_url, "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}")
+
     %{event: created |> Map.take(~w(
       name title description summary browser_url type
       featured_image_url start_date end_date status contact
-      location tags rsvp_download_url instructions
+      location tags rsvp_download_url instructions organizer_edit_url
     )a)}
   end
 
@@ -176,11 +185,26 @@ defmodule Jotform.SubmitEvent do
   end
 
   defp create_organizer(%{email: email, phone: phone, first_name: first_name, last_name: last_name}) do
-    Nb.People.push(%{email: email, phone: phone, first_name: first_name, last_name: last_name})
+    # Nb.People.push(%{email: email, phone: phone, first_name: first_name, last_name: last_name})
     Person.push(%{
       email_addresses: [EmailAddress.get_or_insert(%{address: email, primary: true})],
       phone_numbers: [PhoneNumber.get_or_insert(%{number: phone, primary: true})],
       postal_addresses: [],
       given_name: first_name, family_name: last_name})
+  end
+
+  defp matching_val(attr, map) do
+    key =
+      map
+      |> Map.keys()
+      |> Enum.filter(fn full -> extract_val_portion(full) == attr end)
+      |> List.first()
+
+    Map.get(map, key)
+  end
+
+  defp extract_val_portion(attr) do
+    [_| rest] = String.split attr, "_"
+    Enum.join rest, "_"
   end
 end

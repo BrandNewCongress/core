@@ -1,0 +1,14 @@
+<%= @event.contact.name %> --
+
+<%= @first_name %> <%= @last_name %> is coming to your event, <%= @event.title %>.
+
+To download the full list of rsvps, with name, email, and phone numbers, visit <%= @event.rsvp_download_url %>.
+
+As before, here's the public url of your event:
+https://now.justicedemocrats.com<%= @event.browser_url %>
+
+Share it with your friends so to make the most successful event you can.
+
+Together we can bring a better future,
+
+<%= @candidate %> Events Team

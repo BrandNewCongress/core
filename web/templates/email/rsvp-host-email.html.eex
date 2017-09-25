@@ -94,35 +94,34 @@
 
     <div style="font-size: 18px; font-family: Roboto Slab, sans-serif; color: #555;">
       <p>
-        <%= @first_name %> --
+        <%= @event.contact.name %> --
         <br/>
         <br/>
-        Thank you for your RSVP to <%= @event.title %>.
+
+
+        <%= @first_name %> <%= @last_name %> is coming to your event, <%= @event.title %>.
         <br/>
         <br/>
-        Here are your event details:
+
+        To download the full list of rsvps, with name, email, and phone numbers, visit <%= @event.rsvp_download_url %>.
         <br/>
         <br/>
-        <b>WHAT:</b> <%= @event.title %></b>
-        <br/>
-        <b>WHEN:</b> <%= @event.date_line %>
-        <br/>
-        <b>WHERE:</b>
-          <%= @event.location.venue %> <br/>
-          <%= @event.location.address_lines |> List.first() %>, <%= @event.location.locality %> <%= @event.location.region %>
+
+        As before, here's the public url of your event:
         <br/>
         <br/>
-        <b>DESCRIPTION: </b> <%= @event.description %>
-        <br/>
-        <br/>
-        Invite a friend to join you and double your impact!
-        <br/>
-        <br/>
+
         <a href="https://now.jusicedemocrats.com<%= @event.browser_url %>"> https://now.justicedemocrats.com<%= @event.browser_url %> </a>
+
+        Share it with your friends so to make the most successful event you can.
         <br/>
         <br/>
+
         Together we can bring a better future,
-        <br/> <%= @candidate %> Events Team
+        <br/>
+        <br/>
+
+        <%= @candidate %> Events Team
       </p>
     </div>
 

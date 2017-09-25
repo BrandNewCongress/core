@@ -44,12 +44,9 @@ defmodule Core.EventMailer do
     |> Core.Mailer.deliver()
   end
 
-  def on_rsvp(event, %{"first_name" => first_name, "last_name" => last_name, "email" => email}) do
-    Logger.info "Sending email to #{email} because of RSVP to #{event.name}"
-
+  def on_rsvp(event, params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}) do
     candidate =
       event.tags
-      |> Enum.map(&(&1.name))
       |> Enum.filter(&(String.contains?(&1, "Calendar: ")))
       |> Enum.map(&(&1 |> String.split(":") |> List.last() |> String.trim()))
       |> Enum.filter(&(not Enum.member?(["Brand New Congress", "Justice Democrats"], &1)))
@@ -60,15 +57,33 @@ defmodule Core.EventMailer do
       cand -> cand
     end
 
-    IO.inspect candidate
+    event = Map.put(event, :rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{Osdi.Event.rsvp_link_for(event.name)}")
 
+    send_attendee_email(event, params, candidate)
+    send_host_email(event, params, candidate)
+  end
+
+  defp send_attendee_email(event, params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}, candidate) do
+    Logger.info "Sending email to #{email} because they RSVPed to #{event.name}"
     params = ~M{first_name, last_name, email, candidate, event}
 
     new()
     |> to({"#{first_name} #{last_name}", email})
-    |> from({event.contact.name, "events@brandnewcongress.org"})
+    |> from({event.contact.name || event.contact.email_address, "events@justicedemocrats.com"})
     |> subject("RSVP Confirmation: #{event.title}")
     |> render_body(:"rsvp-email", params)
+    |> Core.Mailer.deliver()
+  end
+
+  defp send_host_email(event, params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}, candidate) do
+    Logger.info "Sending email to #{email} because someone RSVPed to their event, #{event.name}"
+    params = ~M{first_name, last_name, email, candidate, event}
+
+    new()
+    |> to({"#{event.contact.name}", event.contact.email_address})
+    |> from({"#{candidate} Events Team", "events@justicedemocrats.com"})
+    |> subject("A New RSVP for #{event.title}!")
+    |> render_body(:"rsvp-host-email", params)
     |> Core.Mailer.deliver()
   end
 end
