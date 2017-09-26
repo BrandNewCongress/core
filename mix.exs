@@ -59,7 +59,8 @@ defmodule Core.Mixfile do
      {:shorter_maps, "~> 2.0"},
      {:osdi, git: "https://github.com/BrandNewCongress/osdi_ex.git"},
      {:poison, "~> 3.0", override: true},
-     {:cipher, ">= 1.3.3"}]
+     {:cipher, ">= 1.3.3"},
+     {:maps, git: "https://github.com/justicedemocrats/maps_ex.git"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
