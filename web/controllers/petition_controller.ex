@@ -37,7 +37,7 @@ defmodule Core.PetitionController do
   end
 
   # Extract and render petition
-  defp do_render_petition(conn, params, %{
+  defp do_render_petition(conn, params, object = %{
     "slug" => slug,
     "content" => content,
     "metadata" => metadata = %{
@@ -67,11 +67,12 @@ defmodule Core.PetitionController do
 
     og_description = HtmlSanitizeEx.strip_tags(content)
 
+    share_image = URI.encode(get_in(object, ["metadata", "share_image", "imgix_url"]) || background_image)
     background_image = URI.encode(background_image)
 
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
-       post_sign_text: post_sign_text, background_image: background_image,
+       post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
        no_footer: true, signed: false, count: pretty_num(count), target: pretty_num(target),
        progress: pretty_num(progress), banner: background_image, description: og_description] ++ GlobalOpts.get(conn, params)
   end
