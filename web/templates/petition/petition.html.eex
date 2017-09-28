@@ -5,6 +5,7 @@
 <meta name="copyright" content="copyright(@brand)%>" />
 
 <!-- for Facebook -->
+<meta property="og:url" content="<%= core_deployment(@brand) <> "/petition/" <> @slug%>" />
 <meta property="og:title" content="<%=@title%>" />
 <meta property="og:type" content="article" />
 <meta property="og:image" content="<%=@background_image%>" />
