@@ -67,7 +67,7 @@ defmodule Core.PetitionController do
 
     og_description = HtmlSanitizeEx.strip_tags(content)
 
-    background_image = ~s("#{background_image}")
+    background_image = URI.encode(background_image)
 
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
@@ -138,7 +138,7 @@ defmodule Core.PetitionController do
 
     Nb.People.add_tags(id, tags)
 
-    background_image = ~s("#{background_image}")
+    background_image = URI.encode(background_image)
 
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
