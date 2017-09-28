@@ -69,5 +69,8 @@ defmodule Core.Router do
 
     get "/events", EventsController, :as_json
     get "/events/:candidate", EventsController, :as_json
+
+    post "/signup", SignupController, :simple
+    post "/volunteer", SignupController, :volunteer
   end
 end

@@ -2,7 +2,7 @@ import superagent from 'superagent'
 import createHistory from 'history/createBrowserHistory'
 import smoothScroll from 'smoothscroll'
 import morphdom from 'morphdom'
-import emitter from 'event-emitter-es6'
+import EventEmitter from 'event-emitter-es6'
 
 const history = createHistory()
 
@@ -32,7 +32,7 @@ const attachHistory = () =>
  *
  */
 
-const bus = emitter()
+const bus = new EventEmitter()
 
 const base = document.querySelector('html')
 const morph = html => morphdom(base, html, { childrenOnly: true })
