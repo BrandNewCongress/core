@@ -7,6 +7,7 @@ defmodule Core.SignupController do
     response =
       signup_body
       |> to_atom_map()
+      |> IO.inspect()
       |> Osdi.PersonSignup.main()
       |> do_remove_tags(signup_body)
 
@@ -20,7 +21,7 @@ defmodule Core.SignupController do
     json conn, %{"woops" => "woops"}
   end
 
-  defp do_remove_tags(person, %{"tags_to_remove" => tags_to_remove}), do:
+  defp do_remove_tags(person, %{"remove_tags" => tags_to_remove}), do:
     Osdi.Person.remove_tags(person, tags_to_remove)
 
   defp do_remove_tags(person, %{}), do: person
