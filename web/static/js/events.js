@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { render } from 'react-dom'
+import spa from './spa'
 import EventMap from './components/event-map'
 
 class EmbededMap extends Component {
@@ -11,7 +12,7 @@ class EmbededMap extends Component {
 
     this.fetchState()
 
-    window.bus.on('page-change', this.fetchState)
+    spa.bus.on('page-change', this.fetchState)
   }
 
   fetchState = () => {
