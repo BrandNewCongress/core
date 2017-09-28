@@ -2,7 +2,7 @@ import superagent from 'superagent'
 import createHistory from 'history/createBrowserHistory'
 import smoothScroll from 'smoothscroll'
 import morphdom from 'morphdom'
-import emitter from 'arbitrary-emitter'
+import emitter from 'event-emitter-es6'
 
 const history = createHistory()
 
