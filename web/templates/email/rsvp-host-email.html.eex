@@ -111,7 +111,7 @@
         <br/>
         <br/>
 
-        <a href="https://now.jusicedemocrats.com<%= @event.browser_url %>"> https://now.justicedemocrats.com<%= @event.browser_url %> </a>
+        <a href="https://now.justicedemocrats.com<%= @event.browser_url %>"> https://now.justicedemocrats.com<%= @event.browser_url %> </a>
 
         Share it with your friends so to make the most successful event you can.
         <br/>
