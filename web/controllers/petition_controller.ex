@@ -139,6 +139,7 @@ defmodule Core.PetitionController do
 
     Nb.People.add_tags(id, tags)
 
+    share_image = URI.encode(get_in(object, ["metadata", "share_image", "imgix_url"]) || background_image)
     background_image = URI.encode(background_image)
 
     render conn, "petition.html",
