@@ -39,7 +39,7 @@ defmodule Core.Mixfile do
      {:phoenix_html, "~> 2.6"},
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
-     {:httpotion, "~> 3.0.2"},
+     {:httpotion, "~> 3.0.3"},
      {:browser, "~> 0.1.0"},
      {:stash, "~> 1.0.0"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
