@@ -144,7 +144,7 @@ defmodule Core.PetitionController do
 
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
-       post_sign_text: post_sign_text, background_image: background_image,
+       post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
        twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
        signed: true] ++ GlobalOpts.get(conn, params)
   end
