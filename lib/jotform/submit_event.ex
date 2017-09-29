@@ -185,7 +185,6 @@ defmodule Jotform.SubmitEvent do
   end
 
   defp create_organizer(%{email: email, phone: phone, first_name: first_name, last_name: last_name}) do
-    # Nb.People.push(%{email: email, phone: phone, first_name: first_name, last_name: last_name})
     Person.push(%{
       email_addresses: [EmailAddress.get_or_insert(%{address: email, primary: true})],
       phone_numbers: [PhoneNumber.get_or_insert(%{number: phone, primary: true})],

@@ -73,7 +73,7 @@ defmodule Core.PetitionController do
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
        post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
-       no_footer: true, signed: false, count: pretty_num(count), target: pretty_num(target),
+       banner: share_image, no_footer: true, signed: false, count: pretty_num(count), target: pretty_num(target),
        progress: pretty_num(progress), banner: background_image, description: og_description] ++ GlobalOpts.get(conn, params)
   end
 
@@ -145,7 +145,7 @@ defmodule Core.PetitionController do
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
        post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
-       twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
+       banner: share_image, twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
        signed: true] ++ GlobalOpts.get(conn, params)
   end
 
