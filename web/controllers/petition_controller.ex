@@ -86,7 +86,7 @@ defmodule Core.PetitionController do
   def post(conn, params = %{"petition" => petition, "name" => name, "email" => email, "zip" => zip}) do
     global_opts = GlobalOpts.get(conn, params)
 
-    %{"slug" => slug,
+    object = %{"slug" => slug,
       "content" => content,
       "title" => admin_title,
       "metadata" => %{
