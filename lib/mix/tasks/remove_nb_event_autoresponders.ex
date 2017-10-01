@@ -1,4 +1,9 @@
 defmodule Mix.Tasks.RemoveNbEventAutoReponders do
+  @moduledoc """
+
+  Important: This is a legacy task using a deprecated nationbuilder interface
+
+  """
   use Mix.Task
 
   def run(_) do

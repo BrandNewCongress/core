@@ -116,13 +116,6 @@ defmodule Core.PetitionController do
       ""
     end
 
-    %{"id" => id} = Nb.People.push(%{
-      "email" => email,
-      "first_name" => first_name,
-      "last_name" => last_name,
-      "mailing_address" => %{"zip" => zip}
-    })
-
     # Add the petition signed tag
     brand = Keyword.get(global_opts, :brand)
     source = case brand do
@@ -137,7 +130,14 @@ defmodule Core.PetitionController do
         []
       end
 
-    Nb.People.add_tags(id, tags)
+    %{id: id} = Osdi.PersonSignup.main(%{
+      person: %{
+        given_name: first_name,
+        family_name: last_name,
+        postal_addresses: [%{postal_code: zip}],
+        email_addresses: [%{address: email, primary: true}],
+      },
+      add_tags: tags})
 
     share_image = URI.encode(get_in(object, ["metadata", "share_image", "imgix_url"]) || background_image)
     background_image = URI.encode(background_image)

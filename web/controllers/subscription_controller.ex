@@ -68,10 +68,8 @@ defmodule Core.SubscriptionController do
     Fetch the user's tags from nation builder to present different unsubscribe options
   """
   def unsubscribe_get(conn, params = %{"email" => email}) do
-    tags = case Nb.People.match(%{"email" => email}) do
-      %{"tags" => tags} -> tags
-      _ -> nil
-    end
+    person = Osdi.Person.match(%{email_address: email})
+    tags = Enum.map person.tags, &(&1.name)
 
     if tags do
       unsubscribed_tags = tags
@@ -114,7 +112,8 @@ defmodule Core.SubscriptionController do
     sources not present on the request's params
   """
   def unsubscribe_post(conn, params = %{"email" => email}) do
-    %{"id" => id, "tags" => tags} = Nb.People.match %{"email" => email}
+    person = %{id: id} = Osdi.Person.match(%{email_address: email})
+    tags = Enum.map person.tags, &(&1.name)
 
     current_sources =
       tags
@@ -132,7 +131,7 @@ defmodule Core.SubscriptionController do
         to_unsub
         |> Enum.map(fn tag -> "Action: Unsubscribed: #{tag}" end)
 
-      Nb.People.add_tags(id, tags_to_add)
+      Osdi.Person.add_tags(person, tags_to_add)
       to_unsub
     end)
 
@@ -146,7 +145,7 @@ defmodule Core.SubscriptionController do
       tags_to_remove = unsubs_to_remove
         |> Enum.map(fn tag -> "Action: Unsubscribed: #{tag}" end)
 
-      Nb.People.delete_tags(id, tags_to_remove)
+      Osdi.Person.remove_tags(person, tags_to_remove)
       unsubs_to_remove
     end)
 
@@ -189,13 +188,13 @@ defmodule Core.SubscriptionController do
     nice_name = @sources[candidate]
 
     # Find the person
-    id = case Nb.People.match %{"email" => email} do
-      %{"id" => id} -> id
+    id = case Osdi.Person.match %{email_address: email} do
+      %{id: id} -> id
       _ -> nil
     end
 
     if id do
-      Nb.People.add_tags(id, "Action: Unsubscribed: #{nice_name}")
+      Osdi.Person.add_tags(%Osdi.Person{id: id}, ["Action: Unsubscribed: #{nice_name}"])
     end
 
     # Determine the resubscribe link

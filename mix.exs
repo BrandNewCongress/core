@@ -58,6 +58,7 @@ defmodule Core.Mixfile do
      {:number, "~> 0.5.2"},
      {:shorter_maps, "~> 2.0"},
      {:osdi, git: "https://github.com/BrandNewCongress/osdi_ex.git"},
+     {:nb, git: "https://github.com/BrandNewCongress/nb_ex.git"},
      {:poison, "~> 3.0", override: true},
      {:cipher, ">= 1.3.3"}]
   end
