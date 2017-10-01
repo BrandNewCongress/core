@@ -112,7 +112,7 @@ defmodule Core.SubscriptionController do
     sources not present on the request's params
   """
   def unsubscribe_post(conn, params = %{"email" => email}) do
-    person = %{id: id} = Osdi.Person.match(%{email_address: email})
+    person = %{id: _id} = Osdi.Person.match(%{email_address: email})
     tags = Enum.map person.tags, &(&1.name)
 
     current_sources =

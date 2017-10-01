@@ -130,7 +130,7 @@ defmodule Core.PetitionController do
         []
       end
 
-    %{id: id} = Osdi.PersonSignup.main(%{
+    %{id: _id} = Osdi.PersonSignup.main(%{
       person: %{
         given_name: first_name,
         family_name: last_name,

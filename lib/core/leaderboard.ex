@@ -28,7 +28,6 @@ defmodule Core.LeaderboardHelpers do
       |> List.last()
       |> String.trim()
 
-    ref_tag_name = "Action: Joined Website: Brand New Congress: #{ref}"
     signup_count = Repo.all(from t in Tagging, where: t.tag_id == ^tag.id) |> length()
 
     {signup_count, ref, person}
