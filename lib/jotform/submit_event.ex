@@ -139,8 +139,10 @@ defmodule Jotform.SubmitEvent do
     organizer_edit_hash = Cipher.encrypt("#{created.organizer_id}")
     created = Map.put(created, :organizer_edit_url, "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}")
 
+    created = EventHelp.add_date_line(created)
+
     %{event: created |> Map.take(~w(
-      name title description summary browser_url type
+      name title description summary browser_url type date_line
       featured_image_url start_date end_date status contact
       location tags rsvp_download_url instructions organizer_edit_url
     )a)}
