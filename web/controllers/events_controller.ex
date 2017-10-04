@@ -98,9 +98,10 @@ defmodule Core.EventsController do
 
     %{"title" => title} = Cosmic.get(candidate)
 
+    slugs = Stash.get(:event_cache, "Calendar: #{title}") || []
+
     events =
-      :event_cache
-      |> Stash.get("Calendar: #{title}")
+      slugs
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
       |> Enum.sort(&EventHelp.date_compare/2)
       |> Enum.map(&EventHelp.add_date_line/1)
