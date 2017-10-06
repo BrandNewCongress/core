@@ -1,4 +1,9 @@
 <div class="two-column">
+  <!--  Userlike integration code -->
+  <script async type="text/javascript"
+    src="//userlike-cdn-widgets.s3-eu-west-1.amazonaws.com/124d455cc0fff1efaa6ab920de37b143f085c6fca72366127953634582c70337.js">
+  </script>
+
   <div class="right-column">
     <div class="external-content-wrapper">
       <p>
