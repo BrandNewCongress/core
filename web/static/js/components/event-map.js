@@ -161,7 +161,7 @@ export default class EventMap extends Component {
             marginTop: '10px',
             height: '100%'
           }}
-          onClick={() => window.navigateTo('/form/submit-event')}
+          href="/form/submit-event"
         >
           Host One Now
         </a>
@@ -177,7 +177,7 @@ export default class EventMap extends Component {
           >
             <a
               className="secondary-button"
-              onClick={() => window.navigateTo('/act/call')}
+              href="/act/call"
               style={{
                 width: '48%',
                 height: '100%',
@@ -192,7 +192,7 @@ export default class EventMap extends Component {
             </a>
             <a
               className="secondary-button"
-              onClick={() => window.navigateTo('/form/teams')}
+              href="/form/teams"
               style={{
                 width: '48%',
                 height: '100%',
