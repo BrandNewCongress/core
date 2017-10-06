@@ -41,6 +41,16 @@ const fetch = (href, fn) =>
     .get(href)
     .end((err, res) => (err ? console.error(err) : fn(null, res.text)))
 
+const reloadBodyScripts = () => {
+  const scripts = document.querySelectorAll('main script')
+  scripts.forEach(s => {
+    const replacement = document.createElement('script')
+    replacement.src = s.src
+    s.insertAdjacentElement('afterend', replacement)
+    s.remove()
+  })
+}
+
 const is = {
   relative: a => a.href && a.getAttribute('href').startsWith('/'),
   internal: a => a.href && a.getAttribute('href').startsWith('#'),
@@ -55,7 +65,7 @@ const handle = {
     fetch(a.getAttribute('href'), (err, html) => {
       morph(html)
       history.push(a.getAttribute('href'))
-      console.log('hi')
+      reloadBodyScripts()
       bus.emit('morphed')
     }),
 

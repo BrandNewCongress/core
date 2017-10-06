@@ -3,13 +3,13 @@ defmodule GlobalOpts do
     cond do
       Map.has_key?(params, "brand") ->
         case params["brand"] do
-          "jd" -> "jd"
-          _ -> "bnc"
+          "bnc" -> "bnc"
+          _ -> "jd"
         end
 
       String.contains?(conn.host, "justicedemocrats") -> "jd"
       String.contains?(conn.host, "brandnewcongress") -> "bnc"
-      true -> "bnc"
+      true -> "jd"
     end
   end
 
