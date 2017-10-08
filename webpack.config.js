@@ -37,14 +37,7 @@ const config = {
           presets: ['es2015', 'react'],
           plugins: [
             'transform-class-properties',
-            'transform-object-rest-spread',
-            [
-              'import',
-              {
-                libraryName: 'antd',
-                style: 'css'
-              }
-            ]
+            'transform-object-rest-spread'
           ]
         }
       },
