@@ -50,7 +50,7 @@ defmodule Jotform.SubmitEvent do
         if addr_part do
           addr_part |> String.split(":") |> List.last() |> String.trim()
         else
-          ""
+          nil
         end
       end)
 
@@ -62,23 +62,23 @@ defmodule Jotform.SubmitEvent do
     end
 
     ## ------------ Determine calendar id and time zone, geocoding only once
-    {calendars, time_zone_info, {latitude, longitude}} = Task.await(Task.async(fn ->
-      # First, geocode
-      to_geocode = "#{venue_house_number} #{venue_street_name}, #{venue_city}, #{venue_state}"
-      {lat, lng} = Maps.geocode(to_geocode)
+    to_geocode = "#{venue_house_number} #{venue_street_name}, #{venue_city}, #{venue_state}"
 
-      # Use geocode for calendar_id
-      calendars = Task.async(fn -> get_calendars({lat, lng}) end)
+    %{"postal_code" => goog_postal_code, "locality" => goog_locality, "region" => goog_region,
+      "location" => %{"latitude" => latitude, "longitude" => longitude}} = Maps.fill_address(to_geocode)
 
-      # Use geocode for time zone
-      time_zone_info = Task.async(fn ->
-        Maps.time_zone_of({lat, lng})
-      end)
+    # Use geocode for calendar_id
+    calendar_task = Task.async(fn -> get_calendars({latitude, longitude}) end)
 
-      {Task.await(calendars), Task.await(time_zone_info), {lat, lng}}
-    end))
+    # Use geocode for time zone
+    time_zone_task = Task.async(fn ->
+      Maps.time_zone_of({latitude, longitude})
+    end)
 
+    calendars = Task.await(calendar_task)
+    time_zone_info = Task.await(time_zone_task)
     organizer = Task.await(organizer_task)
+
     %{time_zone_id: time_zone_id} = time_zone_info
 
     ## ------------ Determine event tags
@@ -113,9 +113,9 @@ defmodule Jotform.SubmitEvent do
         time_zone: time_zone_id,
         venue: venue_name,
         address_lines: [venue_address],
-        locality: venue_city,
-        region: venue_state,
-        postal_code: venue_zip,
+        locality: venue_city || goog_locality,
+        region: venue_state || goog_region,
+        postal_code: venue_zip || goog_postal_code,
         location: %Geo.Point{coordinates: {latitude, longitude}, srid: nil},
       },
       tags: tags,

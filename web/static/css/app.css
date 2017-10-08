@@ -1,4 +1,6 @@
 /*This file is for your main application css.*/
+@import '~shoelace.css'
+
 body {
   margin: 0;
 }
@@ -58,20 +60,6 @@ html, body {
   40% {
     transform: scale(1);
   }
-}
-
-input.text  {
-  color: white;
-  width: 100%;
-  font-size: 16px;
-  height: 20px;
-  border: 1px solid #ddd;
-  font-weight: 300;
-  padding: 1em;
-  transition: border-color 500ms linear;
-  margin-bottom: 1em;
-  margin-top: 5px;
-  background-color: rgba(255,255,255,0.1);
 }
 
 .primary-button, .secondary-button {

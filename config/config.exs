@@ -27,7 +27,7 @@ config :phoenix, :template_engines,
   haml: PhoenixHaml.Engine
 
 # Use google_maps
-config :core, goog_key: System.get_env("GOOG_KEY")
+config :maps, goog_key: System.get_env("GOOG_KEY")
 
 # Quantum config
 jobs =

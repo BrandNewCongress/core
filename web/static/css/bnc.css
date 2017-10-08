@@ -14,6 +14,11 @@
   --color-accent-two: var(--bnc-green);
 }
 
+body.bnc {
+  /* Shoelace */
+  --button-bg-color: var(--bnc-purple);
+}
+
 /* Platform / text styles */
 .bnc h1 {
   font-family: 'Roboto Condensed', sans-serif !important;

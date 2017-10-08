@@ -1,6 +1,6 @@
 <%
   background_color = case @brand do
-    "bnc" -> "none"
+    "bnc" -> "white"
     "jd" -> "#5B919F"
   end
 %>
