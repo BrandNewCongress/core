@@ -37,7 +37,6 @@ defmodule Core.Jobs.EventCache do
     Logger.info "Updated event cache on #{Timex.now() |> DateTime.to_iso8601()}"
 
     all_events
-    "good"
   end
 
   def load_cached do

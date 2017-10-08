@@ -185,7 +185,7 @@ header .donate-link {
 }
 
 .top-level.hovering {
-  color: white;
+  color: white !important;
   background-color: black;
 }
 

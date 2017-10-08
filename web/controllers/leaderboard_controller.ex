@@ -7,13 +7,14 @@ defmodule Core.LeaderboardController do
   end
 
   def post(conn, params = %{"email" => email, "phone" => phone, "first" => first_name, "last" => last_name}) do
-    %{"id" => id, "tags" => tags} = Nb.People.push(%{
-      "email" => email, "phone" => phone,
-      "first_name" => first_name, "last_name" => last_name
+    person = %{tags: tags} = Osdi.Person.push(%{
+      email_address: email, phone_number: phone,
+      given_name: first_name, family_name: last_name
     })
 
     current_code =
       tags
+      |> Enum.map(fn %{name: name} -> name end)
       |> Enum.filter(fn t -> String.contains?(t, "Recruiter Code:") end)
       |> Enum.map(fn t -> String.split(t, ":") end)
       |> Enum.map(fn [_vox_part, ref_code] -> String.trim(ref_code) end)
@@ -26,11 +27,11 @@ defmodule Core.LeaderboardController do
         code = String.slice(email, 0..2) <> String.slice(phone, 0..2)
         tag = "Recruiter Code: #{code}"
 
-        Task.async(fn -> Nb.People.add_tags(id, [tag]) end)
+        Osdi.Person.add_tags(person, [tag])
         code
       end
 
-    Nb.People.add_tags(id, [
+    Osdi.Person.add_tags(person, [
       "Action: Claimed Recruiting Code: Brand New Congress"
     ])
 

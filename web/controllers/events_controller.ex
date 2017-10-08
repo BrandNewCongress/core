@@ -17,6 +17,17 @@ defmodule Core.EventsController do
       [district: district, coordinates: coordinates, title: "Events"] ++ GlobalOpts.get(conn, params)
   end
 
+  def iframe(conn, params = %{"district" => district}) do
+    {:ok, coordinates} =
+      district
+      |> get_coordinates()
+      |> Poison.encode()
+
+    render conn, "embedded.html",
+      [layout: {Core.LayoutView, "bare.html"}, district: district, coordinates: coordinates,
+       title: "Events in #{district}"] ++ GlobalOpts.get(conn, params)
+  end
+
   def get_one(conn, params = %{"name" => event_name}) do
     event =
       case Stash.get :event_cache, event_name do
@@ -98,9 +109,10 @@ defmodule Core.EventsController do
 
     %{"title" => title} = Cosmic.get(candidate)
 
+    slugs = Stash.get(:event_cache, "Calendar: #{title}") || []
+
     events =
-      :event_cache
-      |> Stash.get("Calendar: #{title}")
+      slugs
       |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
       |> Enum.sort(&EventHelp.date_compare/2)
       |> Enum.map(&EventHelp.add_date_line/1)
@@ -146,4 +158,5 @@ defmodule Core.EventsController do
     |> Map.put(:rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}")
     |> Map.put(:organizer_edit_url, organizer_edit_url)
   end
+
 end

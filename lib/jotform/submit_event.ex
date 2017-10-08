@@ -12,11 +12,11 @@ defmodule Jotform.SubmitEvent do
       area_phone: %{"area" => area, "phone" => phone_rest},
       email: email, event_type: event_type, event_date: event_date,
       start_time: start_time, end_time: end_time, description: description,
-      venue_name: venue_name, should_hide: hide_address, address: venue_address,
+      venue_name: venue_name, hide_address: hide_address, address: venue_address,
       event_name: event_name, should_contact: should_contact,
       instructions: instructions} =
         ~w(name area_phone email event_type event_date start_time end_time description
-           venue_name should_hide address event_name should_contact instructions)
+           venue_name hide_address address event_name should_contact instructions)
         |> Enum.map(fn attr -> {String.to_atom(attr), matching_val(attr, as_map)} end)
         |> Enum.into(%{})
 
@@ -39,7 +39,6 @@ defmodule Jotform.SubmitEvent do
 
     ## ------------ Proper phone number
     phone = area <> phone_rest
-    should_hide = hide_address == "Yes"
     should_contact = should_contact == "Yes"
 
     ## ------------ Extract and format the address
@@ -110,7 +109,7 @@ defmodule Jotform.SubmitEvent do
         email_address: email
       },
       location: %{
-        public: not should_hide,
+        public: hide_address == "Show",
         time_zone: time_zone_id,
         venue: venue_name,
         address_lines: [venue_address],
@@ -139,8 +138,10 @@ defmodule Jotform.SubmitEvent do
     organizer_edit_hash = Cipher.encrypt("#{created.organizer_id}")
     created = Map.put(created, :organizer_edit_url, "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}")
 
+    created = EventHelp.add_date_line(created)
+
     %{event: created |> Map.take(~w(
-      name title description summary browser_url type
+      name title description summary browser_url type date_line
       featured_image_url start_date end_date status contact
       location tags rsvp_download_url instructions organizer_edit_url
     )a)}
@@ -185,7 +186,6 @@ defmodule Jotform.SubmitEvent do
   end
 
   defp create_organizer(%{email: email, phone: phone, first_name: first_name, last_name: last_name}) do
-    # Nb.People.push(%{email: email, phone: phone, first_name: first_name, last_name: last_name})
     Person.push(%{
       email_addresses: [EmailAddress.get_or_insert(%{address: email, primary: true})],
       phone_numbers: [PhoneNumber.get_or_insert(%{number: phone, primary: true})],

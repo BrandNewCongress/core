@@ -82,13 +82,7 @@ defmodule Core.ActController do
   def call_aid(conn, params = %{"candidate" => candidate}) do
     %{"title" => title} = Cosmic.get(candidate)
 
-    events =
-      :event_cache
-      |> Stash.get("Calendar: #{title}")
-      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
-      |> Enum.sort(&EventHelp.date_compare/2)
-      # |> Enum.take(6)
-      |> Enum.map(&EventHelp.add_date_line/1)
+    events = EventHelp.events_for(title)
 
     render conn, "call-aid.html",
       [events: events, no_header: true, no_footer: true, slug: candidate] ++ GlobalOpts.get(conn, params)
@@ -97,16 +91,15 @@ defmodule Core.ActController do
   def easy_volunteer(conn, params = %{"candidate" => candidate, "phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name}) do
     %{"title" => title} = Cosmic.get(candidate)
 
-    events =
-      :event_cache
-      |> Stash.get("Calendar: #{title}")
-      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
-      |> Enum.sort(&EventHelp.date_compare/2)
-      |> Enum.take(6)
-      |> Enum.map(&EventHelp.add_date_line/1)
+    events = EventHelp.events_for(title)
 
-    %{"id" => id} = Nb.People.push(%{"phone" => phone, "email" => email, "first_name" => first_name, "last_name" => last_name})
-    Nb.People.add_tags(id, ["Action: Joined as Volunteer: #{title}"])
+    %{id: id} = Osdi.PersonSignup.main(%{
+      person: %{
+        phone_numbers: [%{number: phone, primary: true}],
+        email_addresses: [%{primary: true, address: email}],
+        given_name: first_name, family_name: last_name
+      },
+      add_tags: ["Action: Joined as Volunteer: #{title}"]})
 
     render conn, "call-aid.html",
       [events: events, no_header: true, no_footer: true, slug: candidate, person: id] ++ GlobalOpts.get(conn, params)

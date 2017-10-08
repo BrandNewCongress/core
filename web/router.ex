@@ -41,6 +41,7 @@ defmodule Core.Router do
     get "/events", EventsController, :get
     get "/events/:name", EventsController, :get_one
     post "/events/:name", EventsController, :rsvp
+    get "/events-iframe/:district", EventsController, :iframe
 
     get "/call", VoxController, :get
     get "/call/logins", VoxController, :get_logins
@@ -69,5 +70,8 @@ defmodule Core.Router do
 
     get "/events", EventsController, :as_json
     get "/events/:candidate", EventsController, :as_json
+
+    post "/signup", SignupController, :simple
+    post "/volunteer", SignupController, :volunteer
   end
 end

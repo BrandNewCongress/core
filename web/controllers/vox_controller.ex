@@ -13,13 +13,14 @@ defmodule Core.VoxController do
     brand = Keyword.get(global_opts, :brand)
     date = "#{"America/New_York" |> Timex.now() |> Timex.to_date}"
 
-    %{"id" => id, "tags" => tags} = Nb.People.push(%{
-      "email" => email, "phone" => phone,
-      "first_name" => first_name, "last_name" => last_name
+    person = %{tags: tags} = Osdi.Person.push(%{
+      email_address: email, phone_number: phone,
+      given_name: first_name, family_name: last_name
     })
 
     current_username =
       tags
+      |> Enum.map(fn %{name: name} -> name end)
       |> Enum.filter(fn t -> String.contains?(t, "Vox Alias: #{copyright(brand)}") and String.contains?(t, date) end)
       |> Enum.map(fn t -> String.split(t, ":") end)
       |> Enum.map(fn [_vox_part, _brand_part, result, _date_part] -> String.trim(result) end)
@@ -30,7 +31,7 @@ defmodule Core.VoxController do
       un -> [un, Core.Vox.password_for(un, brand)]
     end
 
-    Nb.People.add_tags(id, [
+    Osdi.Person.add_tags(person, [
       "Action: Made Calls: #{copyright(brand)}",
       "Vox Alias: #{copyright(brand)}: #{username}: #{date}"
     ])

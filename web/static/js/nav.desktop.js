@@ -16,13 +16,16 @@ class TopNav extends Component {
   render() {
     const { hover } = this.state
 
+    const divStyleAnchor = {display: 'block', textDecoration: 'none', color: 'inherit'}
+
     return (
       <div className="drop-down">
         {siteMap.map((tl, idx) => [
-          <div
+          <a
             key={tl.label}
             className={`top-level ${hover == idx ? 'hovering' : ''}`}
-            href={tl}
+            href={hrefOfEntry(tl)}
+            style={divStyleAnchor}
             onMouseEnter={this.showOpts(idx)}
             onMouseLeave={this.hideOpts(idx)}
           >
@@ -32,16 +35,17 @@ class TopNav extends Component {
               siteMap[idx].children.length > 0 &&
               <div className="panel">
                 {siteMap[idx].children.map(child =>
-                  <div
+                  <a
                     key={child.label}
                     className="item"
-                    href={child}
+                    style={divStyleAnchor}
+                    href={hrefOfEntry(child)}
                   >
                     {child.label}
-                  </div>
+                  </a>
                 )}
               </div>}
-          </div>,
+          </a>,
           idx < siteMap.length - 1 && <div style={{marginTop: '5px'}}> / </div>
         ])}
       </div>

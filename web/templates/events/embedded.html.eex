@@ -1,0 +1,4 @@
+<link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+<div class="jd">
+  <%= render "events.html", assigns %>
+</div>

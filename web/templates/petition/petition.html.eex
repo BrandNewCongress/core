@@ -5,16 +5,17 @@
 <meta name="copyright" content="copyright(@brand)%>" />
 
 <!-- for Facebook -->
+<meta property="og:url" content="<%= core_deployment(@brand) <> "/petition/" <> @slug%>" />
 <meta property="og:title" content="<%=@title%>" />
 <meta property="og:type" content="article" />
-<meta property="og:image" content="<%=@background_image%>" />
+<meta property="og:image" content="<%=@share_image%>" />
 <meta property="og:description" content="<%=@content%>" />
 
 <!-- for Twitter -->
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="<%=@title%>" />
 <meta name="twitter:description" content="<%=@content%>" />
-<meta name="twitter:image" content="<%=@background_image%>" />
+<meta name="twitter:image" content="<%=@share_image%>" />
 
 <div class="two-column">
   <div class="right-column">

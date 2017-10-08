@@ -1,7 +1,9 @@
+<% IO.puts "HELLO HELLO \n HELLO HELLO " %>
 <div id="events-app"></div>
 <script defer="defer" src="<%= static_path(@conn, "/js/events.js") %>"></script>
 <script>
   window.startingCoordinates = <%= @coordinates %>
+  window.district = <%= assigns[:district] || nil %>
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
 

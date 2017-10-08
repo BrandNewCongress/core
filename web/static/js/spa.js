@@ -2,7 +2,7 @@ import superagent from 'superagent'
 import createHistory from 'history/createBrowserHistory'
 import smoothScroll from 'smoothscroll'
 import morphdom from 'morphdom'
-import emitter from 'arbitrary-emitter'
+import EventEmitter from 'event-emitter-es6'
 
 const history = createHistory()
 
@@ -32,7 +32,7 @@ const attachHistory = () =>
  *
  */
 
-const bus = emitter()
+const bus = new EventEmitter()
 
 const base = document.querySelector('html')
 const morph = html => morphdom(base, html, { childrenOnly: true })
@@ -40,6 +40,16 @@ const fetch = (href, fn) =>
   superagent
     .get(href)
     .end((err, res) => (err ? console.error(err) : fn(null, res.text)))
+
+const reloadBodyScripts = () => {
+  const scripts = document.querySelectorAll('main script')
+  scripts.forEach(s => {
+    const replacement = document.createElement('script')
+    replacement.src = s.src
+    s.insertAdjacentElement('afterend', replacement)
+    s.remove()
+  })
+}
 
 const is = {
   relative: a => a.href && a.getAttribute('href').startsWith('/'),
@@ -55,7 +65,7 @@ const handle = {
     fetch(a.getAttribute('href'), (err, html) => {
       morph(html)
       history.push(a.getAttribute('href'))
-      console.log('hi')
+      reloadBodyScripts()
       bus.emit('morphed')
     }),
 

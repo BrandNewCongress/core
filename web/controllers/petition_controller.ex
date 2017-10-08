@@ -37,7 +37,7 @@ defmodule Core.PetitionController do
   end
 
   # Extract and render petition
-  defp do_render_petition(conn, params, %{
+  defp do_render_petition(conn, params, object = %{
     "slug" => slug,
     "content" => content,
     "metadata" => metadata = %{
@@ -67,10 +67,13 @@ defmodule Core.PetitionController do
 
     og_description = HtmlSanitizeEx.strip_tags(content)
 
+    share_image = URI.encode(get_in(object, ["metadata", "share_image", "imgix_url"]) || background_image)
+    background_image = URI.encode(background_image)
+
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
-       post_sign_text: post_sign_text, background_image: background_image,
-       no_footer: true, signed: false, count: pretty_num(count), target: pretty_num(target),
+       post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
+       banner: share_image, no_footer: true, signed: false, count: pretty_num(count), target: pretty_num(target),
        progress: pretty_num(progress), banner: background_image, description: og_description] ++ GlobalOpts.get(conn, params)
   end
 
@@ -83,7 +86,7 @@ defmodule Core.PetitionController do
   def post(conn, params = %{"petition" => petition, "name" => name, "email" => email, "zip" => zip}) do
     global_opts = GlobalOpts.get(conn, params)
 
-    %{"slug" => slug,
+    object = %{"slug" => slug,
       "content" => content,
       "title" => admin_title,
       "metadata" => %{
@@ -113,13 +116,6 @@ defmodule Core.PetitionController do
       ""
     end
 
-    %{"id" => id} = Nb.People.push(%{
-      "email" => email,
-      "first_name" => first_name,
-      "last_name" => last_name,
-      "mailing_address" => %{"zip" => zip}
-    })
-
     # Add the petition signed tag
     brand = Keyword.get(global_opts, :brand)
     source = case brand do
@@ -134,12 +130,22 @@ defmodule Core.PetitionController do
         []
       end
 
-    Nb.People.add_tags(id, tags)
+    %{id: _id} = Osdi.PersonSignup.main(%{
+      person: %{
+        given_name: first_name,
+        family_name: last_name,
+        postal_addresses: [%{postal_code: zip}],
+        email_addresses: [%{address: email, primary: true}],
+      },
+      add_tags: tags})
+
+    share_image = URI.encode(get_in(object, ["metadata", "share_image", "imgix_url"]) || background_image)
+    background_image = URI.encode(background_image)
 
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
-       post_sign_text: post_sign_text, background_image: background_image,
-       twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
+       post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
+       banner: share_image, twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
        signed: true] ++ GlobalOpts.get(conn, params)
   end
 

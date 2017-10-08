@@ -1,4 +1,16 @@
 defmodule EventHelp do
+  def events_for(calendar) do
+    try do
+      :event_cache
+      |> Stash.get("Calendar: #{calendar}")
+      |> Enum.map(fn slug -> Stash.get(:event_cache, slug) end)
+      |> Enum.sort(&EventHelp.date_compare/2)
+      |> Enum.map(&EventHelp.add_date_line/1)
+    rescue
+      _e -> []
+    end
+  end
+
   def add_date_line(event) do
     date_line =
       humanize_date(event.start_date, event.location.time_zone) <> "from " <>

@@ -44,7 +44,7 @@ defmodule Core.EventMailer do
     |> Core.Mailer.deliver()
   end
 
-  def on_rsvp(event, params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}) do
+  def on_rsvp(event, params) do
     candidate =
       event.tags
       |> Enum.filter(&(String.contains?(&1, "Calendar: ")))
@@ -63,7 +63,7 @@ defmodule Core.EventMailer do
     send_host_email(event, params, candidate)
   end
 
-  defp send_attendee_email(event, params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}, candidate) do
+  defp send_attendee_email(event, _params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}, candidate) do
     Logger.info "Sending email to #{email} because they RSVPed to #{event.name}"
     params = ~M{first_name, last_name, email, candidate, event}
 
@@ -75,7 +75,7 @@ defmodule Core.EventMailer do
     |> Core.Mailer.deliver()
   end
 
-  defp send_host_email(event, params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}, candidate) do
+  defp send_host_email(event, _params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}, candidate) do
     Logger.info "Sending email to #{email} because someone RSVPed to their event, #{event.name}"
     params = ~M{first_name, last_name, email, candidate, event}
 

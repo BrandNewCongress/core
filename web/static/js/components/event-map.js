@@ -4,7 +4,7 @@ import EventMarker from './event-marker'
 import GeoSuggest from 'react-geosuggest'
 import socket from '../socket'
 
-const DIST_GROUP_THRESHOLD = .0000001
+const DIST_GROUP_THRESHOLD = 0.0000001
 
 export default class EventMap extends Component {
   state = {
@@ -161,52 +161,59 @@ export default class EventMap extends Component {
             marginTop: '10px',
             height: '100%'
           }}
-          onClick={() => window.navigateTo('/form/submit-event')}
+          href={
+            window.location.origin.includes('justicedemocrats') ||
+            window.location.origin.includes('brandnewcongress')
+              ? '/form/submit-event'
+              : 'https://now.justicedemocrats.com/form/submit-event'
+          }
         >
           Host One Now
         </a>
 
-        <div className="other-options-container" style={{ marginTop: 10 }}>
-          Or, help from home:
-          <div
-            className="other-options-container"
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between'
-            }}
-          >
-            <a
-              className="secondary-button"
-              onClick={() => window.navigateTo('/act/call')}
+        {!this.props.embeddedMode && (
+          <div className="other-options-container" style={{ marginTop: 10 }}>
+            Or, help from home:
+            <div
+              className="other-options-container"
               style={{
-                width: '48%',
-                height: '100%',
-                paddingTop: '5px',
-                margin: '0px',
-                paddingBottom: '5px',
-                marginTop: '10px',
-                textAlign: 'center'
+                display: 'flex',
+                justifyContent: 'space-between'
               }}
             >
-              Call Voters
-            </a>
-            <a
-              className="secondary-button"
-              onClick={() => window.navigateTo('/form/teams')}
-              style={{
-                width: '48%',
-                height: '100%',
-                paddingTop: '5px',
-                margin: '0px',
-                paddingBottom: '5px',
-                marginTop: '10px',
-                textAlign: 'center'
-              }}
-            >
-              Join a National Team
-            </a>
+              <a
+                className="secondary-button"
+                href="/act/call"
+                style={{
+                  width: '48%',
+                  height: '100%',
+                  paddingTop: '5px',
+                  margin: '0px',
+                  paddingBottom: '5px',
+                  marginTop: '10px',
+                  textAlign: 'center'
+                }}
+              >
+                Call Voters
+              </a>
+              <a
+                className="secondary-button"
+                href="/form/teams"
+                style={{
+                  width: '48%',
+                  height: '100%',
+                  paddingTop: '5px',
+                  margin: '0px',
+                  paddingBottom: '5px',
+                  marginTop: '10px',
+                  textAlign: 'center'
+                }}
+              >
+                Join a National Team
+              </a>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     )
 
@@ -214,12 +221,15 @@ export default class EventMap extends Component {
     events.reduce(
       (acc, event) =>
         acc.filter(
-          (es, idx) => this.distanceBetween(this.centroid(es), event) < DIST_GROUP_THRESHOLD
+          (es, idx) =>
+            this.distanceBetween(this.centroid(es), event) <
+            DIST_GROUP_THRESHOLD
         ).length == 0
           ? acc.concat([[event]])
           : acc.map(
               (es, idx) =>
-                this.distanceBetween(this.centroid(es), event) < DIST_GROUP_THRESHOLD
+                this.distanceBetween(this.centroid(es), event) <
+                DIST_GROUP_THRESHOLD
                   ? es.concat([event])
                   : es
             ),
