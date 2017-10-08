@@ -75,36 +75,55 @@
         <%= raw(@post_sign_text) %>
       </div>
 
-      <!--  Load Twitter Widget -->
-      <script>window.twttr = (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {};
-        if (d.getElementById(id)) return t; js = d.createElement(s);
-        js.id = id; js.src = "https://platform.twitter.com/widgets.js";
-        fjs.parentNode.insertBefore(js, fjs); t._e = [];
-        t.ready = function(f) { t._e.push(f); }; return t;
-      }(document, "script", "twitter-wjs"));</script>
+      <h1> Next Steps </1>
 
-      <!--  Load Facebook Widget -->
-      <div id="fb-root"></div>
-      <script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return; js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1";
-        fjs.parentNode.insertBefore(js, fjs);
-      }(document, 'script', 'facebook-jssdk'));</script>
+      <fieldset style="margin-top: 20px;">
+        <legend style="color:white;">Help us get to <%= @target %></legend>
+        <!--  Load Twitter Widget -->
+        <script>window.twttr = (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0], t = window.twttr || {};
+          if (d.getElementById(id)) return t; js = d.createElement(s);
+          js.id = id; js.src = "https://platform.twitter.com/widgets.js";
+          fjs.parentNode.insertBefore(js, fjs); t._e = [];
+          t.ready = function(f) { t._e.push(f); }; return t;
+        }(document, "script", "twitter-wjs"));</script>
 
-      <a class="twitter-share-button" href="<%=@twitter_href%>" data-size="large">
-        Tweet
-      </a>
+        <!--  Load Facebook Widget -->
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return; js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));</script>
 
-      <div class="fb-share-button" data-href="<%=@url%>" data-layout="button_count" data-size="large">
-        <a class="fb-xfbml-parse-ignore" target="_blank"
-          style="background-color: #3b5998; color: white; padding: 5px; text-decoration: none; margin-top: 5px;"
-          href="<%=@fb_href%>"
-        >
-          Share on Facebook
+        <a class="twitter-share-button" href="<%=@twitter_href%>" data-size="large">
+          Tweet
         </a>
-      </div>
+
+        <div class="fb-share-button" data-href="<%=@url%>" data-layout="button_count" data-size="large">
+          <a class="fb-xfbml-parse-ignore" target="_blank"
+            style="background-color: #3b5998; color: white; padding: 5px; text-decoration: none; margin-top: 5px;"
+            href="<%=@fb_href%>"
+          >
+            Share on Facebook
+          </a>
+        </div>
+      </fieldset>
+
+      <%= if @callpower do %>
+        <fieldset >
+
+        </fieldset>
+      <% end %>
+
+      <%= if @delivery do %>
+        <fieldset>
+          <legend> Signup to deliver the petition </legend>
+          <p> We need people to deliver our petitions to congress. </p>
+          <p> If you think you'll have the time and ability to </p>
+        </fieldset>
+      <% end %>
     <% end %>
   </div>
 </div>

@@ -142,11 +142,21 @@ defmodule Core.PetitionController do
     share_image = URI.encode(get_in(object, ["metadata", "share_image", "imgix_url"]) || background_image)
     background_image = URI.encode(background_image)
 
+    count = case Core.PetitionCount.stats_for(title) do
+      {:ok, %{in_last: _in_last, total: count}} -> count
+      {:error, _} -> nil
+    end
+
+    target =
+      if count do
+        Enum.max([round((count * 2) / 25_000) * 25_000, 25_000])
+      end
+
     render conn, "petition.html",
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
        post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
        banner: share_image, twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
-       signed: true] ++ GlobalOpts.get(conn, params)
+       count: count, target: target, signed: true] ++ GlobalOpts.get(conn, params)
   end
 
   def redirect_home(conn, params) do
