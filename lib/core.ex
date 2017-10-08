@@ -19,9 +19,8 @@ defmodule Core do
       # Start the endpoint when the application starts
       supervisor(Core.Endpoint, []),
       worker(Redix, [Application.get_env(:core, :redis_url), [name: :redix]]),
-      worker(Core.Scheduler, [])
-
-      # One offs
+      worker(Core.Scheduler, []),
+      worker(Core.PetitionCount, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html

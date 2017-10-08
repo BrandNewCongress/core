@@ -50,10 +50,10 @@ defmodule Core.PetitionController do
     }
   }) do
 
-    count =
-      if Map.has_key?(metadata, "count") && metadata["count"] != "" do
-        metadata["count"] |> format_count()
-      end
+    count = case Core.PetitionCount.stats_for(title) do
+      {:ok, %{in_last: _in_last, total: count}} -> count
+      {:error, _} -> nil
+    end
 
     target =
       if count do
