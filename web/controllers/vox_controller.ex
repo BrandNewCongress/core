@@ -54,7 +54,7 @@ defmodule Core.VoxController do
     end)
 
     render conn, "vox-submitted.html",
-      [username: username, password: password, title: "Call",
+      [username: String.trim(username), password: String.trim(password), title: "Call",
        call_page: chosen_content] ++ global_opts
   end
 
