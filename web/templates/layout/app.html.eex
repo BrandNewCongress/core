@@ -16,7 +16,7 @@
 
 <% background_image =
   cond do
-    assigns[:banner] -> assigns[:banner]
+    assigns[:background_image] -> assigns[:background_image]
     true -> "none"
   end
 %>
