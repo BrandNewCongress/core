@@ -2,6 +2,7 @@ defmodule Core.PetitionCount do
   use Agent
   alias Osdi.{Repo, Tagging, Tag}
   import Ecto.Query
+  require Logger
 
   @in_last [hours: -1]
 
@@ -20,10 +21,10 @@ defmodule Core.PetitionCount do
   end
 
   def update do
+    Logger.info "Updating petition cache"
+
     petition_tags = Repo.all(from t in Tag,
       where: ilike(t.name, "%Signed Petition%"),
-      join: pt in Tagging,
-      on: pt.tag_id == t.id,
       select: {t.name, t.id})
 
     tasks =
@@ -36,10 +37,11 @@ defmodule Core.PetitionCount do
           list -> Map.put(acc, petition_name, [tag_id | list])
         end
       end)
-      # |> Enum.map(fn {title, tag_ids} -> Task.async(fn -> update_petition({title, tag_ids}) end) end)
-      |> Enum.map(&update_petition/1)
+      |> Enum.map(fn {title, tag_ids} -> Task.async(fn -> update_petition({title, tag_ids}) end) end)
 
-    Enum.map tasks, &Task.await/1
+    Enum.each tasks, &Task.await/1
+
+    Logger.info "Updated petition cache on #{Timex.now() |> DateTime.to_iso8601()}"
   end
 
   defp update_petition({title, tag_ids}) do
@@ -61,8 +63,8 @@ defmodule Core.PetitionCount do
   def dump_state do
     state = Agent.get __MODULE__, fn state -> state end
 
-    Enum.map state, fn {title, %{total: total, in_last: in_last}} ->
-      "#{title}:\t#{total}"
-    end
+    state
+    |> Enum.map(fn {title, %{total: total}} -> "#{title}:\t#{total}" end)
+    |> Enum.join("\n")
   end
 end
