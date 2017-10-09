@@ -54,7 +54,6 @@ defmodule Core.PetitionCount do
       select: count(pt.id))
 
     Agent.update __MODULE__, fn state ->
-      IO.puts "#{title}: #{total}"
       Map.put(state, title, %{total: total, in_last: in_last})
     end
   end
