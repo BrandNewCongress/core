@@ -21,7 +21,7 @@ defmodule Core.Mixfile do
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger,
                     :gettext, :phoenix_ecto, :postgrex, :httpotion,
                     :phoenix_swoosh, :timex, :quantum, :osdi, :browser, :csv,
-                    :html_sanitize_ex, :number, :stash, :topo]]
+                    :html_sanitize_ex, :number, :stash, :topo, :maps]]
   end
 
   # Specifies which paths to compile per environment.
