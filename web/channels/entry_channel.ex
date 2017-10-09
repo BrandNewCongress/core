@@ -21,7 +21,8 @@ defmodule Core.EntryChannel do
 
         entry
         |> extract_update(campaign_name)
-        |> (&Nb.People.update(id, &1)).()
+        # TODO – replace with osdi version
+        # |> (&Nb.People.update(id, &1)).()
 
         push socket, "update", %{"n" => n, "message" => "Updated person: #{id}."}
 
@@ -34,7 +35,8 @@ defmodule Core.EntryChannel do
         %{"id" => id} =
           entry
           |> Map.merge(entry |> extract_update(campaign_name))
-          |> Nb.People.push()
+          # TODO – replace with osdi version
+          # |> Nb.People.push()
 
         push socket, "update", %{"n" => n, "message" => "Created new person: #{id}."}
 
@@ -44,24 +46,27 @@ defmodule Core.EntryChannel do
     push socket, "update", %{"n" => n, "message" => "Adding new contact for id #{nb_id}"}
 
     if entry["contactMethod"] == "event_rsvp" do
-      Nb.People.add_tags(nb_id, [
-        "Action: Attended Event: #{campaign_name}"
-      ])
+      # TODO – replace with osdi version
+      # Nb.People.add_tags(nb_id, [
+      #   "Action: Attended Event: #{campaign_name}"
+      # ])
 
-      slug = 124
+      # slug = 124
 
-      Nb.Events.Rsvps.create(slug, %{
-        person_id: nb_id
-      })
+      # TODO – replace with osdi version
+      # Nb.Events.Rsvps.create(slug, %{
+      #   person_id: nb_id
+      # })
     else
-      Nb.Contacts.create(nb_id, %{
-        type_id: 1,
-        author_id: 70_380, # required but not in use
-        sender_id: 70_380, # required but not in use
-        method: entry["contactMethod"],
-        status: entry["result"],
-        note: "Primary issue: #{entry["issue"]}"
-      })
+      # TODO – replace with osdi version
+      # Nb.Contacts.create(nb_id, %{
+      #   type_id: 1,
+      #   author_id: 70_380, # required but not in use
+      #   sender_id: 70_380, # required but not in use
+      #   method: entry["contactMethod"],
+      #   status: entry["result"],
+      #   note: "Primary issue: #{entry["issue"]}"
+      # })
     end
 
     push socket, "done", %{"n" => n}

@@ -40,7 +40,7 @@ defmodule Core.PetitionController do
   defp do_render_petition(conn, params, object = %{
     "slug" => slug,
     "content" => content,
-    "metadata" => metadata = %{
+    "metadata" => %{
       "title" => title,
       "sign_button_text" => sign_button_text,
       "post_sign_text" => post_sign_text,
@@ -77,9 +77,6 @@ defmodule Core.PetitionController do
        progress: pretty_num(progress), background_image: background_image, description: og_description] ++ GlobalOpts.get(conn, params)
   end
 
-  defp format_count(""), do: nil
-  defp format_count(count) when is_integer(count), do: count
-  defp format_count(count) when is_binary(count), do: count |> Integer.parse() |> Tuple.to_list() |> List.first()
   defp pretty_num(nil), do: nil
   defp pretty_num(n), do: n |> Number.Delimit.number_to_delimited(precision: 0)
 
