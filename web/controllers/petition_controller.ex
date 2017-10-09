@@ -101,7 +101,7 @@ defmodule Core.PetitionController do
     } = Cosmic.get(petition)
 
 
-    call_power_campaign_id = object["call_power_campaign_id"]
+    call_power_campaign_id = object["metadata"]["call_power_campaign_id"]
 
     url = "https://#{conn.host}/petition/#{slug}"
     twitter_query = URI.encode_query([text: tweet_template, url: url])
