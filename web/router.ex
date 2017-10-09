@@ -25,6 +25,7 @@ defmodule Core.Router do
 
     get "/petition/:petition", PetitionController, :get
     post "/petition/:petition", PetitionController, :post
+    get "/petition-counts", PetitionController, :counts
 
     get "/form/:form", FormController, :get
     get "/info/:info", InfoController, :get

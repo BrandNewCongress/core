@@ -22,6 +22,8 @@ defmodule Core.PetitionCount do
   def update do
     petition_tags = Repo.all(from t in Tag,
       where: ilike(t.name, "%Signed Petition%"),
+      join: pt in Tagging,
+      on: pt.tag_id == t.id,
       select: {t.name, t.id})
 
     tasks =
@@ -34,7 +36,8 @@ defmodule Core.PetitionCount do
           list -> Map.put(acc, petition_name, [tag_id | list])
         end
       end)
-      |> Enum.map(fn {title, tag_ids} -> Task.async(fn -> update_petition({title, tag_ids}) end) end)
+      # |> Enum.map(fn {title, tag_ids} -> Task.async(fn -> update_petition({title, tag_ids}) end) end)
+      |> Enum.map(&update_petition/1)
 
     Enum.map tasks, &Task.await/1
   end
@@ -51,7 +54,16 @@ defmodule Core.PetitionCount do
       select: count(pt.id))
 
     Agent.update __MODULE__, fn state ->
+      IO.puts "#{title}: #{total}"
       Map.put(state, title, %{total: total, in_last: in_last})
+    end
+  end
+
+  def dump_state do
+    state = Agent.get __MODULE__, fn state -> state end
+
+    Enum.map state, fn {title, %{total: total, in_last: in_last}} ->
+      "#{title}:\t#{total}"
     end
   end
 end

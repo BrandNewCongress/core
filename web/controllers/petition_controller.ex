@@ -156,4 +156,8 @@ defmodule Core.PetitionController do
     end
     redirect(conn, external: url)
   end
+
+  def counts(conn, _params) do
+    text conn, Core.PetitionCount.dump_state
+  end
 end
