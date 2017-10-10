@@ -17,7 +17,7 @@ defmodule Core.OsdiController do
       |> to_atom_map()
       |> Osdi.RecordContact.main()
 
-    json conn, response
+    json conn, Map.take(response, ~w(action_date contact_effort_id contact_type origin_system status_code target_id success identifiers contactor_id)a)
   end
 
   defp do_remove_tags(person, %{"remove_tags" => tags_to_remove}), do:
