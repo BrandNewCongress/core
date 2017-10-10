@@ -17,7 +17,7 @@ defmodule Core.OsdiController do
 
     response =
       as_atom_map
-      |> Map.put(:action_date, action_date)
+      |> put_in([:contact, :action_date], action_date)
       |> Osdi.RecordContact.main()
 
     json conn, Map.take(response, ~w(action_date contact_effort_id contact_type origin_system status_code target_id success identifiers contactor_id)a)
