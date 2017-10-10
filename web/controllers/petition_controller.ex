@@ -80,7 +80,7 @@ defmodule Core.PetitionController do
   defp pretty_num(nil), do: nil
   defp pretty_num(n), do: n |> Number.Delimit.number_to_delimited(precision: 0)
 
-  def post(conn, params = %{"petition" => petition, "name" => name, "email" => email, "zip" => zip}) do
+  def post(conn, params = %{"petition" => petition, "name" => name, "email" => email, "zip" => zip, "phone" => phone}) do
     global_opts = GlobalOpts.get(conn, params)
 
     object = %{"slug" => slug,
@@ -98,7 +98,9 @@ defmodule Core.PetitionController do
     } = Cosmic.get(petition)
 
 
-    call_power_campaign_id = object["metadata"]["call_power_campaign_id"]
+    [call_power_campaign_id, call_power_header, call_power_prompt] =
+      ~w(call_power_campaign_id call_power_header call_power_prompt)
+      |> Enum.map(fn key -> get_in(object, ["metadata", key]) end)
 
     url = "https://#{conn.host}/petition/#{slug}"
     twitter_query = URI.encode_query([text: tweet_template, url: url])
@@ -136,6 +138,7 @@ defmodule Core.PetitionController do
         family_name: last_name,
         postal_addresses: [%{postal_code: zip}],
         email_addresses: [%{address: email, primary: true}],
+        phone_numbers: [%{number: phone, do_not_call: false}]
       },
       add_tags: tags})
 
@@ -156,8 +159,10 @@ defmodule Core.PetitionController do
       [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
        post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
        banner: share_image, twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
-       count: count, target: target, signed: true, submitted_zip: zip,
-       call_power_campaign_id: call_power_campaign_id] ++ GlobalOpts.get(conn, params)
+       count: count, target: target, signed: true, submitted_zip: zip, submitted_phone: phone,
+       submitted_email: email, submitted_name: name,
+       call_power_campaign_id: call_power_campaign_id, call_power_header: call_power_header,
+       call_power_prompt: call_power_prompt] ++ GlobalOpts.get(conn, params)
   end
 
   def redirect_home(conn, params) do

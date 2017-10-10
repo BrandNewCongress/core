@@ -11,6 +11,7 @@ const config = {
     'vox-report': './web/static/js/vox-report.js',
     'leaderboard-report': './web/static/js/leaderboard-report.js',
     standup: './web/static/js/standup.js',
+    petition: './web/static/js/petition.js',
     app: './web/static/js/app.js',
     css: [
       './web/static/css/app.css',

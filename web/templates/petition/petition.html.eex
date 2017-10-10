@@ -49,6 +49,10 @@
               <input type="email" name="email" required="required"/>
             </div>
             <div class="input-field">
+              <label>Mobile Phone Number</label>
+              <input type="tel" name="phone" />
+            </div>
+            <div class="input-field">
               <label>Zip</label>
               <input type="text" name="zip" maxlength="5" required="required" />
             </div>
@@ -112,17 +116,31 @@
       </fieldset>
 
       <%= if @call_power_campaign_id do %>
-        <script src="https://jd-callpower.herokuapp.com/api/campaign/<%= @call_power_campaign_id %>/embed.js"></script>
+        <script src="<%= static_path(@conn, "/js/petition.js") %>" defer="defer"></script>
+        <script async="true" defer="defer" src="https://jd-callpower.herokuapp.com/api/campaign/<%= @call_power_campaign_id %>/embed.js"></script>
         <fieldset style="color:white;">
-          <legend> Call your congressperson now! </legend>
+          <legend> <%= @call_power_header %> </legend>
           <label>
-            Give us your phone number, and you'll get a call connecting you to your congress person.
-            Before connecting you, well'll give you instructions for how you can make the biggest impact.
+            <%= raw(@call_power_prompt) %>
           </label>
+
           <form id="call_form">
-            <input id="phone_id" type="tel"/>
+            <input id="phone_id" type="hidden" value="<%= @submitted_phone %>"/>
             <input id="location_id" type="hidden" value="<%= @submitted_zip %>" />
-            <button type="submit" style="width: 100%; margin-top: 10px;" id="call-power-go"> Call Me </button>
+            <button type="submit" style="width: 100%; margin-top: 10px;" id="call-power-go"> Call Me At <%= @submitted_phone %> </button>
+          </form>
+
+          <%= form_tag("/petition/#{@slug}", method: :post, id: "number-replace-form", style: "margin-top: 10px;") %>
+            <input name="name" value="<%= @submitted_name %>" type="hidden" />
+            <input name="email" value="<%= @submitted_email %>" type="hidden" />
+            <input name="zip" value="<%= @submitted_zip %>" type="hidden" />
+            <div class="input-field" id="number-replacement-field" style="display: none;">
+              <label>Different Number</label>
+              <input type="tel" name="phone" />
+            </div>
+            <div class="input-field">
+              <button id="number-replace-button" class="button-block">Call Me at a Different Number</button>
+            </div>
           </form>
         </fieldset>
       <% end %>
@@ -183,6 +201,7 @@ html, body {
 
 .petition-container input {
   background-color: rgba(255,255,255,0.1);
+  color: white;
 }
 
 .petition-container label {
