@@ -12,9 +12,12 @@ defmodule Core.OsdiController do
   end
 
   def record_contact(conn, record_contact_body = %{"contact" => %{}}) do
+    as_atom_map = to_atom_map(record_contact_body)
+    {:ok, action_date, _} = DateTime.from_iso8601(as_atom_map.action_date)
+
     response =
-      record_contact_body
-      |> to_atom_map()
+      as_atom_map
+      |> Map.put(:action_date, action_date)
       |> Osdi.RecordContact.main()
 
     json conn, Map.take(response, ~w(action_date contact_effort_id contact_type origin_system status_code target_id success identifiers contactor_id)a)
