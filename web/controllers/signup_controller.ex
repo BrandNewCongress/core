@@ -13,7 +13,7 @@ defmodule Core.OsdiController do
 
   def record_contact(conn, record_contact_body = %{"contact" => %{}}) do
     as_atom_map = to_atom_map(record_contact_body)
-    {:ok, action_date, _} = DateTime.from_iso8601(as_atom_map.action_date)
+    {:ok, action_date, _} = DateTime.from_iso8601(as_atom_map.contact.action_date)
 
     response =
       as_atom_map
