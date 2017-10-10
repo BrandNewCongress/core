@@ -6,6 +6,7 @@
     true -> nil
   end
 %>
+<% abbrev = String.upcase(@brand) %>
 
 <div class="nav-body-container">
   <%= if @brand == "jd" do %>
@@ -31,7 +32,7 @@
           <a target="_blank" class="primary-button"
             href="https://docs.google.com/document/d/1AKs90WQvTLzA9-fzt7RkR_V1Af8p5-xXgDT2JenOw5k/edit?usp=sharing"
           >
-            Read the guide on how to make calls for BNC
+            Read the guide on how to make calls for <%= abbrev %>
           </a>
 
           <label> Second, </label>
