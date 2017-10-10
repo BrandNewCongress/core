@@ -72,7 +72,7 @@ defmodule Core.Router do
     get "/events", EventsController, :as_json
     get "/events/:candidate", EventsController, :as_json
 
-    post "/signup", SignupController, :simple
-    post "/volunteer", SignupController, :volunteer
+    post "/signup", OsdiController, :signup
+    post "/record-contact", OsdiController, :record_contact
   end
 end

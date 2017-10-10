@@ -1,12 +1,21 @@
-defmodule Core.SignupController do
+defmodule Core.OsdiController do
   use Core.Web, :controller
 
-  def simple(conn, signup_body = %{"person" => %{}}) do
+  def signup(conn, signup_body = %{"person" => %{}}) do
     response =
       signup_body
       |> to_atom_map()
       |> Osdi.PersonSignup.main()
       |> do_remove_tags(signup_body)
+
+    json conn, response
+  end
+
+  def record_contact(conn, record_contact_body = %{"contact" => %{}}) do
+    response =
+      record_contact_body
+      |> to_atom_map()
+      |> Osdi.RecordContact.main()
 
     json conn, response
   end
