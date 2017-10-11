@@ -95,6 +95,7 @@ defmodule Core.EventsController do
     |> String.downcase()
     |> String.replace(" ", "-")
     |> String.replace(":", "")
+    |> String.replace(",", "")
   end
 
   def as_json(conn, params = %{"candidate" => candidate}) do
