@@ -30,7 +30,7 @@
         <div class="link-container" style="display: flex; flex-direction: column; align-items: center;">
           <label> First, </label>
           <a target="_blank" class="primary-button"
-            href="https://docs.google.com/document/d/1AKs90WQvTLzA9-fzt7RkR_V1Af8p5-xXgDT2JenOw5k/edit?usp=sharing"
+            href="https://docs.google.com/document/d/13PglZGs0pGkpTy3BWZbbUdhla63nJhTIHpYtq_X0A8M/edit?usp=sharing"
           >
             Read the guide on how to make calls for <%= abbrev %>
           </a>
