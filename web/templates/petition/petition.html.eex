@@ -34,7 +34,7 @@
         </div>
       <% end %>
 
-      <%= form_tag("/petition/#{@slug}", method: :post) %>
+      <%= form_tag("/petition/#{@slug}", method: :post, id: "main-form") %>
         <div class="petition-container">
           <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
 
@@ -57,7 +57,7 @@
               <input type="text" name="zip" maxlength="5" required="required" />
             </div>
             <div class="input-field">
-              <button type="submit" class="button-block"><%=@sign_button_text%></button>
+              <button onclick="fbq('track', 'Lead'); document.querySelector('#main-form').submit();" type="submit" class="button-block"><%=@sign_button_text%></button>
             </div>
           </fieldset>
 
@@ -115,7 +115,7 @@
         </div>
       </fieldset>
 
-      <%= if @call_power_campaign_id do %>
+      <%= if @call_power_campaign_id != nil and @call_power_campaign_id != "" do %>
         <script src="<%= static_path(@conn, "/js/petition.js") %>" defer="defer"></script>
         <script async="true" defer="defer" src="https://jd-callpower.herokuapp.com/api/campaign/<%= @call_power_campaign_id %>/embed.js"></script>
         <fieldset style="color:white;">
@@ -286,10 +286,4 @@ html, body {
     src="https://www.facebook.com/tr?id=371916799853582&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Facebook Pixel Code -->
-<% end %>
-
-<%= if @brand == "jd" and @signed do %>
-  <script>
-    fbq('track', 'Lead');
-  </script>
 <% end %>

@@ -155,14 +155,19 @@ defmodule Core.PetitionController do
         Enum.max([round((count * 2) / 25_000) * 25_000, 25_000])
       end
 
-    render conn, "petition.html",
-      [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
-       post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
-       banner: share_image, twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
-       count: count, target: target, signed: true, submitted_zip: zip, submitted_phone: phone,
-       submitted_email: email, submitted_name: name,
-       call_power_campaign_id: call_power_campaign_id, call_power_header: call_power_header,
-       call_power_prompt: call_power_prompt] ++ GlobalOpts.get(conn, params)
+    redirect_url = get_in(object, ["metadata", "redirect_url"])
+    if redirect_url != nil and redirect_url != ""  do
+      redirect conn, external: redirect_url
+    else
+      render conn, "petition.html",
+        [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
+         post_sign_text: post_sign_text, background_image: background_image, share_image: share_image,
+         banner: share_image, twitter_href: twitter_href, fb_href: fb_href, no_footer: true, url: url,
+         count: count, target: target, signed: true, submitted_zip: zip, submitted_phone: phone,
+         submitted_email: email, submitted_name: name,
+         call_power_campaign_id: call_power_campaign_id, call_power_header: call_power_header,
+         call_power_prompt: call_power_prompt] ++ GlobalOpts.get(conn, params)
+     end
   end
 
   def redirect_home(conn, params) do
