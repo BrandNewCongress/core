@@ -39,7 +39,7 @@
     </div>
 
     <%= if (not @mobile) do %>
-      <a class="donate-link" target="_blank" href="https://<%= homepage(@brand) %>/donate">
+      <a class="donate-link" target="_blank" href="https://<%= homepage(@brand) %>/donate?refcode=nowheader">
         Support <%= abbr(@brand) %>
       </a>
     <% end %>
