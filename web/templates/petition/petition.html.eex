@@ -57,7 +57,11 @@
               <input type="text" name="zip" maxlength="5" required="required" />
             </div>
             <div class="input-field">
-              <button onclick="fbq('track', 'Lead'); document.querySelector('#main-form').submit();" type="submit" class="button-block"><%=@sign_button_text%></button>
+              <%= if @brand == "jd" do %>
+                <button onclick="fbq('track', 'Lead'); document.querySelector('#main-form').submit();" type="submit" class="button-block"><%=@sign_button_text%></button>
+              <% else %>
+                <button type="submit" class="button-block"><%=@sign_button_text%></button>
+              <% end %>
             </div>
           </fieldset>
 
