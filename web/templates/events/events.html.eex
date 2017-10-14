@@ -1,4 +1,3 @@
-<% IO.puts "HELLO HELLO \n HELLO HELLO " %>
 <div id="events-app"></div>
 <script defer="defer" src="<%= static_path(@conn, "/js/events.js") %>"></script>
 <script>

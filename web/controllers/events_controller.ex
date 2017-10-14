@@ -23,9 +23,11 @@ defmodule Core.EventsController do
       |> get_coordinates()
       |> Poison.encode()
 
-    render conn, "embedded.html",
+    conn
+    |> delete_resp_header("x-frame-options")
+    |> render("embedded.html",
       [layout: {Core.LayoutView, "bare.html"}, district: district, coordinates: coordinates,
-       title: "Events in #{district}"] ++ GlobalOpts.get(conn, params)
+       title: "Events in #{district}"] ++ GlobalOpts.get(conn, params))
   end
 
   def get_one(conn, params = %{"name" => event_name}) do
