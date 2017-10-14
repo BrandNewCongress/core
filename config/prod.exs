@@ -17,7 +17,11 @@ config :core, Core.Endpoint,
   check_origin: [
     "https://core.gigalixirapp.com",
     "https://now.brandnewcongress.org",
+    "https://www.brandnewcongress.org",
+    "https://brandnewcongress.org",
     "https://now.justicedemocrats.com",
+    "https://www.justicedemocrats.com",
+    "https://justicedemocrats.com",
     "http://localhost:4000"
   ],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
