@@ -195,7 +195,7 @@ html, body {
   text-transform: uppercase;
 }
 
-.right-column p {
+.right-column p, .right-column li {
   font-size: inherit !important;
   color: #ccc !important;
   line-height: 1.6em !important;
