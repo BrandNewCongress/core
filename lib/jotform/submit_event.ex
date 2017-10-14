@@ -14,7 +14,7 @@ defmodule Jotform.SubmitEvent do
       start_time: start_time, end_time: end_time, description: description,
       venue_name: venue_name, hide_address: hide_address, address: venue_address,
       event_name: event_name, should_contact: should_contact,
-      instructions: instructions} =
+      instructions: instructions, hide_phone: hide_phone} =
         ~w(name area_phone email event_type event_date start_time end_time description
            venue_name hide_address address event_name should_contact instructions hide_phone)
         |> Enum.map(fn attr -> {String.to_atom(attr), matching_val(attr, as_map)} end)
@@ -54,7 +54,7 @@ defmodule Jotform.SubmitEvent do
         end
       end)
 
-    venue_address = venue_house_number <> " " <> venue_street_name
+    venue_address = "#{venue_house_number} #{venue_street_name}"
 
     ## ------------ Create and or find person
     organizer_task = Task.async fn ->
