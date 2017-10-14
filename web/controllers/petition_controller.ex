@@ -161,7 +161,7 @@ defmodule Core.PetitionController do
            fragment: redirect_fragment, host: redirect_host} = URI.parse(redirect_url)
 
       redirect_query = case redirect_query do
-        nil -> %{refcode: params["ref"]}
+        nil -> URI.encode_query(%{refcode: params["ref"]})
         some_binary ->
           some_binary
           |> URI.decode_query()
