@@ -16,7 +16,7 @@ defmodule Jotform.SubmitEvent do
       event_name: event_name, should_contact: should_contact,
       instructions: instructions} =
         ~w(name area_phone email event_type event_date start_time end_time description
-           venue_name hide_address address event_name should_contact instructions)
+           venue_name hide_address address event_name should_contact instructions hide_phone)
         |> Enum.map(fn attr -> {String.to_atom(attr), matching_val(attr, as_map)} end)
         |> Enum.into(%{})
 
@@ -106,7 +106,8 @@ defmodule Jotform.SubmitEvent do
       contact: %{
         name: first_name <> " " <> last_name,
         phone_number: phone,
-        email_address: email
+        email_address: email,
+        public: hide_phone != "Hide"
       },
       location: %{
         public: hide_address == "Show",

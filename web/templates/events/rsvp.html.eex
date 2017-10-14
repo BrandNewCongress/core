@@ -39,7 +39,9 @@
         <h3> Contact </h3>
         <p> <%= @event.contact.name %> </p>
         <p> <a href="mailto:<%= @event.contact.email_address %>"> <%= @event.contact.email_address %> </a> </p>
-        <p> <%= @event.contact.phone_number %> </p>
+        <%= if @event.contact.public do %>
+          <p> <%= @event.contact.phone_number %> </p>
+        <% end %>
       </div>
     </div>
 
