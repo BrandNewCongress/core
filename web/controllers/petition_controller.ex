@@ -157,7 +157,24 @@ defmodule Core.PetitionController do
 
     redirect_url = get_in(object, ["metadata", "redirect_url"])
     if redirect_url != nil and redirect_url != ""  do
-      redirect conn, external: redirect_url
+      %URI{scheme: redirect_scheme, path: redirect_path, query: redirect_query,
+           fragment: redirect_fragment, host: redirect_host} = URI.parse(redirect_url)
+
+      redirect_query = case redirect_query do
+        nil -> %{refcode: params["ref"]}
+        some_binary ->
+          some_binary
+          |> URI.decode_query()
+          |> Map.merge(%{refcode: params["ref"]})
+          |> URI.encode_query()
+      end
+
+      transformed_url = URI.to_string(%URI{
+        scheme: redirect_scheme, path: redirect_path, query: redirect_query,
+        fragment: redirect_fragment, host: redirect_host
+      })
+
+      redirect conn, external: transformed_url
     else
       render conn, "petition.html",
         [slug: slug, title: title, content: content, sign_button_text: sign_button_text,
