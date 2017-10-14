@@ -22,6 +22,8 @@ config :core, Core.Endpoint,
     "https://now.justicedemocrats.com",
     "https://www.justicedemocrats.com",
     "https://justicedemocrats.com",
+    "http://ecbiz237.inmotionhosting.com/",
+    "https://ecbiz237.inmotionhosting.com/",
     "http://localhost:4000"
   ],
   force_ssl: [rewrite_on: [:x_forwarded_proto]],
