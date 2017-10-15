@@ -54,13 +54,26 @@ defmodule Core.EventsController do
       Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email})
     end)
 
+    referrer_data = Map.merge(get_source(params), get_referrer(conn)) |> IO.inspect
+
     Attendance.push(event.id, %{
       given_name: first_name, family_name: last_name, email_address: email,
       phone_number: phone, postal_address: %Address{
         address_lines: [address], locality: city, region: state, postal_code: zip
-      }})
+      }}, referrer_data)
 
     render conn, "rsvp.html", [event: event, person: true, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
+  end
+
+  defp get_source(%{"ref" => ref}), do: %{source: ref}
+  defp get_source(_params), do: %{}
+
+  defp get_referrer(conn) do
+    case get_req_header(conn, "referrer") do
+      nil -> %{}
+      [] -> %{}
+      url -> %{referrer: url}
+    end
   end
 
   defp get_district(""), do: nil
