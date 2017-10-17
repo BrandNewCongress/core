@@ -1,0 +1,72 @@
+<div class="nav-body-container">
+  <div class="header-container">
+    <h1 style="font-family: 'Alfa Slab One', sans-serif; text-transform: uppercase;"> Candidates </h1>
+  </div>
+
+  <div class="candidate-message">
+    We are excited to announce our first candidates! Join us to be notified of many more candidates in the weeks to come.
+  </div>
+
+  <div class="card-container">
+    <%= for cand <- @candidates do %>
+      <div class="card" href="<%= cand.external_website %>">
+        <div class="name-container">
+          <%= cand.title %>
+        </div>
+        <img style="width: 100%" class="card-pic" src="<%= cand.small_picture %>" />
+        <div class="district-container">
+          <%= cand.district %>
+        </div>
+        <div class="blurb-container">
+          <%= cand.website_blurb %>
+          <a href="<%= cand.external_website %>">Read More</a>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<style>
+
+.nav-body-container {
+  display: block;
+}
+
+.header-container {
+  border-bottom: 7px solid #111;
+  margin-top: 30px;
+}
+
+.card-container {
+  display: flex;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 50%;
+  min-width: 25%;
+  text-align: center;
+}
+
+.name-container {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 32px;
+  text-transform: uppercase;
+  font-weight: bold;
+  /* TODO – get roboto condensed going */
+  border-bottom: 7px solid #373737;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.district-container {
+  margin-top: 15px;
+  margin-bottom: 5px;
+  background-color: #2a5058;
+  color: white;
+  width: 100%;
+}
+
+</style>

@@ -54,6 +54,8 @@ defmodule Core.Router do
     get "/leaderboard/email", LeaderboardController, :send_email
     post "/leaderboard", LeaderboardController, :post
 
+    get "/candidates", CandidateController, :get
+
     get "/unsubscribe", SubscriptionController, :unsubscribe_get
     post "/unsubscribe", SubscriptionController, :unsubscribe_post
     get "/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_get
