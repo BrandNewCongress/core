@@ -41,7 +41,7 @@ defmodule Core.CandidateController do
       "small_picture" => %{"imgix_url" => small_picture}} = candidate
 
     %{district: district, external_website: external_website, website_blurb: website_blurb,
-      small_picture: small_picture, title: title}
+      small_picture: ~s("#{URI.encode(small_picture)}"), title: title}
   end
 
   defp by_district(%{district: d1}, %{district: d2}) do

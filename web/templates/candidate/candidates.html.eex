@@ -3,7 +3,7 @@
     <h1 style="font-family: 'Alfa Slab One', sans-serif; text-transform: uppercase;"> Candidates </h1>
   </div>
 
-  <div class="candidate-message">
+  <div class="candidate-message" style="margin-top: 20px; margin-bottom: 10px;">
     We are excited to announce our first candidates! Join us to be notified of many more candidates in the weeks to come.
   </div>
 
@@ -13,8 +13,8 @@
         <div class="name-container">
           <%= cand.title %>
         </div>
-        <div style="width: 100%; height: 234px; overflow: hidden;">
-          <img style="width: 100%" class="card-pic" src="<%= cand.small_picture %>" />
+        <div class="cand-image" style="width: 100%; height: 234px; overflow: hidden; background-image: url(<%= cand.small_picture %>)">
+          <!-- <img style="width: 100%; bottom: 0;" class="card-pic" src="<%= cand.small_picture %>" /> -->
         </div>
         <div class="district-container">
           <%= cand.district %>
@@ -42,14 +42,20 @@
 .card-container {
   display: flex;
   flex-wrap: wrap;
+  margin-top: 10px;
 }
 
 .card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 45%;
-  min-width: 25%;
+  <%= if @mobile do %>
+    max-width: 95%;
+    min-width: 25%;
+  <% else %>
+    max-width: 45%;
+    min-width: 25%;
+  <% end %>
   text-align: center;
   margin: 10px;
 }
@@ -71,6 +77,10 @@
   background-color: #2a5058;
   color: white;
   width: 100%;
+}
+
+.cand-image {
+  background-size: cover;
 }
 
 </style>
