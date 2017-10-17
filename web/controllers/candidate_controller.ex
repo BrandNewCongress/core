@@ -13,6 +13,7 @@ defmodule Core.CandidateController do
       |> Enum.filter(&is_launched/1)
       |> Enum.filter(&has_props/1)
       |> Enum.map(&preprocess/1)
+      |> Enum.sort(&by_district/2)
 
     render conn, "candidates.html", [title: "Candidates", candidates: candidates] ++ global_opts
   end
@@ -41,5 +42,9 @@ defmodule Core.CandidateController do
 
     %{district: district, external_website: external_website, website_blurb: website_blurb,
       small_picture: small_picture, title: title}
+  end
+
+  defp by_district(%{district: d1}, %{district: d2}) do
+    d1 <= d2
   end
 end

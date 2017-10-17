@@ -13,7 +13,9 @@
         <div class="name-container">
           <%= cand.title %>
         </div>
-        <img style="width: 100%" class="card-pic" src="<%= cand.small_picture %>" />
+        <div style="width: 100%; height: 234px; overflow: hidden;">
+          <img style="width: 100%" class="card-pic" src="<%= cand.small_picture %>" />
+        </div>
         <div class="district-container">
           <%= cand.district %>
         </div>
@@ -39,20 +41,22 @@
 
 .card-container {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 50%;
+  max-width: 45%;
   min-width: 25%;
   text-align: center;
+  margin: 10px;
 }
 
 .name-container {
   font-family: 'Roboto Condensed', sans-serif;
-  font-size: 32px;
+  font-size: 24px;
   text-transform: uppercase;
   font-weight: bold;
   /* TODO – get roboto condensed going */
