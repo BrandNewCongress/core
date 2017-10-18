@@ -90,7 +90,9 @@ defmodule Core.EventsController do
       district
       |> District.centroid()
       |> Tuple.to_list()
+      |> (fn [y, x] -> [x, y] end).()
       |> Poison.encode()
+
     coordinates
   end
 

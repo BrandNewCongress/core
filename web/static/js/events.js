@@ -21,7 +21,7 @@ class EmbededMap extends Component {
       ? window.startingCoordinates
       : cookie ? JSON.parse(cookie) : null
 
-    const district = window.district ? district : getCookie('district')
+    const district = window.district ? window.district : getCookie('district')
 
     if (this.state.district !== district) {
       this.setState({
