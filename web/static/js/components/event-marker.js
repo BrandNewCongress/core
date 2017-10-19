@@ -42,13 +42,13 @@ export default class EventMarker extends Component {
     } = ev
 
     const style = {
-      maxHeight: 250,
+      maxHeight: 290,
       borderTop: idx > 0 ? '1px solid black' : '',
       marginTop: idx > 0 ? 10 : 0
     }
 
     return (
-      <div key={idx} className="event-item event" style={style}>
+      <div key={idx} id={ev.name} className="event-item event" style={style}>
         <h5 className="time-info">
           <div className="dateblock">{date_line}</div>
         </h5>

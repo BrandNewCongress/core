@@ -4,7 +4,12 @@ import EventMarker from './event-marker'
 import GeoSuggest from 'react-geosuggest'
 import socket from '../socket'
 
-const DIST_GROUP_THRESHOLD = 0.0000001
+const DIST_GROUP_THRESHOLD = 0.0001
+
+const print = s => {
+  console.log(s)
+  return s
+}
 
 export default class EventMap extends Component {
   state = {
@@ -114,7 +119,7 @@ export default class EventMap extends Component {
             url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
           />
           {overlay && <GeoJSON data={overlay} className="district-overlay" />}
-          {this.groupEvents(events).map(es => (
+          {print(this.groupEvents(events)).map(es => (
             <EventMarker key={es[0].name} events={es} />
           ))}
         </Map>
@@ -217,24 +222,24 @@ export default class EventMap extends Component {
       </div>
     )
 
-  groupEvents = events =>
-    events.reduce(
-      (acc, event) =>
-        acc.filter(
-          (es, idx) =>
-            this.distanceBetween(this.centroid(es), event) <
-            DIST_GROUP_THRESHOLD
-        ).length == 0
-          ? acc.concat([[event]])
-          : acc.map(
-              (es, idx) =>
-                this.distanceBetween(this.centroid(es), event) <
-                DIST_GROUP_THRESHOLD
-                  ? es.concat([event])
-                  : es
-            ),
-      []
-    )
+  groupEvents = events => {
+    const groups = []
+
+    events.forEach(ev => {
+      const groupToJoin = groups.filter(
+        group =>
+          this.distanceBetween(this.centroid(group), ev) < DIST_GROUP_THRESHOLD
+      )[0]
+
+      if (groupToJoin) {
+        groupToJoin.push(ev)
+      } else {
+        groups.push([ev])
+      }
+    })
+
+    return groups
+  }
 
   distanceBetween = (coords, e) => {
     const result = Math.pow(
@@ -243,20 +248,14 @@ export default class EventMap extends Component {
       0.5
     )
 
-    if (e.name == 'calling-unaffiliated-voters-09-29') {
-      console.log(coords)
-      console.log(e)
-      console.log(result)
-    }
-
     return result
   }
 
   centroid = es => {
     const totals = [0, 0]
     es.forEach(e => {
-      totals[0] = totals[0] = e.location.location[0]
-      totals[1] = totals[1] = e.location.location[1]
+      totals[0] = totals[0] + e.location.location[0]
+      totals[1] = totals[1] + e.location.location[1]
     })
 
     const [lat_sum, long_sum] = totals
