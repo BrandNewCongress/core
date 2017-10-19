@@ -30,6 +30,16 @@ defmodule Core.EventsController do
        title: "Events in #{district}"] ++ GlobalOpts.get(conn, params))
   end
 
+  def iframe(conn, params) do
+    {:ok, coordinates} = nil |> get_coordinates() |> Poison.encode()
+
+    conn
+    |> delete_resp_header("x-frame-options")
+    |> render("embedded.html",
+      [layout: {Core.LayoutView, "bare.html"}, district: "",
+       coordinates: coordinates, title: "Events"] ++ GlobalOpts.get(conn, params))
+  end
+
   def get_one(conn, params = %{"name" => event_name}) do
     event =
       case Stash.get :event_cache, event_name do
