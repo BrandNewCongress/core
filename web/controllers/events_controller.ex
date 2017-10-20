@@ -64,7 +64,7 @@ defmodule Core.EventsController do
       Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email})
     end)
 
-    referrer_data = Map.merge(get_source(params), get_referrer(conn)) |> IO.inspect
+    referrer_data = Map.merge(get_source(params), get_referrer(conn))
 
     Attendance.push(event.id, %{
       given_name: first_name, family_name: last_name, email_address: email,

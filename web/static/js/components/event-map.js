@@ -119,7 +119,7 @@ export default class EventMap extends Component {
             url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
           />
           {overlay && <GeoJSON data={overlay} className="district-overlay" />}
-          {print(this.groupEvents(events)).map(es => (
+          {this.groupEvents(events).map(es => (
             <EventMarker key={es[0].name} events={es} />
           ))}
         </Map>
