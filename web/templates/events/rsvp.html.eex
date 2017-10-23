@@ -93,12 +93,12 @@
             </div>
           </div>
           <div class="form-row">
-            <input type="submit" value="I'm coming!" class="primary-button" style="width: 200px; padding: 10px;">
+            <button type="submit"> I'm coming! </button>
           </div>
         </form>
         <div class="bar"></div>
         <div style="display: flex; justify-content: center; width: 100%;">
-          <a target="_blank" href="https://events.brandnewcongress.org/" class="primary-button" style="width: 200px; padding: 10px; text-decoration: none;"><p>More Events</p></a>
+          <a target="_blank" href="https://events.brandnewcongress.org/" class="button"><p>More Events</p></a>
         </div>
 
       <% else %>
@@ -106,6 +106,7 @@
         <h3> Thanks for rsvping! </h3>
         <p> We'll be in touch soon with details and reminders. </p>
         <p> In the meantime, share the event and try to get some of your friends to come! </p>
+        <button onclick="refresh()"> RSVP A Different Person </button>
         <div class="share-buttons">
         </div>
       <% end %>
@@ -173,3 +174,8 @@
 }
 
 </style>
+<script>
+function refresh () {
+  window.location.href = window.location.href
+}
+</script>
