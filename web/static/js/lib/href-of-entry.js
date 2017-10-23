@@ -1,8 +1,10 @@
-const base = window.location.hostname.replace('now.', '')
+const base = window.location.href.includes('justicedemocrats')
+  ? 'https://justicedemocrats.com'
+  : 'https://brandnewcongress.org'
 
 export default entry => {
   console.log(entry)
   return entry.path.indexOf('HOSTNAME') > -1
-  ? 'https://' + entry.path.replace('HOSTNAME', base)
+  ? entry.path.replace('HOSTNAME', base)
   : entry.path
 }
