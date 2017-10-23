@@ -52,13 +52,13 @@ defmodule Core.EventsController do
     render conn, "rsvp.html", [event: event, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
 
-  def rsvp(conn, params = %{"name" => event_name, "name" => name,
+  def rsvp(conn, params = %{"slug" => event_name, "name" => name,
     "email" => email, "phone" => phone, "address" => address,
     "zip" => zip, "city" => city, "state" => state}) do
 
     [first_name, last_name] = case String.split(name, ",") do
       [single] -> [single, nil]
-      list -> [List.first(), List.last()]
+      list -> [List.first(list), List.last(list)]
     end
 
     event = Stash.get :event_cache, event_name
@@ -70,15 +70,27 @@ defmodule Core.EventsController do
 
     referrer_data = Map.merge(get_source(params), get_referrer(conn))
 
-    Attendance.push(event.id, %{
-      given_name: first_name, family_name: last_name, email_address: email,
-      phone_number: phone, postal_address: %Address{
-        address_lines: [address], locality: city, region: state, postal_code: zip
-      }}, referrer_data)
+    attendance =
+      %{given_name: first_name, family_name: last_name}
+      |> add_if_exists(:email_address, email, email)
+      |> add_if_exists(:phone_number, phone, phone)
+      |> add_if_exists(:postal_address, address, %Address{
+          address_lines: [address], locality: city, region: state, postal_code: zip
+        })
+
+    Attendance.push(event.id, attendance, referrer_data)
 
     render conn, "rsvp.html", [
       event: event, person: true, title: event.title,
       description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
+  end
+
+  defp add_if_exists(map, key, test, val) do
+    if test != nil and test != "" do
+      Map.put(map, key, val)
+    else
+      map
+    end
   end
 
   defp get_source(%{"ref" => ref}), do: %{source: ref}

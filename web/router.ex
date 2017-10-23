@@ -41,7 +41,7 @@ defmodule Core.Router do
 
     get "/events", EventsController, :get
     get "/events/:name", EventsController, :get_one
-    post "/events/:name", EventsController, :rsvp
+    post "/events/:slug", EventsController, :rsvp
     get "/events-iframe", EventsController, :iframe
     get "/events-iframe/:district", EventsController, :iframe
 
