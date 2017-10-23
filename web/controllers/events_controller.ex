@@ -52,10 +52,14 @@ defmodule Core.EventsController do
     render conn, "rsvp.html", [event: event, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
 
-  def rsvp(conn, params = %{"name" => event_name,
-    "first_name" => first_name, "last_name" => last_name,
+  def rsvp(conn, params = %{"name" => event_name, "name" => name,
     "email" => email, "phone" => phone, "address" => address,
     "zip" => zip, "city" => city, "state" => state}) do
+
+    [first_name, last_name] = case String.split(name, ",") do
+      [single] -> [single, nil]
+      list -> [List.first(), List.last()]
+    end
 
     event = Stash.get :event_cache, event_name
     banner = get_banner(event.type)
@@ -72,7 +76,9 @@ defmodule Core.EventsController do
         address_lines: [address], locality: city, region: state, postal_code: zip
       }}, referrer_data)
 
-    render conn, "rsvp.html", [event: event, person: true, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
+    render conn, "rsvp.html", [
+      event: event, person: true, title: event.title,
+      description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
   end
 
   defp get_source(%{"ref" => ref}), do: %{source: ref}

@@ -54,12 +54,8 @@
           <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
           <div class="form-row">
             <div class="form-el">
-              <label> First Name </label> <br/>
-              <input name="first_name" type="text" />
-            </div>
-            <div class="form-el">
-              <label> Last Name </label><br/>
-              <input name="last_name" type="text" />
+              <label> Name </label> <br/>
+              <input name="name" type="text" />
             </div>
           </div>
           <div class="form-row">

@@ -16,8 +16,8 @@
 
 <% background_image =
   cond do
-    assigns[:background_image] -> assigns[:background_image]
-    true -> "none"
+    assigns[:background_image] -> "background-image: url(#{assigns[:background_image]});"
+    true -> ""
   end
 %>
 
@@ -47,7 +47,7 @@
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
-  <body class="<%= @brand %>"  style="background-image: url(<%=background_image%>);">
+  <body class="<%= @brand %>"  style="<%=background_image%>">
     <%= if assigns[:no_header] != true do %>
       <%= render Core.LayoutView, "header.html",
             [conn: @conn, mobile: @mobile, header_text: assigns[:header_text],
