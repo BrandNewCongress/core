@@ -43,7 +43,7 @@ const bnc = [
       },
       {
         label: 'Attend an Event',
-        path: 'events.HOSTNAME/',
+        path: '/events',
         matches: () => false,
         children: []
       },

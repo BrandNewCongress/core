@@ -38,10 +38,14 @@
   transform: scale(1);
 }
 
-.side-nav-item.selected {
+.bnc .side-nav-item.selected {
   background-color: var(--bnc-purple);
   color: white;
   padding: 5px;
+}
+
+.jd .side-nav-item.selected {
+  color: var(--jd-periwinkle);
 }
 
 .section-header-container {

@@ -17,13 +17,13 @@ const attachHistory = () =>
  * Behavior
  *
  * href=<relative url> with AJAX -> morphdom
- * done? no
+ * done? yes
  *
  * href=<absolute url> -> new tab
- * done? no
+ * done? yes
  *
  * href=# -> smooth scroll
- * done? no
+ * done? yes
  *
  * handle backs
  * done? no
