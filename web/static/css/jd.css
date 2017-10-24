@@ -36,3 +36,7 @@
   width: 30px;
   height: 30px;
 }
+
+.top-level {
+  color: white !important;
+}
