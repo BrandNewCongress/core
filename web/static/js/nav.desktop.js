@@ -46,7 +46,7 @@ class TopNav extends Component {
                 )}
               </div>}
           </a>,
-          idx < siteMap.length - 1 && <div style={{marginTop: '5px'}}> / </div>
+          idx < siteMap.length - 1 && <div className="separator"> / </div>
         ])}
       </div>
     )
