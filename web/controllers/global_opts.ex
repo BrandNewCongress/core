@@ -7,9 +7,14 @@ defmodule GlobalOpts do
           _ -> "jd"
         end
 
-      String.contains?(conn.host, "justicedemocrats") -> "jd"
-      String.contains?(conn.host, "brandnewcongress") -> "bnc"
-      true -> "jd"
+      String.contains?(conn.host, "justicedemocrats") ->
+        "jd"
+
+      String.contains?(conn.host, "brandnewcongress") ->
+        "bnc"
+
+      true ->
+        "jd"
     end
   end
 

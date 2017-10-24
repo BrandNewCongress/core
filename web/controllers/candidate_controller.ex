@@ -15,7 +15,7 @@ defmodule Core.CandidateController do
       |> Enum.map(&preprocess/1)
       |> Enum.sort(&by_district/2)
 
-    render conn, "candidates.html", [title: "Candidates", candidates: candidates] ++ global_opts
+    render(conn, "candidates.html", [title: "Candidates", candidates: candidates] ++ global_opts)
   end
 
   defp is_brand(%{"brands" => brands}, brand), do: Enum.member?(brands, brand)
@@ -36,12 +36,21 @@ defmodule Core.CandidateController do
   end
 
   defp preprocess(candidate) do
-    %{"district" => district, "external_website" => external_website,
-      "website_blurb" => website_blurb, "title" => title,
-      "small_picture" => %{"imgix_url" => small_picture}} = candidate
+    %{
+      "district" => district,
+      "external_website" => external_website,
+      "website_blurb" => website_blurb,
+      "title" => title,
+      "small_picture" => %{"imgix_url" => small_picture}
+    } = candidate
 
-    %{district: district, external_website: external_website, website_blurb: website_blurb,
-      small_picture: ~s("#{URI.encode(small_picture)}"), title: title}
+    %{
+      district: district,
+      external_website: external_website,
+      website_blurb: website_blurb,
+      small_picture: ~s("#{URI.encode(small_picture)}"),
+      title: title
+    }
   end
 
   defp by_district(%{district: d1}, %{district: d2}) do

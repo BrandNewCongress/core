@@ -2,15 +2,15 @@ defmodule Core.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "events", Core.EventsChannel
-  channel "entry", Core.EntryChannel
-  channel "standup", Core.StandupChannel
-  channel "vox-report", Core.VoxReportChannel
-  channel "leaderboard-report", Core.LeaderboardReportChannel
+  channel("events", Core.EventsChannel)
+  channel("entry", Core.EntryChannel)
+  channel("standup", Core.StandupChannel)
+  channel("vox-report", Core.VoxReportChannel)
+  channel("leaderboard-report", Core.LeaderboardReportChannel)
 
   ## Transports
-  transport :websocket, Phoenix.Transports.WebSocket
-  transport :longpoll, Phoenix.Transports.LongPoll
+  transport(:websocket, Phoenix.Transports.WebSocket)
+  transport(:longpoll, Phoenix.Transports.LongPoll)
 
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After

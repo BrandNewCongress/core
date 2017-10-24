@@ -3,12 +3,15 @@ defmodule Core.EventsView do
 
   def candidate_of(tags) do
     tags
-    |> Enum.reject(& String.contains?(&1, "Justice Democrats") or String.contains?(&1, "Brand New Congress"))
-    |> Enum.filter(& String.contains?(&1, "Calendar"))
+    |> Enum.reject(
+         &(String.contains?(&1, "Justice Democrats") or String.contains?(&1, "Brand New Congress"))
+       )
+    |> Enum.filter(&String.contains?(&1, "Calendar"))
     |> List.first()
   end
 
   def get_donate_url(nil), do: nil
+
   def get_donate_url(candidate) do
     %{"metadata" => %{"donate_url" => donate_url}} =
       candidate

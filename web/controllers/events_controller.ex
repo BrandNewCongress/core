@@ -8,13 +8,18 @@ defmodule Core.EventsController do
 
   def get(conn, params) do
     district = get_district(params["district"] || conn.cookies["district"])
+
     {:ok, coordinates} =
       district
       |> get_coordinates()
       |> Poison.encode()
 
-    render conn, "events.html",
-      [district: district, coordinates: coordinates, title: "Events"] ++ GlobalOpts.get(conn, params)
+    render(
+      conn,
+      "events.html",
+      [district: district, coordinates: coordinates, title: "Events"] ++
+        GlobalOpts.get(conn, params)
+    )
   end
 
   def iframe(conn, params = %{"district" => district}) do
@@ -25,9 +30,15 @@ defmodule Core.EventsController do
 
     conn
     |> delete_resp_header("x-frame-options")
-    |> render("embedded.html",
-      [layout: {Core.LayoutView, "bare.html"}, district: district, coordinates: coordinates,
-       title: "Events in #{district}"] ++ GlobalOpts.get(conn, params))
+    |> render(
+         "embedded.html",
+         [
+           layout: {Core.LayoutView, "bare.html"},
+           district: district,
+           coordinates: coordinates,
+           title: "Events in #{district}"
+         ] ++ GlobalOpts.get(conn, params)
+       )
   end
 
   def iframe(conn, params) do
@@ -35,33 +46,54 @@ defmodule Core.EventsController do
 
     conn
     |> delete_resp_header("x-frame-options")
-    |> render("embedded.html",
-      [layout: {Core.LayoutView, "bare.html"}, district: "",
-       coordinates: coordinates, title: "Events"] ++ GlobalOpts.get(conn, params))
+    |> render(
+         "embedded.html",
+         [
+           layout: {Core.LayoutView, "bare.html"},
+           district: "",
+           coordinates: coordinates,
+           title: "Events"
+         ] ++ GlobalOpts.get(conn, params)
+       )
   end
 
   def get_one(conn, params = %{"name" => event_name}) do
     event =
-      case Stash.get :event_cache, event_name do
+      case Stash.get(:event_cache, event_name) do
         nil -> nil
         event -> event
       end
 
     banner = get_banner(event.type)
 
-    render conn, "rsvp.html", [event: event, title: event.title, description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
+    render(
+      conn,
+      "rsvp.html",
+      [event: event, title: event.title, description: event.description, banner: banner] ++
+        GlobalOpts.get(conn, params)
+    )
   end
 
-  def rsvp(conn, params = %{"slug" => event_name, "name" => name,
-    "email" => email, "phone" => phone, "address" => address,
-    "zip" => zip, "city" => city, "state" => state}) do
+  def rsvp(
+        conn,
+        params = %{
+          "slug" => event_name,
+          "name" => name,
+          "email" => email,
+          "phone" => phone,
+          "address" => address,
+          "zip" => zip,
+          "city" => city,
+          "state" => state
+        }
+      ) do
+    [first_name, last_name] =
+      case String.split(name, ",") do
+        [single] -> [single, nil]
+        list -> [List.first(list), List.last(list)]
+      end
 
-    [first_name, last_name] = case String.split(name, ",") do
-      [single] -> [single, nil]
-      list -> [List.first(list), List.last(list)]
-    end
-
-    event = Stash.get :event_cache, event_name
+    event = Stash.get(:event_cache, event_name)
     banner = get_banner(event.type)
 
     Task.async(fn ->
@@ -75,14 +107,25 @@ defmodule Core.EventsController do
       |> add_if_exists(:email_address, email, email)
       |> add_if_exists(:phone_number, phone, phone)
       |> add_if_exists(:postal_address, address, %Address{
-          address_lines: [address], locality: city, region: state, postal_code: zip
-        })
+           address_lines: [address],
+           locality: city,
+           region: state,
+           postal_code: zip
+         })
 
     Attendance.push(event.id, attendance, referrer_data)
 
-    render conn, "rsvp.html", [
-      event: event, person: true, title: event.title,
-      description: event.description, banner: banner] ++ GlobalOpts.get(conn, params)
+    render(
+      conn,
+      "rsvp.html",
+      [
+        event: event,
+        person: true,
+        title: event.title,
+        description: event.description,
+        banner: banner
+      ] ++ GlobalOpts.get(conn, params)
+    )
   end
 
   defp add_if_exists(map, key, test, val) do
@@ -106,6 +149,7 @@ defmodule Core.EventsController do
 
   defp get_district(""), do: nil
   defp get_district(nil), do: nil
+
   defp get_district(district) do
     district
     |> String.upcase()
@@ -113,6 +157,7 @@ defmodule Core.EventsController do
   end
 
   defp get_coordinates(nil), do: [38.805470223177466, -100.23925781250001]
+
   defp get_coordinates(district) do
     {:ok, coordinates} =
       district
@@ -136,7 +181,7 @@ defmodule Core.EventsController do
   end
 
   defp slugize(event_type) do
-    "Event Type: " <> event_type
+    ("Event Type: " <> event_type)
     |> String.downcase()
     |> String.replace(" ", "-")
     |> String.replace(":", "")
@@ -146,7 +191,8 @@ defmodule Core.EventsController do
   def as_json(conn, params = %{"candidate" => candidate}) do
     brand = conn |> GlobalOpts.get(params) |> Keyword.get(:brand)
 
-    candidate = String.downcase candidate
+    candidate = String.downcase(candidate)
+
     candidate =
       case candidate do
         "alexandria-ocasio" -> "alexandria-ocasio-cortez"
@@ -166,12 +212,12 @@ defmodule Core.EventsController do
 
     events =
       if params["secret"] == @secret do
-        Enum.map events, &add_secret_attrs/1
+        Enum.map(events, &add_secret_attrs/1)
       else
         events
       end
 
-    json conn, events
+    json(conn, events)
   end
 
   def as_json(conn, params) do
@@ -187,22 +233,24 @@ defmodule Core.EventsController do
 
     events =
       if params["secret"] == @secret do
-        Enum.map events, &add_secret_attrs/1
+        Enum.map(events, &add_secret_attrs/1)
       else
         events
       end
 
-    json conn, events
+    json(conn, events)
   end
 
   defp add_secret_attrs(event = %{id: id}) do
-    organizer_id = Repo.one(from e in Event, where: e.id == ^id, select: e.organizer_id)
+    organizer_id = Repo.one(from(e in Event, where: e.id == ^id, select: e.organizer_id))
     organizer_edit_hash = Cipher.encrypt("#{organizer_id}")
     organizer_edit_url = "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}"
 
     event
-    |> Map.put(:rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}")
+    |> Map.put(
+         :rsvp_download_url,
+         "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}"
+       )
     |> Map.put(:organizer_edit_url, organizer_edit_url)
   end
-
 end

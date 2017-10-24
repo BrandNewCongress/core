@@ -9,7 +9,7 @@ defmodule Core.StandupChannel do
   end
 
   def handle_in("congress", _content, socket) do
-    push socket, "congress", %{congress: Congress.reps_by_state()}
+    push(socket, "congress", %{congress: Congress.reps_by_state()})
     {:noreply, socket}
   end
 end

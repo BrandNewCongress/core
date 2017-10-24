@@ -12,11 +12,11 @@ defmodule Core.VoxReportChannel do
       |> Nb.Api.stream()
       |> Stream.filter(&is_vox_tag/1)
       |> Stream.map(&get_person_of_tag/1)
-      |> Stream.map(&(push_person(socket, &1)))
+      |> Stream.map(&push_person(socket, &1))
       |> Enum.to_list()
       |> length()
 
-    push socket, "done", %{"length" => l}
+    push(socket, "done", %{"length" => l})
 
     {:noreply, socket}
   end
@@ -34,19 +34,21 @@ defmodule Core.VoxReportChannel do
     {tag, person}
   end
 
-  defp push_person(socket, {tag,
-      %{"first_name" => first, "last_name" => last, "email" => email,
-        "phone" => phone}}) do
-
+  defp push_person(socket, {
+         tag,
+         %{"first_name" => first, "last_name" => last, "email" => email, "phone" => phone}
+       }) do
     [_, username, date] =
       tag
       |> String.split(":")
       |> Enum.map(&String.trim/1)
 
-    push socket, "row", %{"row" => "#{tag}, #{username}, #{date}, #{first}, #{last}, #{email}, #{phone}"}
+    push(socket, "row", %{
+      "row" => "#{tag}, #{username}, #{date}, #{first}, #{last}, #{email}, #{phone}"
+    })
   end
 
   defp push_person(_, {tag, nil}) do
-    Logger.info "No person match for tag #{tag}"
+    Logger.info("No person match for tag #{tag}")
   end
 end

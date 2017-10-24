@@ -3,14 +3,21 @@ defmodule Core.LeaderboardController do
   @secret Application.get_env(:core, :update_secret)
 
   def get(conn, params) do
-    render conn, "get-ref-code.html", [title: "Ref Code"] ++ GlobalOpts.get(conn, params)
+    render(conn, "get-ref-code.html", [title: "Ref Code"] ++ GlobalOpts.get(conn, params))
   end
 
-  def post(conn, params = %{"email" => email, "phone" => phone, "first" => first_name, "last" => last_name}) do
-    person = %{tags: tags} = Osdi.Person.push(%{
-      email_address: email, phone_number: phone,
-      given_name: first_name, family_name: last_name
-    })
+  def post(
+        conn,
+        params = %{"email" => email, "phone" => phone, "first" => first_name, "last" => last_name}
+      ) do
+    person =
+      %{tags: tags} =
+      Osdi.Person.push(%{
+        email_address: email,
+        phone_number: phone,
+        given_name: first_name,
+        family_name: last_name
+      })
 
     current_code =
       tags
@@ -35,17 +42,24 @@ defmodule Core.LeaderboardController do
       "Action: Claimed Recruiting Code: Brand New Congress"
     ])
 
-    render conn, "got-ref-code.html",
-      [code: code, title: "Recruiter Code", first_name: first_name] ++ GlobalOpts.get(conn, params)
+    render(
+      conn,
+      "got-ref-code.html",
+      [code: code, title: "Recruiter Code", first_name: first_name] ++
+        GlobalOpts.get(conn, params)
+    )
   end
 
   def get_report(conn, params = %{"secret" => @secret}) do
-    render conn, "leaderboard-report.html",
+    render(
+      conn,
+      "leaderboard-report.html",
       [layout: {Core.LayoutView, "empty.html"}] ++ GlobalOpts.get(conn, params)
+    )
   end
 
   def send_email(conn, _params = %{"secret" => @secret}) do
     Task.async(fn -> Core.Jobs.MailLeaderboard.send() end)
-    json conn, %{"ok" => "ok"}
+    json(conn, %{"ok" => "ok"})
   end
 end

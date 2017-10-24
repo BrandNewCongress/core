@@ -33,16 +33,16 @@ defmodule Core.SubscriptionController do
   # ---------------------------------------------------------------------------
   defp is_source_tag(tag) do
     tag
-      |> String.split(":", [global: true])
-      |> Enum.map(&(String.trim(&1)))
-      |> is_source_tag_list()
+    |> String.split(":", global: true)
+    |> Enum.map(&String.trim(&1))
+    |> is_source_tag_list()
   end
 
   defp is_unsubscribe_tag(tag) do
     tag
-      |> String.split(":", [global: true])
-      |> Enum.map(&(String.trim(&1)))
-      |> is_unsubscribed_tag_list()
+    |> String.split(":", global: true)
+    |> Enum.map(&String.trim(&1))
+    |> is_unsubscribed_tag_list()
   end
 
   defp is_source_tag_list(["Action" | ["Joined Website" | _]]), do: true
@@ -51,61 +51,74 @@ defmodule Core.SubscriptionController do
   defp is_unsubscribed_tag_list(_), do: false
 
   defp extract_candidate(tag) do
-    ["Action" | [_ | candidate]] = String.split(tag, ":", [global: true])
+    ["Action" | [_ | candidate]] = String.split(tag, ":", global: true)
 
     candidate
-    |> List.to_string
-    |> String.trim
+    |> List.to_string()
+    |> String.trim()
   end
 
   # ---------------------------------------------------------------------------
   # ----------------------  Endpoint Handlers ---------------------------------
   # ---------------------------------------------------------------------------
 
-  @doc"""
+  @doc """
     GET /unsubscribe?email=email
 
     Fetch the user's tags from nation builder to present different unsubscribe options
   """
   def unsubscribe_get(conn, params = %{"email" => email}) do
     person = Osdi.Person.match(%{email_address: email})
-    tags = Enum.map person.tags, &(&1.name)
+    tags = Enum.map(person.tags, & &1.name)
 
     if tags do
-      unsubscribed_tags = tags
-        |> Enum.filter(&(is_unsubscribe_tag(&1)))
-        |> Enum.map(&(extract_candidate(&1)))
+      unsubscribed_tags =
+        tags
+        |> Enum.filter(&is_unsubscribe_tag(&1))
+        |> Enum.map(&extract_candidate(&1))
 
-      subscribed_tags = tags
-        |> Enum.filter(&(is_source_tag(&1)))
-        |> Enum.map(&(extract_candidate(&1)))
+      subscribed_tags =
+        tags
+        |> Enum.filter(&is_source_tag(&1))
+        |> Enum.map(&extract_candidate(&1))
 
-      subscriptions = subscribed_tags
+      subscriptions =
+        subscribed_tags
         |> Enum.map(fn tag -> {tag, not Enum.member?(unsubscribed_tags, tag)} end)
 
-      render conn,
+      render(
+        conn,
         "unsubscribing.html",
-        [email: email, subscriptions: subscriptions, no_footer: true,
-         title: "Unsubscribe"] ++ GlobalOpts.get(conn, params)
+        [email: email, subscriptions: subscriptions, no_footer: true, title: "Unsubscribe"] ++
+          GlobalOpts.get(conn, params)
+      )
     else
       global_opts = GlobalOpts.get(conn, params)
 
-      help_email = case Keyword.get(global_opts, :brand) do
-        "jd" -> "help@justicedemocrats.com"
-        "bnc" -> "help@brandnewcongress.org"
-      end
+      help_email =
+        case Keyword.get(global_opts, :brand) do
+          "jd" -> "help@justicedemocrats.com"
+          "bnc" -> "help@brandnewcongress.org"
+        end
 
-      render conn,
+      render(
+        conn,
         "unsubscribing.html",
-        [email: email, subscriptions: nil, no_footer: true,
-         help_email: help_email, title: "Unsubscribe"] ++ global_opts
+        [
+          email: email,
+          subscriptions: nil,
+          no_footer: true,
+          help_email: help_email,
+          title: "Unsubscribe"
+        ] ++ global_opts
+      )
     end
   end
 
   # Handle no email
   def unsubscribe_get(conn, params), do: do_homepage_redirect(conn, params)
 
-  @doc"""
+  @doc """
     GET /unsubscribe?email=email with post body
 
     Handle the different unsubscribe options, adding tags unsubscribe for those
@@ -113,55 +126,65 @@ defmodule Core.SubscriptionController do
   """
   def unsubscribe_post(conn, params = %{"email" => email}) do
     person = %{id: _id} = Osdi.Person.match(%{email_address: email})
-    tags = Enum.map person.tags, &(&1.name)
+    tags = Enum.map(person.tags, & &1.name)
 
     current_sources =
       tags
-      |> Enum.filter(&(is_source_tag(&1)))
-      |> Enum.map(&(extract_candidate(&1)))
+      |> Enum.filter(&is_source_tag(&1))
+      |> Enum.map(&extract_candidate(&1))
 
     # Add unsubscription tags
-    unsubscribe_task = Task.async(fn ->
+    unsubscribe_task =
+      Task.async(fn ->
+        to_unsub =
+          current_sources
+          |> Enum.filter(fn tag -> not Map.has_key?(params, tag) end)
 
-      to_unsub =
-        current_sources
-        |> Enum.filter(fn tag -> not Map.has_key?(params, tag) end)
+        tags_to_add =
+          to_unsub
+          |> Enum.map(fn tag -> "Action: Unsubscribed: #{tag}" end)
 
-      tags_to_add =
+        Osdi.Person.add_tags(person, tags_to_add)
         to_unsub
-        |> Enum.map(fn tag -> "Action: Unsubscribed: #{tag}" end)
-
-      Osdi.Person.add_tags(person, tags_to_add)
-      to_unsub
-    end)
+      end)
 
     # Remove no longer wanted unsubscription tags
-    subscribe_task = Task.async(fn ->
-      unsubs_to_remove = tags
-        |> Enum.filter(&(is_unsubscribe_tag(&1)))
-        |> Enum.map(&(extract_candidate(&1)))
-        |> Enum.filter(fn tag -> Map.has_key?(params, tag) end)
+    subscribe_task =
+      Task.async(fn ->
+        unsubs_to_remove =
+          tags
+          |> Enum.filter(&is_unsubscribe_tag(&1))
+          |> Enum.map(&extract_candidate(&1))
+          |> Enum.filter(fn tag -> Map.has_key?(params, tag) end)
 
-      tags_to_remove = unsubs_to_remove
-        |> Enum.map(fn tag -> "Action: Unsubscribed: #{tag}" end)
+        tags_to_remove =
+          unsubs_to_remove
+          |> Enum.map(fn tag -> "Action: Unsubscribed: #{tag}" end)
 
-      Osdi.Person.remove_tags(person, tags_to_remove)
-      unsubs_to_remove
-    end)
+        Osdi.Person.remove_tags(person, tags_to_remove)
+        unsubs_to_remove
+      end)
 
     to_unsubscribe = Task.await(unsubscribe_task)
     to_subscribe = Task.await(subscribe_task)
 
-    render conn,
+    render(
+      conn,
       "unsubscribed.html",
-      [email: email, no_footer: true, to_unsubscribe: to_unsubscribe,
-       to_subscribe: to_subscribe, title: "Unsubscribe"] ++ GlobalOpts.get(conn, params)
+      [
+        email: email,
+        no_footer: true,
+        to_unsubscribe: to_unsubscribe,
+        to_subscribe: to_subscribe,
+        title: "Unsubscribe"
+      ] ++ GlobalOpts.get(conn, params)
+    )
   end
 
   # Redirect if no email
   def unsubscribe_post(conn, params), do: do_homepage_redirect(conn, params)
 
-  @doc"""
+  @doc """
     GET /unsubscribe/:candidate?email=email
 
     Simple are you sure for candidate unsubscribe - doesn't matter if currently
@@ -170,16 +193,18 @@ defmodule Core.SubscriptionController do
   def unsubscribe_candidate_get(conn, params = %{"email" => email, "candidate" => candidate}) do
     nice_name = @sources[candidate]
 
-    render conn,
+    render(
+      conn,
       "unsubscribing-candidate.html",
-      [email: email, no_footer: true, title: "Unsubscribe",
-       candidate: nice_name, slug: candidate] ++ GlobalOpts.get(conn, params)
+      [email: email, no_footer: true, title: "Unsubscribe", candidate: nice_name, slug: candidate] ++
+        GlobalOpts.get(conn, params)
+    )
   end
 
   # Redirect if no email
   def unsubscribe_candidate_get(conn, params), do: do_homepage_redirect(conn, params)
 
-  @doc"""
+  @doc """
     GET /unsubscribe/:candidate?email=email with post body
 
     Do the unsubscription and show a success page
@@ -188,10 +213,11 @@ defmodule Core.SubscriptionController do
     nice_name = @sources[candidate]
 
     # Find the person
-    id = case Osdi.Person.match %{email_address: email} do
-      %{id: id} -> id
-      _ -> nil
-    end
+    id =
+      case Osdi.Person.match(%{email_address: email}) do
+        %{id: id} -> id
+        _ -> nil
+      end
 
     if id do
       Osdi.Person.add_tags(%Osdi.Person{id: id}, ["Action: Unsubscribed: #{nice_name}"])
@@ -199,15 +225,24 @@ defmodule Core.SubscriptionController do
 
     # Determine the resubscribe link
     global_opts = GlobalOpts.get(conn, params)
-    base = case Keyword.get(global_opts, :brand) do
-      "jd" -> "https://justicedemocrats.com/"
-      "bnc" -> "https://brandnewcongress.org/"
-    end
 
-    render conn,
+    base =
+      case Keyword.get(global_opts, :brand) do
+        "jd" -> "https://justicedemocrats.com/"
+        "bnc" -> "https://brandnewcongress.org/"
+      end
+
+    render(
+      conn,
       "unsubscribed-candidate.html",
-      [email: email, no_footer: true, title: "Unsubscribe", candidate: nice_name,
-       url: base <> candidate] ++ global_opts
+      [
+        email: email,
+        no_footer: true,
+        title: "Unsubscribe",
+        candidate: nice_name,
+        url: base <> candidate
+      ] ++ global_opts
+    )
   end
 
   # Redirect if no email
@@ -215,10 +250,11 @@ defmodule Core.SubscriptionController do
 
   # Private function for any situation where the email is missing
   defp do_homepage_redirect(conn, params) do
-    url = case conn |> GlobalOpts.get(params) |> Keyword.get(:brand) do
-      "jd" -> "https://justicedemocrats.com"
-      "bnc" -> "https://brandnewcongress.org"
-    end
+    url =
+      case conn |> GlobalOpts.get(params) |> Keyword.get(:brand) do
+        "jd" -> "https://justicedemocrats.com"
+        "bnc" -> "https://brandnewcongress.org"
+      end
 
     redirect(conn, external: url)
   end
