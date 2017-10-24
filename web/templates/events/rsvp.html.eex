@@ -1,3 +1,6 @@
+<% candidate = candidate_of(@event.tags) %>
+<% donate_url = get_donate_url(candidate) %>
+
 <%= if @mobile do %>
   <div style="padding: 50px;">
 <% else %>
@@ -7,6 +10,16 @@
     <div class="header">
       <h2> <%= @event.title %> </h2>
     </div>
+
+    <div class="quick-actions">
+      <div class="form-el">
+        <a class="button" href="#rsvp"> RSVP Now </a>
+        <%= if donate_url do %>
+          <a class="button button-info" href="<%= donate_url %>"> Donate </a>
+        <% end %>
+      </div>
+    </div>
+
     <div class="description" style="white-space: pre-wrap;">
       <%= raw(scrub(@event.description)) %>
     </div>
@@ -50,7 +63,7 @@
     <div class="rsvp">
       <%= if assigns[:person] == nil do %>
         <h3> RSVP: Who is coming? </h3>
-        <form method="post" action="/events/<%= @event.name %>">
+        <form name="rsvp" method="post" action="/events/<%= @event.name %>">
           <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
           <div class="form-row">
             <div class="form-el">
@@ -178,4 +191,14 @@
 function refresh () {
   window.location.href = window.location.href
 }
+</script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-107976358-2"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-107976358-2');
 </script>
