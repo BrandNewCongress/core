@@ -10,7 +10,6 @@ defmodule Core.EventsView do
 
   def get_donate_url(nil), do: nil
   def get_donate_url(candidate) do
-    IO.inspect candidate
     %{"metadata" => %{"donate_url" => donate_url}} =
       candidate
       |> String.split(":")
@@ -18,7 +17,6 @@ defmodule Core.EventsView do
       |> String.trim()
       |> String.downcase()
       |> String.replace(" ", "-")
-      |> IO.inspect
       |> Cosmic.get()
 
     donate_url
