@@ -6,10 +6,11 @@ defmodule Core.Jobs.MailLeaderboard do
     |> Enum.to_list()
   end
 
-  defp format_row({count, ref,
-      %{"first_name" => first, "last_name" => last, "email" => email,
-        "phone" => phone}}) do
-
+  defp format_row({
+         count,
+         ref,
+         %{"first_name" => first, "last_name" => last, "email" => email, "phone" => phone}
+       }) do
     "#{ref}, #{count}, #{first}, #{last}, #{email}, #{phone}"
   end
 end

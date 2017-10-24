@@ -11,12 +11,12 @@ defmodule Entity do
   end
 
   defp process_request_headers(hdrs) do
-    Enum.into(hdrs, ["Accept": "application/json", "Content-Type": "application/json"])
+    Enum.into(hdrs, Accept: "application/json", "Content-Type": "application/json")
   end
 
   defp process_options(opts) do
     opts
-    |> Keyword.update(:query, @default_params, &(Map.merge(@default_params, &1)))
+    |> Keyword.update(:query, @default_params, &Map.merge(@default_params, &1))
   end
 
   defp process_response_body(raw) do
@@ -31,6 +31,6 @@ defmodule Entity do
   end
 
   def search(query) do
-    get "/", [query: %{query: query}]
+    get("/", query: %{query: query})
   end
 end

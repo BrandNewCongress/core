@@ -12,56 +12,74 @@ defmodule Core.PetitionCount do
   end
 
   def stats_for(title) do
-    Agent.get __MODULE__, fn state ->
+    Agent.get(__MODULE__, fn state ->
       case Map.get(state, title) do
         nil -> {:error, "not found"}
         vals -> {:ok, vals}
       end
-    end
+    end)
   end
 
   def update do
-    Logger.info "Updating petition cache"
+    Logger.info("Updating petition cache")
 
-    petition_tags = Repo.all(from t in Tag,
-      where: ilike(t.name, "%Signed Petition%"),
-      select: {t.name, t.id})
+    petition_tags =
+      Repo.all(
+        from(
+          t in Tag,
+          where: ilike(t.name, "%Signed Petition%"),
+          select: {t.name, t.id}
+        )
+      )
 
     tasks =
       petition_tags
-      |> Enum.filter(fn {name, _} -> (name |> String.split(":") |> length()) < 5 end)
-      |> Enum.reduce(%{}, fn ({name, tag_id}, acc) ->
-        petition_name = name |> String.split(":") |> List.last() |> String.trim()
-        case Map.get(acc, petition_name) do
-          nil -> Map.put(acc, petition_name, [tag_id])
-          list -> Map.put(acc, petition_name, [tag_id | list])
-        end
-      end)
-      |> Enum.map(fn {title, tag_ids} -> Task.async(fn -> update_petition({title, tag_ids}) end) end)
+      |> Enum.filter(fn {name, _} -> name |> String.split(":") |> length() < 5 end)
+      |> Enum.reduce(%{}, fn {name, tag_id}, acc ->
+           petition_name = name |> String.split(":") |> List.last() |> String.trim()
 
-    Enum.each tasks, &Task.await/1
+           case Map.get(acc, petition_name) do
+             nil -> Map.put(acc, petition_name, [tag_id])
+             list -> Map.put(acc, petition_name, [tag_id | list])
+           end
+         end)
+      |> Enum.map(fn {title, tag_ids} ->
+           Task.async(fn -> update_petition({title, tag_ids}) end)
+         end)
 
-    Logger.info "Updated petition cache on #{Timex.now() |> DateTime.to_iso8601()}"
+    Enum.each(tasks, &Task.await/1)
+
+    Logger.info("Updated petition cache on #{Timex.now() |> DateTime.to_iso8601()}")
   end
 
   defp update_petition({title, tag_ids}) do
-    [total] = Repo.all(from pt in Tagging,
-      where: pt.tag_id in ^tag_ids,
-      select: count(pt.id))
+    [total] =
+      Repo.all(
+        from(
+          pt in Tagging,
+          where: pt.tag_id in ^tag_ids,
+          select: count(pt.id)
+        )
+      )
 
     since = Timex.shift(Timex.now(), @in_last)
-    [in_last] = Repo.all(from pt in Tagging,
-      where: pt.tag_id in ^tag_ids and
-        pt.inserted_at > ^since,
-      select: count(pt.id))
 
-    Agent.update __MODULE__, fn state ->
+    [in_last] =
+      Repo.all(
+        from(
+          pt in Tagging,
+          where: pt.tag_id in ^tag_ids and pt.inserted_at > ^since,
+          select: count(pt.id)
+        )
+      )
+
+    Agent.update(__MODULE__, fn state ->
       Map.put(state, title, %{total: total, in_last: in_last})
-    end
+    end)
   end
 
   def dump_state do
-    state = Agent.get __MODULE__, fn state -> state end
+    state = Agent.get(__MODULE__, fn state -> state end)
 
     state
     |> Enum.map(fn {title, %{total: total}} -> "#{title}:\t#{total}" end)

@@ -55,6 +55,7 @@ defmodule District do
       case Regex.named_captures(~r/(?<state>[A-Z]{2,})[ -]?(?<district>([0-9]{1,2}))/, processed) do
         %{"district" => district, "state" => state} ->
           "#{state}-#{district |> String.pad_leading(2, "0")}"
+
         nil ->
           nil
       end
@@ -94,18 +95,21 @@ defmodule District do
 
   @spec from_unknown(binary) :: {binary, {number, number}}
   def from_unknown(string) do
-    district = if is_short_form(string) do
-      normalize(string)
-    else
-      from_address(string)
-    end
+    district =
+      if is_short_form(string) do
+        normalize(string)
+      else
+        from_address(string)
+      end
 
     geoj = geojsons() |> Map.take([district])
-    coordinates = if geoj |> Map.keys() |> length() > 0 do
-      geoj |> centroid()
-    else
-      "Hmm, it doesn't seem like #{string} is a valid congressional district. Try typing your address and we'll figure it out."
-    end
+
+    coordinates =
+      if geoj |> Map.keys() |> length() > 0 do
+        geoj |> centroid()
+      else
+        "Hmm, it doesn't seem like #{string} is a valid congressional district. Try typing your address and we'll figure it out."
+      end
 
     {district, coordinates}
   end
@@ -134,16 +138,21 @@ defmodule District do
       |> List.first()
     else
       candidate_geos = Map.take(geojsons(), candidate_districts)
+
       {closest_name, closest_dist} =
         candidate_geos
-        |> Enum.map(fn {key, polygon = %Geo.MultiPolygon{}} -> {key, naive_geo_distance({x, y}, polygon)} end)
+        |> Enum.map(fn {key, polygon = %Geo.MultiPolygon{}} ->
+             {key, naive_geo_distance({x, y}, polygon)}
+           end)
         |> Enum.map(fn {key, dist} -> {key, dist * @miles_per_degree} end)
-        |> Enum.sort(fn ({_l1, d1}, {_l2, d2}) -> d2 >= d1 end)
+        |> Enum.sort(fn {_l1, d1}, {_l2, d2} -> d2 >= d1 end)
         |> List.first()
 
       if closest_dist < @mile_limit do
         candidates
-        |> Enum.filter(fn %{"metadata" => %{"district" => district}} -> district == closest_name end)
+        |> Enum.filter(fn %{"metadata" => %{"district" => district}} ->
+             district == closest_name
+           end)
         |> List.first()
       else
         nil
@@ -170,7 +179,7 @@ defmodule District do
       |> List.first()
       |> List.first()
 
-    {sum_x, sum_y} = list |> Enum.reduce(fn ({x, y}, {acc_x, acc_y}) -> {acc_x + x, acc_y + y} end)
+    {sum_x, sum_y} = list |> Enum.reduce(fn {x, y}, {acc_x, acc_y} -> {acc_x + x, acc_y + y} end)
     {key, {sum_x / length(list), sum_y / length(list)}}
   end
 
@@ -198,23 +207,25 @@ defmodule District do
       |> List.first()
       |> List.first()
 
-    {_, _, closest_dist} = Enum.reduce list, {0, 0, 1_000_000_000}, fn ({this_y, this_x}, {min_x, min_y, min_dist}) ->
-      this_dist = naive_distance({this_x, this_y}, {x, y})
-      if this_dist <= min_dist do
-        {this_x, this_y, this_dist}
-      else
-        {min_x, min_y, min_dist}
-      end
-    end
+    {_, _, closest_dist} =
+      Enum.reduce(list, {0, 0, 1_000_000_000}, fn {this_y, this_x}, {min_x, min_y, min_dist} ->
+        this_dist = naive_distance({this_x, this_y}, {x, y})
+
+        if this_dist <= min_dist do
+          {this_x, this_y, this_dist}
+        else
+          {min_x, min_y, min_dist}
+        end
+      end)
 
     closest_dist
   end
 
   def naive_distance({x1, y1}, {x2, y2}) do
-    :math.sqrt((:math.pow(y2 - y1, 2) + :math.pow(x2 - x1, 2)))
+    :math.sqrt(:math.pow(y2 - y1, 2) + :math.pow(x2 - x1, 2))
   end
 
   def naive_distance_in_miles({x1, y1}, {x2, y2}) do
-    (:math.sqrt((:math.pow(y2 - y1, 2) + :math.pow(x2 - x1, 2)))) * @miles_per_degree
+    :math.sqrt(:math.pow(y2 - y1, 2) + :math.pow(x2 - x1, 2)) * @miles_per_degree
   end
 end

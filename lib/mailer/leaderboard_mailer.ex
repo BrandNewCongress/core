@@ -6,7 +6,7 @@ defmodule Core.LeaderboardMailer do
   require Logger
 
   def send_leaderboard(raw) do
-    Logger.info "Sending regular leaderboard email to Sam"
+    Logger.info("Sending regular leaderboard email to Sam")
 
     new()
     |> to({"Sam Briggs", "sam@brandnewcongress.org"})

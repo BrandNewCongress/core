@@ -5,12 +5,16 @@ defmodule Core.VoxMailer do
 
   require Logger
 
-  def on_vox_login_claimed(%{"username" => username, "date" => date,
-      "first_name" => first_name, "last_name" => last_name, "email" => email,
-      "phone" => phone, "source" => source
-    }) do
-
-    Logger.info "Sending email to Sam because of Vox claim #{username}"
+  def on_vox_login_claimed(%{
+        "username" => username,
+        "date" => date,
+        "first_name" => first_name,
+        "last_name" => last_name,
+        "email" => email,
+        "phone" => phone,
+        "source" => source
+      }) do
+    Logger.info("Sending email to Sam because of Vox claim #{username}")
 
     new()
     |> to({"Sam Briggs", "sam@brandnewcongress.org"})

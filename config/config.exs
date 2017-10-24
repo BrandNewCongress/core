@@ -6,16 +6,14 @@
 use Mix.Config
 
 # General application configuration
-config :core,
-  ecto_repos: [Osdi.Repo]
+config :core, ecto_repos: [Osdi.Repo]
 
 # Configures the endpoint
 config :core, Core.Endpoint,
   url: [host: 'localhost'],
   secret_key_base: "GxtfaDIKOkay5x2k0cxuJYQPX4BEyeo9fHynynmVqtiJoDgZqM8gvXT8dSMXekhI",
   render_errors: [view: Core.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Core.PubSub,
-           adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Core.PubSub, adapter: Phoenix.PubSub.PG2]
 
 # Configures Elixir's Logger
 config :logger, :console,
@@ -23,20 +21,21 @@ config :logger, :console,
   metadata: [:request_id]
 
 # Use pug
-config :phoenix, :template_engines,
-  haml: PhoenixHaml.Engine
+config :phoenix, :template_engines, haml: PhoenixHaml.Engine
 
 # Use google_maps
 config :maps, goog_key: System.get_env("GOOG_KEY")
 
 # Quantum config
 jobs =
-  [{"*/2 * * * *", {Core.Jobs.EventCache, :update, []}},
-   {"*/2 * * * *", {Core.PetitionCount, :update, []}},
-   {"@daily", {Core.Jobs.MailLeaderboard , :send, []}}]
+  [
+    {"*/2 * * * *", {Core.Jobs.EventCache, :update, []}},
+    {"*/2 * * * *", {Core.PetitionCount, :update, []}},
+    {"@daily", {Core.Jobs.MailLeaderboard, :send, []}}
+  ]
 
 config :core, Core.Scheduler, jobs: jobs
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
-import_config "#{Mix.env}.exs"
+import_config "#{Mix.env()}.exs"

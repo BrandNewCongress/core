@@ -5,14 +5,14 @@ defmodule Mix.Tasks.NbNameFix do
     "lists/1794/people"
     |> Nb.Api.stream()
     |> Enum.map(fn %{"id" => id, "last_name" => last_name} ->
+         ln =
+           last_name
+           |> String.replace("[", "")
+           |> String.replace("]", "")
+           |> String.replace("\"", "")
 
-      ln = last_name
-      |> String.replace("[", "")
-      |> String.replace("]", "")
-      |> String.replace("\"", "")
-
-      Nb.People.update(id, %{"last_name" => ln})
-    end)
+         Nb.People.update(id, %{"last_name" => ln})
+       end)
   end
 end
 

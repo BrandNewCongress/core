@@ -7,12 +7,12 @@ defmodule District.Parser do
     geojsons =
       districts
       |> Enum.map(fn district ->
-        {:ok, file} = "./lib/clients/district/geojsons/#{district}" |> File.read()
-        {:ok, %{"geometry" => geometry}} = file |> Poison.decode()
+           {:ok, file} = "./lib/clients/district/geojsons/#{district}" |> File.read()
+           {:ok, %{"geometry" => geometry}} = file |> Poison.decode()
 
-        geometry
-        |> Geo.JSON.decode()
-       end)
+           geometry
+           |> Geo.JSON.decode()
+         end)
 
     districts
     |> Enum.map(fn str -> str |> String.split(".") |> List.first() end)

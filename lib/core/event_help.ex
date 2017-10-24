@@ -13,9 +13,10 @@ defmodule EventHelp do
 
   def add_date_line(event) do
     date_line =
-      humanize_date(event.start_date, event.location.time_zone) <> "from " <>
-      humanize_time(event.start_date, event.location.time_zone) <> " - " <>
-      humanize_time(event.end_date, event.location.time_zone)
+      humanize_date(event.start_date, event.location.time_zone) <>
+        "from " <>
+        humanize_time(event.start_date, event.location.time_zone) <>
+        " - " <> humanize_time(event.end_date, event.location.time_zone)
 
     Map.put(event, :date_line, date_line)
   end
@@ -23,8 +24,22 @@ defmodule EventHelp do
   defp humanize_date(dt, time_zone) do
     %DateTime{month: month, day: day} = get_zoned_dt(dt, time_zone)
 
-    month = ["January", "February", "March", "April", "May", "June", "July",
-             "August", "September", "October", "November", "December"] |> Enum.at(month - 1)
+    month =
+      [
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      ]
+      |> Enum.at(month - 1)
 
     "#{month}, #{day} "
   end
@@ -56,7 +71,7 @@ defmodule EventHelp do
   def add_candidate_attr(event) do
     candidate =
       event.tags
-      |> Enum.filter(&(String.contains?(&1, "Calendar: ")))
+      |> Enum.filter(&String.contains?(&1, "Calendar: "))
       |> Enum.map(&(&1 |> String.split(":") |> List.last() |> String.trim()))
       |> Enum.reject(&(&1 == "Brand New Congress" or &1 == "Justice Democrats"))
       |> List.first()
@@ -66,7 +81,7 @@ defmodule EventHelp do
   end
 
   def destructure_tags(event) do
-    destructured = Enum.map event.tags, fn %{name: name} -> name end
+    destructured = Enum.map(event.tags, fn %{name: name} -> name end)
     Map.put(event, :tags, destructured)
   end
 end

@@ -5,5 +5,4 @@ defmodule District.GeoJson do
   def geojsons do
     @geojsons
   end
-
 end

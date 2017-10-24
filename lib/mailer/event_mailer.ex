@@ -7,7 +7,7 @@ defmodule Core.EventMailer do
   import ShorterMaps
 
   def on_create(id, slug, event) do
-    Logger.info "Sending email to Sam for event #{id}"
+    Logger.info("Sending email to Sam for event #{id}")
 
     new()
     |> to({"Sam Briggs", "sam@brandnewcongress.org"})
@@ -19,7 +19,7 @@ defmodule Core.EventMailer do
   end
 
   def failure_alert(body) do
-    Logger.info "Sending email to Ben because of failure on Typeform webhook"
+    Logger.info("Sending email to Ben because of failure on Typeform webhook")
 
     {:ok, stringified} = Poison.encode(body)
 
@@ -32,7 +32,7 @@ defmodule Core.EventMailer do
   end
 
   def bad_event_alert(body) do
-    Logger.info "Sending email to Ben because of bad event"
+    Logger.info("Sending email to Ben because of bad event")
 
     {:ok, stringified} = Poison.encode(body)
 
@@ -47,24 +47,34 @@ defmodule Core.EventMailer do
   def on_rsvp(event, params) do
     candidate =
       event.tags
-      |> Enum.filter(&(String.contains?(&1, "Calendar: ")))
+      |> Enum.filter(&String.contains?(&1, "Calendar: "))
       |> Enum.map(&(&1 |> String.split(":") |> List.last() |> String.trim()))
       |> Enum.filter(&(not Enum.member?(["Brand New Congress", "Justice Democrats"], &1)))
       |> List.first()
 
-    candidate = case candidate do
-      nil -> "Justice Democrats"
-      cand -> cand
-    end
+    candidate =
+      case candidate do
+        nil -> "Justice Democrats"
+        cand -> cand
+      end
 
-    event = Map.put(event, :rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{Osdi.Event.rsvp_link_for(event.name)}")
+    event =
+      Map.put(
+        event,
+        :rsvp_download_url,
+        "https://admin.justicedemocrats.com/rsvps/#{Osdi.Event.rsvp_link_for(event.name)}"
+      )
 
     send_attendee_email(event, params, candidate)
     send_host_email(event, params, candidate)
   end
 
-  defp send_attendee_email(event, _params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}, candidate) do
-    Logger.info "Sending email to #{email} because they RSVPed to #{event.name}"
+  defp send_attendee_email(
+         event,
+         _params = %{"first_name" => first_name, "last_name" => last_name, "email" => email},
+         candidate
+       ) do
+    Logger.info("Sending email to #{email} because they RSVPed to #{event.name}")
     params = ~M{first_name, last_name, email, candidate, event}
 
     new()
@@ -75,8 +85,12 @@ defmodule Core.EventMailer do
     |> Core.Mailer.deliver()
   end
 
-  defp send_host_email(event, _params = %{"first_name" => first_name, "last_name" => last_name, "email" => email}, candidate) do
-    Logger.info "Sending email to #{email} because someone RSVPed to their event, #{event.name}"
+  defp send_host_email(
+         event,
+         _params = %{"first_name" => first_name, "last_name" => last_name, "email" => email},
+         candidate
+       ) do
+    Logger.info("Sending email to #{email} because someone RSVPed to their event, #{event.name}")
     params = ~M{first_name, last_name, email, candidate, event}
 
     new()
