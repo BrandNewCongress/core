@@ -89,8 +89,9 @@ defmodule Core.EventsController do
       ) do
     [first_name, last_name] =
       case String.split(name, ",") do
-        [single] -> [single, nil]
+        [single] -> [single, ""]
         list -> [List.first(list), List.last(list)]
+        _ -> ["", ""]
       end
 
     event = Stash.get(:event_cache, event_name)
