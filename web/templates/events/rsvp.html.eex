@@ -68,17 +68,17 @@
           <div class="form-row">
             <div class="form-el">
               <label> Name </label> <br/>
-              <input name="name" type="text" />
+              <input name="name" type="text" required="required"/>
             </div>
           </div>
           <div class="form-row">
             <div class="form-el">
               <label> Email </label><br/>
-              <input name="email" type="email" />
+              <input name="email" type="email" required="required"/>
             </div>
             <div class="form-el">
               <label> Phone </label><br/>
-              <input name="phone" type="tel" />
+              <input name="phone" type="tel" required="required"/>
             </div>
           </div>
           <div class="form-row">
