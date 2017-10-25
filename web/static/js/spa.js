@@ -3,6 +3,7 @@ import createHistory from 'history/createBrowserHistory'
 import smoothScroll from 'smoothscroll'
 import morphdom from 'morphdom'
 import EventEmitter from 'event-emitter-es6'
+import closest from 'component-closest'
 
 const history = createHistory()
 
@@ -61,13 +62,13 @@ const is = {
 }
 
 const handle = {
-  relative: a =>
+  relative: a => {
     fetch(a.getAttribute('href'), (err, html) => {
       morph(html)
       history.push(a.getAttribute('href'))
       reloadBodyScripts()
       bus.emit('morphed')
-    }),
+    })},
 
   external: a => window.open(a.getAttribute('href')),
 
@@ -90,7 +91,8 @@ const createBinder = type => () =>
       a =>
         (a.onclick = ev => {
           ev.preventDefault()
-          handle[type](ev.target)
+          const a = closest(ev.target, 'a', true)
+          handle[type](a)
         })
     )
 

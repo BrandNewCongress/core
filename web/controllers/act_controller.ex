@@ -160,7 +160,7 @@ defmodule Core.ActController do
 
   defp event_action_options(_conn, _params) do
     [
-      %{icon: "event.html", label: "Attend an Event", href: "https://events.brandnewcongress.org"},
+      %{icon: "event.html", label: "Attend an Event", href: "/events"},
       %{icon: "host.html", label: "Host an Event", href: "/form/submit-event"}
     ]
   end
@@ -171,7 +171,7 @@ defmodule Core.ActController do
       %{
         icon: "nominate-icon.html",
         label: "Nominate a Candidate",
-        href: "https://brandnewcongress.org/nominate"
+        href: "https://justicedemocrats.com/nominate"
       },
       %{
         icon: "district-icon.html",

@@ -139,7 +139,7 @@ const jd = [
       },
       {
         label: 'Attend an Event',
-        path: 'events.HOSTNAME/',
+        path: 'HOSTNAME/events',
         matches: () => false,
         children: []
       },
