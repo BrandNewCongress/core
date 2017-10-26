@@ -90,7 +90,6 @@ class SideNav extends Component {
 }
 
 function doRender() {
-  console.log('morphed')
   render(<TopNav {...window.opts} />, document.getElementById('sidebar'))
 
   const target = document.getElementById('side-nav')
