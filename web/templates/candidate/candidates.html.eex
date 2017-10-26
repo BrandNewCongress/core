@@ -13,7 +13,7 @@
         <div class="name-container">
           <%= cand.title %>
         </div>
-        <div class="cand-image" style="width: 100%; height: 234px; overflow: hidden; background-position: center; background-image: url(<%= cand.small_picture %>)">
+        <div class="cand-image" style="width: 100%; height: 234px; overflow: hidden; background-position: bottom; background-image: url(<%= cand.small_picture %>)">
           <!-- <img style="width: 100%; bottom: 0;" class="card-pic" src="<%= cand.small_picture %>" /> -->
         </div>
         <div class="district-container">
