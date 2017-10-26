@@ -133,7 +133,7 @@ defmodule Core.EventsController do
     if test != nil and test != "" do
       Map.put(map, key, val)
     else
-      Map.put(map, key, nil)
+      map
     end
   end
 
