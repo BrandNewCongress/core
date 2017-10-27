@@ -84,6 +84,9 @@ defmodule Core.EventsController do
           "zip" => zip,
         }
       ) do
+
+    global_opts = GlobalOpts.get(conn, params)
+
     [first_name, last_name] =
       case String.split(name, ",") do
         [single] -> [single, ""]
@@ -94,8 +97,8 @@ defmodule Core.EventsController do
     event = Stash.get(:event_cache, event_name)
     banner = get_banner(event.type)
 
-    Task.async(fn ->
-      Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email})
+    spawn(fn ->
+      Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email}, Keyword.get(global_opts, :brand))
     end)
 
     referrer_data = Map.merge(get_source(params), get_referrer(conn))
@@ -117,7 +120,7 @@ defmodule Core.EventsController do
         title: event.title,
         description: event.description,
         banner: banner
-      ] ++ GlobalOpts.get(conn, params)
+      ] ++ global_opts
     )
   end
 

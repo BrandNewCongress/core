@@ -44,7 +44,7 @@ defmodule Core.EventMailer do
     |> Core.Mailer.deliver()
   end
 
-  def on_rsvp(event, params) do
+  def on_rsvp(event, params, brand) do
     candidate =
       event.tags
       |> Enum.filter(&String.contains?(&1, "Calendar: "))
@@ -54,7 +54,11 @@ defmodule Core.EventMailer do
 
     candidate =
       case candidate do
-        nil -> "Justice Democrats"
+        nil ->
+          case brand do
+            "jd" -> "Justice Democrats"
+            "bnc" -> "Brand New Congress"
+          end
         cand -> cand
       end
 
@@ -65,31 +69,35 @@ defmodule Core.EventMailer do
         "https://admin.justicedemocrats.com/rsvps/#{Osdi.Event.rsvp_link_for(event.name)}"
       )
 
-    send_attendee_email(event, params, candidate)
-    send_host_email(event, params, candidate)
+    send_attendee_email(event, params, candidate, brand)
+    send_host_email(event, params, candidate, brand)
   end
 
   defp send_attendee_email(
          event,
          _params = %{"first_name" => first_name, "last_name" => last_name, "email" => email},
-         candidate
+         candidate,
+         brand
        ) do
+
     Logger.info("Sending email to #{email} because they RSVPed to #{event.name}")
     params = ~M{first_name, last_name, email, candidate, event}
 
     new()
     |> to({"#{first_name} #{last_name}", email})
-    |> from({event.contact.name || event.contact.email_address, "events@justicedemocrats.com"})
+    |> from({event.contact.name || event.contact.email_address, brand_email(brand)})
     |> subject("RSVP Confirmation: #{event.title}")
-    |> render_body(:"rsvp-email", params)
+    |> render_body(String.to_atom("rsvp-email-#{brand}"), params)
     |> Core.Mailer.deliver()
   end
 
   defp send_host_email(
          event,
          _params = %{"first_name" => first_name, "last_name" => last_name, "email" => email},
-         candidate
+         candidate,
+         brand
        ) do
+
     Logger.info("Sending email to #{email} because someone RSVPed to their event, #{event.name}")
     params = ~M{first_name, last_name, email, candidate, event}
 
@@ -100,4 +108,7 @@ defmodule Core.EventMailer do
     |> render_body(:"rsvp-host-email", params)
     |> Core.Mailer.deliver()
   end
+
+  defp brand_email("jd"), do: "events@justicedemocrats.com"
+  defp brand_email("bnc"), do: "events@brandnewcongress.org"
 end
