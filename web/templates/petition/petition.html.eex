@@ -58,7 +58,7 @@
             </div>
             <div class="input-field">
               <%= if @brand == "jd" do %>
-                <button onclick="fbq('track', 'Lead'); document.querySelector('#main-form').submit();" type="submit" class="button-block"><%=@sign_button_text%></button>
+                <button onclick="fbq('track', 'Lead');" type="submit" class="button-block"><%=@sign_button_text%></button>
               <% else %>
                 <button type="submit" class="button-block"><%=@sign_button_text%></button>
               <% end %>
