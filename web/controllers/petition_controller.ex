@@ -49,6 +49,7 @@ defmodule Core.PetitionController do
          object = %{
            "slug" => slug,
            "content" => content,
+           "title" => admin_title,
            "metadata" => %{
              "title" => title,
              "sign_button_text" => sign_button_text,
@@ -59,8 +60,9 @@ defmodule Core.PetitionController do
            }
          }
        ) do
+
     count =
-      case Core.PetitionCount.stats_for(title) do
+      case Core.PetitionCount.stats_for(admin_title) do
         {:ok, %{in_last: _in_last, total: count}} -> count
         {:error, _} -> nil
       end
