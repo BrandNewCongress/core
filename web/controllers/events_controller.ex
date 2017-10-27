@@ -81,10 +81,7 @@ defmodule Core.EventsController do
           "name" => name,
           "email" => email,
           "phone" => phone,
-          "address" => address,
           "zip" => zip,
-          "city" => city,
-          "state" => state
         }
       ) do
     [first_name, last_name] =
@@ -107,12 +104,7 @@ defmodule Core.EventsController do
       %{given_name: first_name, family_name: last_name}
       |> add_if_exists(:email_address, email, email)
       |> add_if_exists(:phone_number, phone, phone)
-      |> add_if_exists(:postal_address, address, %Address{
-           address_lines: [address],
-           locality: city,
-           region: state,
-           postal_code: zip
-         })
+      |> add_if_exists(:postal_address, zip, %Address{postal_code: zip})
 
     Attendance.push(event.id, attendance, referrer_data)
 

@@ -60,52 +60,32 @@
 
     <div class="bar"></div>
 
-    <div class="rsvp">
+    <div name="rsvp" class="rsvp">
       <%= if assigns[:person] == nil do %>
         <h3> RSVP: Who is coming? </h3>
-        <form name="rsvp" method="post" action="/events/<%= @event.name %>">
+        <form method="post" action="/events/<%= @event.name %>">
           <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
           <div class="form-row">
             <div class="form-el">
               <label> Name </label> <br/>
               <input name="name" type="text" required="required"/>
             </div>
-          </div>
-          <div class="form-row">
             <div class="form-el">
               <label> Email </label><br/>
               <input name="email" type="email" required="required"/>
             </div>
+          </div>
+          <div class="form-row">
             <div class="form-el">
               <label> Phone </label><br/>
               <input name="phone" type="tel" required="required"/>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-el" style="margin-left: -8px; width: 277px;">
-              <label> Address </label><br/>
-              <input name="address" type="text" placeholder="1600 Pennsylvania Avenue" style="width: 100%;"/>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-el" style="margin-left: -8px; width: 277px;">
+            <div class="form-el" >
               <label> Zip Code </label><br/>
-              <input name="zip" type="text" placeholder="20500" style="width: 100%;"/>
+              <input name="zip" type="text" placeholder="20500" />
             </div>
           </div>
-          <div class="form-row">
-            <div class="form-el" style="margin-left: -8px; width: 277px;">
-              <label> City </label><br/>
-              <input name="city" type="text" placeholder="Washington" style="width: 100%;"/>
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-el" style="margin-left: -8px; width: 277px;">
-              <label> State </label><br/>
-              <input name="state" type="text" placeholder="DC" style="width: 100%;"/>
-            </div>
-          </div>
-          <div class="form-row">
+          <div class="form-row" style="margin-top: 10px;">
             <button type="submit"> I'm coming! </button>
           </div>
         </form>
