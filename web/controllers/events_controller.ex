@@ -90,7 +90,7 @@ defmodule Core.EventsController do
     [first_name, last_name] =
       case String.split(name, ",") do
         [single] -> [single, ""]
-        list -> [List.first(list), List.last(list)]
+        list = [_ | _] -> [List.first(list), List.last(list)]
         _ -> ["", ""]
       end
 
