@@ -239,8 +239,8 @@ defmodule Jotform.SubmitEvent do
          last_name: last_name
        }) do
     Person.push(%{
-      email_addresses: [EmailAddress.get_or_insert(%{address: email, primary: true})],
-      phone_numbers: [PhoneNumber.get_or_insert(%{number: phone, primary: true})],
+      email_address: email,
+      phone_number: phone,
       postal_addresses: [],
       given_name: first_name,
       family_name: last_name
