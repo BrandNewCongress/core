@@ -169,7 +169,7 @@
 </style>
 <script>
 function refresh () {
-  window.location.href = window.location.href
+  window.location.href = window.location.href.split("#")[0]
 }
 </script>
 
