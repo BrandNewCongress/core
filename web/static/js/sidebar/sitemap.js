@@ -105,12 +105,12 @@ const jd = [
 
   {
     label: 'Candidates',
-    path: 'HOSTNAME/candidates',
+    path: '/candidates',
     matches: () => window.location.href.match('/candidates'),
     children: [
       {
         label: 'Candidates',
-        path: 'HOSTNAME/candidates',
+        path: '/candidates',
         children: []
       },
       {
@@ -139,7 +139,7 @@ const jd = [
       },
       {
         label: 'Attend an Event',
-        path: 'HOSTNAME/events',
+        path: '/events',
         matches: () => false,
         children: []
       },
