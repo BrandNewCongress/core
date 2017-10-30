@@ -2,8 +2,6 @@ const otherNumberButton = document.querySelector('#number-replace-button')
 
 function doSubmit () {
   const otherNumberForm = document.querySelector('#number-replace-form')
-  console.log(otherNumberForm)
-  debugger
 }
 
 function showField (ev) {

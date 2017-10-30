@@ -2,14 +2,10 @@ import React, { Component } from 'react'
 import { Map, TileLayer, CircleMarker, Popup, GeoJSON } from 'react-leaflet'
 import EventMarker from './event-marker'
 import GeoSuggest from 'react-geosuggest'
+import geojsonArea from 'geojson-area'
 import socket from '../socket'
 
 const DIST_GROUP_THRESHOLD = 0.0001
-
-const print = s => {
-  console.log(s)
-  return s
-}
 
 export default class EventMap extends Component {
   state = {
@@ -80,11 +76,25 @@ export default class EventMap extends Component {
         overlay: polygon
       })
 
+      const area = geojsonArea.geometry(polygon)
+      let zoom = 11
+
+      if (area < 100000000) {
+        zoom = 11
+      } else if (area < 5000000000) {
+        zoom = 10
+      } else if (area < 20000000000) {
+        zoom = 9
+      }
+
+      this.setState({ zoom })
+
       this.channel.off('district-overlay')
     })
   }
 
   onViewportChanged = ({ center, zoom }) => this.setState({ center, zoom })
+
   closeModal = () => this.setState({ noEvents: false })
 
   render() {

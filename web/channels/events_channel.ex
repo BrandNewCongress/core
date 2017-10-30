@@ -46,12 +46,11 @@ defmodule Core.EventsChannel do
 
     near_user =
       Enum.filter(events, fn
-        %{location: %{location: %{latitude: lat, longitude: lng}}} ->
-          {lat, _} = Float.parse(lat)
-          {lng, _} = Float.parse(lng)
+        %{location: %{location: %Geo.Point{coordinates: {lat, lng}}}} ->
           District.naive_distance_in_miles({lng, lat}, centroid) < 20
 
         _else ->
+          IO.inspect events
           false
       end)
 
