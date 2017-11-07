@@ -4,8 +4,8 @@
     <br/>
     <br/>
 
-    Username: <%= @username %> <br/>
-    Password: <%= @password %> <br/>
+    Username: <%= @username %><br/>
+    Password: <%= @password %><br/>
   </p>
 
   <%= raw(@call_page) %>
