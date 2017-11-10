@@ -41,7 +41,8 @@ defmodule Core.Mixfile do
         :number,
         :stash,
         :topo,
-        :maps
+        :maps,
+        :cosmic
       ]
     ]
   end
@@ -84,7 +85,8 @@ defmodule Core.Mixfile do
       {:nb, git: "https://github.com/BrandNewCongress/nb_ex.git"},
       {:poison, "~> 3.0", override: true},
       {:cipher, ">= 1.3.3"},
-      {:maps, git: "https://github.com/justicedemocrats/maps_ex.git"}
+      {:maps, git: "https://github.com/justicedemocrats/maps_ex.git"},
+      {:cosmic, git: "https://github.com/BrandNewCongress/cosmic_ex.git"}
     ]
   end
 
