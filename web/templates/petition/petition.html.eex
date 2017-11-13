@@ -22,17 +22,17 @@
     <%= if not @signed do %>
       <div class="external-content-wrapper">
         <%= raw(@content) %>
-      </div>
 
-      <%= if @count do %>
-        <div class="count-container">
-          <div class="count-bar" style="width: <%= @progress %>%;">
+        <%= if @count do %>
+          <div class="count-container">
+            <div class="count-bar" style="width: <%= @progress %>%;">
+            </div>
           </div>
-        </div>
-        <div class="count-prompt">
-          <strong> <%= @count %> people have signed. Help us get to <%= @target %>! </strong>
-        </div>
-      <% end %>
+          <div class="count-prompt">
+            <strong> <%= @count %> people have signed. Help us get to <%= @target %>! </strong>
+          </div>
+        <% end %>
+      </div>
 
       <%= form_tag("/petition/#{@slug}", method: :post, id: "main-form") %>
         <div class="petition-container">
@@ -250,6 +250,10 @@ html, body {
 .jd .petition-container input[type="submit"]:hover {
   background-color: #DDE600;
   border: 1px solid black;
+}
+
+.external-content-wrapper {
+  padding: 30px;
 }
 
 .external-content-wrapper h1,
