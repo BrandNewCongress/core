@@ -48,10 +48,14 @@
               <label>Email</label>
               <input type="email" name="email" required="required"/>
             </div>
-            <div class="input-field">
-              <label>Mobile Phone Number</label>
-              <input type="tel" name="phone" />
-            </div>
+
+            <%= if assigns[:show_phone] != nil and assigns[:show_phone] == "Show" do %>
+              <div class="input-field">
+                <label>Mobile Phone Number</label>
+                <input type="tel" name="phone" />
+              </div>
+            <% end %>
+
             <div class="input-field">
               <label>Zip</label>
               <input type="text" name="zip" maxlength="5" required="required" />
@@ -173,13 +177,18 @@ html, body {
 }
 
 .right-column {
-  margin-top: 10%;
+  margin-top: 50px;
   margin-bottom: 10%;
-  max-width: 600px;
+  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
   padding: 20px;
   background-color: rgba(30,30,30,0.8);
+  <%= if @mobile do %>
+    display: block;
+  <% else %>
+    display: flex;
+  <% end %>
 }
 
 .right-column h1, .right-column h2 {

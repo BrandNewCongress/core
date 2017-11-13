@@ -50,7 +50,7 @@ defmodule Core.PetitionController do
            "slug" => slug,
            "content" => content,
            "title" => admin_title,
-           "metadata" => %{
+           "metadata" => metadata = %{
              "title" => title,
              "sign_button_text" => sign_button_text,
              "post_sign_text" => post_sign_text,
@@ -98,6 +98,7 @@ defmodule Core.PetitionController do
         banner: share_image,
         no_footer: true,
         signed: false,
+        show_phone: metadata["show_phone"],
         count: pretty_num(count),
         target: pretty_num(target),
         progress: pretty_num(progress),

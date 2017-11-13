@@ -20,8 +20,8 @@ defmodule Core.BrandHelpers do
   def address("bnc"), do: "P. O. BOX 621264 CHARLOTTE, NC 28262"
   def address("jd"), do: "P. O. BOX 621264 CHARLOTTE, NC 28262"
 
-  def homepage("bnc"), do: "brandnewcongress.org"
-  def homepage("jd"), do: "justicedemocrats.com"
+  def homepage("bnc"), do: "https://brandnewcongress.org"
+  def homepage("jd"), do: "https://justicedemocrats.com"
 
   def core_deployment("bnc"), do: "https://now.brandnewcongress.org"
   def core_deployment("jd"), do: "https://now.justicedemocrats.com"
