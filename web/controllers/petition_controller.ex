@@ -117,8 +117,7 @@ defmodule Core.PetitionController do
           "petition" => petition,
           "name" => name,
           "email" => email,
-          "zip" => zip,
-          "phone" => phone
+          "zip" => zip
         }
       ) do
     global_opts = GlobalOpts.get(conn, params)
@@ -178,15 +177,23 @@ defmodule Core.PetitionController do
           []
         end
 
+    person = %{
+      given_name: first_name,
+      family_name: last_name,
+      postal_addresses: [%{postal_code: zip}],
+      email_addresses: [%{address: email, primary: true}]
+    }
+
+    person =
+      if params["phone"] do
+        Map.put(person, :phone_numbers, [%{number: params["phone"], do_not_call: false}])
+      else
+        person
+      end
+
     %{id: _id} =
       Osdi.PersonSignup.main(%{
-        person: %{
-          given_name: first_name,
-          family_name: last_name,
-          postal_addresses: [%{postal_code: zip}],
-          email_addresses: [%{address: email, primary: true}],
-          phone_numbers: [%{number: phone, do_not_call: false}]
-        },
+        person: person,
         add_tags: tags
       })
 
@@ -260,7 +267,7 @@ defmodule Core.PetitionController do
           target: target,
           signed: true,
           submitted_zip: zip,
-          submitted_phone: phone,
+          submitted_phone: params["phone"],
           submitted_email: email,
           submitted_name: name,
           call_power_campaign_id: call_power_campaign_id,
