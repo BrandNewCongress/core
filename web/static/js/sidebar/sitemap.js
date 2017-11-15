@@ -62,9 +62,7 @@ const bnc = [
       },
       {
         label: 'Any special skills?',
-        path: window.location.origin.includes('justicedemocrats')
-          ? 'https://justicedemocrats.org/special-skills'
-          : 'https://brandnewcongress.org/special-skills',
+        path: '/form/special-skills',
         matches: () => false,
         children: []
       }
