@@ -6,6 +6,8 @@ defmodule Core.JotformController do
     %{"metadata" => %{"event_submitted" => success_hook, "submission_failure" => failure_hook}} =
       Cosmic.get("event-webhooks")
 
+    IO.inspect params
+
     try do
       response = Jotform.SubmitEvent.on_event_submit(params)
 
@@ -16,8 +18,9 @@ defmodule Core.JotformController do
 
       json(conn, response)
     rescue
-      _e ->
-        Core.EventMailer.failure_alert(params)
+      e ->
+        Map.merge(%{error: e}, params)
+        |> Core.EventMailer.failure_alert()
 
         failure_hook
         |> HTTPotion.post(body: params |> Poison.encode!())
