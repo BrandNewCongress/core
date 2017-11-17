@@ -63,6 +63,10 @@ const is = {
 
 const handle = {
   relative: a => {
+    if (a.getAttribute('href').includes('form')) {
+      return window.location.href = a.getAttribute('href')
+    }
+
     fetch(a.getAttribute('href'), (err, html) => {
       morph(html)
       history.push(a.getAttribute('href'))
