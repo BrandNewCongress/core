@@ -126,7 +126,7 @@ const jd = [
 
   {
     label: 'Platform',
-    path: 'HOSTNAME/plan',
+    path: 'www.HOSTNAME/platform',
     children: [],
     matches: () => window.location.href.match('/plan')
   }
