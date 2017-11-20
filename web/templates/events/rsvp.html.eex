@@ -91,7 +91,7 @@
         </form>
         <div class="bar"></div>
         <div style="display: flex; justify-content: center; width: 100%;">
-          <a target="_blank" href="https://events.brandnewcongress.org/" class="button"><p>More Events</p></a>
+          <a target="_blank" href="/act" class="button"><p>More Events</p></a>
         </div>
 
       <% else %>
