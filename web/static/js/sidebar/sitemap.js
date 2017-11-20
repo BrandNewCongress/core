@@ -117,7 +117,7 @@ const jd = [
       },
       {
         label: 'Any special skills?',
-        path: '/special-skills',
+        path: '/form/special-skills',
         matches: () => false,
         children: []
       }
@@ -126,7 +126,7 @@ const jd = [
 
   {
     label: 'Platform',
-    path: 'www.HOSTNAME/platform',
+    path: 'HOSTNAME/platform',
     children: [],
     matches: () => window.location.href.match('/plan')
   }
