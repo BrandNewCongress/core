@@ -184,7 +184,7 @@ html, body {
   margin-right: auto;
   padding: 20px;
   background-color: rgba(30,30,30,0.8);
-  <%= if @mobile do %>
+  <%= if @mobile or @signed do %>
     display: block;
   <% else %>
     display: flex;
