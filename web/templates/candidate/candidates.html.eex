@@ -43,6 +43,7 @@
   display: flex;
   flex-wrap: wrap;
   margin-top: 10px;
+  justify-content: space-around;
 }
 
 .card {
@@ -74,9 +75,11 @@
 .district-container {
   margin-top: 15px;
   margin-bottom: 5px;
+  padding: 2px;
   background-color: #2a5058;
   color: white;
   width: 100%;
+  font-weight: bold;
 }
 
 .cand-image {
