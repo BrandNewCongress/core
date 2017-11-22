@@ -10,7 +10,7 @@
     role="navigation"
     style="display: flex; justify-content: space-between; align-items: center; height: 75px;"
   >
-    <a href="https://<%= homepage(@brand) %>">
+    <a href="<%= homepage(@brand) %>">
       <%= if @brand == "jd" do %>
 
         <%= if @mobile do %>
