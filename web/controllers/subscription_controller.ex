@@ -213,8 +213,8 @@ defmodule Core.SubscriptionController do
     nice_name = @sources[candidate]
 
     # Find the person
-    person = Osdi.Person.push(%{email_address: email})
-    Osdi.Person.add_tags(Person, ["Action: Unsubscribed: #{nice_name}"])
+    %{id: id} = Osdi.Person.push(%{email_address: email})
+    Osdi.Person.add_tags(%Osdi.Person{id: id}, ["Action: Unsubscribed: #{nice_name}"])
 
     # Determine the resubscribe link
     global_opts = GlobalOpts.get(conn, params)
