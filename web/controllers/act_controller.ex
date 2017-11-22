@@ -91,7 +91,8 @@ defmodule Core.ActController do
         callable_slugs: callable_slugs,
         event_action_options: event_action_options(conn, params),
         home_action_options: home_action_options(conn, params),
-        draft: draft
+        draft: draft,
+        calling_page_is_down: Cosmic.get("calling-page-is-down")
       ] ++ global_opts
     )
   end

@@ -1,190 +1,202 @@
-<%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Call Voters"] %>
-<% csl =
-  cond do
-    @calling_script_link != nil and String.contains?(@calling_script_link, "https://") -> @calling_script_link
-    @calling_script_link -> core_deployment(@brand) <> @calling_script_link
-    true -> nil
-  end
-%>
-<% abbrev = String.upcase(@brand) %>
+<%= if @calling_page_is_down["metadata"]["calling_page_is_down"] == "Show Message" do %>
 
-<div class="nav-body-container">
-  <%= if @brand == "jd" do %>
-    <!-- Start of justicedemocrats Zendesk Widget script -->
-    <script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(e){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var e=this.createElement("script");n&&(this.domain=n),e.id="js-iframe-async",e.src="https://assets.zendesk.com/embeddable_framework/main.js",this.t=+new Date,this.zendeskHost="justicedemocrats.zendesk.com",this.zEQueue=a,this.body.appendChild(e)},o.write('<body onload="document._l();">'),o.close()}();
-    /*]]>*/</script>
-    <!-- End of justicedemocrats Zendesk Widget script -->
-  <% end %>
+  <div class="nav-body-container" style="padding: 20px;">
+    <%= if (not @mobile) do %>
+      <%= render Core.LayoutView, "left-nav.html", assigns %>
+    <% end %>
+    <div>
+      <%= raw(@calling_page_is_down["content"]) %>
+    </div>
+  </div>
+<% else %>
+  <%= render Core.LayoutView, "h1.html", [brand: @brand, text: "Call Voters"] %>
+  <% csl =
+    cond do
+      @calling_script_link != nil and String.contains?(@calling_script_link, "https://") -> @calling_script_link
+      @calling_script_link -> core_deployment(@brand) <> @calling_script_link
+      true -> nil
+    end
+  %>
+  <% abbrev = String.upcase(@brand) %>
 
-  <%= if (not @mobile) do %>
-    <%= render Core.LayoutView, "left-nav.html", assigns %>
-  <% end %>
+  <div class="nav-body-container">
+    <%= if @brand == "jd" do %>
+      <!-- Start of justicedemocrats Zendesk Widget script -->
+      <script>/*<![CDATA[*/window.zEmbed||function(e,t){var n,o,d,i,s,a=[],r=document.createElement("iframe");window.zEmbed=function(){a.push(arguments)},window.zE=window.zE||window.zEmbed,r.src="javascript:false",r.title="",r.role="presentation",(r.frameElement||r).style.cssText="display: none",d=document.getElementsByTagName("script"),d=d[d.length-1],d.parentNode.insertBefore(r,d),i=r.contentWindow,s=i.document;try{o=s}catch(e){n=document.domain,r.src='javascript:var d=document.open();d.domain="'+n+'";void(0);',o=s}o.open()._l=function(){var e=this.createElement("script");n&&(this.domain=n),e.id="js-iframe-async",e.src="https://assets.zendesk.com/embeddable_framework/main.js",this.t=+new Date,this.zendeskHost="justicedemocrats.zendesk.com",this.zEQueue=a,this.body.appendChild(e)},o.write('<body onload="document._l();">'),o.close()}();
+      /*]]>*/</script>
+      <!-- End of justicedemocrats Zendesk Widget script -->
+    <% end %>
 
-  <div class="page-body">
-    <%= if @on_hours or @draft do %>
-      <%= if (@candidate["slug"] in @callable_slugs) or @draft do %>
-        <div style="margin-top: 10px; margin-bottom: 10px; text-align: left">
-          <%= raw(@candidate_calling_page) %>
-        </div>
+    <%= if (not @mobile) do %>
+      <%= render Core.LayoutView, "left-nav.html", assigns %>
+    <% end %>
 
-        <div class="link-container" style="display: flex; flex-direction: column; align-items: center;">
-          <label> First, </label>
-          <a target="_blank" class="primary-button"
-            href="https://docs.google.com/document/d/13PglZGs0pGkpTy3BWZbbUdhla63nJhTIHpYtq_X0A8M/edit?usp=sharing"
-          >
-            Read the guide on how to make calls for <%= abbrev %>
-          </a>
+    <div class="page-body">
+      <%= if @on_hours or @draft do %>
+        <%= if (@candidate["slug"] in @callable_slugs) or @draft do %>
+          <div style="margin-top: 10px; margin-bottom: 10px; text-align: left">
+            <%= raw(@candidate_calling_page) %>
+          </div>
 
-          <label> Second, </label>
-          <a target="_blank" class="primary-button" href="<%= csl %>">
-            Read the calling script
-          </a>
+          <div class="link-container" style="display: flex; flex-direction: column; align-items: center;">
+            <label> First, </label>
+            <a target="_blank" class="primary-button"
+              href="https://docs.google.com/document/d/13PglZGs0pGkpTy3BWZbbUdhla63nJhTIHpYtq_X0A8M/edit?usp=sharing"
+            >
+              Read the guide on how to make calls for <%= abbrev %>
+            </a>
 
-          <label> Third, </label>
-          <a target="_blank" class="primary-button" href="<%= core_deployment(@brand) <> "/call" %>">
-            Claim your login
-          </a>
+            <label> Second, </label>
+            <a target="_blank" class="primary-button" href="<%= csl %>">
+              Read the calling script
+            </a>
 
-          <label> Fourth, </label>
-          <a target="_blank" class="primary-button" href="https://portal.na4.livevox.com/BrandNewCampaign/AgentLogin">
-            Login to our dialer, and get calling!
-          </a>
-        </div>
+            <label> Third, </label>
+            <a target="_blank" class="primary-button" href="<%= core_deployment(@brand) <> "/call" %>">
+              Claim your login
+            </a>
 
-        <div style="text-align: left">
-          <h3> Calling hours </h3>
+            <label> Fourth, </label>
+            <a target="_blank" class="primary-button" href="https://portal.na4.livevox.com/BrandNewCampaign/AgentLogin">
+              Login to our dialer, and get calling!
+            </a>
+          </div>
+
+          <div style="text-align: left">
+            <h3> Calling hours </h3>
+              <p>
+                We make calls from 5PM - 9PM on weekdays and 10AM - 9PM on
+                weekends in the candidates' local time zone,
+                so check back anytime you want to make calls.
+                <br />
+                However, your login information will change each day, so you'll
+                need to reclaim it.
+              </p>
+            <h3> Questions? </h3>
+              <p>
+                Please email
+                <% email =
+                  case @brand do
+                    "jd" -> "dialer@justicedemocrats.com"
+                    "bnc" -> "dialer@brandnewcongress.org"
+                  end
+                %>
+
+                <a href="mailto:<%= email %>" target="-blank">
+                  <%= email %>
+                </a>.
+                We'll get back to you as soon as we can.
+              </p>
+          </div>
+
+        <% else %>
+
+          <%= if @candidate do %>
             <p>
-              We make calls from 5PM - 9PM on weekdays and 10AM - 9PM on
-              weekends in the candidates' local time zone,
-              so check back anytime you want to make calls.
+              We've made all of our calls for <%= @candidate["title"] %> for
+              today! <br />
               <br />
-              However, your login information will change each day, so you'll
-              need to reclaim it.
             </p>
-          <h3> Questions? </h3>
-            <p>
-              Please email
-              <% email =
-                case @brand do
-                  "jd" -> "dialer@justicedemocrats.com"
-                  "bnc" -> "dialer@brandnewcongress.org"
-                end
-              %>
+          <% else %>
 
-              <a href="mailto:<%= email %>" target="-blank">
-                <%= email %>
-              </a>.
-              We'll get back to you as soon as we can.
+            <p>
+              Sorry, we don't have a candidate in your district yet. <br />
+              <br />
             </p>
-        </div>
+          <% end %>
+
+          <p> Please make calls for one of our other candidates: <br /> </p>
+          <ul>
+            <%= for cand <- @callable_candidates do %>
+              <li>
+                <p> <a href="<%= "/act/call/#{cand.slug}" %>" target="_blank">
+                  <%= cand.name %>
+                </a> </p>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
 
       <% else %>
 
-        <%= if @candidate do %>
+        <%= if @candidate !== nil and length(@callable_candidates) > 0 do %>
+
           <p>
-            We've made all of our calls for <%= @candidate["title"] %> for
-            today! <br />
-            <br />
-          </p>
+            Since we only make calls from 5PM - 9PM on weekdays and 10AM - 9PM on weekends
+            in the candidates' local time zone,
+            we're not calling voters in <%= @candidate["title"] %>'s district right now.
+          <p>
+
+          <p> Please make calls for one of our other candidates: <br /> </p>
+          <ul>
+            <%= for cand <- @callable_candidates do %>
+              <li>
+                <p> <a href="<%= "/act/call/#{cand.slug}" %>" target="_blank">
+                  <%= cand.name %>
+                </a> </p>
+              </li>
+            <% end %>
+          </ul>
+
         <% else %>
 
           <p>
-            Sorry, we don't have a candidate in your district yet. <br />
-            <br />
+            At the moment, we're making calls from 5PM - 9PM on weekdays and
+            10AM - 9PM on Saturday and 12 noon to 9PM on Sunday in the candidates'
+            local time zone.
           </p>
+
+          <p>
+            Please fill out
+            <a href="/form/call-from-home" target="_blank">
+              this form
+            </a>
+            and we'll help you get set up soon.
+          </p>
+
         <% end %>
 
-        <p> Please make calls for one of our other candidates: <br /> </p>
-        <ul>
-          <%= for cand <- @callable_candidates do %>
-            <li>
-              <p> <a href="<%= "/act/call/#{cand.slug}" %>" target="_blank">
-                <%= cand.name %>
-              </a> </p>
-            </li>
-          <% end %>
-        </ul>
       <% end %>
+    </div>
 
-    <% else %>
-
-      <%= if @candidate !== nil and length(@callable_candidates) > 0 do %>
-
-        <p>
-          Since we only make calls from 5PM - 9PM on weekdays and 10AM - 9PM on weekends
-          in the candidates' local time zone,
-          we're not calling voters in <%= @candidate["title"] %>'s district right now.
-        <p>
-
-        <p> Please make calls for one of our other candidates: <br /> </p>
-        <ul>
-          <%= for cand <- @callable_candidates do %>
-            <li>
-              <p> <a href="<%= "/act/call/#{cand.slug}" %>" target="_blank">
-                <%= cand.name %>
-              </a> </p>
-            </li>
-          <% end %>
-        </ul>
-
-      <% else %>
-
-        <p>
-          At the moment, we're making calls from 5PM - 9PM on weekdays and
-          10AM - 9PM on Saturday and 12 noon to 9PM on Sunday in the candidates'
-          local time zone.
-        </p>
-
-        <p>
-          Please fill out
-          <a href="/form/call-from-home" target="_blank">
-            this form
-          </a>
-          and we'll help you get set up soon.
-        </p>
-
-      <% end %>
-
-    <% end %>
   </div>
 
-</div>
+  <style>
 
-<style>
+  .nav-body-container {
+    display: flex;
+  }
 
-.nav-body-container {
-  display: flex;
-}
+  .page-body {
+    margin: 20px;
+  }
 
-.page-body {
-  margin: 20px;
-}
+  .page-body > .link-container > a {
+    width: 200px;
+    padding: 10px;
+    text-transform: none;
+    text-decoration: none;
+    text-align: center;
+  }
 
-.page-body > .link-container > a {
-  width: 200px;
-  padding: 10px;
-  text-transform: none;
-  text-decoration: none;
-  text-align: center;
-}
+  .option-group-header {
+    font-size: larger;
+    border-bottom: 1px solid black;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
 
-.option-group-header {
-  font-size: larger;
-  border-bottom: 1px solid black;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
+  .option-container {
+    display: flex;
+    flex-wrap: wrap;
+    <%= if @mobile do %>
+      justify-content: space-around;
+    <% end %>
+  }
 
-.option-container {
-  display: flex;
-  flex-wrap: wrap;
-  <%= if @mobile do %>
-    justify-content: space-around;
-  <% end %>
-}
+  .container {
+    padding: 30px;
+  }
 
-.container {
-  padding: 30px;
-}
-
-</style>
+  </style>
+<% end %>
