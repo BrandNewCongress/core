@@ -6,8 +6,6 @@ defmodule Core.JotformController do
     %{"metadata" => %{"event_submitted" => success_hook, "submission_failure" => failure_hook}} =
       Cosmic.get("event-webhooks")
 
-    IO.inspect params
-
     try do
       response = Jotform.SubmitEvent.on_event_submit(params)
 
