@@ -59,7 +59,9 @@ defmodule Core.EventMailer do
             "jd" -> "Justice Democrats"
             "bnc" -> "Brand New Congress"
           end
-        cand -> cand
+
+        cand ->
+          cand
       end
 
     event =
@@ -79,7 +81,6 @@ defmodule Core.EventMailer do
          candidate,
          brand
        ) do
-
     Logger.info("Sending email to #{email} because they RSVPed to #{event.name}")
     params = ~M{first_name, last_name, email, candidate, event}
 
@@ -97,7 +98,6 @@ defmodule Core.EventMailer do
          candidate,
          brand
        ) do
-
     Logger.info("Sending email to #{email} because someone RSVPed to their event, #{event.name}")
     params = ~M{first_name, last_name, email, candidate, event}
 

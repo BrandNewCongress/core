@@ -81,10 +81,9 @@ defmodule Core.EventsController do
           "name" => name,
           "email" => email,
           "phone" => phone,
-          "zip" => zip,
+          "zip" => zip
         }
       ) do
-
     global_opts = GlobalOpts.get(conn, params)
 
     [first_name, last_name] =
@@ -98,7 +97,11 @@ defmodule Core.EventsController do
     banner = get_banner(event.type)
 
     spawn(fn ->
-      Core.EventMailer.on_rsvp(event, ~m{first_name, last_name, email}, Keyword.get(global_opts, :brand))
+      Core.EventMailer.on_rsvp(
+        event,
+        ~m{first_name, last_name, email},
+        Keyword.get(global_opts, :brand)
+      )
     end)
 
     referrer_data = Map.merge(get_source(params), get_referrer(conn))

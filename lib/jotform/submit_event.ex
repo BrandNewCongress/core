@@ -83,7 +83,8 @@ defmodule Jotform.SubmitEvent do
       end)
 
     ## ------------ Determine calendar id and time zone, geocoding only once
-    to_geocode = "#{venue_house_number} #{venue_street_name}, #{venue_city}, #{venue_state}, #{venue_zip}"
+    to_geocode =
+      "#{venue_house_number} #{venue_street_name}, #{venue_city}, #{venue_state}, #{venue_zip}"
 
     %{
       "postal_code" => goog_postal_code,

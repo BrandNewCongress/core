@@ -50,7 +50,6 @@ defmodule Core.EventsChannel do
           District.naive_distance_in_miles({lng, lat}, centroid) < 20
 
         _else ->
-          IO.inspect events
           false
       end)
 

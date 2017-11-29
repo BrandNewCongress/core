@@ -60,7 +60,6 @@ defmodule Core.PetitionController do
            }
          }
        ) do
-
     count =
       case Core.PetitionCount.stats_for(admin_title) do
         {:ok, %{in_last: _in_last, total: count}} -> count
