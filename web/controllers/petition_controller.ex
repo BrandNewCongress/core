@@ -102,7 +102,10 @@ defmodule Core.PetitionController do
         target: pretty_num(target),
         progress: pretty_num(progress),
         background_image: background_image,
-        description: og_description
+        description: og_description,
+        show_checkbox: metadata["show_checkbox"],
+        checkbox_prompt: metadata["checkbox_prompt"],
+        checkbox_tag: metadata["checkbox_tag"]
       ] ++ GlobalOpts.get(conn, params)
     )
   end
@@ -126,7 +129,7 @@ defmodule Core.PetitionController do
         "slug" => slug,
         "content" => content,
         "title" => admin_title,
-        "metadata" => %{
+        "metadata" => metadata = %{
           "title" => title,
           "sign_button_text" => sign_button_text,
           "post_sign_text" => post_sign_text,
@@ -175,6 +178,14 @@ defmodule Core.PetitionController do
         else
           []
         end
+
+    tags = tags ++ if Map.has_key?(params, metadata["checkbox_tag"]) do
+      ["Action: Signed Petition: #{source}: #{admin_title}: #{metadata["checkbox_tag"]}"]
+    else
+      []
+    end
+
+    IO.inspect tags
 
     person = %{
       given_name: first_name,

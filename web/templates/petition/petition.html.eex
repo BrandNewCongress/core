@@ -56,6 +56,13 @@
               </div>
             <% end %>
 
+            <%= if assigns[:show_checkbox] != nil and assigns[:show_checkbox] == "Show" do %>
+              <div class="input-field">
+                <label><%= assigns[:checkbox_prompt] %></label>
+                <input type="checkbox" name="<%= assigns[:checkbox_tag] %>" />
+              </div>
+            <% end %>
+
             <div class="input-field">
               <label>Zip</label>
               <input type="text" name="zip" maxlength="5" required="required" />
