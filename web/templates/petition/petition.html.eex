@@ -56,17 +56,18 @@
               </div>
             <% end %>
 
-            <%= if assigns[:show_checkbox] != nil and assigns[:show_checkbox] == "Show" do %>
-              <div class="input-field">
-                <label><%= assigns[:checkbox_prompt] %></label>
-                <input type="checkbox" name="<%= assigns[:checkbox_tag] %>" />
-              </div>
-            <% end %>
-
             <div class="input-field">
               <label>Zip</label>
               <input type="text" name="zip" maxlength="5" required="required" />
             </div>
+
+            <%= if assigns[:show_checkbox] != nil and assigns[:show_checkbox] == "Show" do %>
+              <div class="input-field switch" style="margin-bottom: 70px;">
+                  <input type="checkbox" name="<%= assigns[:checkbox_tag] %>" id="checkbox-switch" />
+                  <label for="checkbox-switch"><%= assigns[:checkbox_prompt] %></label>
+              </div>
+            <% end %>
+
             <div class="input-field">
               <%= if @brand == "jd" do %>
                 <button onclick="fbq('track', 'Lead');" type="submit" class="button-block"><%=@sign_button_text%></button>
