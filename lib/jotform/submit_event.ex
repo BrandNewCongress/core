@@ -115,7 +115,13 @@ defmodule Jotform.SubmitEvent do
         false -> []
       end
 
-    tags = contact_tag ++ Enum.map(calendars, &"Calendar: #{&1}")
+    direct_publish_tag =
+      case status do
+        "confirmed" -> ["Source: Direct Publish"]
+        _ -> []
+      end
+
+    tags = contact_tag ++ direct_publish_tag ++ Enum.map(calendars, &"Calendar: #{&1}")
 
     summary =
       String.slice(description, 0..199) <>
