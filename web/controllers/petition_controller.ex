@@ -185,8 +185,6 @@ defmodule Core.PetitionController do
       []
     end
 
-    IO.inspect tags
-
     person = %{
       given_name: first_name,
       family_name: last_name,
