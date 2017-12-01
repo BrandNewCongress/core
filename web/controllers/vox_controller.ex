@@ -152,12 +152,13 @@ defmodule Core.VoxController do
       })
     end)
 
-    render(
-      conn,
-      "vox-iframe-claimed.html",
-      username: String.trim(username),
-      password: String.trim(password),
-      layout: {Core.LayoutView, "empty.html"}
-    )
+    conn
+    |> delete_resp_header("x-frame-options")
+    |> render(
+         "vox-iframe-claimed.html",
+         username: String.trim(username),
+         password: String.trim(password),
+         layout: {Core.LayoutView, "empty.html"}
+       )
   end
 end
