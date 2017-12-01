@@ -92,4 +92,72 @@ defmodule Core.VoxController do
       [layout: {Core.LayoutView, "empty.html"}] ++ GlobalOpts.get(conn, params)
     )
   end
+
+  def get_iframe(conn, params = %{"client" => client}) do
+    conn
+    |> delete_resp_header("x-frame-options")
+    |> render("vox-iframe.html", client: client, layout: {Core.LayoutView, "empty.html"})
+  end
+
+  def post_iframe(conn, params) do
+    %{
+      "email" => email,
+      "phone" => phone,
+      "first" => first_name,
+      "last" => last_name,
+      "client" => client
+    } = params
+
+    date = "#{"America/New_York" |> Timex.now() |> Timex.to_date()}"
+
+    person =
+      %{tags: tags} =
+      Osdi.Person.push(%{
+        email_address: email,
+        phone_number: phone,
+        given_name: first_name,
+        family_name: last_name
+      })
+
+    current_username =
+      tags
+      |> Enum.map(fn %{name: name} -> name end)
+      |> Enum.filter(fn t ->
+           String.contains?(t, "Vox Alias: #{client}") and String.contains?(t, date)
+         end)
+      |> Enum.map(fn t -> String.split(t, ":") end)
+      |> Enum.map(fn [_vox_part, _client_part, result, _date_part] -> String.trim(result) end)
+      |> List.first()
+
+    [username, password] =
+      case current_username do
+        nil -> Core.Vox.next_login(client)
+        un -> [un, Core.Vox.password_for(un, client)]
+      end
+
+    Osdi.Person.add_tags(person, [
+      "Action: Made Calls: #{client}",
+      "Vox Alias: #{client}: #{username}: #{date}"
+    ])
+
+    Task.async(fn ->
+      Core.VoxMailer.on_vox_login_claimed(%{
+        "username" => username,
+        "date" => date,
+        "first_name" => first_name,
+        "last_name" => last_name,
+        "email" => email,
+        "phone" => phone,
+        "source" => client
+      })
+    end)
+
+    render(
+      conn,
+      "vox-iframe-claimed.html",
+      username: String.trim(username),
+      password: String.trim(password),
+      layout: {Core.LayoutView, "empty.html"}
+    )
+  end
 end

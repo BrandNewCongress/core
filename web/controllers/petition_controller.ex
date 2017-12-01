@@ -179,11 +179,13 @@ defmodule Core.PetitionController do
           []
         end
 
-    tags = tags ++ if Map.has_key?(params, metadata["checkbox_tag"]) do
-      ["Action: Signed Petition: #{source}: #{admin_title}: #{metadata["checkbox_tag"]}"]
-    else
-      []
-    end
+    tags =
+      tags ++
+        if Map.has_key?(params, metadata["checkbox_tag"]) do
+          ["Action: Signed Petition: #{source}: #{admin_title}: #{metadata["checkbox_tag"]}"]
+        else
+          []
+        end
 
     person = %{
       given_name: first_name,

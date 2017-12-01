@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="https://cdn.shoelace.style/1.0.0-beta24/shoelace.css">
+<div style="padding: 30px;">
+  <%= form_tag("/call-iframe/#{@client}", method: :post) %>
+    <div class="petition-container">
+      <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
+      <div class="input-field">
+        <label>First Name</label>
+        <input class="text" type="text" name="first" required="required"/>
+      </div>
+      <div class="input-field">
+        <label>Last Name</label>
+        <input class="text" type="text" name="last" required="required"/>
+      </div>
+      <div class="input-field">
+        <label>Email</label>
+        <input class="text" type="email" name="email" required="required"/>
+      </div>
+      <div class="input-field">
+        <label>Phone</label>
+        <input class="text" type="tel" name="phone" maxlength="10" required="required" />
+      </div>
+      <div class="input-field">
+        <input class="button" type="submit" value="Claim My Login">
+      </div>
+    </div>
+  </form>
+</div>

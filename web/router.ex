@@ -52,6 +52,9 @@ defmodule Core.Router do
     get("/call/report", VoxController, :get_report)
     post("/call", VoxController, :post)
 
+    get("/call-iframe/:client", VoxController, :get_iframe)
+    post("/call-iframe/:client", VoxController, :post_iframe)
+
     get("/leaderboard", LeaderboardController, :get)
     get("/leaderboard/report", LeaderboardController, :get_report)
     get("/leaderboard/email", LeaderboardController, :send_email)

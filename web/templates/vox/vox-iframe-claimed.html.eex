@@ -1,0 +1,11 @@
+<link rel="stylesheet" href="https://cdn.shoelace.style/1.0.0-beta24/shoelace.css">
+<div style="padding: 30px;">
+  <p>
+    Thanks for signing up to make calls! Here's your username and password.
+    <br/>
+    <br/>
+
+    Username: <%= @username %><br/>
+    Password: <%= @password %><br/>
+  </p>
+</div>
