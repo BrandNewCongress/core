@@ -242,7 +242,7 @@ defmodule Core.EventsController do
 
   defp add_secret_attrs(event = %{id: id}) do
     [rsvp_count, organizer_id] = Enum.map([
-      Task.async(fn -> Repo.count(from a in Attendance, where: a.event_id == ^id) end),
+      Task.async(fn -> Repo.all(from a in Attendance, where: a.event_id == ^id, select: a.id) |> length() end),
       Task.async(fn -> Repo.one(from(e in Event, where: e.id == ^id, select: e.organizer_id)) end)
     ], &Task.await/1)
 
