@@ -29,7 +29,7 @@
         </div>
         <div>
           <label>Phone</label>
-          <input class="text" name="phone" maxlength="10" required="required" />
+          <input class="text" type="tel" name="phone" maxlength="10" required="required" />
         </div>
         <div style="text-align: center; width: calc(100% + 2em);">
           <input class="petition-submit" type="submit" value="Start Making Calls">
