@@ -44,7 +44,8 @@ defmodule Core.InfoController do
         "content" => content,
         "metadata" => metadata = %{
           "visibility" => visibility,
-          "brands" => brands
+          "brands" => brands,
+          "show_help_desk_widget" => show_help_desk_widget
         }
       } = Cosmic.get(slug)
 
@@ -66,7 +67,8 @@ defmodule Core.InfoController do
           render(
             conn,
             "info.html",
-            [content: chosen_content, title: title] ++ global_opts ++ empty_params(object)
+            [content: chosen_content, title: title, show_help_desk_widget: show_help_desk_widget] ++
+              global_opts ++ empty_params(object)
           )
       end
     else
