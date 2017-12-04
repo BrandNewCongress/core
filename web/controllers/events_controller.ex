@@ -241,7 +241,11 @@ defmodule Core.EventsController do
   end
 
   defp add_secret_attrs(event = %{id: id}) do
-    organizer_id = Repo.one(from(e in Event, where: e.id == ^id, select: e.organizer_id))
+    [rsvp_count, organizer_id] = Enum.map([
+      Task.async(fn -> Repo.count(from a in Attendance, where: a.event_id == ^id) end),
+      Task.async(fn -> Repo.one(from(e in Event, where: e.id == ^id, select: e.organizer_id)) end)
+    ], &Task.await/1)
+
     organizer_edit_hash = Cipher.encrypt("#{organizer_id}")
     organizer_edit_url = "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}"
 
@@ -251,5 +255,6 @@ defmodule Core.EventsController do
          "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}"
        )
     |> Map.put(:organizer_edit_url, organizer_edit_url)
+    |> Map.put(:rsvp_count, rsvp_count)
   end
 end
