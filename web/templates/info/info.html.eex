@@ -28,19 +28,25 @@
   }
 
   function showHiddenContent (ev) {
-    var els = [document.querySelector('#vol-events')].concat(Array.from(document.querySelectorAll('.vol-events')));
+    var el = document.querySelector('#vol-events');
+    var action = el.getAttribute('data-action');
 
-    els.forEach(el => {
-      var action = el.getAttribute('data-action');
+    if (action == 'show') {
+      show(el)
+    } else if (action == 'hide') {
+      hide(el)
+    } else {
+      toggle(el)
+    }
+  }
 
-      if (action == 'show') {
-        show(el)
-      } else if (action == 'hide') {
-        hide(el)
-      } else {
-        toggle(el)
-      }
-    })
+  function toggleTarget (ev) {
+    var el = ev.target
+    var targetId = el.getAttribute('data-target')
+
+    var target = document.querySelector('#' + targetId)
+
+    if (target) toggle(target)
   }
 
   var buttons = Array.from(document.querySelectorAll('.show-events'));
@@ -48,5 +54,12 @@
   buttons.forEach(function (button) {
     button.addEventListener('click', showHiddenContent);
   })
+
+
+  var togglers = Array.from(document.querySelectorAll('.toggler'));
+
+  togglers.forEach(function (button) {
+    button.addEventListener('click', toggleTarget)
+  });
 
 </script>
