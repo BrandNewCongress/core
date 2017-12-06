@@ -4,8 +4,6 @@ defmodule Core.PetitionCount do
   import Ecto.Query
   require Logger
 
-  @in_last [hours: -1]
-
   def start_link do
     Task.start_link(&update/0)
     Agent.start_link(fn -> %{} end, name: __MODULE__)
@@ -47,8 +45,7 @@ defmodule Core.PetitionCount do
            Task.async(fn -> update_petition({title, tag_ids}) end)
          end)
 
-    Enum.each(tasks, &Task.await/1)
-
+    Enum.each(tasks, fn task -> Task.await(task, 20_000) end)
     Logger.info("Updated petition cache on #{Timex.now() |> DateTime.to_iso8601()}")
   end
 
@@ -62,19 +59,8 @@ defmodule Core.PetitionCount do
         )
       )
 
-    since = Timex.shift(Timex.now(), @in_last)
-
-    [in_last] =
-      Repo.all(
-        from(
-          pt in Tagging,
-          where: pt.tag_id in ^tag_ids and pt.inserted_at > ^since,
-          select: count(pt.id)
-        )
-      )
-
     Agent.update(__MODULE__, fn state ->
-      Map.put(state, title, %{total: total, in_last: in_last})
+      Map.put(state, title, %{total: total})
     end)
   end
 
