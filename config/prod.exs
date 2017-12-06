@@ -31,4 +31,15 @@ config :core, Core.Endpoint,
   cache_static_manifest: "priv/static/manifest.json",
   server: true
 
+config :libcluster,
+  topologies: [
+    k8s_example: [
+      strategy: Cluster.Strategy.Kubernetes,
+      config: [
+        kubernetes_selector: "${LIBCLUSTER_KUBERNETES_SELECTOR}",
+        kubernetes_node_basename: "${LIBCLUSTER_KUBERNETES_NODE_BASENAME}"
+      ]
+    ]
+  ]
+
 import_config "prod.secret.exs"

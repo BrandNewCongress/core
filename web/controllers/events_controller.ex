@@ -241,10 +241,18 @@ defmodule Core.EventsController do
   end
 
   defp add_secret_attrs(event = %{id: id}) do
-    [rsvp_count, organizer_id] = Enum.map([
-      Task.async(fn -> Repo.all(from a in Attendance, where: a.event_id == ^id, select: a.id) |> length() end),
-      Task.async(fn -> Repo.one(from(e in Event, where: e.id == ^id, select: e.organizer_id)) end)
-    ], &Task.await/1)
+    [rsvp_count, organizer_id] =
+      Enum.map(
+        [
+          Task.async(fn ->
+            Repo.all(from(a in Attendance, where: a.event_id == ^id, select: a.id)) |> length()
+          end),
+          Task.async(fn ->
+            Repo.one(from(e in Event, where: e.id == ^id, select: e.organizer_id))
+          end)
+        ],
+        &Task.await/1
+      )
 
     organizer_edit_hash = Cipher.encrypt("#{organizer_id}")
     organizer_edit_url = "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}"
