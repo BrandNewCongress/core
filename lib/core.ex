@@ -6,7 +6,6 @@ defmodule Core do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    Cosmic.fetch_all()
     Core.Jobs.EventCache.fetch_or_load()
 
     # Define workers and child supervisors to be supervised
@@ -16,6 +15,8 @@ defmodule Core do
 
       # Start the endpoint when the application starts
       supervisor(Core.Endpoint, []),
+      supervisor(Phoenix.PubSub.PG2, [:core, []]),
+      worker(Cosmic, [[application: :core]]),
       worker(Redix, [Application.get_env(:core, :redis_url), [name: :redix]]),
       worker(Core.Scheduler, []),
       worker(Core.PetitionCount, [])
