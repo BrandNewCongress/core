@@ -86,7 +86,8 @@ defmodule Core.Mixfile do
       {:poison, "~> 3.0", override: true},
       {:cipher, ">= 1.3.3"},
       {:maps, git: "https://github.com/justicedemocrats/maps_ex.git"},
-      {:cosmic, git: "https://github.com/BrandNewCongress/cosmic_ex.git"}
+      {:cosmic, git: "https://github.com/BrandNewCongress/cosmic_ex.git"},
+      {:libcluster, "~> 2.0.3"}
     ]
   end
 
