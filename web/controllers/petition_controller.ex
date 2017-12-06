@@ -62,7 +62,7 @@ defmodule Core.PetitionController do
        ) do
     count =
       case Core.PetitionCount.stats_for(admin_title) do
-        {:ok, %{in_last: _in_last, total: count}} -> count
+        {:ok, %{total: count}} -> count
         {:error, _} -> nil
       end
 
@@ -214,7 +214,7 @@ defmodule Core.PetitionController do
 
     count =
       case Core.PetitionCount.stats_for(title) do
-        {:ok, %{in_last: _in_last, total: count}} -> count
+        {:ok, %{total: count}} -> count
         {:error, _} -> nil
       end
 
