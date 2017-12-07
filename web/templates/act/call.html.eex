@@ -77,8 +77,8 @@
                 Please email
                 <% email =
                   case @brand do
-                    "jd" -> "dialer@justicedemocrats.com"
-                    "bnc" -> "dialer@brandnewcongress.org"
+                    "jd" -> "calling@justicedemocrats.com"
+                    "bnc" -> "calling@brandnewcongress.org"
                   end
                 %>
 
