@@ -102,7 +102,13 @@ defmodule Jotform.SubmitEvent do
         Maps.time_zone_of({latitude, longitude})
       end)
 
-    calendars = ["Justice Democrats", "Brand New Congress"] # Task.await(calendar_task)
+    # calendars = Task.await(calendar_task)
+    calendars =
+      ["Justice Democrats", "Brand New Congress"] ++
+        if as_map["candidate"],
+          do: as_map["candidate"] |> String.split(":") |> List.last(),
+          else: []
+
     time_zone_info = Task.await(time_zone_task)
     organizer = Task.await(organizer_task)
 
