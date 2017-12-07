@@ -94,7 +94,7 @@ defmodule Jotform.SubmitEvent do
     } = Maps.fill_address(to_geocode)
 
     # Use geocode for calendar_id
-    calendar_task = Task.async(fn -> get_calendars({latitude, longitude}) end)
+    # calendar_task = Task.async(fn -> get_calendars({latitude, longitude}) end)
 
     # Use geocode for time zone
     time_zone_task =
@@ -102,7 +102,7 @@ defmodule Jotform.SubmitEvent do
         Maps.time_zone_of({latitude, longitude})
       end)
 
-    calendars = Task.await(calendar_task)
+    calendars = ["Justice Democrats", "Brand New Congress"] # Task.await(calendar_task)
     time_zone_info = Task.await(time_zone_task)
     organizer = Task.await(organizer_task)
 
