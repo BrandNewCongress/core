@@ -87,7 +87,9 @@ defmodule Core.Mixfile do
       {:cipher, ">= 1.3.3"},
       {:maps, git: "https://github.com/justicedemocrats/maps_ex.git"},
       {:cosmic, git: "https://github.com/BrandNewCongress/cosmic_ex.git"},
-      {:libcluster, "~> 2.0.3"}
+      {:libcluster, "~> 2.0.3"},
+      {:short_maps, "~> 0.1.2"},
+      {:actionkit, git: "https://github.com/justicedemocrats/actionkit_ex.git"}
     ]
   end
 
@@ -101,7 +103,6 @@ defmodule Core.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      #  "test": ["ecto.create --quiet", "ecto.migrate", "test"]]
       test: ["test"]
     ]
   end

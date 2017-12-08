@@ -27,6 +27,11 @@ config :core, Core.Vox,
   api_key: System.get_env("MAILGUN_KEY"),
   domain: System.get_env("MAILGUN_DOMAIN")
 
+config :actionkit,
+  base: System.get_env("AK_BASE"),
+  username: System.get_env("AK_USERNAME"),
+  password: System.get_env("AK_PASSWORD")
+
 config :osdi, Osdi.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: "osdi_repo",

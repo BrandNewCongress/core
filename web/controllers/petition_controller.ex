@@ -1,5 +1,6 @@
 defmodule Core.PetitionController do
   use Core.Web, :controller
+  import ShortMaps
 
   def get(conn, params = %{"petition" => petition}) do
     object = Cosmic.get(petition)
@@ -165,47 +166,51 @@ defmodule Core.PetitionController do
     # Add the petition signed tag
     brand = Keyword.get(global_opts, :brand)
 
-    source =
-      case brand do
-        "jd" -> "Justice Democrats"
-        "bnc" -> "Brand New Congress"
-      end
+    ak_petition_sign(params, brand, object)
 
-    tags =
-      ["Action: Signed Petition: #{source}: #{admin_title}"] ++
-        if Map.has_key?(params, "ref") do
-          ["Action: Signed Petition: #{source}: #{admin_title}: #{params["ref"]}"]
-        else
-          []
+    spawn(fn ->
+      source =
+        case brand do
+          "jd" -> "Justice Democrats"
+          "bnc" -> "Brand New Congress"
         end
 
-    tags =
-      tags ++
-        if Map.has_key?(params, metadata["checkbox_tag"]) do
-          ["Action: Signed Petition: #{source}: #{admin_title}: #{metadata["checkbox_tag"]}"]
+      tags =
+        ["Action: Signed Petition: #{source}: #{admin_title}"] ++
+          if Map.has_key?(params, "ref") do
+            ["Action: Signed Petition: #{source}: #{admin_title}: #{params["ref"]}"]
+          else
+            []
+          end
+
+      tags =
+        tags ++
+          if Map.has_key?(params, metadata["checkbox_tag"]) do
+            ["Action: Signed Petition: #{source}: #{admin_title}: #{metadata["checkbox_tag"]}"]
+          else
+            []
+          end
+
+      person = %{
+        given_name: first_name,
+        family_name: last_name,
+        postal_addresses: [%{postal_code: zip}],
+        email_addresses: [%{address: email, primary: true}]
+      }
+
+      person =
+        if params["phone"] do
+          Map.put(person, :phone_numbers, [%{number: params["phone"], do_not_call: false}])
         else
-          []
+          person
         end
 
-    person = %{
-      given_name: first_name,
-      family_name: last_name,
-      postal_addresses: [%{postal_code: zip}],
-      email_addresses: [%{address: email, primary: true}]
-    }
-
-    person =
-      if params["phone"] do
-        Map.put(person, :phone_numbers, [%{number: params["phone"], do_not_call: false}])
-      else
-        person
-      end
-
-    %{id: _id} =
-      Osdi.PersonSignup.main(%{
-        person: person,
-        add_tags: tags
-      })
+      %{id: _id} =
+        Osdi.PersonSignup.main(%{
+          person: person,
+          add_tags: tags
+        })
+    end)
 
     share_image =
       URI.encode(get_in(object, ["metadata", "share_image", "imgix_url"]) || background_image)
@@ -286,6 +291,23 @@ defmodule Core.PetitionController do
         ] ++ GlobalOpts.get(conn, params)
       )
     end
+  end
+
+  def ak_petition_sign(params = ~m(name email zip), brand, ~m(slug metadata)) do
+    list =
+      case brand do
+        "jd" -> "Justice Democrats"
+        "bnc" -> "Brand New Congress"
+      end
+
+    source = if Map.has_key?(params, "ref"), do: %{source: params["ref"]}, else: %{}
+    custom = if Map.has_key?(params, metadata["checkbox_tag"]),
+      do: [{"action_#{String.downcase(metadata["checkbox_tag"]) |> String.replace(" ", "_")}", true}],
+      else: []
+
+    extra = custom |> Enum.into(%{}) |> Map.merge(source)
+
+    Ak.Petition.process_petition_sign(slug, Map.merge(~m(name email zip), extra), list)
   end
 
   def redirect_home(conn, params) do

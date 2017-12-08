@@ -1,4 +1,5 @@
 %{
+  "actionkit": {:git, "https://github.com/justicedemocrats/actionkit_ex.git", "ccd0c09876c4d1a4b6041a039954003ef88ed9a0", []},
   "apex": {:hex, :apex, "1.0.0", "abf230314d35ca4c48a902f693247f190ad42fc14862b9c4f7dbb7077b21c20a", [], [], "hexpm"},
   "browser": {:hex, :browser, "0.1.5", "50670574b1fd78ac3ca44173aef0e3cbf4322e42627dcab351d40d5420f525c1", [:mix], [], "hexpm"},
   "bunt": {:hex, :bunt, "0.2.0", "951c6e801e8b1d2cbe58ebbd3e616a869061ddadcc4863d0a2182541acae9a38", [:mix], [], "hexpm"},
@@ -57,6 +58,7 @@
   "redix": {:hex, :redix, "0.6.1", "20986b0e02f02b13e6f53c79a1ae70aa83147488c408f40275ec261f5bb0a6d0", [:mix], [{:connection, "~> 1.0", [hex: :connection, repo: "hexpm", optional: false]}], "hexpm"},
   "remodel": {:hex, :remodel, "0.0.4", "306cac863e708d84c49670a55b6ad35dccad52c213faf10502f80228a0a79bba", [:mix], [], "hexpm"},
   "seg_seg": {:hex, :seg_seg, "0.0.1", "3bf890734bfc4d69070b259f041263368ae9d2a003ed6e66de6b54523d970db1", [:mix], [{:vector, "~> 0.2.1", [hex: :vector, repo: "hexpm", optional: false]}], "hexpm"},
+  "short_maps": {:hex, :short_maps, "0.1.2", "a7c2bfd91179cdbdfe90e74a023992335d116982fa672612c74776b2e9257a7b", [:mix], [], "hexpm"},
   "shorter_maps": {:hex, :shorter_maps, "2.2.1", "65298ed203be953a6d14755aab5c9f7e365e81104315a6799f9911e93cb99364", [], [], "hexpm"},
   "ssl_verify_fun": {:hex, :ssl_verify_fun, "1.1.1", "28a4d65b7f59893bc2c7de786dec1e1555bd742d336043fe644ae956c3497fbe", [:make, :rebar], [], "hexpm"},
   "stash": {:hex, :stash, "1.0.0", "e2d9e61f67009a0d2c59796169316754a06314f11572fce2a967b583bd947976", [:mix], [], "hexpm"},

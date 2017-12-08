@@ -19,7 +19,10 @@ defmodule Core do
       worker(Cosmic, [[application: :core]]),
       worker(Redix, [Application.get_env(:core, :redis_url), [name: :redix]]),
       worker(Core.Scheduler, []),
-      worker(Core.PetitionCount, [])
+      worker(Core.PetitionCount, []),
+      worker(Ak.List, []),
+      worker(Ak.Petition, []),
+      worker(Ak.Signup, [])
     ]
 
     # See http://elixir-lang.org/docs/stable/elixir/Supervisor.html
