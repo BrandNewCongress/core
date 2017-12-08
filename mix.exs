@@ -42,7 +42,9 @@ defmodule Core.Mixfile do
         :stash,
         :topo,
         :maps,
-        :cosmic
+        :cosmic,
+        :shorter_maps,
+        :short_maps
       ]
     ]
   end
