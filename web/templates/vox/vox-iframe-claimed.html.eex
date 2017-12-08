@@ -1,11 +1,31 @@
 <link rel="stylesheet" href="https://cdn.shoelace.style/1.0.0-beta24/shoelace.css">
 <div style="padding: 30px;">
-  <p>
-    Thanks for signing up to make calls! Here's your username and password.
-    <br/>
-    <br/>
+  <%= if @client == "beto" do %>
+    <link id="style-css" rel="stylesheet" href="https://betofortexas.com/wp-content/themes/wp-bft-flst/css/style.min.css?ver=1512705899" type="text/css" media="all">
+    <div class="entry__body">
+      <p>
+        Thanks for signing up to make calls! Here's your username and password.
+        <br/>
+        <br/>
 
-    Username: <%= @username %><br/>
-    Password: <%= @password %><br/>
-  </p>
+        Username: <%= @username %><br/>
+        Password: <%= @password %><br/>
+      </p>
+
+      <p>Click here to log in to the Beto dialer</p>
+      <a class="button-link" href="https://portal.na4.livevox.com/BrandNewCampaign/AgentLogin" target="_blank">Login</a>
+      <p><a href="https://docs.google.com/document/d/1P8sovdKDC8_5_ct5k9udsr6RH0lXNOerwkK9eHy2PBU/" target="_blank">Click here</a> to open the call script</p>
+      <p>Mon-Fri: 5pm ET - 9pm CT || Sat-Sun: 12pm ET - 9pm CT</p>
+      <p><em>Still have questions? <a href="mailto:organizing@betofortexas.com?subject=Beto Dialer">Email organizing@betofortexas.com</a> with "Beto Dialer" in the subject line and we will get back to you ASAP.</em>
+    </div>
+  <% else %>
+    <p>
+      Thanks for signing up to make calls! Here's your username and password.
+      <br/>
+      <br/>
+
+      Username: <%= @username %><br/>
+      Password: <%= @password %><br/>
+    </p>
+  <% end %>
 </div>

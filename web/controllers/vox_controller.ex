@@ -91,6 +91,7 @@ defmodule Core.VoxController do
          "vox-iframe-claimed.html",
          username: String.trim(username),
          password: String.trim(password),
+         client: client,
          layout: {Core.LayoutView, "empty.html"}
        )
   end
