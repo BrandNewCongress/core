@@ -43,7 +43,6 @@ defmodule Core.Mixfile do
         :topo,
         :maps,
         :cosmic,
-        :shorter_maps,
         :short_maps
       ]
     ]
@@ -82,7 +81,6 @@ defmodule Core.Mixfile do
       {:remodel, "~> 0.0.4"},
       {:distillery, "~> 1.0.0"},
       {:number, "~> 0.5.2"},
-      {:shorter_maps, "~> 2.0"},
       {:osdi, git: "https://github.com/BrandNewCongress/osdi_ex.git"},
       {:nb, git: "https://github.com/BrandNewCongress/nb_ex.git"},
       {:poison, "~> 3.0", override: true},

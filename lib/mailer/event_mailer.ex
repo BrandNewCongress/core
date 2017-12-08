@@ -4,7 +4,7 @@ defmodule Core.EventMailer do
     layout: {Core.EmailView, :email}
 
   require Logger
-  import ShorterMaps
+  import ShortMaps
 
   def on_create(id, slug, event) do
     Logger.info("Sending email to Sam for event #{id}")
@@ -82,7 +82,7 @@ defmodule Core.EventMailer do
          brand
        ) do
     Logger.info("Sending email to #{email} because they RSVPed to #{event.name}")
-    params = ~M{first_name, last_name, email, candidate, event}
+    params = ~m(first_name last_name email candidate event)a
 
     new()
     |> to({"#{first_name} #{last_name}", email})
@@ -99,7 +99,7 @@ defmodule Core.EventMailer do
          brand
        ) do
     Logger.info("Sending email to #{email} because someone RSVPed to their event, #{event.name}")
-    params = ~M{first_name, last_name, email, candidate, event}
+    params = ~m(first_name last_name email candidate event)a
 
     new()
     |> to({"#{event.contact.name}", event.contact.email_address})

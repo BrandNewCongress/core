@@ -1,7 +1,7 @@
 defmodule Core.EventsController do
   use Core.Web, :controller
   require Logger
-  import ShorterMaps
+  import ShortMaps
   alias Osdi.{Attendance, Address, Event, Repo}
 
   @secret Application.get_env(:core, :update_secret)
@@ -99,7 +99,7 @@ defmodule Core.EventsController do
     spawn(fn ->
       Core.EventMailer.on_rsvp(
         event,
-        ~m{first_name, last_name, email},
+        ~m(first_name last_name email),
         Keyword.get(global_opts, :brand)
       )
     end)
