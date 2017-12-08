@@ -3,49 +3,26 @@ defmodule Core.VoxController do
 
   use Core.Web, :controller
   import Core.BrandHelpers
+  import ShortMaps
 
   def get(conn, params) do
     render(conn, "vox.html", [title: "Call"] ++ GlobalOpts.get(conn, params))
   end
 
-  def post(
-        conn,
-        params = %{"email" => email, "phone" => phone, "first" => first_name, "last" => last_name}
-      ) do
+  def post(conn, params = ~m(email phone name)) do
     global_opts = GlobalOpts.get(conn, params)
-    brand = Keyword.get(global_opts, :brand)
+    client = Keyword.get(global_opts, :brand)
     date = "#{"America/New_York" |> Timex.now() |> Timex.to_date()}"
 
-    person =
-      %{tags: tags} =
-      Osdi.Person.push(%{
-        email_address: email,
-        phone_number: phone,
-        given_name: first_name,
-        family_name: last_name
-      })
-
-    current_username =
-      tags
-      |> Enum.map(fn %{name: name} -> name end)
-      |> Enum.filter(fn t ->
-           String.contains?(t, "Vox Alias: #{copyright(brand)}") and String.contains?(t, date)
-         end)
-      |> Enum.map(fn t -> String.split(t, ":") end)
-      |> Enum.map(fn [_vox_part, _brand_part, result, _date_part] -> String.trim(result) end)
-      |> List.first()
+    current_username = Ak.DialerLogin.existing_login_for_email(email, client)
 
     [username, password] =
       case current_username do
-        nil -> Core.Vox.next_login(brand)
-        un -> [un, Core.Vox.password_for(un, brand)]
+        nil -> Core.Vox.next_login(client)
+        un -> [un, Core.Vox.password_for(un, client)]
       end
 
-    Osdi.Person.add_tags(person, [
-      "Action: Made Calls: #{copyright(brand)}",
-      "Vox Alias: #{copyright(brand)}: #{username}: #{date}"
-    ])
-
+    Ak.DialerLogin.record_login_claimed(~m(email phone name), username, client)
     %{"content" => call_page, "metadata" => metadata} = Cosmic.get("call-page")
 
     content_key = "#{Keyword.get(global_opts, :brand)}_content"
@@ -57,16 +34,8 @@ defmodule Core.VoxController do
         call_page
       end
 
-    Task.async(fn ->
-      Core.VoxMailer.on_vox_login_claimed(%{
-        "username" => username,
-        "date" => date,
-        "first_name" => first_name,
-        "last_name" => last_name,
-        "email" => email,
-        "phone" => phone,
-        "source" => Keyword.get(global_opts, :brand)
-      })
+    spawn(fn ->
+      Core.VoxMailer.on_vox_login_claimed(Map.merge(~m(username date name email phone), %{"source" => client}))
     end)
 
     render(
@@ -99,35 +68,10 @@ defmodule Core.VoxController do
     |> render("vox-iframe.html", client: client, layout: {Core.LayoutView, "empty.html"})
   end
 
-  def post_iframe(conn, params) do
-    %{
-      "email" => email,
-      "phone" => phone,
-      "first" => first_name,
-      "last" => last_name,
-      "client" => client
-    } = params
-
+  def post_iframe(conn, params = ~m(email phone name client)) do
     date = "#{"America/New_York" |> Timex.now() |> Timex.to_date()}"
 
-    person =
-      %{tags: tags} =
-      Osdi.Person.push(%{
-        email_address: email,
-        phone_number: phone,
-        given_name: first_name,
-        family_name: last_name
-      })
-
-    current_username =
-      tags
-      |> Enum.map(fn %{name: name} -> name end)
-      |> Enum.filter(fn t ->
-           String.contains?(t, "Vox Alias: #{client}") and String.contains?(t, date)
-         end)
-      |> Enum.map(fn t -> String.split(t, ":") end)
-      |> Enum.map(fn [_vox_part, _client_part, result, _date_part] -> String.trim(result) end)
-      |> List.first()
+    current_username = Ak.DialerLogin.existing_login_for_email(email, client)
 
     [username, password] =
       case current_username do
@@ -135,21 +79,10 @@ defmodule Core.VoxController do
         un -> [un, Core.Vox.password_for(un, client)]
       end
 
-    Osdi.Person.add_tags(person, [
-      "Action: Made Calls: #{client}",
-      "Vox Alias: #{client}: #{username}: #{date}"
-    ])
+    Ak.DialerLogin.record_login_claimed(~m(email phone name), username, client)
 
-    Task.async(fn ->
-      Core.VoxMailer.on_vox_login_claimed(%{
-        "username" => username,
-        "date" => date,
-        "first_name" => first_name,
-        "last_name" => last_name,
-        "email" => email,
-        "phone" => phone,
-        "source" => client
-      })
+    spawn(fn ->
+      Core.VoxMailer.on_vox_login_claimed(Map.merge(~m(username date name email phone), %{"source" => client}))
     end)
 
     conn

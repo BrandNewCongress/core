@@ -4,12 +4,8 @@
     <div class="petition-container">
       <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
       <div class="input-field">
-        <label>First Name</label>
-        <input class="text" type="text" name="first" required="required"/>
-      </div>
-      <div class="input-field">
-        <label>Last Name</label>
-        <input class="text" type="text" name="last" required="required"/>
+        <label>Name</label>
+        <input class="text" type="text" name="name" required="required"/>
       </div>
       <div class="input-field">
         <label>Email</label>

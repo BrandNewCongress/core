@@ -8,8 +8,7 @@ defmodule Core.VoxMailer do
   def on_vox_login_claimed(%{
         "username" => username,
         "date" => date,
-        "first_name" => first_name,
-        "last_name" => last_name,
+        "name" => name,
         "email" => email,
         "phone" => phone,
         "source" => source
@@ -24,8 +23,7 @@ defmodule Core.VoxMailer do
     |> render_body("event-failure.text", %{raw: "
 Username: #{username}
 Date: #{date}
-First name: #{first_name}
-Last name: #{last_name}
+Name: #{name}
 Email: #{email}
 Phone: #{phone}
 Source: #{source}
