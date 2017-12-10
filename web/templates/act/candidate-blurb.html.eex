@@ -1,13 +1,13 @@
-<% use = @candidate || @closest_candidate %>
+<% cand = @candidate || @closest_candidate %>
 <%
   prompt = case @candidate do
-    nil -> "You're near #{use["title"]}'s district! (#{use["metadata"]["district"]})"
-    %{} -> "You're in #{use["title"]}'s district!"
+    nil -> "You're near #{cand["title"]}'s district! (#{cand["metadata"]["district"]})"
+    %{} -> "You're in #{cand["title"]}'s district!"
   end
 %>
 
-<% name = use["title"] %>
-<% url = use["metadata"]["domain_name"] %>
+<% name = cand["title"] %>
+<% url = cand["metadata"]["external_website"] %>
 
 <%= if @mobile do %>
   <div class="candidate-blurb">
@@ -15,9 +15,9 @@
       <div class="blurb-header">
         <%= prompt %>
       </div>
-      <img class="blurb-image" src="<%= use["metadata"]["small_picture"]["imgix_url"] %>" />
+      <img class="blurb-image" src="<%= cand["metadata"]["small_picture"]["imgix_url"] %>" />
       <div class="blurb">
-        <%= raw(use["metadata"]["short_story"]) %>
+        <%= raw(cand["metadata"]["website_blurb"]) %>
       </div>
     </div>
     <div class="learn-more">
@@ -32,7 +32,7 @@
           <%= prompt %>
         </div>
         <div class="blurb">
-          <%= raw(use["metadata"]["short_story"]) %>
+          <%= raw(cand["metadata"]["website_blurb"]) %>
         </div>
       </div>
       <img class="blurb-image" src="<%= use["metadata"]["small_picture"]["imgix_url"] %>" />
