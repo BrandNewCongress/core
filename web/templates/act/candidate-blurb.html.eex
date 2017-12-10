@@ -35,7 +35,7 @@
           <%= raw(cand["metadata"]["website_blurb"]) %>
         </div>
       </div>
-      <img class="blurb-image" src="<%= use["metadata"]["small_picture"]["imgix_url"] %>" />
+      <img class="blurb-image" src="<%= cand["metadata"]["small_picture"]["imgix_url"] %>" />
     </div>
     <div class="learn-more">
       Learn more about <%= name %> <a href="<%= url %>"> here </a>.
