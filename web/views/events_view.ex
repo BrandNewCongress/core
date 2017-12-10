@@ -15,6 +15,7 @@ defmodule Core.EventsView do
   def get_donate_url(candidate) do
     %{"metadata" => %{"donate_url" => donate_url}} =
       candidate
+      |> String.replace("ñ", "n")
       |> String.split(":")
       |> List.last()
       |> String.trim()
