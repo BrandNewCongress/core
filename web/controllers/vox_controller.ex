@@ -65,7 +65,11 @@ defmodule Core.VoxController do
   def get_iframe(conn, params = %{"client" => client}) do
     conn
     |> delete_resp_header("x-frame-options")
-    |> render("vox-iframe.html", client: client, layout: {Core.LayoutView, "empty.html"})
+    |> render("vox-iframe.html", [
+        client: client, layout: {Core.LayoutView, "empty.html"},
+        use_post_sign: Map.has_key?(params, "post_sign"),
+        post_sign_url: Map.get(params, "post_sign")
+      ])
   end
 
   def post_iframe(conn, params = ~m(email phone name client)) do
@@ -92,6 +96,8 @@ defmodule Core.VoxController do
          username: String.trim(username),
          password: String.trim(password),
          client: client,
+         use_post_sign: Map.has_key?(params, "post_sign"),
+         post_sign_url: Map.get(params, "post_sign"),
          layout: {Core.LayoutView, "empty.html"}
        )
   end

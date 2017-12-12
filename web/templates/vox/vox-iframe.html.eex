@@ -1,6 +1,14 @@
+<%
+  post_url = if @use_post_sign do
+    "/call-iframe/#{@client}?post_sign=#{@post_sign_url}"
+  else
+    "/call-iframe/#{@client}"
+  end
+%>
+
 <link rel="stylesheet" href="https://cdn.shoelace.style/1.0.0-beta24/shoelace.css">
 <div style="padding: 30px;">
-  <%= form_tag("/call-iframe/#{@client}", method: :post) %>
+  <%= form_tag(post_url, method: :post) %>
     <div class="petition-container">
       <input type="hidden" name="_csrf_token" value="<%= csrf_token() %>" />
       <div class="input-field">
