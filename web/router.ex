@@ -51,6 +51,7 @@ defmodule Core.Router do
     get("/call/logins", VoxController, :get_logins)
     get("/call/report", VoxController, :get_report)
     post("/call", VoxController, :post)
+    get("/call/who-claimed/:client/:login", VoxController, :who_claimed)
 
     get("/call-iframe/:client", VoxController, :get_iframe)
     post("/call-iframe/:client", VoxController, :post_iframe)
@@ -68,6 +69,7 @@ defmodule Core.Router do
     post("/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_post)
 
     get("/entry", EntryController, :get)
+
   end
 
   scope "/api", Core do
