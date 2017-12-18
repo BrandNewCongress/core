@@ -1,5 +1,4 @@
 defmodule Jotform.SubmitEvent do
-  alias Osdi.{Repo, Person, Event, EmailAddress, PhoneNumber}
   require Logger
 
   @doc """

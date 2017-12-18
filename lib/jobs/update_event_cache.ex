@@ -1,6 +1,5 @@
 defmodule Core.Jobs.EventCache do
   require Logger
-  alias Osdi.{Repo, Event, Tag}
   import Ecto.Query
 
   @attrs ~w(
