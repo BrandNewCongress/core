@@ -240,7 +240,8 @@ defmodule Core.EventsController do
     json(conn, events)
   end
 
-  defp add_secret_attrs(event = %{id: id}) do
+  defp add_secret_attrs(event) do
+    "actionnkit:" <> id = event.identifiers |> List.first()
     %{body: %{"count" => rsvp_count}} = EventProxy.get("event/#{id}/rsvp-count")
 
     organizer_edit_hash = Cipher.encrypt("#{event.organizer_id}")
