@@ -71,25 +71,12 @@ defmodule Jotform.SubmitEvent do
 
     venue_address = "#{venue_house_number} #{venue_street_name}"
 
-    ## ------------ Create and or find person
-    organizer_task =
-      Task.async(fn ->
-        create_organizer(%{
-          email: email,
-          phone: phone,
-          first_name: first_name,
-          last_name: last_name
-        })
-      end)
-
     ## ------------ Determine calendar id and time zone, geocoding only once
     calendars =
       ["Justice Democrats", "Brand New Congress"] ++
         if as_map["candidate"],
           do: as_map["candidate"] |> String.split(":") |> List.last(),
           else: []
-
-    organizer = Task.await(organizer_task)
 
     ## ------------ Determine event tags
     contact_tag =
@@ -114,8 +101,6 @@ defmodule Jotform.SubmitEvent do
     event = %{
       title: event_name,
       status: status,
-      creator: organizer,
-      organizer: organizer,
       type: event_type,
       description: description,
       summary: summary,
@@ -213,21 +198,6 @@ defmodule Jotform.SubmitEvent do
       %{"title" => title} -> [title]
       _ -> ["Brand New Congress", "Justice Democrats"]
     end
-  end
-
-  defp create_organizer(%{
-         email: email,
-         phone: phone,
-         first_name: first_name,
-         last_name: last_name
-       }) do
-    Person.push(%{
-      email_address: email,
-      phone_number: phone,
-      postal_addresses: [],
-      given_name: first_name,
-      family_name: last_name
-    })
   end
 
   defp matching_val(attr, map) do
