@@ -22,10 +22,12 @@ defmodule Jotform.SubmitEvent do
       event_name: event_name,
       should_contact: should_contact,
       instructions: instructions,
-      hide_phone: hide_phone
+      hide_phone: hide_phone,
+      candidate: candidate
     } =
       ~w(name area_phone email event_type event_date start_time end_time description
-           venue_name hide_address address event_name should_contact instructions hide_phone)
+           venue_name hide_address address event_name should_contact instructions
+           hide_phone candidate)
       |> Enum.map(fn attr -> {String.to_atom(attr), matching_val(attr, as_map)} end)
       |> Enum.into(%{})
 
@@ -73,7 +75,7 @@ defmodule Jotform.SubmitEvent do
     ## ------------ Determine calendar id and time zone, geocoding only once
     calendars =
       ["Justice Democrats", "Brand New Congress"] ++
-        if as_map["candidate"],
+        if candidate,
           do: as_map["candidate"] |> String.split(":") |> List.last(),
           else: []
 
