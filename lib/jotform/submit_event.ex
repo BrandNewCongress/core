@@ -83,36 +83,13 @@ defmodule Jotform.SubmitEvent do
       end)
 
     ## ------------ Determine calendar id and time zone, geocoding only once
-    to_geocode =
-      "#{venue_house_number} #{venue_street_name}, #{venue_city}, #{venue_state}, #{venue_zip}"
-
-    %{
-      "postal_code" => goog_postal_code,
-      "locality" => goog_locality,
-      "region" => goog_region,
-      "location" => %{"latitude" => latitude, "longitude" => longitude}
-    } = Maps.fill_address(to_geocode)
-
-    # Use geocode for calendar_id
-    # calendar_task = Task.async(fn -> get_calendars({latitude, longitude}) end)
-
-    # Use geocode for time zone
-    time_zone_task =
-      Task.async(fn ->
-        Maps.time_zone_of({latitude, longitude})
-      end)
-
-    # calendars = Task.await(calendar_task)
     calendars =
       ["Justice Democrats", "Brand New Congress"] ++
         if as_map["candidate"],
           do: as_map["candidate"] |> String.split(":") |> List.last(),
           else: []
 
-    time_zone_info = Task.await(time_zone_task)
     organizer = Task.await(organizer_task)
-
-    %{time_zone_id: time_zone_id} = time_zone_info
 
     ## ------------ Determine event tags
     contact_tag =
@@ -143,8 +120,8 @@ defmodule Jotform.SubmitEvent do
       description: description,
       summary: summary,
       instructions: instructions,
-      start_date: construct_dt(start_time, event_date, time_zone_info),
-      end_date: construct_dt(end_time, event_date, time_zone_info),
+      start_date: construct_dt(start_time, event_date),
+      end_date: construct_dt(end_time, event_date),
       contact: %{
         name: first_name <> " " <> last_name,
         phone_number: phone,
@@ -153,35 +130,30 @@ defmodule Jotform.SubmitEvent do
       },
       location: %{
         public: hide_address == "Show",
-        time_zone: time_zone_id,
         venue: venue_name,
         address_lines: [venue_address],
-        locality: venue_city || goog_locality,
-        region: venue_state || goog_region,
-        postal_code: venue_zip || goog_postal_code,
-        location: %Geo.Point{coordinates: {latitude, longitude}, srid: nil}
+        locality: venue_city,
+        region: venue_state,
+        postal_code: venue_zip
       },
       tags: tags
     }
 
-    event = Map.put(event, :name, Event.slug_for(event.title, event.start_date))
-
     Logger.info("Creating event on calendars #{Enum.join(calendars, ", ")}")
 
-    created =
-      %{id: event_id, name: name} =
-      %Event{}
-      |> Event.changeset(event)
-      |> Repo.insert!()
-      |> Repo.preload([:tags, :location])
+    %{body: created} = EventProxy.post("events", body: event)
+    %{identifiers: identifiers, name: name} = created
 
-    Logger.info("Created event #{event_id}: #{name}: #{inspect(created)}")
+    Logger.info("Created event #{inspect(identifiers)}: #{name}")
+
+    rsvp_id = identifiers |> List.first() |> String.split(":") |> List.last()
+    encrypted_id = Cipher.encrypt(rsvp_id)
 
     created =
       Map.put(
         created,
         :rsvp_download_url,
-        "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}"
+        "https://admin.justicedemocrats.com/rsvps/#{encrypted_id}"
       )
 
     organizer_edit_hash = Cipher.encrypt("#{created.organizer_id}")
@@ -202,9 +174,7 @@ defmodule Jotform.SubmitEvent do
     )a)}
   end
 
-  def construct_dt(time, date, time_zone_info) do
-    %{utc_offset: utc_offset, time_zone: time_zone, zone_abbr: zone_abbr} = time_zone_info
-
+  def construct_dt(time, date) do
     [hours, minutes] = military_time(time)
 
     [month, day, year] = String.split(date, "/")
@@ -213,13 +183,13 @@ defmodule Jotform.SubmitEvent do
       year: easy_int(year),
       month: easy_int(month),
       day: easy_int(day),
-      time_zone: time_zone,
+      time_zone: "",
       hour: easy_int(hours),
       minute: easy_int(minutes),
       second: 0,
       std_offset: 0,
-      utc_offset: utc_offset,
-      zone_abbr: zone_abbr
+      utc_offset: 0,
+      zone_abbr: "UTC"
     }
   end
 

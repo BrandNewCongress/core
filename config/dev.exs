@@ -70,3 +70,7 @@ config :logger, :console, format: "[$level] $message\n"
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20
+
+config :core,
+  proxy_base_url: "http://localhost:3000/ak",
+  proxy_secret: "secret"

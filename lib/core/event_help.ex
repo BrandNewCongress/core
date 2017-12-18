@@ -13,16 +13,16 @@ defmodule EventHelp do
 
   def add_date_line(event) do
     date_line =
-      humanize_date(event.start_date, event.location.time_zone) <>
+      humanize_date(event.start_date) <>
         "from " <>
-        humanize_time(event.start_date, event.location.time_zone) <>
-        " - " <> humanize_time(event.end_date, event.location.time_zone)
+        humanize_time(event.start_date) <>
+        " - " <> humanize_time(event.end_date)
 
     Map.put(event, :date_line, date_line)
   end
 
-  defp humanize_date(dt, time_zone) do
-    %DateTime{month: month, day: day} = get_zoned_dt(dt, time_zone)
+  defp humanize_date(dt) do
+    %DateTime{month: month, day: day} = parse(dt)
 
     month =
       [
@@ -44,19 +44,14 @@ defmodule EventHelp do
     "#{month}, #{day} "
   end
 
-  defp humanize_time(dt, time_zone) do
-    %DateTime{hour: hour, minute: minute} = get_zoned_dt(dt, time_zone)
+  defp humanize_time(dt) do
+    %DateTime{hour: hour, minute: minute} = parse(dt)
 
     {hour, am_pm} = if hour >= 12, do: {hour - 12, "PM"}, else: {hour, "AM"}
     hour = if hour == 0, do: 12, else: hour
     minute = if minute == 0, do: "", else: ":#{minute}"
 
     "#{hour}#{minute} " <> am_pm
-  end
-
-  defp get_zoned_dt(dt, time_zone) do
-    dt
-    |> Timex.Timezone.convert(time_zone |> Timex.Timezone.get(Timex.now()))
   end
 
   def set_browser_url(ev = %{name: name}), do: Map.put(ev, :browser_url, "/events/#{name}")
@@ -83,5 +78,11 @@ defmodule EventHelp do
   def destructure_tags(event) do
     destructured = Enum.map(event.tags, fn %{name: name} -> name end)
     Map.put(event, :tags, destructured)
+  end
+
+  def parse(dt) do
+    iso = if String.ends_with?(dt, "Z"), do: dt, else: dt <> "Z"
+    {:ok, result, _} = DateTime.from_iso8601(iso)
+    result
   end
 end
