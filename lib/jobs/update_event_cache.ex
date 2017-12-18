@@ -12,13 +12,13 @@ defmodule Core.Jobs.EventCache do
     Logger.info("Updating event cache")
 
     # Fetch all events
-    all_events =
-      from(e in Event, where: e.status == "confirmed" and e.end_date > ^NaiveDateTime.utc_now())
-      |> Repo.all()
-      |> Repo.preload([:tags, :location])
-      |> Enum.map(fn ev -> Map.take(ev, @attrs) end)
-      |> Enum.map(&EventHelp.destructure_tags/1)
-      |> Enum.map(&EventHelp.set_browser_url/1)
+    all_events = EventProxy.stream("events")
+      |> Enum.map(fn e ->
+        e
+        |> Map.put(:start_date, EventHelp.parse(e.start_date))
+        |> Map.put(:end_date, EventHelp.parse(e.end_date))
+      end)
+      |> Enum.filter(fn e -> e.status == "confirmed" and e.start_date > DateTime.utc_now() end)
       |> Enum.map(&EventHelp.add_date_line/1)
 
     # Cache each by slug
@@ -57,13 +57,13 @@ defmodule Core.Jobs.EventCache do
     Stash.set(:event_cache, event.name, event)
   end
 
-  defp events_for_calendar(%{name: selected_calendar}, events) do
+  defp events_for_calendar(selected_calendar, events) do
     Enum.filter(events, fn %{tags: tags} ->
       Enum.member?(tags, selected_calendar)
     end)
   end
 
   defp cache_calendar(events, calendar) do
-    Stash.set(:event_cache, calendar.name, Enum.map(events, fn %{name: slug} -> slug end))
+    Stash.set(:event_cache, calendar, Enum.map(events, fn %{name: slug} -> slug end))
   end
 end

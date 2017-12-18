@@ -6,8 +6,6 @@ defmodule Core do
   def start(_type, _args) do
     import Supervisor.Spec
 
-    Core.Jobs.EventCache.fetch_or_load()
-
     # Define workers and child supervisors to be supervised
     children = [
       # Start the Ecto repository
@@ -29,6 +27,8 @@ defmodule Core do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Core.Supervisor]
     result = Supervisor.start_link(children, opts)
+
+    Core.Jobs.EventCache.fetch_or_load()
 
     result
   end
