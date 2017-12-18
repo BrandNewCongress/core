@@ -2,7 +2,7 @@ defmodule Core.EventsController do
   use Core.Web, :controller
   require Logger
   import ShortMaps
-  alias Osdi.{Repo, Attendance, Event, Person}
+  alias Osdi.{Repo, Attendance, Event, Person, Address}
 
   @secret Application.get_env(:core, :update_secret)
 
