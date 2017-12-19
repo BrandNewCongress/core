@@ -75,9 +75,15 @@ defmodule Jotform.SubmitEvent do
     ## ------------ Determine calendar id and time zone, geocoding only once
     calendars =
       ["Justice Democrats", "Brand New Congress"] ++
-        if candidate,
-          do: as_map["candidate"] |> String.split(":") |> List.last(),
-          else: []
+        case candidate do
+          nil -> []
+          "" -> []
+          _ ->
+            case String.split(candidate, ":") do
+              [_, cand] -> cand
+              _ -> []
+            end
+        end
 
     ## ------------ Determine event tags
     contact_tag =
