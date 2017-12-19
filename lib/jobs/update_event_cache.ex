@@ -11,15 +11,16 @@ defmodule Core.Jobs.EventCache do
     Logger.info("Updating event cache")
 
     # Fetch all events
-    all_events = EventProxy.stream("events")
+    all_events =
+      EventProxy.stream("events")
       |> Enum.map(fn e ->
-        e
-        |> Map.put(:start_date, EventHelp.parse(e.start_date))
-        |> Map.put(:end_date, EventHelp.parse(e.end_date))
-      end)
+           e
+           |> Map.put(:start_date, EventHelp.parse(e.start_date))
+           |> Map.put(:end_date, EventHelp.parse(e.end_date))
+         end)
       |> Enum.filter(fn e ->
-        e.status == "confirmed" and Timex.after?(e.start_date, Timex.now())
-      end)
+           e.status == "confirmed" and Timex.after?(e.start_date, Timex.now())
+         end)
       |> Enum.map(&EventHelp.add_date_line/1)
 
     # Cache each by slug
@@ -33,7 +34,7 @@ defmodule Core.Jobs.EventCache do
     # Filter each by calendar
     all_tags = Enum.flat_map(all_events, & &1.tags)
 
-    Enum.filter(all_tags, & String.contains?(&1, "Calendar:"))
+    Enum.filter(all_tags, &String.contains?(&1, "Calendar:"))
     |> Enum.each(fn calendar ->
          calendar |> events_for_calendar(all_events) |> cache_calendar(calendar)
        end)

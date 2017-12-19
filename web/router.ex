@@ -69,7 +69,6 @@ defmodule Core.Router do
     post("/unsubscribe/:candidate", SubscriptionController, :unsubscribe_candidate_post)
 
     get("/entry", EntryController, :get)
-
   end
 
   scope "/api", Core do

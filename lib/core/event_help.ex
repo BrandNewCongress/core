@@ -14,9 +14,7 @@ defmodule EventHelp do
   def add_date_line(event) do
     date_line =
       humanize_date(event.start_date) <>
-        "from " <>
-        humanize_time(event.start_date) <>
-        " - " <> humanize_time(event.end_date)
+        "from " <> humanize_time(event.start_date) <> " - " <> humanize_time(event.end_date)
 
     Map.put(event, :date_line, date_line)
   end

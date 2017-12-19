@@ -301,9 +301,16 @@ defmodule Core.PetitionController do
       end
 
     source = if Map.has_key?(params, "ref"), do: %{source: params["ref"]}, else: %{}
-    custom = if Map.has_key?(params, metadata["checkbox_tag"]),
-      do: [{"action_#{String.downcase(metadata["checkbox_tag"]) |> String.replace(" ", "_")}", true}],
-      else: []
+
+    custom =
+      if Map.has_key?(params, metadata["checkbox_tag"]),
+        do: [
+          {
+            "action_#{String.downcase(metadata["checkbox_tag"]) |> String.replace(" ", "_")}",
+            true
+          }
+        ],
+        else: []
 
     extra = custom |> Enum.into(%{}) |> Map.merge(source)
 

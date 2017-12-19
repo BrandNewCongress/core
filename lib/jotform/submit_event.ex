@@ -76,8 +76,12 @@ defmodule Jotform.SubmitEvent do
     calendars =
       ["Justice Democrats", "Brand New Congress"] ++
         case candidate do
-          nil -> []
-          "" -> []
+          nil ->
+            []
+
+          "" ->
+            []
+
           _ ->
             case String.split(candidate, ":") do
               [_, cand] -> cand

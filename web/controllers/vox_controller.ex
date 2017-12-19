@@ -35,7 +35,9 @@ defmodule Core.VoxController do
       end
 
     spawn(fn ->
-      Core.VoxMailer.on_vox_login_claimed(Map.merge(~m(username date name email phone), %{"source" => client}))
+      Core.VoxMailer.on_vox_login_claimed(
+        Map.merge(~m(username date name email phone), %{"source" => client})
+      )
     end)
 
     render(
@@ -65,11 +67,13 @@ defmodule Core.VoxController do
   def get_iframe(conn, params = %{"client" => client}) do
     conn
     |> delete_resp_header("x-frame-options")
-    |> render("vox-iframe.html", [
-        client: client, layout: {Core.LayoutView, "empty.html"},
-        use_post_sign: Map.has_key?(params, "post_sign"),
-        post_sign_url: Map.get(params, "post_sign")
-      ])
+    |> render(
+         "vox-iframe.html",
+         client: client,
+         layout: {Core.LayoutView, "empty.html"},
+         use_post_sign: Map.has_key?(params, "post_sign"),
+         post_sign_url: Map.get(params, "post_sign")
+       )
   end
 
   def post_iframe(conn, params = ~m(email phone name client)) do
@@ -86,7 +90,9 @@ defmodule Core.VoxController do
     Ak.DialerLogin.record_login_claimed(~m(email phone name), username, client)
 
     spawn(fn ->
-      Core.VoxMailer.on_vox_login_claimed(Map.merge(~m(username date name email phone), %{"source" => client}))
+      Core.VoxMailer.on_vox_login_claimed(
+        Map.merge(~m(username date name email phone), %{"source" => client})
+      )
     end)
 
     conn
@@ -109,6 +115,6 @@ defmodule Core.VoxController do
         nil -> %{error: "Not found"}
       end
 
-    json conn, result
+    json(conn, result)
   end
 end
