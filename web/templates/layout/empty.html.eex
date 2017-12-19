@@ -1,3 +1,3 @@
-<main role="main">
+<main role="main" style="max-height: 600px; overflow: none;">
   <%= render @view_module, @view_template, assigns %>
 </main>
