@@ -189,11 +189,13 @@ defmodule Jotform.SubmitEvent do
     }
   end
 
-  defp military_time(%{"hourSelect" => hours, "minuteSelect" => minutes, "ampm" => "AM"}) do
-    ["#{hours}", "#{minutes}"]
+  def military_time(%{"hourSelect" => hours, "minuteSelect" => minutes, "ampm" => "AM"}) do
+    {hrs, _} = Integer.parse(hours)
+    hrs = if hrs == 12, do: 0, else: hrs
+    ["#{hrs}", "#{minutes}"]
   end
 
-  defp military_time(%{"hourSelect" => hours, "minuteSelect" => minutes, "ampm" => "PM"}) do
+  def military_time(%{"hourSelect" => hours, "minuteSelect" => minutes, "ampm" => "PM"}) do
     {hrs, _} = Integer.parse(hours)
     hrs = if hrs == 12, do: hrs, else: hrs + 12
     ["#{hrs}", "#{minutes}"]
