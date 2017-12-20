@@ -241,18 +241,22 @@ defmodule Core.EventsController do
   end
 
   defp add_secret_attrs(event) do
-    "actionnkit:" <> id = event.identifiers |> List.first()
-    %{body: %{"count" => rsvp_count}} = EventProxy.get("event/#{id}/rsvp-count")
+    "actionkit:" <> id = event.identifiers |> List.first()
+    # %{body: %{"count" => rsvp_count}} = EventProxy.get("event/#{id}/rsvp-count")
 
     organizer_edit_hash = Cipher.encrypt("#{event.organizer_id}")
     organizer_edit_url = "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}"
 
+    id = event.identifiers |> List.first() |> String.split(":") |> List.last()
+    rsvp_encrypted = Cipher.encrypt(id)
+
     event
     |> Map.put(
          :rsvp_download_url,
-         "https://admin.justicedemocrats.com/rsvps/#{Event.rsvp_link_for(event.name)}"
+         "https://admin.justicedemocrats.com/rsvps/#{rsvp_encrypted}"
        )
+    |> Map.put(:id, id)
     |> Map.put(:organizer_edit_url, organizer_edit_url)
-    |> Map.put(:rsvp_count, rsvp_count)
+    |> Map.put(:rsvp_count, 0)
   end
 end
