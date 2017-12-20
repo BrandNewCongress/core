@@ -144,30 +144,23 @@ defmodule Jotform.SubmitEvent do
 
     rsvp_id = identifiers |> List.first() |> String.split(":") |> List.last()
     encrypted_id = Cipher.encrypt(rsvp_id)
-
-    created =
-      Map.put(
-        created,
-        :rsvp_download_url,
-        "https://admin.justicedemocrats.com/rsvps/#{encrypted_id}"
-      )
-
     organizer_edit_hash = Cipher.encrypt("#{created.organizer_id}")
 
     created =
-      Map.put(
-        created,
-        :organizer_edit_url,
-        "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}"
-      )
+      created
+      |> Map.put(
+           created,
+           :rsvp_download_url,
+           "https://admin.justicedemocrats.com/rsvps/#{encrypted_id}"
+         )
+      |> Map.put(
+           created,
+           :organizer_edit_url,
+           "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}"
+         )
+      |> EventHelp.add_date_line()
 
-    created = EventHelp.add_date_line(created)
-
-    %{event: created |> Map.take(~w(
-      name title description summary browser_url type date_line
-      featured_image_url start_date end_date status contact
-      location tags rsvp_download_url instructions organizer_edit_url
-    )a)}
+    %{event: created}
   end
 
   def construct_dt(time, date) do

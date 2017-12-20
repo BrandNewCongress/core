@@ -251,10 +251,7 @@ defmodule Core.EventsController do
     rsvp_encrypted = Cipher.encrypt(id)
 
     event
-    |> Map.put(
-         :rsvp_download_url,
-         "https://admin.justicedemocrats.com/rsvps/#{rsvp_encrypted}"
-       )
+    |> Map.put(:rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{rsvp_encrypted}")
     |> Map.put(:id, id)
     |> Map.put(:organizer_edit_url, organizer_edit_url)
     |> Map.put(:rsvp_count, 0)
