@@ -4,7 +4,7 @@ defmodule Core.JotformController do
 
   def submit_event(conn, params) do
     %{"metadata" => %{"event_submitted" => success_hook, "submission_failure" => failure_hook}} =
-      Cosmic.get("event-webhooks")
+      Cosmic.get("jd-esm-config")
 
     try do
       response = Jotform.SubmitEvent.on_event_submit(params)
