@@ -84,7 +84,7 @@ defmodule Jotform.SubmitEvent do
 
           _ ->
             case String.split(candidate, ":") do
-              [_, cand] -> cand
+              [_, cand] -> [String.trim(cand)]
               _ -> []
             end
         end
