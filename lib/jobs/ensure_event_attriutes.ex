@@ -23,8 +23,7 @@ defmodule Core.Jobs.EnsureEventAttributes do
          }
 
          id = event.identifiers |> List.first() |> String.split(":") |> List.last()
-
-         # IO.inspect EventProxy.post("events/#{id}", body: ~m(contact))
+         EventProxy.post("events/#{id}", body: ~m(contact))
        end)
     |> length()
     |> IO.inspect()
