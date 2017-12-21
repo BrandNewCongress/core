@@ -148,13 +148,8 @@ defmodule Jotform.SubmitEvent do
 
     created =
       created
+      |> Map.put(:rsvp_download_url, "https://admin.justicedemocrats.com/rsvps/#{encrypted_id}")
       |> Map.put(
-           created,
-           :rsvp_download_url,
-           "https://admin.justicedemocrats.com/rsvps/#{encrypted_id}"
-         )
-      |> Map.put(
-           created,
            :organizer_edit_url,
            "https://admin.justicedemocrats.com/my-events/#{organizer_edit_hash}"
          )
