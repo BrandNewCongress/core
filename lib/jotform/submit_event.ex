@@ -108,6 +108,10 @@ defmodule Jotform.SubmitEvent do
       String.slice(description, 0..199) <>
         if String.length(description) > 200, do: "...", else: ""
 
+    IO.puts "Fetching time zone"
+    %{time_zone: time_zone} = Maps.time_zone_of("#{venue_address}, #{venue_city}, #{venue_state}")
+    IO.puts "Got time zone"
+
     # Create the thing!
     event = %{
       title: event_name,
@@ -130,14 +134,18 @@ defmodule Jotform.SubmitEvent do
         address_lines: [venue_address],
         locality: venue_city,
         region: venue_state,
-        postal_code: venue_zip
+        postal_code: venue_zip,
+        time_zone: time_zone
       },
       tags: tags
     }
 
     Logger.info("Creating event on calendars #{Enum.join(calendars, ", ")}")
 
+    IO.inspect event
+
     %{body: created} = EventProxy.post("events", body: event)
+    IO.inspect created
     %{identifiers: identifiers, name: name} = created
 
     Logger.info("Created event #{inspect(identifiers)}: #{name}")
@@ -163,18 +171,22 @@ defmodule Jotform.SubmitEvent do
 
     [month, day, year] = String.split(date, "/")
 
-    %DateTime{
-      year: easy_int(year),
-      month: easy_int(month),
-      day: easy_int(day),
-      time_zone: "",
-      hour: easy_int(hours),
-      minute: easy_int(minutes),
-      second: 0,
-      std_offset: 0,
-      utc_offset: 0,
-      zone_abbr: "UTC"
-    }
+    {:ok, dt} =
+      %DateTime{
+        year: easy_int(year),
+        month: easy_int(month),
+        day: easy_int(day),
+        time_zone: "",
+        hour: easy_int(hours),
+        minute: easy_int(minutes),
+        second: 0,
+        std_offset: 0,
+        utc_offset: 0,
+        zone_abbr: "UTC"
+      }
+      |> Timex.format("{YYYY}-{0M}-{0D}T{h24}:{m}")
+
+    dt
   end
 
   def military_time(%{"hourSelect" => hours, "minuteSelect" => minutes, "ampm" => "AM"}) do
