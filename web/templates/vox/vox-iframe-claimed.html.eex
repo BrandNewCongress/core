@@ -6,8 +6,19 @@
       <br/>
       <br/>
 
-      Username: <%= @username %><br/>
-      Password: <%= @password %><br/>
+      <div>
+        Username: <%= @username %><br/>
+        <a id="username-button" data-username="<%= @username %>" class="button" onclick="">
+          Copy Username
+        </a>
+      </div>
+
+      <div>
+        Password: <%= @password %><br/>
+        <a id="password-button" data-password="<%= @password %>" class="button">
+          Copy Password
+        </a>
+      </div>
     </p>
 
     <iframe src="<%= @post_sign_url %>" style="border:none; width: 100%; height: 100%;" />
@@ -43,8 +54,37 @@
       <br/>
       <br/>
 
-      Username: <%= @username %><br/>
-      Password: <%= @password %><br/>
+      <div>
+        Username: <%= @username %><br/>
+        <a id="username-button" data-username="<%= @username %>" class="button" onclick="">
+          Copy Username
+        </a>
+      </div>
+
+      <div>
+        Password: <%= @password %><br/>
+        <a id="password-button" data-password="<%= @password %>" class="button">
+          Copy Password
+        </a>
+      </div>
     </p>
   <% end %>
 </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard-polyfill/2.3.0/clipboard-polyfill.js" defer="defer" ></script>
+<script>
+function copyUsername (ev) {
+  var username = ev.target.getAttribute('data-username')
+  clipboard.writeText(username)
+  ev.target.text = 'Copied!'
+}
+
+function copyPassword (ev) {
+  var password = ev.target.getAttribute('data-password')
+  clipboard.writeText(password)
+  ev.target.text = 'Copied!'
+}
+
+document.getElementById('username-button').addEventListener('click', copyUsername)
+document.getElementById('password-button').addEventListener('click', copyPassword)
+</script>
