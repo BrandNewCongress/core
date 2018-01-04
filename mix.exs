@@ -43,7 +43,8 @@ defmodule Core.Mixfile do
         :topo,
         :maps,
         :cosmic,
-        :short_maps
+        :short_maps,
+        :rollbax
       ]
     ]
   end
@@ -89,7 +90,8 @@ defmodule Core.Mixfile do
       {:cosmic, git: "https://github.com/BrandNewCongress/cosmic_ex.git"},
       {:libcluster, "~> 2.0.3"},
       {:short_maps, "~> 0.1.2"},
-      {:actionkit, git: "https://github.com/justicedemocrats/actionkit_ex.git"}
+      {:actionkit, git: "https://github.com/justicedemocrats/actionkit_ex.git"},
+      {:rollbax, "~> 0.6"}
     ]
   end
 

@@ -84,4 +84,8 @@ defmodule Core.Router do
     post("/signup", OsdiController, :signup)
     post("/record-contact", OsdiController, :record_contact)
   end
+
+  defp handle_errors(conn, %{kind: kind, reason: reason, stack: stacktrace}) do
+    Rollbax.report(kind, reason, stacktrace)
+  end
 end

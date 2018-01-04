@@ -74,3 +74,5 @@ config :phoenix, :stacktrace_depth, 20
 config :core,
   proxy_base_url: "http://localhost:3000/ak",
   proxy_secret: "secret"
+
+config :rollbax, enabled: false

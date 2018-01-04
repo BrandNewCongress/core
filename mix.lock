@@ -57,6 +57,7 @@
   "ranch": {:hex, :ranch, "1.3.2", "e4965a144dc9fbe70e5c077c65e73c57165416a901bd02ea899cfd95aa890986", [:rebar3], [], "hexpm"},
   "redix": {:hex, :redix, "0.6.1", "20986b0e02f02b13e6f53c79a1ae70aa83147488c408f40275ec261f5bb0a6d0", [:mix], [{:connection, "~> 1.0", [hex: :connection, repo: "hexpm", optional: false]}], "hexpm"},
   "remodel": {:hex, :remodel, "0.0.4", "306cac863e708d84c49670a55b6ad35dccad52c213faf10502f80228a0a79bba", [:mix], [], "hexpm"},
+  "rollbax": {:hex, :rollbax, "0.8.2", "204a47a83fe32745def19ea0307b297395c00315fb85f30dfda04d5009b5ecb9", [], [{:hackney, "~> 1.1", [hex: :hackney, repo: "hexpm", optional: false]}, {:poison, "~> 1.4 or ~> 2.0 or ~> 3.0", [hex: :poison, repo: "hexpm", optional: false]}], "hexpm"},
   "seg_seg": {:hex, :seg_seg, "0.0.1", "3bf890734bfc4d69070b259f041263368ae9d2a003ed6e66de6b54523d970db1", [:mix], [{:vector, "~> 0.2.1", [hex: :vector, repo: "hexpm", optional: false]}], "hexpm"},
   "short_maps": {:hex, :short_maps, "0.1.2", "a7c2bfd91179cdbdfe90e74a023992335d116982fa672612c74776b2e9257a7b", [:mix], [], "hexpm"},
   "shorter_maps": {:hex, :shorter_maps, "2.2.1", "65298ed203be953a6d14755aab5c9f7e365e81104315a6799f9911e93cb99364", [], [], "hexpm"},
