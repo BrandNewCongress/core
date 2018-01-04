@@ -16,13 +16,15 @@ defmodule Core.VoxController do
 
     current_username = Ak.DialerLogin.existing_login_for_email(email, client)
 
+    action_calling_from = params["calling_from"] || "unknown"
+
     [username, password] =
       case current_username do
         nil -> Core.Vox.next_login(client)
         un -> [un, Core.Vox.password_for(un, client)]
       end
 
-    Ak.DialerLogin.record_login_claimed(~m(email phone name), username, client)
+    Ak.DialerLogin.record_login_claimed(~m(email phone name action_calling_from), username, client)
     %{"content" => call_page, "metadata" => metadata} = Cosmic.get("call-page")
 
     content_key = "#{Keyword.get(global_opts, :brand)}_content"
@@ -36,7 +38,7 @@ defmodule Core.VoxController do
 
     spawn(fn ->
       Core.VoxMailer.on_vox_login_claimed(
-        Map.merge(~m(username date name email phone), %{"source" => client})
+        Map.merge(~m(username date name email phone action_calling_from), %{"source" => client})
       )
     end)
 
@@ -111,7 +113,7 @@ defmodule Core.VoxController do
   def who_claimed(conn, params = ~m(client login)) do
     result =
       case Ak.DialerLogin.who_claimed(client, login) do
-        ~m(email) -> ~m(email)
+        ~m(email calling_from) -> ~m(email calling_from)
         nil -> %{error: "Not found"}
       end
 

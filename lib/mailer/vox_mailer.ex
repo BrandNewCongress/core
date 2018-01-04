@@ -11,7 +11,8 @@ defmodule Core.VoxMailer do
         "name" => name,
         "email" => email,
         "phone" => phone,
-        "source" => source
+        "source" => source,
+        "action_calling_from" => action_calling_from
       }) do
     Logger.info("Sending email to Sam because of Vox claim #{username}")
 
@@ -27,6 +28,7 @@ Name: #{name}
 Email: #{email}
 Phone: #{phone}
 Source: #{source}
+From: #{action_calling_from}
 "})
     |> Core.Mailer.deliver()
   end

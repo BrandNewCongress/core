@@ -24,6 +24,17 @@
         <input class="text" type="tel" name="phone" maxlength="10" required="required" />
       </div>
       <div class="input-field">
+        <label>Where are you calling from?</label>
+        <br/>
+        <input name="calling_from" type="radio" value="home" /> <label>Home</label>
+        <br/>
+        <input name="calling_from" type="radio" value="vol-pb" /> <label>Volunteer-hosted phone bank</label>
+        <br/>
+        <input name="calling_from" type="radio" value="campaign-office" /> <label>Campaign office</label>
+        <br/>
+        <input name="calling_from" type="radio" value="campaign-pb" /> <label>Campaign-hosted phone bank</label>
+      </div>
+      <div class="input-field">
         <input class="button" type="submit" value="Claim My Login">
       </div>
     </div>
