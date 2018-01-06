@@ -27,7 +27,7 @@ defmodule Core.Jobs.EventCache do
     all_events |> Enum.each(&cache_by_name/1)
 
     # Cache all slugs as part of all
-    Stash.set(:event_cache, "all_slugs", Enum.map(all_events, fn %{name: name} -> name end))
+    Stash.set(:event_cache, "all_slugs", Enum.map(all_events, fn %{id: id} -> id end))
 
     # Filter each by calendar
 
@@ -58,7 +58,7 @@ defmodule Core.Jobs.EventCache do
   end
 
   defp cache_by_name(event) do
-    Stash.set(:event_cache, event.name, event)
+    Stash.set(:event_cache, event.id, event)
   end
 
   defp events_for_calendar(selected_calendar, events) do
@@ -68,6 +68,6 @@ defmodule Core.Jobs.EventCache do
   end
 
   defp cache_calendar(events, calendar) do
-    Stash.set(:event_cache, calendar, Enum.map(events, fn %{name: slug} -> slug end))
+    Stash.set(:event_cache, calendar, Enum.map(events, fn %{id: id} -> id end))
   end
 end
