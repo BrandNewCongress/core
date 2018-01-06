@@ -39,8 +39,7 @@ config :core, Core.Scheduler, jobs: jobs
 
 config :cosmic, slug: "brand-new-congress"
 
-config :logger,
-  backends: [:console, Rollbax.Logger]
+config :logger, backends: [:console, Rollbax.Logger]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

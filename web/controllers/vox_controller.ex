@@ -24,7 +24,12 @@ defmodule Core.VoxController do
         un -> [un, Core.Vox.password_for(un, client)]
       end
 
-    Ak.DialerLogin.record_login_claimed(~m(email phone name action_calling_from), username, client)
+    Ak.DialerLogin.record_login_claimed(
+      ~m(email phone name action_calling_from),
+      username,
+      client
+    )
+
     %{"content" => call_page, "metadata" => metadata} = Cosmic.get("call-page")
 
     content_key = "#{Keyword.get(global_opts, :brand)}_content"

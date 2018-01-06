@@ -108,9 +108,9 @@ defmodule Jotform.SubmitEvent do
       String.slice(description, 0..199) <>
         if String.length(description) > 200, do: "...", else: ""
 
-    IO.puts "Fetching time zone"
+    IO.puts("Fetching time zone")
     %{time_zone: time_zone} = Maps.time_zone_of("#{venue_address}, #{venue_city}, #{venue_state}")
-    IO.puts "Got time zone"
+    IO.puts("Got time zone")
 
     # Create the thing!
     event = %{
@@ -142,10 +142,10 @@ defmodule Jotform.SubmitEvent do
 
     Logger.info("Creating event on calendars #{Enum.join(calendars, ", ")}")
 
-    IO.inspect event
+    IO.inspect(event)
 
     %{body: created} = EventProxy.post("events", body: event)
-    IO.inspect created
+    IO.inspect(created)
     %{identifiers: identifiers, name: name} = created
 
     Logger.info("Created event #{inspect(identifiers)}: #{name}")

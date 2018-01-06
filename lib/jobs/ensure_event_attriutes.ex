@@ -12,9 +12,15 @@ defmodule Core.Jobs.EnsureEventAttributes do
     |> Enum.map(fn event ->
          %{body: organizer} = Ak.Api.get("user/#{event.organizer_id}")
          ~m(email first_name last_name phones) = organizer
-         "/rest/v1/" <> phone_uri = List.first(phones)
 
-         %{body: %{"normalized_phone" => phone_number}} = Ak.Api.get(phone_uri)
+         phone_number =
+           case List.first(phones) do
+             "/rest/v1/" <> phone_uri ->
+               %{body: %{"normalized_phone" => phone_number}} = Ak.Api.get(phone_uri)
+
+             _ ->
+               nil
+           end
 
          contact = %{
            email_address: email,
