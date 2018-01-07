@@ -11,7 +11,7 @@
     <div class="box">
       <p><strong> <%= ev.title %> </strong> <br/>
        <%= ev.date_line %> </p>
-      <a class="little-button" href="/events/<%= ev.name %>" style="display: block;" target="_blank"> RSVP </a>
+      <a class="little-button" href="<%= ev.browser_url %>" style="display: block;" target="_blank"> RSVP </a>
     </div>
     <div class="box">
       <p><strong> <%= ev.location.venue %> </strong> <br/>
