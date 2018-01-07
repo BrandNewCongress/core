@@ -31,8 +31,7 @@ jobs =
   [
     {"*/2 * * * *", {Core.Jobs.EventCache, :update, []}},
     {"*/2 * * * *", {Core.PetitionCount, :update, []}},
-    {"*/10 * * * *", {Core.Jobs.EnsureEventAttributes, :go, []}},
-    {"@daily", {Core.Jobs.MailLeaderboard, :send, []}}
+    {"*/10 * * * *", {Core.Jobs.EnsureEventAttributes, :go, []}}
   ]
 
 config :core, Core.Scheduler, jobs: jobs
