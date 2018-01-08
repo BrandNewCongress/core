@@ -39,6 +39,7 @@
   "mimerl": {:hex, :mimerl, "1.0.2", "993f9b0e084083405ed8252b99460c4f0563e41729ab42d9074fd5e52439be88", [:rebar3], [], "hexpm"},
   "mochiweb": {:hex, :mochiweb, "2.15.0", "e1daac474df07651e5d17cc1e642c4069c7850dc4508d3db7263a0651330aacc", [:rebar3], [], "hexpm"},
   "nb": {:git, "https://github.com/BrandNewCongress/nb_ex.git", "e8d2aac3bdbdf990405e4f08035bae176888f9d4", []},
+  "nimble_csv": {:hex, :nimble_csv, "0.2.0", "0da346c05b14eebef9563b3de72abb68adacec96d8588fb2c50c663ba5d2acc1", [], [], "hexpm"},
   "number": {:hex, :number, "0.5.2", "be47be4b8d55db6eb35869617dbeeba9640946fb0f7ba1d44cc0b15166400872", [:mix], [{:decimal, "~> 1.0", [hex: :decimal, repo: "hexpm", optional: false]}, {:decimal_arithmetic, "~> 0.1", [hex: :decimal_arithmetic, repo: "hexpm", optional: false]}], "hexpm"},
   "osdi": {:git, "https://github.com/BrandNewCongress/osdi_ex.git", "d43b3cd0bff669531eb30e1ff7a8b1577bd1db57", []},
   "parallel_stream": {:hex, :parallel_stream, "1.0.5", "4c78d3e675f9eff885cbe252c89a8fc1d2fb803c0d03a914281e587834e09431", [:mix], [], "hexpm"},
