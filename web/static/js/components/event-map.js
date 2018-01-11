@@ -164,9 +164,11 @@ export default class EventMap extends Component {
         >
           X
         </div>
+
         <div className="no-events-text">
           There's not an event near you yet, but you can be the first.
         </div>
+
         <a
           className="primary-button"
           style={{
@@ -224,7 +226,7 @@ export default class EventMap extends Component {
                   textAlign: 'center'
                 }}
               >
-                Join a National Team
+                Volunteer from Home on a Specialized Team
               </a>
             </div>
           </div>
